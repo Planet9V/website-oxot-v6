@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale Campus v2</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+  html,body{margin:0;height:100%}
+  three-d-stage:not(:defined){visibility:hidden}
+  #link{position:absolute;left:14px;top:14px;z-index:5;font:600 12px Inter,system-ui,sans-serif;
+        background:rgba(22,32,59,.92);color:#DCE4F2;padding:8px 12px;border-radius:8px;text-decoration:none}
+  #link:hover{background:#16203B;color:#fff}
+  #link b{color:#EE7623}
+</style>
+</head>
+<body>
+<three-d-stage name="hyperscale_campus" background="#e8e6e0"></three-d-stage>
+<a id="link" href="hyperscale-campus-explorer.html">Open <b>Connection Explorer</b> →</a>
+<script src="three-d-stage.js"></script>
+<script type="module">
+// Geometry lives in campus-model.js, shared with the Connection Explorer.
+import { buildCampus } from './campus-model.js';
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+const { group, graph } = buildCampus(THREE);
+stage.setObject(group);
+stage._loop && stage._loop();  // hidden iframes never tick rAF
+let n = 0; group.traverse(o => { if (o.isMesh) n++; });
+console.log('[campus] meshes', n, '· graph nodes', Object.keys(graph.nodes).length, '· edges', graph.edges.length);
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale AI Rack</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+  html,body{margin:0;height:100%}
+  three-d-stage:not(:defined){visibility:hidden}
+</style>
+</head>
+<body>
+<three-d-stage name="hyperscale_rack" autorotate></three-d-stage>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+
+// ============ dimensions (meters) — OCP-style 48U liquid-cooled rack ====
+const U = 0.04445;               // 1U
+const RW = 0.60,  RD = 1.20;     // rack outer width / depth
+const IW = 0.538;                // interior (19"-class) width
+const BASE_H = 0.12, TOP_H = 0.04;
+const UNITS = 48;
+const RH = BASE_H + UNITS * U + TOP_H;
+const FRONT = RD / 2, REAR = -RD / 2;
+const uY = (u) => BASE_H + (u - 1) * U;    // bottom Y of slot u (1-based)
+
+// ============ materials =================================================
+const M = {};
+const mat = (n, c, r, m, e) => M[n] = new THREE.MeshStandardMaterial({
+  name: n, color: c, roughness: r, metalness: m,
+  ...(e ? { emissive: e, emissiveIntensity: 1.0 } : {})
+});
+mat('frame_black',   0x21242a, 0.55, 0.25);
+mat('panel_gray',    0x3a3f46, 0.6,  0.15);
+mat('bezel_dark',    0x14161a, 0.5,  0.2);
+mat('tray_silver',   0xb8bdc4, 0.4,  0.5);
+mat('compute_face',  0x272b31, 0.45, 0.2);
+mat('nvsw_face',     0x1d2b3a, 0.45, 0.2);
+mat('psu_face',      0x30343b, 0.5,  0.15);
+mat('grille',        0x0d0e10, 0.8,  0.05);
+mat('copper',        0xc27a45, 0.35, 0.7);
+mat('busbar_guard',  0xd8dadd, 0.5,  0.1);
+mat('coolant_supply',0x1f6fd0, 0.4,  0.2);
+mat('coolant_return',0xc23a2e, 0.4,  0.2);
+mat('hose_black',    0x1a1c1e, 0.7,  0.05);
+mat('qd_steel',      0xaeb4ba, 0.3,  0.6);
+mat('pdu_body',      0x101214, 0.55, 0.15);
+mat('outlet_white',  0xe8e8e2, 0.6,  0.0);
+mat('handle_blue',   0x2e6fb0, 0.5,  0.2);
+mat('latch_orange',  0xe07a26, 0.55, 0.05);
+mat('led_green',     0x2bd96a, 0.3,  0.0, 0x1faf4e);
+mat('led_blue',      0x3f8cff, 0.3,  0.0, 0x1d5fd0);
+mat('led_amber',     0xf2b736, 0.3,  0.0, 0xc78a12);
+mat('port_cage',     0x8f959c, 0.35, 0.6);
+mat('fiber_aqua',    0x35c2c9, 0.55, 0.1);
+mat('drive_face',    0x454a52, 0.5,  0.2);
+mat('cdu_body',      0x2c3138, 0.55, 0.2);
+mat('screen_dark',   0x0a1420, 0.25, 0.1, 0x0a2a40);
+mat('label_white',   0xf0f0ea, 0.8,  0.0);
+
+const rack = new THREE.Group(); rack.name = 'hyperscale_rack';
+function box(name, m, w, h, d, x, y, z, parent = rack) {
+  const g = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+  g.name = name; g.position.set(x, y, z); parent.add(g); return g;
+}
+function cyl(name, m, r, len, x, y, z, axis = 'y', parent = rack) {
+  const g = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 20), m);
+  g.name = name;
+  if (axis === 'x') g.rotation.z = Math.PI / 2;
+  if (axis === 'z') g.rotation.x = Math.PI / 2;
+  g.position.set(x, y, z); parent.add(g); return g;
+}
+
+// ============ rack frame ================================================
+{
+  const g = new THREE.Group(); g.name = 'rack_frame'; rack.add(g);
+  box('base_plinth', M.frame_black, RW, BASE_H, RD, 0, BASE_H / 2, 0, g);
+  box('top_cap', M.frame_black, RW, TOP_H, RD, 0, RH - TOP_H / 2, 0, g);
+  for (const [i, [x, z]] of [[-1,-1],[1,-1],[-1,1],[1,1]].map((p,i)=>[i,p]).values()) {
+    box('post_' + i, M.frame_black, 0.05, RH - BASE_H - TOP_H, 0.05,
+        x * (RW / 2 - 0.03), (BASE_H + RH - TOP_H) / 2, z * (RD / 2 - 0.03), g);
+    cyl('caster_' + i, M.frame_black, 0.035, 0.03, x * (RW / 2 - 0.08), 0.02, z * (RD / 2 - 0.10), 'x', g);
+    box('foot_' + i, M.qd_steel, 0.04, 0.012, 0.04, x * (RW / 2 - 0.05), 0.006, z * (RD / 2 - 0.05), g);
+  }
+  for (const s of [-1, 1]) box('side_panel_' + (s > 0 ? 'r' : 'l'), M.panel_gray,
+      0.012, RH - BASE_H - TOP_H, RD - 0.02, s * (RW / 2 - 0.006), (BASE_H + RH - TOP_H) / 2, 0, g);
+  // EIA mounting rails front + rear
+  for (const [nm, z] of [['rail_front', FRONT - 0.07], ['rail_rear', REAR + 0.32]])
+    for (const s of [-1, 1])
+      box(nm + (s > 0 ? '_r' : '_l'), M.tray_silver, 0.016, UNITS * U, 0.02, s * (IW / 2 + 0.012), BASE_H + UNITS * U / 2, z, g);
+}
+
+// ============ tray helpers ==============================================
+// Every tray: chassis body + face at the front plane.
+const FACE = FRONT - 0.075;                    // front face plane z
+function chassis(name, u, hU, depth, faceMat) {
+  const g = new THREE.Group(); g.name = name;
+  const h = hU * U - 0.004, y = uY(u) + hU * U / 2;
+  box(name + '_chassis', M.tray_silver, IW, h, depth, 0, 0, FACE - depth / 2, g);
+  box(name + '_face', faceMat, IW, h, 0.012, 0, 0, FACE + 0.006, g);
+  for (const s of [-1, 1]) box(name + '_ear' + (s > 0 ? '_r' : '_l'), M.bezel_dark,
+      0.018, h, 0.004, s * (IW / 2 + 0.011), 0, FACE + 0.002, g);
+  g.position.y = y;
+  rack.add(g);
+  return { g, h };
+}
+function leds(g, name, x, y, mats) {
+  mats.forEach((m, i) => box(name + '_led' + i, m, 0.006, 0.003, 0.002, x + i * 0.012, y, FACE + 0.013 - g.position.z, g));
+}
+
+// ============ compute tray (1U, dual-board, liquid-cooled) =============
+function computeTray(u, idx) {
+  const name = 'compute_tray_' + idx;
+  const { g, h } = chassis(name, u, 1, 0.90, M.compute_face);
+  const zf = FACE + 0.013;
+  // two blind-mate handle latches
+  for (const s of [-1, 1]) {
+    box(name + '_handle' + (s > 0 ? '_r' : '_l'), M.handle_blue, 0.05, 0.012, 0.014, s * (IW / 2 - 0.045), 0, zf, g);
+    box(name + '_latch' + (s > 0 ? '_r' : '_l'), M.latch_orange, 0.012, 0.008, 0.015, s * (IW / 2 - 0.085), 0, zf, g);
+  }
+  // E1.S local NVMe bays (4)
+  for (let i = 0; i < 4; i++)
+    box(name + '_nvme_' + i, M.drive_face, 0.016, h - 0.014, 0.006, -0.10 + i * 0.022, 0, zf - 0.002, g);
+  // OSFP backend NIC ports (4) + mgmt RJ45
+  for (let i = 0; i < 4; i++)
+    box(name + '_osfp_' + i, M.port_cage, 0.022, 0.012, 0.008, 0.03 + i * 0.030, 0.004, zf, g);
+  box(name + '_mgmt_rj45', M.grille, 0.016, 0.012, 0.006, 0.155, 0.004, zf, g);
+  leds(g, name, 0.03, -0.012, [M.led_green, M.led_blue, idx % 5 ? M.led_green : M.led_amber]);
+  box(name + '_label', M.label_white, 0.05, 0.008, 0.001, -0.22, 0.011, zf, g);
+  // vent grille strip
+  box(name + '_grille', M.grille, 0.09, h - 0.012, 0.004, 0.21, 0, zf - 0.004, g);
+  // rear: blind-mate QD pair (supply/return) + busbar clip
+  const zr = FACE - 0.90 - 0.008;
+  cyl(name + '_qd_supply', M.coolant_supply, 0.009, 0.03, -0.08, 0, zr, 'z', g);
+  cyl(name + '_qd_return', M.coolant_return, 0.009, 0.03, 0.08, 0, zr, 'z', g);
+  box(name + '_bus_clip', M.copper, 0.03, 0.012, 0.025, 0, 0, zr, g);
+}
+
+// ============ NVLink-class switch tray (1U) ============================
+function switchTray(u, idx) {
+  const name = 'nvswitch_tray_' + idx;
+  const { g, h } = chassis(name, u, 1, 0.86, M.nvsw_face);
+  const zf = FACE + 0.013;
+  box(name + '_band', M.handle_blue, IW - 0.03, 0.006, 0.002, 0, h / 2 - 0.008, zf, g);
+  for (const s of [-1, 1])
+    box(name + '_handle' + (s > 0 ? '_r' : '_l'), M.handle_blue, 0.05, 0.012, 0.014, s * (IW / 2 - 0.045), 0, zf, g);
+  leds(g, name, -0.02, 0, [M.led_green, M.led_green, M.led_blue]);
+  box(name + '_label', M.label_white, 0.06, 0.008, 0.001, -0.20, 0, zf, g);
+  box(name + '_grille', M.grille, 0.20, h - 0.014, 0.004, 0.14, 0, zf - 0.004, g);
+  const zr = FACE - 0.86 - 0.008;
+  cyl(name + '_qd_supply', M.coolant_supply, 0.009, 0.03, -0.08, 0, zr, 'z', g);
+  cyl(name + '_qd_return', M.coolant_return, 0.009, 0.03, 0.08, 0, zr, 'z', g);
+  box(name + '_bus_clip', M.copper, 0.03, 0.012, 0.025, 0, 0, zr, g);
+}
+
+// ============ power shelf (1U, 6 hot-swap PSUs -> 48V busbar) ==========
+function powerShelf(u, idx) {
+  const name = 'power_shelf_' + idx;
+  const { g, h } = chassis(name, u, 1, 0.70, M.psu_face);
+  const zf = FACE + 0.013;
+  const pw = (IW - 0.02) / 6;
+  for (let i = 0; i < 6; i++) {
+    const x = -IW / 2 + 0.01 + pw * (i + 0.5);
+    box(name + '_psu' + i, M.psu_face, pw - 0.004, h - 0.008, 0.006, x, 0, zf - 0.002, g);
+    box(name + '_psu' + i + '_grille', M.grille, pw - 0.018, h - 0.020, 0.003, x, -0.002, zf + 0.001, g);
+    box(name + '_psu' + i + '_led', M.led_green, 0.005, 0.0025, 0.002, x - pw / 2 + 0.012, h / 2 - 0.008, zf + 0.002, g);
+    box(name + '_psu' + i + '_handle', M.bezel_dark, pw - 0.024, 0.005, 0.008, x, h / 2 - 0.009, zf + 0.002, g);
+  }
+  const zr = FACE - 0.70 - 0.008;
+  box(name + '_bus_output', M.copper, 0.05, 0.016, 0.03, 0, 0, zr, g);
+}
+
+// ============ ToR network switch (1U, 32 QSFP-DD) ======================
+function torSwitch(u, idx) {
+  const name = 'tor_switch_' + idx;
+  const { g, h } = chassis(name, u, 1, 0.60, M.bezel_dark);
+  const zf = FACE + 0.013;
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 16; c++) {
+    const x = -IW / 2 + 0.035 + c * 0.0285, y = r ? -0.0085 : 0.0065;
+    box(name + '_qsfp_' + r + '_' + c, M.port_cage, 0.021, 0.010, 0.008, x, y, zf, g);
+    if ((c + r * 3) % 4 !== 3)
+      box(name + '_fiber_' + r + '_' + c, M.fiber_aqua, 0.006, 0.006, 0.014, x, y, zf + 0.008, g);
+  }
+  leds(g, name, 0.195, 0.014, [M.led_green, M.led_blue]);
+  box(name + '_label', M.label_white, 0.05, 0.007, 0.001, -0.21, 0.0155, zf, g);
+}
+
+// ============ storage node (2U, 24 E3.S front bays) ====================
+function storageNode(u, idx) {
+  const name = 'storage_node_' + idx;
+  const { g, h } = chassis(name, u, 2, 0.80, M.compute_face);
+  const zf = FACE + 0.013;
+  for (let c = 0; c < 24; c++) {
+    const x = -IW / 2 + 0.022 + c * 0.0207;
+    box(name + '_bay_' + c, M.drive_face, 0.016, h - 0.016, 0.008, x, 0, zf, g);
+    box(name + '_bay_' + c + '_led', c % 7 === 3 ? M.led_amber : M.led_green,
+        0.004, 0.002, 0.002, x, h / 2 - 0.012, zf + 0.005, g);
+    box(name + '_bay_' + c + '_latch', M.bezel_dark, 0.012, 0.004, 0.003, x, -h / 2 + 0.012, zf + 0.005, g);
+  }
+}
+
+// ============ management / BMC aggregation (1U) ========================
+function mgmtTray(u) {
+  const name = 'mgmt_tray';
+  const { g, h } = chassis(name, u, 1, 0.55, M.psu_face);
+  const zf = FACE + 0.013;
+  for (let i = 0; i < 8; i++)
+    box(name + '_rj45_' + i, M.grille, 0.015, 0.011, 0.006, -0.16 + i * 0.024, 0, zf, g);
+  box(name + '_screen', M.screen_dark, 0.09, 0.020, 0.002, 0.13, 0, zf, g);
+  leds(g, name, 0.20, 0, [M.led_green, M.led_green]);
+}
+
+// ============ in-rack CDU (4U: pumps, HX, controller) ==================
+function cdu(u) {
+  const name = 'cdu';
+  const { g, h } = chassis(name, u, 4, 0.95, M.cdu_body);
+  const zf = FACE + 0.013;
+  box(name + '_screen', M.screen_dark, 0.14, 0.05, 0.003, -0.14, 0.02, zf, g);
+  leds(g, name, -0.19, -0.045, [M.led_green, M.led_green, M.led_amber]);
+  box(name + '_grille', M.grille, 0.22, h - 0.03, 0.004, 0.13, 0, zf - 0.003, g);
+  box(name + '_label', M.label_white, 0.08, 0.010, 0.001, -0.14, -0.02, zf, g);
+  // dual redundant pumps visible through side (rear internals)
+  for (const [i, x] of [-0.10, 0.10].entries())
+    cyl(name + '_pump_' + i, M.qd_steel, 0.045, 0.12, x, 0, FACE - 0.75, 'z', g);
+  box(name + '_hx', M.copper, 0.40, h - 0.04, 0.10, 0, 0, FACE - 0.55, g);
+  // facility water connections out the rear bottom
+  const zr = FACE - 0.95;
+  cyl(name + '_facility_supply', M.coolant_supply, 0.022, 0.10, -0.14, -h / 2 + 0.04, zr - 0.04, 'z', g);
+  cyl(name + '_facility_return', M.coolant_return, 0.022, 0.10, 0.14, -h / 2 + 0.04, zr - 0.04, 'z', g);
+}
+
+// ============ populate slots (bottom -> top) ===========================
+let slot = 1;
+cdu(slot); slot += 4;                                     // U1-4   CDU
+for (let i = 0; i < 3; i++) powerShelf(slot++, i);        // U5-7   power (lower bank)
+for (let i = 0; i < 9; i++) computeTray(slot++, i);       // U8-16  compute 1-9
+for (let i = 0; i < 9; i++) switchTray(slot++, i);        // U17-25 NVLink switches
+for (let i = 9; i < 18; i++) computeTray(slot++, i);      // U26-34 compute 10-18
+for (let i = 3; i < 6; i++) powerShelf(slot++, i);        // U35-37 power (upper bank)
+storageNode(slot, 0); slot += 2;                          // U38-39 storage
+mgmtTray(slot++);                                         // U40    management
+torSwitch(slot++, 0);                                     // U41-42 ToR switches
+torSwitch(slot++, 1);
+// blanking panels to the top
+for (let u = slot, i = 0; u <= UNITS; u++, i++)
+  box('blank_panel_' + i, M.panel_gray, IW, U - 0.006, 0.008, 0, uY(u) + U / 2, FACE + 0.004);
+
+// ============ rear: DC busbar, manifolds, PDUs, backplane ==============
+{
+  const g = new THREE.Group(); g.name = 'rear_infrastructure'; rack.add(g);
+  const busZ = REAR + 0.10, busH = UNITS * U - 0.1;
+  // 48V DC busbar pair (copper, center) with insulating guard
+  box('busbar_guard', M.busbar_guard, 0.07, busH, 0.02, 0, BASE_H + busH / 2 + 0.05, busZ + 0.028, g);
+  for (const [i, x] of [-0.018, 0.018].entries())
+    box('busbar_' + (i ? 'neg' : 'pos'), M.copper, 0.012, busH, 0.03, x, BASE_H + busH / 2 + 0.05, busZ, g);
+  // NVLink copper backplane cartridge behind compute/switch zone
+  box('nvlink_backplane', M.bezel_dark, 0.30, 27 * U, 0.05, 0, uY(8) + 27 * U / 2, REAR + 0.20, g);
+  for (let i = 0; i < 27; i++)
+    box('nvlink_cartridge_' + i, M.copper, 0.26, 0.018, 0.012, 0, uY(8) + (i + 0.5) * U, REAR + 0.17, g);
+  // coolant manifolds: supply (blue, left) / return (red, right)
+  const manH = 38 * U;
+  for (const [nm, m, s] of [['manifold_supply', M.coolant_supply, -1], ['manifold_return', M.coolant_return, 1]]) {
+    cyl(nm, m, 0.028, manH, s * (IW / 2 - 0.02), BASE_H + manH / 2 + 2 * U, REAR + 0.06, 'y', g);
+    // branch QDs + flexible hose stubs to each cooled tray (compute + switch zone)
+    for (let i = 0; i < 27; i++) {
+      const y = uY(8) + (i + 0.5) * U;
+      cyl(nm + '_qd_' + i, M.qd_steel, 0.008, 0.025, s * (IW / 2 - 0.02), y, REAR + 0.085, 'z', g);
+      cyl(nm + '_hose_' + i, M.hose_black, 0.007, 0.13, s * (IW / 2 - 0.055), y, REAR + 0.13, 'z', g)
+        .rotation.y = s * 0.5;
+    }
+    // CDU riser connection
+    cyl(nm + '_riser', m, 0.024, 0.10, s * (IW / 2 - 0.02), BASE_H + 1.5 * U, REAR + 0.06, 'y', g);
+  }
+  // vertical rack PDUs (2, zero-U, for fans/mgmt loads) with C13 outlets
+  for (const [i, s] of [-1, 1].entries()) {
+    const px = s * (RW / 2 - 0.045), pH = 30 * U;
+    box('pdu_' + i, M.pdu_body, 0.055, pH, 0.07, px, BASE_H + pH / 2 + 4 * U, REAR + 0.16, g);
+    for (let o = 0; o < 12; o++)
+      box('pdu_' + i + '_outlet_' + o, M.outlet_white, 0.018, 0.014, 0.004,
+          px, BASE_H + 4 * U + 0.10 + o * 0.105, REAR + 0.16 + 0.037, g);
+    box('pdu_' + i + '_meter', M.screen_dark, 0.03, 0.04, 0.004, px, BASE_H + 4 * U + pH - 0.08, REAR + 0.16 + 0.037, g);
+    cyl('pdu_' + i + '_whip', M.hose_black, 0.014, 0.35, px, BASE_H + 0.12, REAR + 0.20, 'y', g);
+  }
+}
+
+const bb = new THREE.Box3().setFromObject(rack);
+rack.position.y = -bb.min.y;
+stage.setObject(rack);
+stage._loop && stage._loop();  // hidden iframes never tick rAF
+</script>
+</body>
+</html>

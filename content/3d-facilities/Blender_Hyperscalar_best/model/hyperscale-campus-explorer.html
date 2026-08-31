@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale Campus — Connection Explorer</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;background:#e8e6e0}
+  three-d-stage{position:absolute;inset:0}
+  three-d-stage:not(:defined){visibility:hidden}
+  .hud{position:absolute;z-index:10;background:rgba(10,10,11,.95);color:#E8E8E6;border-radius:10px;
+       border:1px solid #2c2c2e;box-shadow:0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(8px)}
+  #left{left:14px;top:14px;width:262px;max-height:calc(100% - 28px);display:flex;flex-direction:column}
+  #right{right:14px;top:14px;width:320px;max-height:calc(100% - 92px);display:flex;flex-direction:column}
+  .hd{padding:12px 62px 10px 14px;border-bottom:1px solid #2c2c2e;flex:0 0 auto;position:relative}
+  .hudbtns{position:absolute;right:9px;top:9px;display:flex;gap:4px}
+  .iconbtn{width:22px;height:22px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:5px;
+           cursor:pointer;font:700 12px Inter,sans-serif;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+  .iconbtn:hover{background:#2c2c2e;color:#fff}
+  .hud.collapsed .bd{display:none}
+  .hud.collapsed{max-height:none}
+  #right[hidden]{display:none}
+  /* sits between the left panel (262px) and the selection panel (320px), never over either */
+  #assets{left:290px;top:14px;width:min(392px, calc(100vw - 290px - 348px));min-width:240px;
+          max-height:calc(100% - 120px);display:flex;flex-direction:column;z-index:11}
+  #assets[hidden]{display:none}
+  .hud.collapsed .bd{display:none}
+  .arow{display:grid;grid-template-columns:minmax(0,1fr) 40px 44px;gap:4px;align-items:center;padding:5px 7px;
+        border-radius:5px;cursor:pointer;border-bottom:1px solid #1e1e20}
+  .arow > .acell{min-width:0;overflow:hidden}
+  .arow:hover{background:#242426}
+  .arow .an{font-size:10.5px;color:#E8E8E6;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .arow .ak{font-size:9px;color:#8a8a88;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .arow .az{font-size:9px;font-weight:700;text-align:center;padding:2px 3px;border-radius:8px}
+  .arow .as{font-size:9px;color:#C8C8C6;text-align:right;font-weight:600}
+  .ahead{display:grid;grid-template-columns:minmax(0,1fr) 40px 44px;gap:4px;font-size:8.5px;font-weight:700;
+         letter-spacing:1.2px;color:#8a8a88;padding:0 7px 5px;border-bottom:1px solid #3a3a3d;margin-bottom:5px}
+  .ahead span:nth-child(2){text-align:center}
+  .ahead span:nth-child(3){text-align:right}
+  .agroup{font-size:9px;font-weight:700;letter-spacing:1.2px;color:#EE7623;margin:11px 0 5px;padding:0 7px}
+  .statline{font-size:9.5px;color:#8a8a88;padding:7px 14px 9px;border-top:1px solid #2c2c2e;flex:0 0 auto;line-height:1.5}
+  .ttl{font-size:12.5px;font-weight:700;color:#FBFAF8;letter-spacing:.2px}
+  .sub{font-size:10.5px;color:#8a8a88;margin-top:3px;line-height:1.4}
+  .bd{padding:11px 14px 13px;overflow-y:auto;flex:1 1 auto}
+  .sec{font-size:9.5px;font-weight:700;letter-spacing:1.6px;color:#EE7623;margin:0 0 7px}
+  .sec.mt{margin-top:15px}
+  .sec.fold{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;
+            padding:3px 0;border-bottom:1px solid #262628;margin-bottom:8px}
+  .sec.fold:hover{color:#F49A55}
+  .sec.fold .caret{font-size:8px;color:#8a8a88;transition:transform .12s;width:8px;display:inline-block}
+  .sec.fold.shut .caret{transform:rotate(-90deg)}
+  .fold-body.shut{display:none}
+  .seg{display:flex;gap:4px;margin-bottom:4px}
+  .seg button{flex:1;font:600 10.5px Inter,sans-serif;padding:6px 4px;border:1px solid #3a3a3d;background:#1c1c1e;
+              color:#B4B4B2;border-radius:5px;cursor:pointer}
+  .seg button.on{background:#EE7623;border-color:#EE7623;color:#fff}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{display:flex;align-items:center;gap:5px;font:600 10px Inter,sans-serif;padding:4px 8px;border-radius:20px;
+        background:#1a1a1c;border:1px solid #3a3a3d;color:#8a8a88;cursor:pointer;user-select:none}
+  .chip.on{background:#2a2a2c;border-color:#5a5a5d;color:#F0F0EE}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .btns{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+  .btn{font:600 10.5px Inter,sans-serif;padding:6px 9px;border:1px solid #3a3a3d;background:#1c1c1e;color:#C8C8C6;
+       border-radius:5px;cursor:pointer}
+  .btn:hover{background:#2c2c2e;color:#fff}
+  .btn.pri{background:#EE7623;border-color:#EE7623;color:#fff}
+  input[type=search]{width:100%;box-sizing:border-box;font:500 11px Inter,sans-serif;padding:6px 8px;border-radius:5px;
+       border:1px solid #3a3a3d;background:#111112;color:#F0F0EE}
+  input[type=search]::placeholder{color:#6e6e6c}
+  .hit{padding:5px 7px;border-radius:5px;font-size:10.5px;cursor:pointer;color:#C8C8C6}
+  .hit:hover{background:#2c2c2e;color:#fff}
+  .selname{font-size:15px;font-weight:700;color:#FBFAF8;line-height:1.25}
+  .selkind{font-size:10.5px;color:#EE7623;font-weight:600;margin-top:3px}
+  .kv{display:flex;gap:8px;font-size:10.5px;padding:3px 0;border-bottom:1px solid #262628}
+  .kv b{flex:0 0 84px;color:#8a8a88;font-weight:600}
+  .kv span{color:#E8E8E6}
+  .conn{display:block;width:100%;text-align:left;padding:7px 8px;margin-bottom:4px;border-radius:6px;border:1px solid #2c2c2e;
+        background:#151516;cursor:pointer;color:inherit;font-family:inherit}
+  .conn:hover{background:#242426;border-color:#5a5a5d}
+  .conn .top{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;color:#F0F0EE}
+  .conn .arrow{color:#EE7623;font-weight:700}
+  .conn .meta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:9.5px;color:#8a8a88}
+  .pill{padding:2px 6px;border-radius:10px;font-weight:700;font-size:9px;color:#101a2e}
+  .empty{font-size:10.5px;color:#8a8a88;line-height:1.5}
+  #tip{position:absolute;z-index:20;pointer-events:none;display:none;background:#0a0a0b;color:#F0F0EE;
+       font:600 10.5px Inter,sans-serif;padding:5px 8px;border-radius:5px;border:1px solid #4a4a4d;white-space:nowrap}
+  .zonetag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:12px;margin-top:6px}
+  .surf{font-size:10px;line-height:1.5;color:#C8C8C6;padding:5px 0 5px 12px;position:relative;border-bottom:1px solid #262628}
+  .surf:before{content:'';position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%;background:#EE7623}
+  .crit{background:#C8332A;color:#fff;padding:1px 5px;border-radius:8px;font-size:8.5px;font-weight:700;letter-spacing:.4px}
+  .oneway{background:#3a3a3d;color:#E8E8E6;padding:1px 5px;border-radius:8px;font-size:8.5px;font-weight:700}
+  .note{font-size:9.5px;color:#8a8a88;line-height:1.45;margin-top:4px;font-style:italic}
+  .bd::-webkit-scrollbar{width:8px}.bd::-webkit-scrollbar-thumb{background:#3a3a3d;border-radius:4px}
+</style>
+</head>
+<body>
+<three-d-stage name="hyperscale_campus" background="#e8e6e0"></three-d-stage>
+
+<div id="left" class="hud">
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="leftCollapse" title="Collapse panel">–</button>
+    </div>
+    <div class="ttl">Campus Connection Explorer</div>
+    <div class="sub">Click a component to select and zoom it. Keys: G graph · P physical · B both · F fit · Esc clear.</div>
+  </div>
+  <div class="bd">
+    <div class="sec">VIEWPOINT</div>
+    <div class="btns">
+      <button class="btn" id="vAll">Fit campus</button>
+      <button class="btn" id="vHall">Data hall</button>
+      <button class="btn" id="vElec">Electrical</button>
+      <button class="btn" id="vCool">Cooling</button>
+      <button class="btn" id="vMMR">MMR / NOC</button>
+    </div>
+    <div class="sec mt">VIEW</div>
+    <div class="seg" id="mode">
+      <button data-m="both">Both</button>
+      <button data-m="physical">Physical</button>
+      <button data-m="graph" class="on">Graph</button>
+    </div>
+    <div class="sec mt">SEARCH</div>
+    <input type="search" id="q" placeholder="pump, firewall, CDU, rack01…" autocomplete="off">
+    <div id="hits"></div>
+    <div class="sec mt fold" data-fold="fMarker"><span class="caret">▼</span>MARKER COLOUR</div>
+    <div class="fold-body" id="fMarker">
+      <div class="seg" id="colmode">
+        <button data-c="system" class="on">System</button>
+        <button data-c="zone">IEC 62443 zone</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fZone"><span class="caret">▼</span>IEC 62443 ZONE</div>
+    <div class="fold-body" id="fZone"><div class="chips" id="zones"></div></div>
+    <div class="sec mt">CONDUITS</div>
+    <div class="seg" id="critmode">
+      <button data-k="all" class="on">All</button>
+      <button data-k="crit">Critical only (§5.6)</button>
+    </div>
+    <div class="sec mt fold" data-fold="fList"><span class="caret">▼</span>ASSET LIST</div>
+    <div class="fold-body" id="fList">
+      <div class="btns" id="listZones"></div>
+      <div class="btns" id="listSystems" style="margin-top:5px"></div>
+    </div>
+    <div class="sec mt fold" data-fold="fSvc"><span class="caret">▼</span>SERVICE</div>
+    <div class="fold-body" id="fSvc"><div class="chips" id="svc"></div></div>
+    <div class="sec mt fold" data-fold="fProto"><span class="caret">▼</span>PROTOCOL</div>
+    <div class="fold-body" id="fProto">
+      <div class="chips" id="proto"></div>
+      <div class="btns" style="margin-top:9px">
+        <button class="btn" id="pAll">All</button>
+        <button class="btn" id="pNone">None</button>
+        <button class="btn" id="pOT">OT only</button>
+        <button class="btn" id="pIT">IT only</button>
+      </div>
+    </div>
+  </div>
+  <div class="statline" id="stats">loading…</div>
+</div>
+
+<div id="right" class="hud" hidden>
+  <div class="hd" id="selHd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="rightCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="rightClose" title="Close (Esc)">×</button>
+    </div>
+    <div class="selname" id="selName">Nothing selected</div>
+    <div class="selkind" id="selKind">Click a component in the model</div>
+    <div class="zonetag" id="zoneTag" style="display:none"></div>
+  </div>
+  <div class="bd" id="selBody">
+    <div class="empty">The model carries a typed connection graph: water, condenser water, air, electricity, fuel, IT data, OT control, fire and security — each edge tagged with its protocol (Ethernet/TCP-IP, Modbus TCP/RTU, PROFINET, BACnet/IP and MS/TP, IEC 61850, OPC UA, OSDP, CAN, dry contact, 4–20 mA).</div>
+  </div>
+</div>
+
+<div id="assets" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="assetsCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="assetsClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="assetsTitle">Asset list</div>
+    <div class="selkind" id="assetsCount"></div>
+  </div>
+  <div class="bd" id="assetsBody"></div>
+</div>
+
+<div id="tip"></div>
+
+<script src="three-d-stage.js"></script>
+<script type="module">
+import { buildCampus, SERVICES, PROTOCOLS, ZONES } from './campus-model.js';
+
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+const { group: C, graph, materials } = buildCampus(THREE);
+
+// ===== graph overlay ====================================================
+const SYSCOL = { PWR:0xd8b23a, CHW:0x1f6fd0, AIR:0x9aa4ac, DATA:0x35c2c9, OT:0x8a4fd0,
+                 BMS:0xe8e8e2, FA:0xc8332a, SEC:0xe07a26, IT:0x9ba1a8 };
+const overlay = new THREE.Group();
+overlay.name = '_graph_overlay';
+overlay.userData.excludeFromExport = true;
+C.add(overlay);
+
+const nodeMarks = {}, edgeTubes = {};
+const localOf = v => C.worldToLocal(v.clone());
+
+for (const n of Object.values(graph.nodes)) {
+  const m = new THREE.Mesh(new THREE.OctahedronGeometry(0.17),
+    new THREE.MeshStandardMaterial({ name:'gn_'+n.system, color: SYSCOL[n.system] ?? 0xcccccc,
+      emissive: SYSCOL[n.system] ?? 0xcccccc, emissiveIntensity:.35, roughness:.4 }));
+  m.name = 'gnode_' + n.id;
+  m.position.copy(localOf(n.anchor));
+  m.userData.graphNode = n.id;
+  overlay.add(m); nodeMarks[n.id] = m;
+}
+// Routed geometry from graph/routes.json when available: orthogonal runs
+// following the containment corridors, filleted at the service bend radius.
+// Falls back to a schematic arc for any edge without a solved route.
+let ROUTES = null;
+try {
+  const res = await fetch('graph/routes.json');
+  if (res.ok) {
+    const j = await res.json();
+    ROUTES = new Map(j.routes.map(r => [r.id, r]));
+    console.log('[explorer] routes loaded', ROUTES.size, '· total', j.meta.total_length_m, 'm');
+  }
+} catch (err) { console.warn('[explorer] no routes.json, using schematic arcs', err); }
+
+for (const e of graph.edges) {
+  const a = localOf(graph.nodes[e.from].anchor), b = localOf(graph.nodes[e.to].anchor);
+  const col = PROTOCOLS[e.protocol]?.color ?? SERVICES[e.service]?.color ?? 0x888888;
+  const r = ROUTES && ROUTES.get(e.id);
+  let curve, radius, segs;
+  if (r && r.points && r.points.length > 1) {
+    const pts = r.points.map(p => localOf(new THREE.Vector3(p[0], p[1], p[2])));
+    curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.02);
+    radius = r.service === 'water' || r.service === 'condenser' || r.service === 'air' ? 0.055 : 0.038;
+    segs = Math.min(220, Math.max(24, pts.length * 3));
+  } else {
+    const mid = a.clone().lerp(b, .5);
+    mid.y += Math.min(2.6, a.distanceTo(b) * .16) + .35;
+    curve = new THREE.QuadraticBezierCurve3(a, mid, b);
+    radius = 0.045; segs = 22;
+  }
+  const t = new THREE.Mesh(new THREE.TubeGeometry(curve, segs, radius, 6, false),
+    new THREE.MeshStandardMaterial({ name:'ge_'+e.service, color:col, emissive:col, emissiveIntensity:.3, roughness:.45 }));
+  t.name = 'gedge_' + e.id;
+  t.userData.graphEdge = e.id;
+  t.userData.routed = !!r;
+  overlay.add(t); edgeTubes[e.id] = t;
+}
+
+stage.setObject(C);
+stage._loop && stage._loop();
+
+// The graph overlay is a view aid — never let it reach the OBJ/GLB deliverable.
+// (OBJExporter ignores .visible entirely, so the overlay must leave the tree.)
+if (typeof stage._runExport === 'function') {
+  const runExport = stage._runExport.bind(stage);
+  stage._runExport = async (fmt) => {
+    const parent = overlay.parent;
+    if (parent) parent.remove(overlay);
+    try { return await runExport(fmt); }
+    finally { if (parent) parent.add(overlay); render(); }
+  };
+}
+
+// ===== dim / highlight bookkeeping ======================================
+const matBase = new Map();
+for (const m of Object.values(materials)) matBase.set(m, { t: m.transparent, o: m.opacity });
+function dimPhysical(on) {
+  for (const [m, b] of matBase) {
+    if (on) { m.transparent = true; m.opacity = 0.07; m.depthWrite = false; }
+    else { m.transparent = b.t; m.opacity = b.o; m.depthWrite = true; }
+    m.needsUpdate = true;
+  }
+}
+const HL = new THREE.MeshStandardMaterial({ name:'highlight', color:0xEE7623, emissive:0xEE7623, emissiveIntensity:.55, roughness:.35 });
+const HL2 = new THREE.MeshStandardMaterial({ name:'highlight_soft', color:0xf2b736, emissive:0xf2b736, emissiveIntensity:.3, roughness:.4 });
+let highlighted = [];
+function clearHL() { for (const [o, m] of highlighted) o.material = m; highlighted = []; }
+function addHL(obj, soft) {
+  obj.traverse(o => { if (o.isMesh && !o.userData.graphNode && !o.userData.graphEdge) {
+    highlighted.push([o, o.material]); o.material = soft ? HL2 : HL; } });
+}
+
+// ===== state + filters ==================================================
+const usedProtos = [...new Set(graph.edges.map(e => e.protocol))]
+  .sort((a, b) => (PROTOCOLS[a]?.layer || '').localeCompare(PROTOCOLS[b]?.layer || '') || a.localeCompare(b));
+const usedSvcs = [...new Set(graph.edges.map(e => e.service))];
+const usedZones = Object.keys(ZONES).filter(z => Object.values(graph.nodes).some(n => n.zone === z));
+const S = { mode:'graph', svc:new Set(usedSvcs), proto:new Set(usedProtos), zone:new Set(usedZones),
+            crit:false, col:'system', sel:null, trace:null };
+
+const svcBox = document.getElementById('svc'), protoBox = document.getElementById('proto');
+const hex = n => '#' + n.toString(16).padStart(6, '0');
+function chip(box, label, color, set, key) {
+  const el = document.createElement('div');
+  el.className = 'chip on';
+  el.innerHTML = `<span class="dot" style="background:${color}"></span>${label}`;
+  el.onclick = () => { set.has(key) ? set.delete(key) : set.add(key); el.classList.toggle('on', set.has(key)); apply(); };
+  box.appendChild(el); return el;
+}
+const svcChips = {}, protoChips = {};
+for (const s of usedSvcs) svcChips[s] = chip(svcBox, SERVICES[s]?.label ?? s, hex(SERVICES[s]?.color ?? 0x888888), S.svc, s);
+for (const p of usedProtos) protoChips[p] = chip(protoBox, p, hex(PROTOCOLS[p]?.color ?? 0x888888), S.proto, p);
+const zoneBox = document.getElementById('zones'), zoneChips = {};
+for (const z of usedZones) zoneChips[z] = chip(zoneBox, ZONES[z].label.replace(/ —.*/, '') + ' · ' + ZONES[z].purdue,
+  hex(ZONES[z].color), S.zone, z);
+const syncChips = () => {
+  for (const [k, el] of Object.entries(svcChips)) el.classList.toggle('on', S.svc.has(k));
+  for (const [k, el] of Object.entries(protoChips)) el.classList.toggle('on', S.proto.has(k));
+  for (const [k, el] of Object.entries(zoneChips)) el.classList.toggle('on', S.zone.has(k));
+};
+
+const nodeVisible = id => { const n = graph.nodes[id]; return !n?.zone || S.zone.has(n.zone); };
+function edgeVisible(e) {
+  if (!S.svc.has(e.service) || !S.proto.has(e.protocol)) return false;
+  if (S.crit && !e.critical) return false;
+  if (!nodeVisible(e.from) && !nodeVisible(e.to)) return false;
+  if (S.trace && !S.trace.edges.has(e.id)) return false;
+  return true;
+}
+function apply() {
+  const showGraph = S.mode !== 'physical';
+  overlay.visible = showGraph;
+  dimPhysical(S.mode === 'graph');
+
+  const geomVis = new Map();
+  for (const e of graph.edges) {
+    const v = edgeVisible(e);
+    if (edgeTubes[e.id]) edgeTubes[e.id].visible = showGraph && v;
+    const g = graph.geomIndex.get(e.id);
+    if (g) geomVis.set(g, (geomVis.get(g) || false) || v);
+  }
+  for (const [g, v] of geomVis) g.visible = v;
+
+  const liveNodes = new Set();
+  for (const e of graph.edges) if (edgeVisible(e)) { liveNodes.add(e.from); liveNodes.add(e.to); }
+  for (const [id, m] of Object.entries(nodeMarks))
+    m.visible = showGraph && (liveNodes.has(id) || S.sel === id) && (nodeVisible(id) || S.sel === id);
+  for (const [id, m] of Object.entries(nodeMarks)) {
+    const n = graph.nodes[id];
+    const c = S.col === 'zone' ? (ZONES[n.zone]?.color ?? 0x777777) : (SYSCOL[n.system] ?? 0xcccccc);
+    m.material.color.setHex(c); m.material.emissive.setHex(c);
+  }
+
+  render();
+}
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('on', x === b));
+  S.mode = b.dataset.m; apply();
+});
+// ---------- asset list popup ----------
+const assetsEl = document.getElementById('assets');
+const assetsBody = document.getElementById('assetsBody');
+const assetsTitle = document.getElementById('assetsTitle');
+const assetsCount = document.getElementById('assetsCount');
+const SYSLABEL = { PWR:'Electrical', CHW:'Cooling / fluid', AIR:'HVAC', DATA:'IT network',
+                   OT:'OT network', BMS:'Controls & monitoring', FA:'Fire & life safety',
+                   SEC:'Physical security', IT:'Compute payload' };
+
+function openAssetList(mode, key) {
+  const list = Object.values(graph.nodes).filter(n => mode === 'zone' ? n.zone === key : n.system === key);
+  assetsTitle.textContent = mode === 'zone'
+    ? (ZONES[key] ? ZONES[key].label : key)
+    : (SYSLABEL[key] || key) + ' — ' + key;
+  const slts = [...new Set(list.map(n => n.slt).filter(Boolean))];
+  assetsCount.textContent = list.length + ' assets'
+    + (mode === 'zone' && ZONES[key] ? ' · Purdue ' + ZONES[key].purdue + ' · target ' + ZONES[key].slt
+       : slts.length ? ' · SL-T ' + slts.sort().join(', ').replace(/SL-T /g, '') : '');
+
+  const groupBy = mode === 'zone' ? 'system' : 'zone';
+  const groups = {};
+  for (const n of list) { const k = n[groupBy] || '—'; (groups[k] = groups[k] || []).push(n); }
+
+  let html = '<div class="ahead"><span>ASSET</span><span>ZONE</span><span>SL-T</span></div>';
+  for (const gk of Object.keys(groups).sort()) {
+    const glabel = groupBy === 'system' ? (SYSLABEL[gk] || gk) + ' (' + gk + ')'
+                 : (ZONES[gk] ? ZONES[gk].label : gk);
+    html += '<div class="agroup">' + glabel + ' · ' + groups[gk].length + '</div>';
+    for (const n of groups[gk].sort((a, b) => a.label.localeCompare(b.label))) {
+      const zc = ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+      const dark = n.zone === 'Z3' || n.zone === 'Z0';
+      html += '<div class="arow" data-id="' + n.id + '">'
+        + '<div class="acell"><div class="an" title="' + n.label + '">' + n.label + '</div><div class="ak">' + n.kind + ' · ' + n.room + '</div></div>'
+        + '<div class="az" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+        + (n.zone || '—') + '</div>'
+        + '<div class="as">' + (n.slt || '—').replace('SL-T ', '') + '</div></div>';
+    }
+  }
+  assetsBody.innerHTML = html;
+  assetsBody.querySelectorAll('.arow').forEach(r => r.onclick = () => selectAndFly(r.dataset.id));
+  assetsEl.hidden = false;
+  assetsEl.classList.remove('collapsed');
+  document.getElementById('assetsCollapse').textContent = '\u2013';
+}
+document.getElementById('assetsClose').onclick = () => { assetsEl.hidden = true; };
+document.getElementById('assetsCollapse').onclick = e => {
+  const on = assetsEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+{
+  const zb = document.getElementById('listZones'), sb = document.getElementById('listSystems');
+  for (const z of usedZones) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = z;
+    b.title = ZONES[z] ? ZONES[z].label : z;
+    b.onclick = () => openAssetList('zone', z);
+    zb.appendChild(b);
+  }
+  const systems = [...new Set(Object.values(graph.nodes).map(n => n.system))].sort();
+  for (const sy of systems) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = sy;
+    b.title = SYSLABEL[sy] || sy;
+    b.onclick = () => openAssetList('system', sy);
+    sb.appendChild(b);
+  }
+}
+
+// foldable filter sections
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.onclick = () => {
+    const body = document.getElementById(h.dataset.fold);
+    if (!body) return;
+    h.classList.toggle('shut');
+    body.classList.toggle('shut');
+  };
+});
+// protocol list is long — start it folded
+document.querySelector('[data-fold="fProto"]').click();
+
+// panel collapse / close
+const leftEl = document.getElementById('left'), rightEl = document.getElementById('right');
+document.getElementById('leftCollapse').onclick = e => {
+  const on = leftEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+  e.target.title = on ? 'Expand panel' : 'Collapse panel';
+};
+document.getElementById('rightCollapse').onclick = e => {
+  const on = rightEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+function closePanel() {
+  rightEl.hidden = true;
+  S.sel = null; S.trace = null; clearHL(); apply();
+}
+document.getElementById('rightClose').onclick = closePanel;
+
+// keyboard shortcuts
+window.addEventListener('keydown', ev => {
+  if (ev.target.tagName === 'INPUT') return;
+  const k = ev.key.toLowerCase();
+  if (k === 'escape') closePanel();
+  else if (k === 'g' || k === 'p' || k === 'b') {
+    const m = k === 'g' ? 'graph' : k === 'p' ? 'physical' : 'both';
+    document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('on', x.dataset.m === m));
+    S.mode = m; apply();
+  } else if (k === 'f') views.vAll();
+});
+
+document.querySelectorAll('#colmode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#colmode button').forEach(x => x.classList.toggle('on', x === b));
+  S.col = b.dataset.c; apply();
+});
+document.querySelectorAll('#critmode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#critmode button').forEach(x => x.classList.toggle('on', x === b));
+  S.crit = b.dataset.k === 'crit'; apply();
+});
+document.getElementById('pAll').onclick = () => { S.svc = new Set(usedSvcs); S.proto = new Set(usedProtos); S.zone = new Set(usedZones); S.trace = null; syncChips(); apply(); };
+document.getElementById('pNone').onclick = () => { S.proto = new Set(); syncChips(); apply(); };
+document.getElementById('pOT').onclick = () => { S.proto = new Set(usedProtos.filter(p => PROTOCOLS[p]?.layer === 'OT')); syncChips(); apply(); };
+document.getElementById('pIT').onclick = () => { S.proto = new Set(usedProtos.filter(p => PROTOCOLS[p]?.layer === 'IT')); syncChips(); apply(); };
+
+// ===== camera =============================================================
+const cam = () => stage._camera, ctr = () => stage._controls;
+const render = () => stage._loop && stage._loop();
+let anim = null;
+function flyTo(center, radius, dirHint) {
+  const c = cam(), t = ctr();
+  const dist = Math.max(1.6, radius * 2.7);
+  const dir = dirHint || c.position.clone().sub(t.target).normalize();
+  const p1 = center.clone().add(dir.clone().multiplyScalar(dist));
+  const p0 = c.position.clone(), t0 = t.target.clone(), t1 = center.clone();
+  const start = performance.now(), dur = 620;
+  if (anim) cancelAnimationFrame(anim);
+  const step = () => {
+    const k = Math.min(1, (performance.now() - start) / dur);
+    const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    c.position.lerpVectors(p0, p1, e); t.target.lerpVectors(t0, t1, e);
+    t.update(); render();
+    if (k < 1) anim = requestAnimationFrame(step); else anim = null;
+  };
+  step();
+}
+const boxOf = o => new THREE.Box3().setFromObject(o);
+function frameObject(o, dirHint) {
+  const b = boxOf(o), ctrp = b.getCenter(new THREE.Vector3());
+  flyTo(ctrp, b.getSize(new THREE.Vector3()).length() / 2, dirHint);
+}
+const V = new THREE.Vector3();
+const views = {
+  vAll:  () => frameObject(C, new THREE.Vector3(.45, .62, .64).normalize()),
+  vHall: () => flyTo(new THREE.Vector3(3, 1.6, 0), 9, new THREE.Vector3(.2, .55, .81).normalize()),
+  vElec: () => flyTo(new THREE.Vector3(-17, 1.4, -1), 7, new THREE.Vector3(.35, .6, .72).normalize()),
+  vCool: () => flyTo(new THREE.Vector3(-9.5, 1.2, -9), 6.5, new THREE.Vector3(.3, .58, .76).normalize()),
+  vMMR:  () => flyTo(new THREE.Vector3(-13, 1.5, 10), 7, new THREE.Vector3(.25, .62, .74).normalize()),
+};
+for (const [id, fn] of Object.entries(views)) document.getElementById(id).onclick = fn;
+
+// ===== selection ==========================================================
+const selName = document.getElementById('selName'), selKind = document.getElementById('selKind'),
+      selBody = document.getElementById('selBody');
+
+function protoPill(p) {
+  const c = hex(PROTOCOLS[p]?.color ?? 0x888888);
+  return `<span class="pill" style="background:${c}">${p}</span>`;
+}
+function select(id, pickedMesh) {
+  const n = graph.nodes[id];
+  if (!n) return;
+  S.sel = id;
+  clearHL();
+  addHL(n.obj);
+  if (pickedMesh && pickedMesh !== n.obj) addHL(pickedMesh);
+
+  rightEl.hidden = false;
+  rightEl.classList.remove('collapsed');
+  document.getElementById('rightCollapse').textContent = '\u2013';
+  selName.textContent = n.label;
+  selKind.textContent = `${n.kind} · ${n.room}`;
+  const zh = document.getElementById('zoneTag');
+  if (n.zone && ZONES[n.zone]) {
+    zh.style.display = 'inline-flex';
+    zh.style.background = hex(ZONES[n.zone].color);
+    zh.style.color = ['Z3'].includes(n.zone) ? '#16203B' : '#fff';
+    zh.textContent = `${ZONES[n.zone].label}  ·  Purdue ${n.purdue || ZONES[n.zone].purdue}  ·  ${n.slt || ZONES[n.zone].slt}`;
+  } else zh.style.display = 'none';
+
+  const ins = graph.adj[id].in, outs = graph.adj[id].out;
+  const rows = (list, dirLabel) => list.map(e => {
+    const other = graph.nodes[e.from === id ? e.to : e.from];
+    const dim = edgeVisible(e) ? '' : 'opacity:.45;';
+    const badges = (e.critical ? '<span class="crit">CRITICAL CONDUIT</span>' : '')
+                 + (e.oneway ? '<span class="oneway">ONE-WAY</span>' : '')
+                 + (e.cross ? `<span class="oneway">${e.cross}</span>` : '');
+    const rt = ROUTES && ROUTES.get(e.id);
+    const runInfo = rt ? `${rt.length_m} m · ${rt.containment}` : null;
+    return `<button class="conn" data-node="${other.id}" style="${dim}">
+      <div class="top"><span class="arrow">${dirLabel}</span>${other.label}</div>
+      <div class="meta">${protoPill(e.protocol)}<span>${SERVICES[e.service]?.label ?? e.service}</span></div>
+      ${badges ? '<div class="meta">' + badges + '</div>' : ''}
+      <div class="meta"><span>${e.label}${e.geom ? ' · ' + e.geom : ''}</span></div>
+      ${runInfo ? '<div class="meta"><span>' + runInfo + '</span></div>' : ''}
+      ${e.note ? '<div class="note">' + e.note + '</div>' : ''}
+    </button>`;
+  }).join('');
+
+  const attrs = Object.entries(n.attrs).map(([k, v]) =>
+    `<div class="kv"><b>${k.replace(/_/g, ' ')}</b><span>${v}</span></div>`).join('');
+  const ident = (n.vendor ? `<div class="kv"><b>vendor</b><span>${n.vendor}</span></div>` : '')
+              + (n.standards ? `<div class="kv"><b>standards</b><span>${n.standards}</span></div>` : '');
+  const surf = n.surface.length
+    ? `<div class="sec mt">ATTACK SURFACE &amp; ASSURANCE NOTES</div>` + n.surface.map(t => `<div class="surf">${t}</div>`).join('')
+    : '';
+
+  selBody.innerHTML =
+    (ident ? `<div class="sec">IDENTIFICATION</div>${ident}` : '') +
+    (attrs ? `<div class="sec mt">ATTRIBUTES</div>${attrs}` : '') +
+    surf +
+    `<div class="sec mt">MESH</div><div class="kv"><b>name</b><span>${pickedMesh?.name || n.mesh}</span></div>` +
+    `<div class="sec mt">TRACE</div><div class="btns">
+       <button class="btn" id="tUp">Upstream</button>
+       <button class="btn" id="tDown">Downstream</button>
+       <button class="btn" id="tBoth">Both</button>
+       <button class="btn" id="tClear">Clear</button></div>` +
+    `<div class="sec mt">FEEDS THIS (${ins.length})</div>${ins.length ? rows(ins, '←') : '<div class="empty">No upstream connections modelled.</div>'}` +
+    `<div class="sec mt">FEEDS FROM HERE (${outs.length})</div>${outs.length ? rows(outs, '→') : '<div class="empty">No downstream connections modelled.</div>'}`;
+
+  selBody.querySelectorAll('.conn').forEach(b => b.onclick = () => selectAndFly(b.dataset.node));
+  const tr = d => { S.trace = graph.trace(id, d); paintTrace(); apply(); };
+  selBody.querySelector('#tUp').onclick = () => tr('up');
+  selBody.querySelector('#tDown').onclick = () => tr('down');
+  selBody.querySelector('#tBoth').onclick = () => tr('both');
+  selBody.querySelector('#tClear').onclick = () => { S.trace = null; clearHL(); addHL(n.obj); apply(); };
+  apply();
+}
+function paintTrace() {
+  clearHL();
+  if (!S.trace) return;
+  for (const nid of S.trace.nodes) {
+    const n = graph.nodes[nid];
+    if (n) addHL(n.obj, nid !== S.sel);
+  }
+  for (const eid of S.trace.edges) {
+    const g = graph.geomIndex.get(eid);
+    if (g) addHL(g, true);
+  }
+}
+function selectAndFly(id) {
+  select(id);
+  const n = graph.nodes[id];
+  if (n) frameObject(n.obj);
+}
+
+// ===== picking ============================================================
+const canvas = stage.shadowRoot.querySelector('canvas');
+const ray = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+function pick(ev) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, cam());
+  const hits = ray.intersectObject(C, true);
+  for (const h of hits) {
+    const o = h.object;
+    if (!o.visible || (o.material && o.material.opacity < .12)) continue;
+    return o;
+  }
+  return null;
+}
+const nodeOf = o => { let p = o; while (p) { if (p.userData.nodeId) return p.userData.nodeId; p = p.parent; } return null; };
+
+let down = null;
+canvas.addEventListener('pointerdown', e => down = { x: e.clientX, y: e.clientY, t: performance.now() });
+canvas.addEventListener('pointerup', e => {
+  if (!down) return;
+  const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  down = null;
+  if (moved > 5) return;
+  const o = pick(e);
+  if (!o) return;
+  if (o.userData.graphNode) return selectAndFly(o.userData.graphNode);
+  if (o.userData.graphEdge) {
+    const ed = graph.edges.find(x => x.id === o.userData.graphEdge);
+    if (ed) return selectAndFly(ed.from);
+  }
+  const id = nodeOf(o);
+  if (id) { select(id, o); frameObject(o.parent && o.parent.type === 'Group' && graph.nodes[id].obj === o.parent ? graph.nodes[id].obj : o); }
+});
+canvas.addEventListener('dblclick', e => { if (!pick(e)) views.vAll(); });
+
+const tip = document.getElementById('tip');
+let tmr = 0;
+canvas.addEventListener('pointermove', e => {
+  if (performance.now() - tmr < 60) return;
+  tmr = performance.now();
+  const o = pick(e);
+  let txt = null;
+  if (o) {
+    if (o.userData.graphNode) txt = graph.nodes[o.userData.graphNode].label;
+    else if (o.userData.graphEdge) {
+      const ed = graph.edges.find(x => x.id === o.userData.graphEdge);
+      txt = ed ? `${graph.nodes[ed.from].label} → ${graph.nodes[ed.to].label} · ${ed.protocol}` : null;
+    } else {
+      const id = nodeOf(o);
+      txt = id ? `${graph.nodes[id].label} — ${o.name}` : o.name;
+    }
+  }
+  if (txt) { tip.textContent = txt; tip.style.display = 'block';
+             tip.style.left = (e.clientX + 12) + 'px'; tip.style.top = (e.clientY + 12) + 'px'; }
+  else tip.style.display = 'none';
+});
+canvas.addEventListener('pointerleave', () => tip.style.display = 'none');
+
+// ===== search =============================================================
+const q = document.getElementById('q'), hits = document.getElementById('hits');
+const meshNames = [];
+C.traverse(o => { if (o.name && !o.name.startsWith('gnode_') && !o.name.startsWith('gedge_')) meshNames.push(o); });
+q.addEventListener('input', () => {
+  const s = q.value.trim().toLowerCase();
+  hits.innerHTML = '';
+  if (s.length < 2) return;
+  const nodeHits = Object.values(graph.nodes)
+    .filter(n => (n.label + ' ' + n.mesh + ' ' + n.kind).toLowerCase().includes(s)).slice(0, 6);
+  const meshHits = meshNames.filter(o => o.name.toLowerCase().includes(s)).slice(0, 6);
+  for (const n of nodeHits) {
+    const d = document.createElement('div');
+    d.className = 'hit'; d.textContent = '◆ ' + n.label;
+    d.onclick = () => { q.value = ''; hits.innerHTML = ''; selectAndFly(n.id); };
+    hits.appendChild(d);
+  }
+  for (const o of meshHits) {
+    if (nodeHits.some(n => n.mesh === o.name)) continue;
+    const d = document.createElement('div');
+    d.className = 'hit'; d.textContent = '· ' + o.name;
+    d.onclick = () => { q.value = ''; hits.innerHTML = '';
+      const id = nodeOf(o); if (id) select(id, o); frameObject(o); };
+    hits.appendChild(d);
+  }
+});
+
+apply();
+views.vAll();
+
+// footer stats
+{
+  const el = document.getElementById('stats');
+  let m = 0, runs = 0;
+  if (ROUTES) for (const r of ROUTES.values()) { m += r.length_m; runs++; }
+  const crit = graph.edges.filter(e => e.critical).length;
+  el.innerHTML = `${Object.keys(graph.nodes).length} assets · ${graph.edges.length} connections · ${crit} critical conduits<br>`
+    + (runs ? `${runs} routed runs · ${Math.round(m).toLocaleString()} m of containment` : 'routes.json not loaded');
+}
+
+console.log('[explorer] nodes', Object.keys(graph.nodes).length, 'edges', graph.edges.length,
+            'missing meshes', graph.missing.length);
+</script>
+</body>
+</html>

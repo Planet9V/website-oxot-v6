@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "project": "OXOT hyperscale AI datacenter — reference graph",
+    "purpose": "Asset register and connection graph accompanying the Babylon scene. Every asset binds to a GLB node by `mesh`.",
+    "glb_sources": {
+      "campus": "hyperscale-campus.html -> Download GLB (facility + hall geometry, 5130 meshes)",
+      "rack": "hyperscale-rack.html -> Download GLB (single high-detail 48U rack)",
+      "plc": "plc.html -> Download GLB (DIN-rail PLC assembly)"
+    },
+    "files": {
+      "facility-graph.json": {
+        "scale": "facility",
+        "assets": 117,
+        "connections": 143
+      },
+      "hall-graph.json": {
+        "scale": "hall",
+        "assets": 216,
+        "connections": 672
+      },
+      "rack-graph.json": {
+        "scale": "rack (template)",
+        "components": 10,
+        "connections": 22,
+        "instances": 96,
+        "components_per_rack": 41
+      }
+    },
+    "totals": {
+      "distinct_assets": 333,
+      "distinct_connections": 815,
+      "rack_internal_components_expanded": 3936,
+      "rack_internal_connections_expanded": 2112,
+      "critical_conduits": 54
+    }
+  },
+  "legends": {
+    "zones": {
+      "Z0": {
+        "label": "Z0 / Zone 4 — Enterprise IT",
+        "purdue": "L4-L5",
+        "slt": "SL-T 2",
+        "color": 10199464
+      },
+      "Z1": {
+        "label": "Z1 / Zone 3 — DCIM / IDMZ",
+        "purdue": "L3-L3.5",
+        "slt": "SL-T 2-3",
+        "color": 3523273
+      },
+      "Z2": {
+        "label": "Z2 / Zone 2 — Supervisory control",
+        "purdue": "L2",
+        "slt": "SL-T 2-3",
+        "color": 9064400
+      },
+      "Z3": {
+        "label": "Z3 / Zone 1 — Field device",
+        "purdue": "L0-L1",
+        "slt": "SL-T 1-2",
+        "color": 14201402
+      },
+      "Z4": {
+        "label": "Z4 — Safety instrumented (SIS)",
+        "purdue": "isolated SIS",
+        "slt": "SL-T 2-3",
+        "color": 13120298
+      },
+      "Z5": {
+        "label": "Z5 — Out-of-band / jump",
+        "purdue": "DMZ segment",
+        "slt": "SL-T 3",
+        "color": 14711334
+      }
+    },
+    "services": {
+      "water": {
+        "label": "Water / coolant",
+        "color": 2060240
+      },
+      "condenser": {
+        "label": "Condenser water",
+        "color": 3050327
+      },
+      "air": {
+        "label": "Air / HVAC",
+        "color": 10134700
+      },
+      "electricity": {
+        "label": "Electricity",
+        "color": 14201402
+      },
+      "fuel": {
+        "label": "Fuel",
+        "color": 14205498
+      },
+      "data": {
+        "label": "Data (IT)",
+        "color": 3523273
+      },
+      "control": {
+        "label": "Control (OT)",
+        "color": 9064400
+      },
+      "fire": {
+        "label": "Fire & life safety",
+        "color": 13120298
+      },
+      "security": {
+        "label": "Physical security",
+        "color": 14711334
+      }
+    },
+    "protocols": {
+      "Ethernet/TCP-IP": {
+        "color": 3523273,
+        "layer": "IT"
+      },
+      "BGP": {
+        "color": 2795957,
+        "layer": "IT"
+      },
+      "SNMP": {
+        "color": 5880009,
+        "layer": "IT"
+      },
+      "CAPWAP": {
+        "color": 4630736,
+        "layer": "IT"
+      },
+      "RS-232 console": {
+        "color": 8359834,
+        "layer": "IT"
+      },
+      "OPC UA": {
+        "color": 10186464,
+        "layer": "OT"
+      },
+      "Modbus TCP": {
+        "color": 9064400,
+        "layer": "OT"
+      },
+      "Modbus RTU": {
+        "color": 7289520,
+        "layer": "OT"
+      },
+      "PROFINET": {
+        "color": 11554768,
+        "layer": "OT"
+      },
+      "BACnet/IP": {
+        "color": 6254544,
+        "layer": "OT"
+      },
+      "BACnet MS/TP": {
+        "color": 4872365,
+        "layer": "OT"
+      },
+      "IEC 61850 MMS": {
+        "color": 13655984,
+        "layer": "OT"
+      },
+      "DNP3": {
+        "color": 10506122,
+        "layer": "OT"
+      },
+      "CAN bus": {
+        "color": 9071312,
+        "layer": "OT"
+      },
+      "OSDP RS-485": {
+        "color": 14711334,
+        "layer": "OT"
+      },
+      "Dry contact": {
+        "color": 10134700,
+        "layer": "OT"
+      },
+      "4-20 mA analog": {
+        "color": 11576458,
+        "layer": "OT"
+      },
+      "Physical flow": {
+        "color": 8359834,
+        "layer": "Process"
+      }
+    }
+  }
+}

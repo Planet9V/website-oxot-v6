@@ -1,0 +1,13 @@
+{
+  "input": "hyperscale_campus.glb",
+  "output": "/Users/jimmcknney/oxot_website_public_sept/new_material_source/3d_Facilities/Blender_Hyperscalar_best/build/hyperscale_campus_hq.glb",
+  "output_bytes": 20761268,
+  "objects": 6880,
+  "meshes": 2151,
+  "materials": 49,
+  "assets_tagged": 404,
+  "conduits_tagged": 1541,
+  "icd_assets_tagged": 24,
+  "routed_runs_built": 1005,
+  "lods": []
+}

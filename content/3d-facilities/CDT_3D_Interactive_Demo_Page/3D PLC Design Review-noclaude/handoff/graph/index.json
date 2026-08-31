@@ -1,0 +1,318 @@
+{
+  "meta": {
+    "project": "OXOT hyperscale AI datacenter — reference graph",
+    "purpose": "Asset register, connection graph and solved routing accompanying the Babylon scene. Assets bind to GLB nodes by `mesh`.",
+    "authority": "icd-graph.json is the specified interface truth (from the DLD/ICD). facility-graph.json and hall-graph.json carry the modelled geometry and the IEC 62443 assessment layer. routes.json holds solved containment paths. Where they disagree on a connection, the ICD wins.",
+    "integrity": {
+      "duplicate_connection_ids": 0,
+      "duplicate_asset_ids": 0,
+      "phantom_endpoints": 0,
+      "danglers": 0,
+      "unrouted_connections": 0,
+      "checked": "2026-08-21",
+      "note": "All five must be zero before publishing — see README \"Integrity checks\". Counts in this file are derived from the graph files, never hand-entered."
+    },
+    "glb_sources": {
+      "campus": "hyperscale-campus.html -> Download GLB (facility + hall, 5761 meshes)",
+      "rack": "hyperscale-rack.html -> Download GLB (single high-detail 48U rack)",
+      "plc": "plc.html -> Download GLB (DIN-rail PLC assembly)"
+    },
+    "files": {
+      "icd-graph.json": {
+        "role": "specified interfaces",
+        "systems": 18,
+        "equipment": 134,
+        "interfaces": 184,
+        "instrument_loops": 7
+      },
+      "facility-graph.json": {
+        "role": "modelled facility + 62443 layer",
+        "assets": 209,
+        "connections": 314,
+        "critical_conduits": 84
+      },
+      "hall-graph.json": {
+        "role": "modelled hall",
+        "assets": 240,
+        "connections": 841,
+        "critical_conduits": 132
+      },
+      "rack-graph.json": {
+        "role": "rack template",
+        "components": 10,
+        "connections": 22,
+        "instances": 96
+      },
+      "routes.json": {
+        "role": "solved containment paths",
+        "routes": 1155,
+        "total_length_m": 17719.7
+      },
+      "positions.json": {
+        "role": "mesh anchors",
+        "entries": 450
+      },
+      "routing.js": {
+        "role": "re-runnable route solver"
+      },
+      "hazard-log.json": {
+        "role": "authored redundancy, timing, hazards, MoR, ALE, controls",
+        "hazards": 11,
+        "critical_items": 15,
+        "mor_requirements": 16,
+        "operating_modes": 7,
+        "ale_scenarios": 6,
+        "controls": 8
+      }
+    },
+    "provenance": {
+      "icd": "hyperscalar - DLD and ICD.md",
+      "hazards_and_mor": "WP09_enhanced.md (N2/N5/N6 CyHAZOPs), WP16_ConOps_MOR.md (modes + MoR registers)",
+      "ale_and_rosi": "WP10_enhanced.md",
+      "cooling_and_redundancy": "WP06 (CDU vendor redundancy, 45/90 s timing)",
+      "mitre": "WP08_Fat_Tail_Risk.md Table 8.7",
+      "unconfirmed": [
+        "node crosswalk N2/N5/N6/N8/N10/N14 to asset ids",
+        "per-rack revenue basis: $12.5M/hr divided by 96 racks"
+      ]
+    }
+  },
+  "legends": {
+    "zones": {
+      "Z0": {
+        "label": "Z0 / Zone 4 — Enterprise IT",
+        "purdue": "L4-L5",
+        "slt": "SL-T 2",
+        "color": 10199464
+      },
+      "Z1": {
+        "label": "Z1 / Zone 3 — DCIM / IDMZ",
+        "purdue": "L3-L3.5",
+        "slt": "SL-T 2-3",
+        "color": 3523273
+      },
+      "Z2": {
+        "label": "Z2 / Zone 2 — Supervisory control",
+        "purdue": "L2",
+        "slt": "SL-T 2-3",
+        "color": 9064400
+      },
+      "Z3": {
+        "label": "Z3 / Zone 1 — Field device",
+        "purdue": "L0-L1",
+        "slt": "SL-T 1-2",
+        "color": 14201402
+      },
+      "Z4": {
+        "label": "Z4 — Safety instrumented (SIS)",
+        "purdue": "isolated SIS",
+        "slt": "SL-T 2-3",
+        "color": 13120298
+      },
+      "Z5": {
+        "label": "Z5 — Out-of-band / jump",
+        "purdue": "DMZ segment",
+        "slt": "SL-T 3",
+        "color": 14711334
+      }
+    },
+    "services": {
+      "water": {
+        "label": "Water / coolant",
+        "color": 2060240
+      },
+      "condenser": {
+        "label": "Condenser water",
+        "color": 3050327
+      },
+      "air": {
+        "label": "Air / HVAC",
+        "color": 10134700
+      },
+      "electricity": {
+        "label": "Electricity",
+        "color": 14201402
+      },
+      "fuel": {
+        "label": "Fuel",
+        "color": 14205498
+      },
+      "data": {
+        "label": "Data (IT)",
+        "color": 3523273
+      },
+      "control": {
+        "label": "Control (OT)",
+        "color": 9064400
+      },
+      "fire": {
+        "label": "Fire & life safety",
+        "color": 13120298
+      },
+      "security": {
+        "label": "Physical security",
+        "color": 14711334
+      }
+    },
+    "protocols": {
+      "Ethernet/TCP-IP": {
+        "color": 3523273,
+        "layer": "IT"
+      },
+      "BGP": {
+        "color": 2795957,
+        "layer": "IT"
+      },
+      "SNMP": {
+        "color": 5880009,
+        "layer": "IT"
+      },
+      "CAPWAP": {
+        "color": 4630736,
+        "layer": "IT"
+      },
+      "RS-232 console": {
+        "color": 8359834,
+        "layer": "IT"
+      },
+      "OPC UA": {
+        "color": 10186464,
+        "layer": "OT"
+      },
+      "Modbus TCP": {
+        "color": 9064400,
+        "layer": "OT"
+      },
+      "Modbus RTU": {
+        "color": 7289520,
+        "layer": "OT"
+      },
+      "PROFINET": {
+        "color": 11554768,
+        "layer": "OT"
+      },
+      "BACnet/IP": {
+        "color": 6254544,
+        "layer": "OT"
+      },
+      "BACnet MS/TP": {
+        "color": 4872365,
+        "layer": "OT"
+      },
+      "IEC 61850 MMS": {
+        "color": 13655984,
+        "layer": "OT"
+      },
+      "DNP3": {
+        "color": 10506122,
+        "layer": "OT"
+      },
+      "CAN bus": {
+        "color": 9071312,
+        "layer": "OT"
+      },
+      "OSDP RS-485": {
+        "color": 14711334,
+        "layer": "OT"
+      },
+      "Dry contact": {
+        "color": 10134700,
+        "layer": "OT"
+      },
+      "4-20 mA analog": {
+        "color": 11576458,
+        "layer": "OT"
+      },
+      "Physical flow": {
+        "color": 8359834,
+        "layer": "Process"
+      }
+    }
+  },
+  "totals": {
+    "assets": 449,
+    "connections": 1155,
+    "critical_conduits": 216,
+    "hardwired_or_serial": 188,
+    "physical_flow_runs": 525,
+    "routes": 1155,
+    "containment_m": 17720,
+    "mesh_anchors": 450,
+    "cells": 2,
+    "glb_meshes": 5981,
+    "rack_instances": 96,
+    "expanded_rack_components": 3936,
+    "expanded_rack_connections": 2112,
+    "assets_by_zone": {
+      "Z0": 183,
+      "Z3": 127,
+      "Z2": 70,
+      "Z1": 34,
+      "Z5": 18,
+      "Z4": 17
+    },
+    "assets_by_cell": {
+      "Campus (shared)": 176,
+      "Cell A": 141,
+      "Cell B": 132
+    },
+    "connections_by_service": {
+      "data": 419,
+      "water": 221,
+      "electricity": 170,
+      "control": 142,
+      "air": 102,
+      "security": 62,
+      "fire": 30,
+      "condenser": 5,
+      "fuel": 4
+    },
+    "connections_by_protocol": {
+      "Physical flow": 525,
+      "Ethernet/TCP-IP": 369,
+      "RS-232 console": 96,
+      "Dry contact": 35,
+      "Modbus RTU": 24,
+      "Modbus TCP": 24,
+      "BACnet/IP": 23,
+      "BACnet MS/TP": 19,
+      "4-20 mA analog": 9,
+      "OPC UA": 9,
+      "PROFINET": 5,
+      "CAPWAP": 3,
+      "IEC 61850 MMS": 3,
+      "OSDP RS-485": 3,
+      "BGP": 2,
+      "SNMP": 2,
+      "CAN bus": 2,
+      "DNP3": 1,
+      "IEEE 1588 PTP": 1
+    },
+    "note": "Single authoritative totals object. Every figure is derived from the graph files by script — never hand-entered. A duplicate `meta.totals` existed in earlier revisions and has been removed; if one reappears, delete it rather than reconciling it."
+  },
+  "cell_architecture": {
+    "cells": 2,
+    "racks_per_cell": 48,
+    "it_load_mw_per_cell": 5.76,
+    "total_load_mw_per_cell": 6.91,
+    "cells_per_100mw_campus": 14.5,
+    "conformance": "4 of 5 cell requirements met, 1 partial (power train not yet split)"
+  },
+  "architecture_review": {
+    "closed": 7,
+    "outstanding": 8,
+    "sources": [
+      "WP07 Chapter 7",
+      "108 Datacenter Hyperscaler BOM"
+    ],
+    "see": "hazard-log.json -> architecture_review"
+  },
+  "integrity": {
+    "duplicate_connection_ids": 0,
+    "duplicate_asset_ids": 0,
+    "phantom_endpoints": 0,
+    "danglers": 0,
+    "unrouted": 0,
+    "checked": "2026-08-21"
+  }
+}

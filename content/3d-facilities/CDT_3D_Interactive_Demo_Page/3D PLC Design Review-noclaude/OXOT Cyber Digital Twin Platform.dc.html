@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#0b0b0c"/>
+  <rect x="30" y="30" width="40" height="40" rx="4" fill="none" stroke="#EE7623" stroke-width="3"/>
+  <circle cx="30" cy="30" r="5" fill="#EE7623"/>
+  <circle cx="70" cy="30" r="5" fill="#EE7623"/>
+  <circle cx="30" cy="70" r="5" fill="#EE7623"/>
+  <circle cx="70" cy="70" r="5" fill="#EE7623"/>
+  <path d="M50 42v16M42 50h16" stroke="#f2f1ee" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</template>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0b0b0c}
+  a{color:#EE7623;text-decoration:none}
+  a:hover{color:#f79350}
+  ::selection{background:#EE7623;color:#0b0b0c}
+</style>
+</helmet>
+
+<div style="font-family:Inter,system-ui,sans-serif;background:#0b0b0c;color:#f2f1ee;min-height:100vh">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;border-bottom:1px solid #232326">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <span style="font:800 14px/1 Inter,sans-serif;letter-spacing:.14em;color:#EE7623">OXOT</span>
+      <span style="font:600 10px/1 Inter,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#8a8a8d">Cyber Digital Twin · guided demo</span>
+    </div>
+    <span style="padding:5px 11px;border:1px solid #3a3a3d;border-radius:4px;font:600 9.5px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#8a8a8d">Illustrative example — not a live client model</span>
+  </div>
+
+  <div style="padding:52px 40px 34px;max-width:1180px;margin:0 auto;text-align:center">
+    <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:18px">Onboarding overview</div>
+    <h1 style="font:800 42px/1.1 Inter,sans-serif;letter-spacing:-.026em;margin:0 0 18px;color:#fff;text-wrap:balance">See how we onboard a Cyber Digital Twin</h1>
+    <p style="font:400 15px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 auto 14px;max-width:44em;text-wrap:pretty">Four phases, two workshops. To make that concrete we built one example — a hyperscale AI datacentre — and put it on this page so you can move through the process with something real in front of you.</p>
+    <p style="font:400 13px/1.6 Inter,sans-serif;color:#6a6a6d;margin:0 auto;max-width:44em;text-wrap:pretty">This is a simplified representation of the method, not the Cyber Digital Twin itself. It shows the shape of the engagement and the kind of question the model answers. Pick a phase below, then follow the prompts in the model beside it.</p>
+  </div>
+
+  <div style="padding:0 40px 20px;max-width:1560px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div onClick="{{ sel1 }}" style="border:1px solid {{ bd1 }};border-radius:8px;padding:14px 16px;background:{{ bg1 }};cursor:pointer;transition:border-color .14s,background .14s">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <span style="{{ badge1 }}">1</span>
+          <span style="font:650 8.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#8a8a8d">Phase</span>
+        </div>
+        <div style="font:700 14px/1.22 Inter,sans-serif;color:#fff">Build Model</div>
+      </div>
+      <div onClick="{{ sel2 }}" style="border:1px solid {{ bd2 }};border-radius:8px;padding:14px 16px;background:{{ bg2 }};cursor:pointer;transition:border-color .14s,background .14s">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <span style="{{ badge2 }}">2</span>
+          <span style="font:650 8.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623">Workshop</span>
+        </div>
+        <div style="font:700 14px/1.22 Inter,sans-serif;color:#fff">WS-1 · Initial Risk Assessment</div>
+      </div>
+      <div onClick="{{ sel3 }}" style="border:1px solid {{ bd3 }};border-radius:8px;padding:14px 16px;background:{{ bg3 }};cursor:pointer;transition:border-color .14s,background .14s">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <span style="{{ badge3 }}">3</span>
+          <span style="font:650 8.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#8a8a8d">Phase</span>
+        </div>
+        <div style="font:700 14px/1.22 Inter,sans-serif;color:#fff">Detail Risk Assessment</div>
+      </div>
+      <div onClick="{{ sel4 }}" style="border:1px solid {{ bd4 }};border-radius:8px;padding:14px 16px;background:{{ bg4 }};cursor:pointer;transition:border-color .14s,background .14s">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <span style="{{ badge4 }}">4</span>
+          <span style="font:650 8.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623">Workshop</span>
+        </div>
+        <div style="font:700 14px/1.22 Inter,sans-serif;color:#fff">WS-2 · Risk Alignment</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 40px 56px;max-width:1560px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:370px 1fr;gap:16px;align-items:stretch">
+
+      <div style="border:1px solid #232326;border-radius:10px;background:#111113;display:flex;flex-direction:column;overflow:hidden">
+        <div style="padding:18px 20px;border-bottom:1px solid #232326;background:#0f0f10">
+          <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:8px">{{ phaseKicker }}</div>
+          <div style="font:700 18px/1.2 Inter,sans-serif;letter-spacing:-.012em;color:#fff;margin-bottom:6px">{{ phaseTitle }}</div>
+          <div style="font:400 11.8px/1.55 Inter,sans-serif;color:#8a8a8d">{{ phaseLede }}</div>
+        </div>
+
+        <div style="padding:18px 20px;border-bottom:1px solid #232326">
+          <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:11px">In the engagement</div>
+          <sc-for list="{{ phaseWork }}" as="row" hint-placeholder-count="4">
+            <div style="display:flex;gap:9px;font:400 11.8px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:7px">
+              <span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#4a4a4d;margin-top:7px"></span>
+              <span>{{ row }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding:18px 20px;border-bottom:1px solid #232326;background:#0d0d0e">
+          <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:11px">Try it in the model →</div>
+          <sc-for list="{{ phaseTry }}" as="step" hint-placeholder-count="3">
+            <div style="display:flex;gap:10px;margin-bottom:11px">
+              <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:4px;border:1px solid #EE7623;color:#EE7623;font:700 9px/1 Inter,sans-serif;margin-top:1px">{{ step.n }}</span>
+              <div>
+                <div style="font:600 11.8px/1.5 Inter,sans-serif;color:#fff;margin-bottom:2px">{{ step.do }}</div>
+                <div style="font:400 11.2px/1.5 Inter,sans-serif;color:#8a8a8d">{{ step.see }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding:18px 20px;margin-top:auto">
+          <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:9px">What comes out of it</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <sc-for list="{{ phaseOut }}" as="tag" hint-placeholder-count="4">
+              <span style="padding:5px 9px;border:1px solid #2c2c2e;border-radius:4px;font:600 10px/1 Inter,sans-serif;color:#c8c8c6">{{ tag }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #232326;border-radius:10px;background:#111113;overflow:hidden;display:flex;flex-direction:column;min-height:620px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;border-bottom:1px solid #232326;background:#0f0f10">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:7px;height:7px;border-radius:50%;background:#EE7623"></span>
+            <span style="font:650 10px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#c8c8c6">Example model — hyperscale AI datacentre</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="font:400 10.5px/1 Inter,sans-serif;color:#6a6a6d">Drag to orbit · scroll to zoom · click any component</span>
+            <a href="hyperscale-campus-explorer.html" target="_blank" style="font:600 10.5px/1 Inter,sans-serif;color:#EE7623">Full screen ↗</a>
+          </div>
+        </div>
+        <iframe src="hyperscale-campus-explorer.html" title="Hyperscale campus explorer" style="width:100%;flex:1 1 auto;border:0;display:block;background:#e8e6e0"></iframe>
+        <div style="padding:11px 18px;border-top:1px solid #232326;background:#0f0f10;font:400 10.5px/1.5 Inter,sans-serif;color:#6a6a6d">Open the panel named <strong style="color:#a8a8a6;font-weight:650">{{ phasePanel }}</strong> on the left of the model to follow this phase. The panels mirror the four phases above.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="padding:56px 40px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1180px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;align-items:start">
+        <div>
+          <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:15px">Why this example</div>
+          <h2 style="font:700 27px/1.16 Inter,sans-serif;letter-spacing:-.02em;margin:0 0 14px;color:#fff">A hyperscale datacentre, because it is hard</h2>
+          <p style="font:400 13px/1.66 Inter,sans-serif;color:#a8a8a6;margin:0 0 11px;text-wrap:pretty">It has everything that makes OT risk difficult in one place: a power train from grid intake to rack tray, liquid cooling with a shared central plant, life-safety systems on hardwired interlocks, and an IT estate sitting right next to all of it.</p>
+          <p style="font:400 13px/1.66 Inter,sans-serif;color:#a8a8a6;margin:0 0 11px;text-wrap:pretty">The campus is split into two independent cells, which is how hyperscalers actually build. That gives the demo something worth asking: does a compromise in one cell stay in that cell?</p>
+          <p style="font:400 13px/1.66 Inter,sans-serif;color:#6a6a6d;margin:0;text-wrap:pretty">Your facility will look nothing like this. The process is the same.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#d8b23a;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">Power</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Grid intake through MV switchgear, transformers, UPS, generators and per-cell busway to the rack.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#1f6fd0;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">Cooling</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Central chillers and towers feeding row CDUs, with direct-to-chip loops into each rack.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#2bd0c8;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">IT &amp; network</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Carrier demarcs, firewalls, dual spine, per-row distribution, jumpbox and out-of-band console.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#a06fd0;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">OT boundary</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Per-cell OT switch and firewall, data diode, protocol gateway, passive monitoring from the NOC.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#e0483a;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">Life safety</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Fire panels, aspirating detection, suppression and the hardwired interlocks that bypass the network.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:15px;background:#111113">
+            <div style="width:20px;height:3px;border-radius:2px;background:#8a8a8d;margin-bottom:10px"></div>
+            <div style="font:700 11.8px/1.25 Inter,sans-serif;color:#fff;margin-bottom:5px">Physical security</div>
+            <p style="font:400 10.6px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Perimeter detection, mantrap, cameras and door contacts back to the security officer's desk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:56px 40px;border-top:1px solid #1a1a1c">
+    <div style="max-width:1180px;margin:0 auto">
+      <div style="border:1px solid #2c2c2e;border-left:2px solid #EE7623;border-radius:8px;padding:24px 28px;background:#111113">
+        <div style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:12px">What this demo is not</div>
+        <p style="font:400 13.5px/1.65 Inter,sans-serif;color:#c8c8c6;margin:0 0 10px;max-width:56em;text-wrap:pretty">This page is a walkthrough of the onboarding process, running on an example facility we built ourselves. It is deliberately limited — enough interaction to show what the method feels like, and no more.</p>
+        <p style="font:400 13.5px/1.65 Inter,sans-serif;color:#8a8a8d;margin:0;max-width:56em;text-wrap:pretty">The Cyber Digital Twin itself carries your live asset data, your configurations, your bills of material and your threat intelligence, and produces the full artifact set. That is a different thing, and we show it separately.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:56px 40px 70px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center">
+      <div>
+        <h2 style="font:700 28px/1.16 Inter,sans-serif;letter-spacing:-.02em;margin:0 0 13px;color:#fff;text-wrap:balance">Want to see this on your facility?</h2>
+        <p style="font:400 13.5px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 22px;max-width:42em;text-wrap:pretty">Your design documents and interface control documents are enough to begin. We build the first model from what you already have, then correct it with your team on the floor.</p>
+        <div style="display:flex;gap:11px;flex-wrap:wrap">
+          <a href="mailto:info@oxot.nl" style="display:inline-block;padding:12px 21px;border-radius:6px;background:#EE7623;color:#0b0b0c;font:700 12.5px/1 Inter,sans-serif">info@oxot.nl</a>
+          <a href="oxot-cdt-process.html" style="display:inline-block;padding:12px 21px;border-radius:6px;border:1px solid #3a3a3d;color:#f2f1ee;font:600 12.5px/1 Inter,sans-serif">The process, on one page</a>
+        </div>
+      </div>
+      <div style="border:1px solid #232326;border-radius:9px;padding:20px 22px;background:#111113">
+        <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:12px">To start, we ask for</div>
+        <div style="display:flex;gap:9px;font:400 11.8px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:6px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>High and detailed level design documents</span></div>
+        <div style="display:flex;gap:9px;font:400 11.8px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:6px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>Interface control documents and P&amp;IDs</span></div>
+        <div style="display:flex;gap:9px;font:400 11.8px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:6px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>FMEA, hazard log and safety-critical item list</span></div>
+        <div style="display:flex;gap:9px;font:400 11.8px/1.55 Inter,sans-serif;color:#c8c8c6"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>ConOps and minimum operating requirements</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:20px 40px;border-top:1px solid #1a1a1c;display:flex;justify-content:space-between;align-items:baseline;gap:20px">
+    <span style="font:600 10px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#4a4a4d">OXOT · OT security engineering</span>
+    <span style="font:400 10px/1 Inter,sans-serif;color:#4a4a4d">Illustrative example · IEC 62443 · TS 50701 · info@oxot.nl</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const PHASES = [
+  { kicker: 'Phase one · before we meet',
+    title: 'Build Model',
+    lede: 'We turn your design documents into something you can walk through.',
+    panel: '1 · Build Model',
+    work: ['Read the HLD, DLD and interface control documents',
+           'Draw out every asset and every connection between them',
+           'Type each link by service and protocol',
+           'Build the geometry so each component can be selected'],
+    try: [
+      { n: '1', do: 'Open panel 1 and press Fit campus', see: 'The whole site: power yard, chiller plant, data hall, support rooms.' },
+      { n: '2', do: 'Turn on a service — try Electricity, then Cooling', see: 'Only that system lights up. This is how we check a model is complete.' },
+      { n: '3', do: 'Click any cabinet, then open Asset List', see: 'Zone, vendor, protocol and firmware — the register behind the picture.' }
+    ],
+    out: ['Asset list', 'Connection register', 'Navigable model', 'Questions for the floor walk'] },
+
+  { kicker: 'Workshop one · on site, with your team',
+    title: 'WS-1 · Initial Risk Assessment',
+    lede: 'We walk the model, then walk the floor, and correct it to as-is.',
+    panel: '2 · WS-1 Initial Risk Assessment',
+    work: ['Review the model with the people who run the plant',
+           'Walk the floor and fix what the documents got wrong',
+           'Frame the threat using comparative sector data rather than worst case',
+           'Agree initial zones, conduits and SL-T targets'],
+    try: [
+      { n: '1', do: 'Open panel 2 and colour by IEC 62443 Zone', see: 'The site re-reads as zones — IT estate, OT boundary, plant floor.' },
+      { n: '2', do: 'Turn on Conduits', see: 'Every crossing between zones. These are what a workshop argues about.' },
+      { n: '3', do: 'Pick a threat entry point — try the engineering workstation', see: 'What one compromised machine can reach, and where it stops.' }
+    ],
+    out: ['As-is corrected model', 'Asset registry', 'Zones and conduits', 'SL-T per zone'] },
+
+  { kicker: 'Phase three · between the workshops',
+    title: 'Detail Risk Assessment',
+    lede: 'We load your safety and reliability work, then ask what failure costs.',
+    panel: '3 · Detail Risk Assessment',
+    work: ['Attach failure modes from your FMEA and hazard log',
+           'Model how a failure propagates through real dependencies',
+           'Trace attacker pathways and the vulnerabilities they use',
+           'Put a number on the consequence'],
+    try: [
+      { n: '1', do: 'Open panel 3 and run a cascading failure from a row CDU', see: 'The failure spreads wave by wave — cooling, then the racks behind it.' },
+      { n: '2', do: 'Read the consequence figure', see: 'Racks stopped and revenue at risk per hour, from the dependency chain.' },
+      { n: '3', do: 'Fail a busway instead', see: 'It stops at the cell boundary. That is the isolation argument, tested.' }
+    ],
+    out: ['Failure scenarios', 'Threat pathways', 'Consequence in money and hours', 'Assumptions register'] },
+
+  { kicker: 'Workshop two · then delivery',
+    title: 'WS-2 · Risk Alignment',
+    lede: 'We show the consequence, then agree what is reasonable to do about it.',
+    panel: '4 · WS-2 Risk Alignment',
+    work: ['Walk the pathways and where they land',
+           'Review the controls each target level asks for, and why',
+           'Test the gaps against what is reasonably practicable',
+           'Agree the achievable level and the order of work'],
+    try: [
+      { n: '1', do: 'Open panel 4 and view the risk portfolio', see: 'Hazards ranked by consequence, with the cost of each safeguard.' },
+      { n: '2', do: 'Open Assumptions & Provenance', see: 'Where each number came from, and what moves if we got it wrong.' },
+      { n: '3', do: 'Compare two entry points', see: 'Why one control matters more than another — the basis for NOW/NEXT/NEVER.' }
+    ],
+    out: ['ZCR diagram', 'Agreed SL-C', 'NOW / NEXT / NEVER', 'Executive briefing', 'Full report'] }
+];
+
+class Component extends DCLogic {
+  state = { i: 0 };
+
+  bd(n) { return this.state.i === n ? '#EE7623' : '#232326'; }
+  bg(n) { return this.state.i === n ? '#17120e' : '#111113'; }
+  badge(n) {
+    const on = this.state.i === n;
+    return 'display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:5px;'
+      + 'background:' + (on ? '#EE7623' : '#232326') + ';color:' + (on ? '#0b0b0c' : '#8a8a8d')
+      + ';font:800 9.5px/1 Inter,sans-serif;flex:0 0 auto';
+  }
+
+  renderVals() {
+    const p = PHASES[this.state.i] || PHASES[0];
+    const pick = n => () => this.setState({ i: n });
+    return {
+      sel1: pick(0), sel2: pick(1), sel3: pick(2), sel4: pick(3),
+      bd1: this.bd(0), bd2: this.bd(1), bd3: this.bd(2), bd4: this.bd(3),
+      bg1: this.bg(0), bg2: this.bg(1), bg3: this.bg(2), bg4: this.bg(3),
+      badge1: this.badge(0), badge2: this.badge(1), badge3: this.badge(2), badge4: this.badge(3),
+      phaseTitle: p.title, phaseLede: p.lede, phaseKicker: p.kicker, phasePanel: p.panel,
+      phaseWork: p.work, phaseTry: p.try, phaseOut: p.out
+    };
+  }
+}
+</script>
+</body>
+</html>

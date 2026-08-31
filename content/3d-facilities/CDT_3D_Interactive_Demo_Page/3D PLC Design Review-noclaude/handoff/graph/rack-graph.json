@@ -1,0 +1,485 @@
+{
+  "meta": {
+    "scale": "rack",
+    "template_id": "rack_gpu_48u",
+    "applies_to": "96 rack instances in hall-graph.json (assets where template == \"rack_gpu_48u\")",
+    "mesh_binding": "component mesh name = <rack instance mesh> + mesh_suffix, e.g. row01_rack01 + _compute_tray_0 = row01_rack01_compute_tray_0",
+    "detail_note": "rows 01-02 are built with per-component meshes; rows 03-06 use zone-band LOD meshes (_power_zone_lo, _compute_zone_lo, _switch_zone, _compute_zone_hi, _power_zone_hi, _storage_zone, _network_zone) and resolve to the same logical components",
+    "standalone_model": "hyperscale-rack.html exports a single high-detail rack GLB with the same component taxonomy at terminal level (handles, NVMe bays, OSFP cages, screw terminals, quick-disconnects)",
+    "external_interfaces": [
+      "_external_power_in",
+      "_external_chw_supply",
+      "_external_chw_return",
+      "_external_fabric_uplink",
+      "_external_oob_uplink",
+      "_external_leak_detection"
+    ],
+    "component_count": 10,
+    "connection_count": 22,
+    "total_components_per_rack": 41
+  },
+  "components": [
+    {
+      "id": "frame",
+      "label": "Rack frame 48U",
+      "kind": "Enclosure",
+      "system": "IT",
+      "zone": "Z0",
+      "sl_target": "SL-T 1",
+      "mesh_suffix": "_frame",
+      "quantity": 1,
+      "standards": "OCP Open Rack v3, EIA-310",
+      "attributes": {
+        "height_u": 48,
+        "width_mm": 600,
+        "depth_mm": 1200,
+        "u_pitch_mm": 44.45,
+        "occupied_u": 38,
+        "blanking_u": 10
+      }
+    },
+    {
+      "id": "power_shelf",
+      "label": "OCP power shelf",
+      "kind": "Power shelf",
+      "system": "PWR",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2",
+      "mesh_suffix": "_power_shelf_{0..5}",
+      "quantity": 6,
+      "standards": "OCP S.A.F.E., IEC 62443-4-2",
+      "attributes": {
+        "psus_per_shelf": 6,
+        "redundancy": "N+1",
+        "input": "400 V AC 3-phase from busway tap",
+        "output": "48 V DC to rack busbar",
+        "placement": "3 lower + 3 upper (NVL72 practice)"
+      },
+      "attack_surface": [
+        "Shelf controller firmware is OCP S.A.F.E. scope.",
+        "A malicious PSU firmware image produces correlated failure across every row simultaneously.",
+        "Exposes PMBus/I2C internally and management telemetry upward."
+      ]
+    },
+    {
+      "id": "busbar",
+      "label": "Rack DC busbar",
+      "kind": "Busbar",
+      "system": "PWR",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "mesh_suffix": "_busbar",
+      "quantity": 1,
+      "standards": "OCP Open Rack v3",
+      "attributes": {
+        "voltage": "48 V DC",
+        "rating": "~3000 A aggregate",
+        "material": "copper"
+      }
+    },
+    {
+      "id": "compute_tray",
+      "label": "GPU compute tray",
+      "kind": "Compute tray (1U)",
+      "system": "IT",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "mesh_suffix": "_compute_tray_{0..17}",
+      "quantity": 18,
+      "vendor": "AMD / Intel / NVIDIA silicon",
+      "standards": "OCP S.A.F.E., IEC 62443-4-1, IEC 62443-2-4 (supply chain), TCG TPM 2.0, Caliptra",
+      "attributes": {
+        "cooling": "cold plates on GPU and CPU die",
+        "local_storage": "4 x E1.S NVMe",
+        "fabric_ports": "4 x OSFP backend NIC",
+        "mgmt_port": "1 x RJ45 BMC",
+        "coolant_interface": "rear blind-mate quick-disconnect pair",
+        "power_interface": "rear busbar clip"
+      },
+      "attack_surface": [
+        "BMC (OpenBMC class) is an embedded control plane with power and firmware authority over the host.",
+        "BIOS/UEFI, GPU VBIOS and DPU/SmartNIC firmware are ICS supply-chain scope under IEC 62443-2-4.",
+        "TPM / Caliptra root of trust anchors measured boot — verify provisioning, not just presence.",
+        "Blind-mate coolant QD failure is a physical-consequence path, not just a leak."
+      ]
+    },
+    {
+      "id": "nvswitch_tray",
+      "label": "Fabric switch tray",
+      "kind": "NVLink-class switch tray (1U)",
+      "system": "DATA",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "mesh_suffix": "_nvswitch_tray_{0..8}",
+      "quantity": 9,
+      "attributes": {
+        "role": "all-to-all backend GPU interconnect",
+        "cooling": "liquid, cold plate",
+        "backplane": "rear copper cartridges"
+      },
+      "attack_surface": [
+        "Backend fabric is a flat, high-trust domain — lateral movement inside the rack is largely unmediated."
+      ]
+    },
+    {
+      "id": "storage_node",
+      "label": "NVMe storage node",
+      "kind": "Storage node (2U)",
+      "system": "IT",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "mesh_suffix": "_storage_node_0",
+      "quantity": 1,
+      "vendor": "SK hynix / Samsung / Dell",
+      "standards": "OCP S.A.F.E., FIPS 140-3, Caliptra",
+      "attributes": {
+        "bays": "24 x E3.S front-serviceable"
+      },
+      "attack_surface": [
+        "Self-encrypting drive key management and secure-erase are FIPS 140-3 scope."
+      ]
+    },
+    {
+      "id": "mgmt_tray",
+      "label": "Rack management tray",
+      "kind": "BMC aggregation (1U)",
+      "system": "DATA",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "mesh_suffix": "_mgmt_tray_0",
+      "quantity": 1,
+      "standards": "OCP S.A.F.E.",
+      "attributes": {
+        "role": "aggregates tray BMCs, presents Redfish",
+        "uplink": "isolated OOB VLAN"
+      },
+      "attack_surface": [
+        "Single point of out-of-band control for the whole rack — SL-T 3, jump-host access only."
+      ]
+    },
+    {
+      "id": "tor_switch",
+      "label": "Top-of-rack switch",
+      "kind": "ToR switch (1U)",
+      "system": "DATA",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "mesh_suffix": "_tor_switch_{0..1}",
+      "quantity": 2,
+      "vendor": "Arista / Cisco",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "role": "frontend / management fabric",
+        "uplink": "2 x 100G to end-of-row",
+        "redundancy": "A/B pair",
+        "ports": "32 x QSFP-DD"
+      }
+    },
+    {
+      "id": "manifold_supply",
+      "label": "Rack coolant manifold (supply)",
+      "kind": "Manifold",
+      "system": "CHW",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "mesh_suffix": "_manifold_supply",
+      "quantity": 1,
+      "standards": "OCP Liquid Cooling Spec",
+      "attributes": {
+        "colour": "blue",
+        "interface": "per-tray quick-disconnect",
+        "loop": "TCS secondary"
+      }
+    },
+    {
+      "id": "manifold_return",
+      "label": "Rack coolant manifold (return)",
+      "kind": "Manifold",
+      "system": "CHW",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "mesh_suffix": "_manifold_return",
+      "quantity": 1,
+      "standards": "OCP Liquid Cooling Spec",
+      "attributes": {
+        "colour": "red",
+        "loop": "TCS secondary"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "r0",
+      "from": "_external_power_in",
+      "to": "power_shelf",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "busway tap-off to shelf AC input",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 6
+    },
+    {
+      "id": "r1",
+      "from": "power_shelf",
+      "to": "busbar",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "48 V DC output onto rack busbar",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 6
+    },
+    {
+      "id": "r2",
+      "from": "busbar",
+      "to": "compute_tray",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC power via rear busbar clip",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r3",
+      "from": "busbar",
+      "to": "nvswitch_tray",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC power via rear busbar clip",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r4",
+      "from": "busbar",
+      "to": "storage_node",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC power via rear busbar clip",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r5",
+      "from": "busbar",
+      "to": "mgmt_tray",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC power via rear busbar clip",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r6",
+      "from": "busbar",
+      "to": "tor_switch",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC power via rear busbar clip",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r7",
+      "from": "_external_chw_supply",
+      "to": "manifold_supply",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "CDU / TCS header supply via rack quick-disconnect",
+      "critical_conduit": true,
+      "one_way": false,
+      "note": "Loss of flow gives ~90 s to thermal event at full load.",
+      "count": null
+    },
+    {
+      "id": "r8",
+      "from": "manifold_supply",
+      "to": "compute_tray",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "cold plate supply, blind-mate QD",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 18
+    },
+    {
+      "id": "r9",
+      "from": "manifold_supply",
+      "to": "nvswitch_tray",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "cold plate supply, blind-mate QD",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 9
+    },
+    {
+      "id": "r10",
+      "from": "compute_tray",
+      "to": "manifold_return",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "cold plate return, blind-mate QD",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 18
+    },
+    {
+      "id": "r11",
+      "from": "nvswitch_tray",
+      "to": "manifold_return",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "cold plate return, blind-mate QD",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": 9
+    },
+    {
+      "id": "r12",
+      "from": "manifold_return",
+      "to": "_external_chw_return",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "return to CDU / TCS header",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r13",
+      "from": "compute_tray",
+      "to": "nvswitch_tray",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "backend GPU fabric over rear copper cartridges",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": "NVLink-class all-to-all; carried on the rack backplane, not structured cabling.",
+      "count": null
+    },
+    {
+      "id": "r14",
+      "from": "compute_tray",
+      "to": "tor_switch",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "frontend host attachment",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r15",
+      "from": "storage_node",
+      "to": "tor_switch",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "storage attachment",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r16",
+      "from": "tor_switch",
+      "to": "_external_fabric_uplink",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "2 x 100G uplink to end-of-row distribution switch",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r17",
+      "from": "mgmt_tray",
+      "to": "compute_tray",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "BMC / Redfish management plane",
+      "critical_conduit": true,
+      "one_way": false,
+      "note": "Power, firmware and console authority over every tray.",
+      "count": null
+    },
+    {
+      "id": "r18",
+      "from": "mgmt_tray",
+      "to": "storage_node",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "BMC management",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r19",
+      "from": "mgmt_tray",
+      "to": "_external_oob_uplink",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "isolated out-of-band VLAN to row console server",
+      "critical_conduit": true,
+      "one_way": false,
+      "note": "Z5 conduit — reachable only through the PAM jump host.",
+      "count": null
+    },
+    {
+      "id": "r20",
+      "from": "power_shelf",
+      "to": "mgmt_tray",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "shelf power telemetry",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": null,
+      "count": null
+    },
+    {
+      "id": "r21",
+      "from": "_external_leak_detection",
+      "to": "busbar",
+      "service": "control",
+      "protocol": "Dry contact",
+      "description": "floor leak rope routed beneath the rack",
+      "critical_conduit": false,
+      "one_way": false,
+      "note": "Leak rope is a row asset; listed here because its coverage zone is per-rack.",
+      "count": null
+    }
+  ]
+}

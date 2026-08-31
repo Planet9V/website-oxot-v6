@@ -1,0 +1,4075 @@
+{
+  "meta": {
+    "project": "OXOT hyperscale AI datacenter — representative reference model",
+    "generated_from": "campus-model.js (three.js build) — mesh names are authoritative and match the exported GLB",
+    "scales": {
+      "facility": "facility-graph.json — site-wide systems: substation, MV/LV, UPS, generators, BESS, chiller plant, towers, MMR, NOC, OT boundary, fire, security",
+      "hall": "hall-graph.json — data hall: 6 rows x (16 GPU racks + row CDU + end-of-row network rack) and every per-rack connection",
+      "rack": "rack-graph.json — internals of one 48U liquid-cooled GPU rack, applied as a template to all 96 rack instances"
+    },
+    "frameworks": [
+      "IEC 62443-3-2 (zones and conduits)",
+      "ISA-95 / Purdue",
+      "NIST SP 800-82r3",
+      "TIA-942",
+      "Uptime Institute Tier III/IV",
+      "ASHRAE TC 9.9"
+    ],
+    "conventions": {
+      "mesh": "every asset carries `mesh`, the exact node name in the GLB; children share the prefix",
+      "system_prefixes": {
+        "PWR": "electrical",
+        "CHW": "cooling / fluid",
+        "AIR": "HVAC",
+        "DATA": "IT network",
+        "OT": "OT network boundary",
+        "BMS": "controls, monitoring, DCIM",
+        "FA": "fire and life safety",
+        "SEC": "physical security",
+        "IT": "compute / storage payload"
+      },
+      "edge": "connections are directed from -> to; `service` is what flows, `protocol` is how it is carried, `physical_run` is the routed geometry that realises it"
+    },
+    "scale": "facility",
+    "asset_count": 117,
+    "connection_count": 143
+  },
+  "legends": {
+    "zones": {
+      "Z0": {
+        "label": "Z0 / Zone 4 — Enterprise IT",
+        "purdue": "L4-L5",
+        "slt": "SL-T 2",
+        "color": 10199464
+      },
+      "Z1": {
+        "label": "Z1 / Zone 3 — DCIM / IDMZ",
+        "purdue": "L3-L3.5",
+        "slt": "SL-T 2-3",
+        "color": 3523273
+      },
+      "Z2": {
+        "label": "Z2 / Zone 2 — Supervisory control",
+        "purdue": "L2",
+        "slt": "SL-T 2-3",
+        "color": 9064400
+      },
+      "Z3": {
+        "label": "Z3 / Zone 1 — Field device",
+        "purdue": "L0-L1",
+        "slt": "SL-T 1-2",
+        "color": 14201402
+      },
+      "Z4": {
+        "label": "Z4 — Safety instrumented (SIS)",
+        "purdue": "isolated SIS",
+        "slt": "SL-T 2-3",
+        "color": 13120298
+      },
+      "Z5": {
+        "label": "Z5 — Out-of-band / jump",
+        "purdue": "DMZ segment",
+        "slt": "SL-T 3",
+        "color": 14711334
+      }
+    },
+    "services": {
+      "water": {
+        "label": "Water / coolant",
+        "color": 2060240
+      },
+      "condenser": {
+        "label": "Condenser water",
+        "color": 3050327
+      },
+      "air": {
+        "label": "Air / HVAC",
+        "color": 10134700
+      },
+      "electricity": {
+        "label": "Electricity",
+        "color": 14201402
+      },
+      "fuel": {
+        "label": "Fuel",
+        "color": 14205498
+      },
+      "data": {
+        "label": "Data (IT)",
+        "color": 3523273
+      },
+      "control": {
+        "label": "Control (OT)",
+        "color": 9064400
+      },
+      "fire": {
+        "label": "Fire & life safety",
+        "color": 13120298
+      },
+      "security": {
+        "label": "Physical security",
+        "color": 14711334
+      }
+    },
+    "protocols": {
+      "Ethernet/TCP-IP": {
+        "color": 3523273,
+        "layer": "IT"
+      },
+      "BGP": {
+        "color": 2795957,
+        "layer": "IT"
+      },
+      "SNMP": {
+        "color": 5880009,
+        "layer": "IT"
+      },
+      "CAPWAP": {
+        "color": 4630736,
+        "layer": "IT"
+      },
+      "RS-232 console": {
+        "color": 8359834,
+        "layer": "IT"
+      },
+      "OPC UA": {
+        "color": 10186464,
+        "layer": "OT"
+      },
+      "Modbus TCP": {
+        "color": 9064400,
+        "layer": "OT"
+      },
+      "Modbus RTU": {
+        "color": 7289520,
+        "layer": "OT"
+      },
+      "PROFINET": {
+        "color": 11554768,
+        "layer": "OT"
+      },
+      "BACnet/IP": {
+        "color": 6254544,
+        "layer": "OT"
+      },
+      "BACnet MS/TP": {
+        "color": 4872365,
+        "layer": "OT"
+      },
+      "IEC 61850 MMS": {
+        "color": 13655984,
+        "layer": "OT"
+      },
+      "DNP3": {
+        "color": 10506122,
+        "layer": "OT"
+      },
+      "CAN bus": {
+        "color": 9071312,
+        "layer": "OT"
+      },
+      "OSDP RS-485": {
+        "color": 14711334,
+        "layer": "OT"
+      },
+      "Dry contact": {
+        "color": 10134700,
+        "layer": "OT"
+      },
+      "4-20 mA analog": {
+        "color": 11576458,
+        "layer": "OT"
+      },
+      "Physical flow": {
+        "color": 8359834,
+        "layer": "Process"
+      }
+    }
+  },
+  "assets": [
+    {
+      "id": "grid",
+      "label": "Utility grid intake",
+      "kind": "HV overhead termination",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_sub_beam_0",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Utility / TSO",
+      "standards": "IEC 61850",
+      "attributes": {
+        "voltage": "150 kV",
+        "redundancy": "dual utility feed (Tier IV)"
+      },
+      "attack_surface": [
+        "Utility interface is outside the operator security perimeter — treat as untrusted source."
+      ]
+    },
+    {
+      "id": "gis",
+      "label": "GIS switchgear",
+      "kind": "Gas-insulated switchgear",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_sub_gis",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Hitachi Energy / Siemens Energy",
+      "standards": "IEC 62443-4-2, IEC 61850",
+      "attributes": {
+        "voltage": "150 kV",
+        "lead_time": "12+ months"
+      },
+      "attack_surface": [
+        "Protection IEDs report to Z2 via IEC 61850 MMS — one documented conduit."
+      ]
+    },
+    {
+      "id": "pad_xfmr",
+      "label": "Pad-mount transformer",
+      "kind": "HV/MV transformer",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_sub_pad_xfmr",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "ABB / SPX",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "ratio": "150 / 33 kV",
+        "rating": "50-100 MVA"
+      },
+      "attack_surface": [
+        "Winding temperature monitor and Buchholz relay are Z3 field instruments."
+      ]
+    },
+    {
+      "id": "mv_swg",
+      "label": "MV switchgear ZX2",
+      "kind": "MV switchgear",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_mv_swg_hitachi_zx2",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Hitachi Energy ZX2",
+      "standards": "IEC 62443-4-2, IEC 61850",
+      "attributes": {
+        "voltage": "33 kV",
+        "topology": "dual-bus"
+      },
+      "attack_surface": [
+        "Relay IEDs form a Z3 sub-zone; station bus interface to Z2 must be explicitly documented."
+      ]
+    },
+    {
+      "id": "mv_swg_b",
+      "label": "MV switchgear PASS (B lineup)",
+      "kind": "MV switchgear",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_mv_swg_abb_pass",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "ABB PASS",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "role": "redundant lineup"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "relay",
+      "label": "Protection relay SEL-751A",
+      "kind": "Protection relay IED",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_relay_sel751a",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Schweitzer SEL-751A",
+      "standards": "IEC 61850 Ed.2, IEC 62443-4-2",
+      "attributes": {
+        "function": "fault detection, isolation, auto-switching"
+      },
+      "attack_surface": [
+        "GOOSE on the process bus is unauthenticated by default — segment and disable unused ports.",
+        "Engineering access (DIGSI/AcSELerator class tooling) must route through the Z5 jump host."
+      ]
+    },
+    {
+      "id": "relay_b",
+      "label": "Protection relay Easergy P3",
+      "kind": "Protection relay IED",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_relay_easergy_p3",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Schneider Easergy P3",
+      "standards": "IEC 61850",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "xfmr",
+      "label": "Dry transformer RESIBLOC",
+      "kind": "MV/LV transformer",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_xfmr_abb_resibloc",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "ABB RESIBLOC",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "ratio": "33 / 0.4 kV",
+        "type": "cast-resin (indoor mandatory)"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "xfmr_b",
+      "label": "Dry transformer Trihal",
+      "kind": "MV/LV transformer",
+      "system": "PWR",
+      "location": "MV room",
+      "mesh": "PWR_xfmr_se_trihal",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Schneider Trihal",
+      "standards": null,
+      "attributes": {
+        "role": "B feed"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "lv_swg",
+      "label": "LV switchgear",
+      "kind": "LV switchboard",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_lv_swg_eaton_prl",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Eaton Pow-R-Line",
+      "standards": "IEC 62443-3-3",
+      "attributes": {
+        "voltage": "400 V",
+        "architecture": "dual LV board per pod"
+      },
+      "attack_surface": [
+        "Firmware-capable \"smart\" breakers are elevated OT attack surface — dedicated VLAN required."
+      ]
+    },
+    {
+      "id": "ats",
+      "label": "ATS (Magnum)",
+      "kind": "Automatic transfer switch",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ats_eaton_magnum",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Eaton Magnum",
+      "standards": "IEC 62443-4-2, NFPA 110",
+      "attributes": {
+        "transfer_time": "60-100 ms electromechanical"
+      },
+      "attack_surface": [
+        "Ethernet-capable transfer controllers require a dedicated management VLAN."
+      ]
+    },
+    {
+      "id": "ats_b",
+      "label": "ATS (ASCO 7000)",
+      "kind": "Automatic transfer switch",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ats_asco7000",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "ASCO 7000 series",
+      "standards": null,
+      "attributes": {
+        "role": "B path"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "sts",
+      "label": "STS2 static transfer switch",
+      "kind": "Static transfer switch",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_sts_vertiv_sts2",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Vertiv STS2",
+      "standards": null,
+      "attributes": {
+        "transfer_time": "<4 ms thyristor",
+        "topology": "N+2C catcher (Tier III+)"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "ups",
+      "label": "UPS 9395XR",
+      "kind": "Modular double-conversion UPS",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ups_eaton_9395xr",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Eaton 9395XR",
+      "standards": "IEC 62443-4-2 SL2",
+      "attributes": {
+        "ride_through": "5-15 min",
+        "redundancy": "2N+1 (Tier IV)"
+      },
+      "attack_surface": [
+        "Network management card exposes SNMP, Modbus TCP and a web UI — isolate in a UPS management VLAN.",
+        "Microsoft OCP mandate applies directly to UPS network cards.",
+        "Vendor cloud service portal is a Z2 → external conduit and must transit the Z1 DMZ."
+      ]
+    },
+    {
+      "id": "ups_b",
+      "label": "UPS Galaxy VXL",
+      "kind": "Modular UPS",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ups_galaxy_vxl",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Schneider Galaxy VXL",
+      "standards": null,
+      "attributes": {
+        "role": "B path"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "ups_c",
+      "label": "UPS Liebert EXL",
+      "kind": "Modular UPS",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ups_vertiv_exl",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Vertiv Liebert EXL S1",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "ups_d",
+      "label": "UPS MegaFlex",
+      "kind": "Modular UPS",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_ups_abb_megaflex",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "ABB MegaFlex",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "epms",
+      "label": "EPMS meter ION9000",
+      "kind": "Revenue-grade power meter",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_epms_ion9000",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Schneider PowerLogic ION9000",
+      "standards": "IEC 62053-22 Class 0.2S",
+      "attributes": {
+        "class": "Class A power quality",
+        "protocols": "OPC UA, DNP3, IEC 61850, Modbus TCP"
+      },
+      "attack_surface": [
+        "EPMS SCADA must be segmented from IT by firewall or unidirectional gateway.",
+        "Each supported protocol is a separate conduit requiring its own documentation."
+      ]
+    },
+    {
+      "id": "battery",
+      "label": "Battery string 1",
+      "kind": "VRLA string + monitoring",
+      "system": "PWR",
+      "location": "Battery room",
+      "mesh": "PWR_battery_string_0",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "EnerSys DataSafe",
+      "standards": "NFPA 855",
+      "attributes": {
+        "runtime": "5 min at full load",
+        "monitoring": "per-cell V, T, ohmic"
+      },
+      "attack_surface": [
+        "Battery monitoring head-end (Albér / BTECH class) is a Z2 asset; sensing units are Z3.",
+        "Uptime and NERC CIP auditors require 2-year data retention."
+      ]
+    },
+    {
+      "id": "battery_b",
+      "label": "Battery string 2",
+      "kind": "VRLA string",
+      "system": "PWR",
+      "location": "Battery room",
+      "mesh": "PWR_battery_string_1",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "EnerSys",
+      "standards": null,
+      "attributes": {
+        "role": "B path"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "rpp",
+      "label": "RPP 1 (with BCMS)",
+      "kind": "Remote power panel",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_rpp_0",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Schneider / Square D",
+      "standards": "ASHRAE TC 9.9",
+      "attributes": {
+        "poles": "42-84",
+        "metering": "branch circuit monitoring"
+      },
+      "attack_surface": [
+        "Metered RPPs sit on the Z3/Z2 boundary — BCMS aggregation is Z2, DCIM dashboard is Z1."
+      ]
+    },
+    {
+      "id": "rpp_b",
+      "label": "RPP 2",
+      "kind": "Remote power panel",
+      "system": "PWR",
+      "location": "LV/UPS room",
+      "mesh": "PWR_rpp_1",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {
+        "role": "B bus"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "gen",
+      "label": "Generator CAT 3516C",
+      "kind": "Diesel generator",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_gen_cat_3516c",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Caterpillar 3516C",
+      "standards": "NFPA 110 Type 10",
+      "attributes": {
+        "rating": "2-3 MW",
+        "start": "10 s to load"
+      },
+      "attack_surface": [
+        "Engine ECM/ECU is Z3; SAE J1939 gateways need explicit zone assignment."
+      ]
+    },
+    {
+      "id": "gen_b",
+      "label": "Generator QSK60",
+      "kind": "Diesel generator",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_gen_cummins_qsk60",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Cummins QSK60",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "gen_c",
+      "label": "Generator KD series",
+      "kind": "Diesel generator",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_gen_kohler_kd",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Kohler KD",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "gen_ctl",
+      "label": "Generator paralleling control",
+      "kind": "Genset controller / PLC",
+      "system": "BMS",
+      "location": "West yard",
+      "mesh": "BMS_gen_cat_3516c_ctl_easygen",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Woodward easYgen",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "functions": "sync-on-close, load share, islanding detection"
+      },
+      "attack_surface": [
+        "Highest-value Z2 electrical target — holds authority over generation dispatch.",
+        "Supports Modbus TCP, IEC 60870-5-101/104 and SNMP; each is a separate conduit."
+      ]
+    },
+    {
+      "id": "daytank",
+      "label": "Generator day tank",
+      "kind": "Fuel day tank",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_gen_cat_3516c_daytank",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": null,
+      "attributes": {
+        "instrument": "level sensor to BMS"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "fuel_tank",
+      "label": "Bulk fuel tank",
+      "kind": "Fuel storage",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_fuel_bulk_tank",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": null,
+      "attributes": {
+        "capacity": "48 h at full load"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "bess",
+      "label": "BESS Megapack",
+      "kind": "Battery energy storage",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_bess_tesla_megapack",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Tesla Megapack (LFP)",
+      "standards": "NFPA 855",
+      "attributes": {
+        "capacity": "3.9-5.6 MWh/unit"
+      },
+      "attack_surface": [
+        "PCS/inverter speaking DNP3 or IEC 61850 is a high-risk conduit endpoint.",
+        "Li-ion deployment mandates off-gas detection."
+      ]
+    },
+    {
+      "id": "bess_b",
+      "label": "BESS (B bank)",
+      "kind": "Battery energy storage",
+      "system": "PWR",
+      "location": "West yard",
+      "mesh": "PWR_bess_vertiv_bess",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 2",
+      "vendor": "Vertiv",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "bess_bms",
+      "label": "BESS controller / microgrid",
+      "kind": "Battery mgmt + microgrid ctl",
+      "system": "BMS",
+      "location": "West yard",
+      "mesh": "BMS_bess_tesla_megapack_bms",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 3",
+      "vendor": "Tesla / Schneider EcoStruxure MGC",
+      "standards": "IEEE 2030.7, NERC CIP (if above BES threshold)",
+      "attributes": {
+        "functions": "dispatch, frequency/voltage regulation, islanding"
+      },
+      "attack_surface": [
+        "Microgrid controller holds authority over all on-site generation — highest-value Z2 asset.",
+        "Grid-operator interface (IEEE 2030.7 / DNP3) is a priority Z2 → external conduit."
+      ]
+    },
+    {
+      "id": "busway",
+      "label": "Hall busway spine",
+      "kind": "Busway / bus duct",
+      "system": "PWR",
+      "location": "Data hall",
+      "mesh": "PWR_hall_busway_spine",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Starline / Eaton Pow-R-Way III",
+      "standards": null,
+      "attributes": {
+        "rating": "up to 1250 A",
+        "ingress": "IP54 (liquid-cooled halls)"
+      },
+      "attack_surface": [
+        "Critical Power Monitor over Modbus TCP is a Z3 → Z2 conduit."
+      ]
+    },
+    {
+      "id": "row1_busway",
+      "label": "Row 01 busway",
+      "kind": "Busway",
+      "system": "PWR",
+      "location": "Data hall",
+      "mesh": "PWR_row01_busway",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Starline Track Busway",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "row1_tap",
+      "label": "Row 01 tap-off box 1",
+      "kind": "Plug-in tap-off box",
+      "system": "PWR",
+      "location": "Data hall",
+      "mesh": "PWR_row01_tapbox_0",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "rack1_busbar",
+      "label": "Rack 01 DC busbar",
+      "kind": "OCP 48 V busbar",
+      "system": "PWR",
+      "location": "Data hall",
+      "mesh": "row01_rack01_busbar",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": "OCP Open Rack v3",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "rack1_psu",
+      "label": "Rack 01 power shelf",
+      "kind": "OCP power shelf",
+      "system": "PWR",
+      "location": "Data hall",
+      "mesh": "row01_rack01_power_shelf_0",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "OCP S.A.F.E., IEC 62443-4-2",
+      "attributes": {
+        "psus": "6 hot-swap, N+1"
+      },
+      "attack_surface": [
+        "Shelf controller firmware is an OCP S.A.F.E. scope item.",
+        "A malicious PSU firmware image produces correlated failure across every row."
+      ]
+    },
+    {
+      "id": "tower",
+      "label": "Cooling tower BAC 3000",
+      "kind": "Open-circuit cooling tower",
+      "system": "CHW",
+      "location": "East yard",
+      "mesh": "CHW_tower_bac3000_0",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Baltimore Aircoil",
+      "standards": "ASHRAE 188",
+      "attributes": {
+        "instruments": "basin level, conductivity, fan VFD"
+      },
+      "attack_surface": [
+        "Chemical dosing wireless links are conduits — isolate and document.",
+        "Legionella water management plan legally required (ASHRAE 188)."
+      ]
+    },
+    {
+      "id": "tower_b",
+      "label": "Cooling tower 2",
+      "kind": "Open-circuit cooling tower",
+      "system": "CHW",
+      "location": "East yard",
+      "mesh": "CHW_tower_bac3000_1",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Baltimore Aircoil",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "chiller",
+      "label": "Chiller 30XW",
+      "kind": "Water-cooled centrifugal chiller",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_chiller_carrier_30xw",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Carrier AquaEdge 30XW",
+      "standards": "IEC 62443, ASHRAE 15",
+      "attributes": {
+        "supply": "7 °C",
+        "return": "12-14 °C",
+        "redundancy": "N+1 (T3) / 2N (T4)"
+      },
+      "attack_surface": [
+        "OEM cloud diagnostics is a Z2 → external conduit and must transit the Z1 DMZ.",
+        "Plant compromise causes thermal shutdown of the IT load — treat as safety-adjacent."
+      ]
+    },
+    {
+      "id": "chiller_b",
+      "label": "Chiller CenTraVac",
+      "kind": "Water-cooled chiller",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_chiller_trane_cvhf",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Trane CenTraVac",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "chiller_c",
+      "label": "Chiller YZ magnetic-bearing",
+      "kind": "Water-cooled chiller",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_chiller_york_yz",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "York / JCI YZ",
+      "standards": null,
+      "attributes": {
+        "efficiency": "COP 6-8 at part load"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "chiller_ctl",
+      "label": "Chiller plant controller",
+      "kind": "Unit controller",
+      "system": "BMS",
+      "location": "Chiller room",
+      "mesh": "BMS_chiller_carrier_30xw_optiview",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Carrier OptiView",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "Holds setpoint authority over the whole thermal chain."
+      ]
+    },
+    {
+      "id": "pump",
+      "label": "Primary CHW pump 1",
+      "kind": "Centrifugal pump",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_pump_grundfos_0",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Grundfos",
+      "standards": "ASHRAE TC 9.9",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "pump_b",
+      "label": "Primary CHW pump 2",
+      "kind": "Centrifugal pump",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_pump_grundfos_1",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": "Grundfos",
+      "standards": null,
+      "attributes": {
+        "role": "N+1"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "vfd",
+      "label": "Pump VFD ACQ580",
+      "kind": "Variable frequency drive",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_vfd_abb_acq580_0",
+      "zone": "Z2",
+      "purdue": "L1-L2",
+      "sl_target": "SL-T 2",
+      "vendor": "ABB ACQ580",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "saving": "30-60 % vs constant speed"
+      },
+      "attack_surface": [
+        "Drives with Modbus RTU/TCP or PROFINET carry direct control authority over flow."
+      ]
+    },
+    {
+      "id": "vfd_b",
+      "label": "Pump VFD 2",
+      "kind": "Variable frequency drive",
+      "system": "CHW",
+      "location": "Chiller room",
+      "mesh": "CHW_vfd_abb_acq580_1",
+      "zone": "Z2",
+      "purdue": "L1-L2",
+      "sl_target": "SL-T 2",
+      "vendor": "ABB ACQ580",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "wts_plc",
+      "label": "Water treatment PLC",
+      "kind": "PLC",
+      "system": "BMS",
+      "location": "Chiller room",
+      "mesh": "BMS_wts_plc_s71200",
+      "zone": "Z2",
+      "purdue": "L1-L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Siemens S7-1200",
+      "standards": "IEC 62443-4-1, IEC 62443-4-2, ASHRAE 188",
+      "attributes": {
+        "duty": "biocide, scale, pH/ORP, blowdown"
+      },
+      "attack_surface": [
+        "Target for firmware security validation to reach SL-3/4.",
+        "TCS loop resistivity >1 MΩ·cm required for bare-copper direct-to-chip cooling."
+      ]
+    },
+    {
+      "id": "drycooler",
+      "label": "Dry cooler / adiabatic economiser",
+      "kind": "Dry fluid cooler",
+      "system": "CHW",
+      "location": "East yard",
+      "mesh": "CHW_drycooler_0",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Evapco eco-Air / Güntner",
+      "standards": null,
+      "attributes": {
+        "water_saving": "~95 % vs evaporative"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "drycooler_b",
+      "label": "Dry cooler 2",
+      "kind": "Dry fluid cooler",
+      "system": "CHW",
+      "location": "East yard",
+      "mesh": "CHW_drycooler_1",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 1-2",
+      "vendor": "Evapco",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "fws_spine",
+      "label": "Facility water spine (FWS)",
+      "kind": "Primary header",
+      "system": "CHW",
+      "location": "Data hall",
+      "mesh": "CHW_fws_supply_spine",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": "ASHRAE TC 9.9 Liquid Cooling",
+      "attributes": {
+        "dT": "6 K",
+        "loop": "facility water system"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "row1_cdu",
+      "label": "Row 01 CDU",
+      "kind": "Coolant distribution unit",
+      "system": "CHW",
+      "location": "Data hall",
+      "mesh": "row01_cdu_rack",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Motivair / CoolIT / Vertiv XDU",
+      "standards": "OCP Liquid Cooling Spec, ASHRAE TC 9.9",
+      "attributes": {
+        "pumps": "2 (N+1)",
+        "loops": "TCS secondary ↔ FWS primary",
+        "density": "mandatory ≥ 50 kW/rack"
+      },
+      "attack_surface": [
+        "CDU vendor cloud portal is a Z2 → external conduit.",
+        "Manipulating flow or temperature setpoints causes thermal runaway in ~90 s at full load.",
+        "Firmware checks on CDUs are a high-value assurance target for AI halls."
+      ]
+    },
+    {
+      "id": "row1_cdu_plc",
+      "label": "Row 01 CDU controller",
+      "kind": "PLC",
+      "system": "BMS",
+      "location": "Data hall",
+      "mesh": "BMS_row01_cdu_rack_plc",
+      "zone": "Z2",
+      "purdue": "L1-L2",
+      "sl_target": "SL-T 3",
+      "vendor": "Siemens / Schneider",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "Direct cyber-physical authority over pumps and valves for a 130 kW+ row."
+      ]
+    },
+    {
+      "id": "row1_tcs",
+      "label": "Row 01 TCS header",
+      "kind": "Technology cooling header",
+      "system": "CHW",
+      "location": "Data hall",
+      "mesh": "CHW_row01_tcs_header_supply",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": "OCP Liquid Cooling Spec",
+      "attributes": {
+        "loop": "technology cooling system (secondary)"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "row1_rack1",
+      "label": "Row 01 rack 01",
+      "kind": "GPU rack (48U, D2C liquid)",
+      "system": "IT",
+      "location": "Data hall",
+      "mesh": "row01_rack01",
+      "zone": "Z0",
+      "purdue": "L4-L5",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "OCP S.A.F.E.",
+      "attributes": {
+        "load": "~120 kW",
+        "cooling": "direct-to-chip cold plates"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "rack1_compute",
+      "label": "Rack 01 compute tray",
+      "kind": "GPU compute tray",
+      "system": "IT",
+      "location": "Data hall",
+      "mesh": "row01_rack01_compute_tray_0",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": "AMD / Intel / NVIDIA silicon",
+      "standards": "OCP S.A.F.E., IEC 62443-4-1, TCG TPM 2.0, Caliptra",
+      "attributes": {
+        "local_storage": "E1.S NVMe",
+        "fabric": "OSFP backend NIC"
+      },
+      "attack_surface": [
+        "BMC (OpenBMC class) is an embedded control plane with its own network path.",
+        "BIOS/firmware and DPU/SmartNIC images are ICS supply-chain scope under IEC 62443-2-4.",
+        "TPM / root-of-trust (Caliptra) anchors measured boot."
+      ]
+    },
+    {
+      "id": "rack1_storage",
+      "label": "Rack 01 storage node",
+      "kind": "NVMe storage node",
+      "system": "IT",
+      "location": "Data hall",
+      "mesh": "row01_rack01_storage_node_0",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": "SK hynix / Samsung / Dell",
+      "standards": "OCP S.A.F.E., FIPS 140-3, Caliptra",
+      "attributes": {
+        "bays": "24 × E3.S"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "rack1_mgmt",
+      "label": "Rack 01 management tray",
+      "kind": "BMC aggregation",
+      "system": "IT",
+      "location": "Data hall",
+      "mesh": "row01_rack01_mgmt_tray_0",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": null,
+      "standards": "OCP S.A.F.E.",
+      "attributes": {},
+      "attack_surface": [
+        "Out-of-band management plane — must sit on an isolated OOB VLAN reachable only via the jump host."
+      ]
+    },
+    {
+      "id": "row1_leak",
+      "label": "Row 01 leak detection",
+      "kind": "TDR sensing cable",
+      "system": "BMS",
+      "location": "Data hall",
+      "mesh": "BMS_row01_leak_ring",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1-2",
+      "vendor": "TraceTek TT-1000 / RLE SeaHawk",
+      "standards": null,
+      "attributes": {
+        "accuracy": "<1 m location",
+        "media": "water and glycol"
+      },
+      "attack_surface": [
+        "Liquid cooling requires detection at every CDU, manifold and quick-disconnect."
+      ]
+    },
+    {
+      "id": "row1_th",
+      "label": "Row 01 temp/humidity",
+      "kind": "T/RH sensor",
+      "system": "BMS",
+      "location": "Data hall",
+      "mesh": "BMS_row01_th_sensor_0",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": "ASHRAE TC 9.9",
+      "attributes": {
+        "band": "18-27 °C cold aisle, 8-80 % dew point"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "ahu",
+      "label": "Outdoor AHU",
+      "kind": "Air handling unit",
+      "system": "AIR",
+      "location": "East yard",
+      "mesh": "AIR_ahu_outdoor",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2",
+      "vendor": "Munters / Nortek",
+      "standards": "ASHRAE TC 9.9",
+      "attributes": {
+        "filtration": "MERV 11+ for economiser air"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "crah",
+      "label": "CRAH 1",
+      "kind": "Computer room air handler",
+      "system": "AIR",
+      "location": "Data hall",
+      "mesh": "AIR_crah_0",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Vertiv Liebert / Stulz CyberAir",
+      "standards": "IEC 62443, ASHRAE TC 9.9",
+      "attributes": {
+        "fans": "EC plug fans",
+        "redundancy": "N+1 per room (T3)"
+      },
+      "attack_surface": [
+        "Vendor remote service portal (iCOM / SiteController class) is a Z2 → external conduit."
+      ]
+    },
+    {
+      "id": "crah_b",
+      "label": "CRAH 2",
+      "kind": "Computer room air handler",
+      "system": "AIR",
+      "location": "Data hall",
+      "mesh": "AIR_crah_1",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Vertiv Liebert",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "crah_c",
+      "label": "CRAH 3",
+      "kind": "Computer room air handler",
+      "system": "AIR",
+      "location": "Data hall",
+      "mesh": "AIR_crah_2",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Stulz",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "crah_ctl",
+      "label": "CRAH 1 controller",
+      "kind": "Unit controller",
+      "system": "BMS",
+      "location": "Data hall",
+      "mesh": "BMS_crah_0_ctl",
+      "zone": "Z2",
+      "purdue": "L1-L2",
+      "sl_target": "SL-T 2",
+      "vendor": "Vertiv iCOM",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "Receives the fire-alarm HVAC shutdown interlock — verify it cannot be defeated from the network."
+      ]
+    },
+    {
+      "id": "h2_fan",
+      "label": "Battery room H2 exhaust",
+      "kind": "Emergency exhaust fan",
+      "system": "AIR",
+      "location": "Battery room",
+      "mesh": "AIR_batt_h2_exhaust_fan",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "NFPA 855",
+      "attributes": {},
+      "attack_surface": [
+        "Ventilation start is a safety function — interlocked at the starter, not operator-overridable."
+      ]
+    },
+    {
+      "id": "h2_sensor",
+      "label": "Battery room H2 detector",
+      "kind": "Gas detector",
+      "system": "BMS",
+      "location": "Battery room",
+      "mesh": "BMS_batt_h2_sensor",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 2",
+      "vendor": "Honeywell Analytics / Li-ion Tamer",
+      "standards": "NFPA 855",
+      "attributes": {
+        "alarm": "1 % LEL"
+      },
+      "attack_surface": [
+        "Off-gas detection is mandatory wherever Li-ion UPS or BESS is deployed."
+      ]
+    },
+    {
+      "id": "facp",
+      "label": "Fire alarm panel",
+      "kind": "Addressable FACP (SIS)",
+      "system": "FA",
+      "location": "NOC",
+      "mesh": "FA_facp_sinteso_fc2080",
+      "zone": "Z4",
+      "purdue": "SIS (isolated)",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Siemens FC2080 / Notifier NFS2",
+      "standards": "NFPA 72, TIA-942-C §6, IEC 62443",
+      "attributes": {
+        "loop": "addressable SLC ring"
+      },
+      "attack_surface": [
+        "Z4 must be isolated from all other zones; supervisory output to Z2 is one-way only.",
+        "Panel → central station is a Z4 → external conduit (listed supervising station)."
+      ]
+    },
+    {
+      "id": "vesda",
+      "label": "Row 01 VESDA sampling pipe",
+      "kind": "Aspirating smoke detection",
+      "system": "FA",
+      "location": "Data hall",
+      "mesh": "FA_row01_vesda_pipe",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 2",
+      "vendor": "Xtralis VESDA-E",
+      "standards": "TIA-942-C (mandated)",
+      "attributes": {
+        "sensitivity": "≤ 0.005 % obs/ft"
+      },
+      "attack_surface": [
+        "Detector → FACP is a supervised Z3 → Z4 conduit."
+      ]
+    },
+    {
+      "id": "bottles",
+      "label": "Agent bottle bank",
+      "kind": "Clean-agent cylinders",
+      "system": "FA",
+      "location": "Data hall",
+      "mesh": "FA_agent_bottle_bank0_0",
+      "zone": "Z4",
+      "purdue": "SIS",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Kidde / Ansul",
+      "standards": "NFPA 2001",
+      "attributes": {
+        "agent": "inert gas (IG-541 class)",
+        "abort": "15-30 s pre-discharge"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "nozzle",
+      "label": "Row 01 suppression nozzle",
+      "kind": "Discharge nozzle",
+      "system": "FA",
+      "location": "Data hall",
+      "mesh": "FA_row01_nozzle_-7",
+      "zone": "Z4",
+      "purdue": "SIS",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "NFPA 2001",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "epo",
+      "label": "EPO station",
+      "kind": "Emergency power off",
+      "system": "FA",
+      "location": "Data hall",
+      "mesh": "FA_epo_button_0",
+      "zone": "Z4",
+      "purdue": "SIS",
+      "sl_target": "SL-T 2-3",
+      "vendor": null,
+      "standards": "NFPA 70 / NFPA 75",
+      "attributes": {},
+      "attack_surface": [
+        "Hard-wired safety circuit — must not be reachable from any network."
+      ]
+    },
+    {
+      "id": "carrier_a",
+      "label": "Carrier entry A",
+      "kind": "OSP duct bank / MMR entry",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_carrier_entry_0",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "TIA-942",
+      "attributes": {
+        "fibre": "single-mode",
+        "diversity": "physically separate path from entry B"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "isp_a",
+      "label": "ISP router A",
+      "kind": "Carrier edge router",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_isp_router_a",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": "Cisco / Arista",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "isp_b",
+      "label": "ISP router B",
+      "kind": "Carrier edge router",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_isp_router_b",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": "Cisco / Arista",
+      "standards": null,
+      "attributes": {
+        "role": "diverse carrier"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "ddos_a",
+      "label": "DDoS scrubber A",
+      "kind": "Security appliance",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_ddos_appliance_a",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": "Fortinet / Arbor class",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "ddos_b",
+      "label": "DDoS scrubber B",
+      "kind": "Security appliance",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_ddos_appliance_b",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "wan_a",
+      "label": "WAN ingress A",
+      "kind": "WAN aggregation",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_wan_ingress_a",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "fw_a",
+      "label": "Perimeter firewall A",
+      "kind": "Next-gen firewall",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_fw_paloalto_pa7000_a",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Palo Alto PA-7000",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "pairing": "active/active HA"
+      },
+      "attack_surface": [
+        "Network boundary protection: the enterprise-side control on every IT ↔ OT crossing."
+      ]
+    },
+    {
+      "id": "fw_b",
+      "label": "Perimeter firewall B",
+      "kind": "Next-gen firewall",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_fw_paloalto_pa7000_b",
+      "zone": "Z0",
+      "purdue": "L5",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Palo Alto PA-7000",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "dmz_sw",
+      "label": "DMZ switch",
+      "kind": "Switch",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_dmz_switch",
+      "zone": "Z1",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 2-3",
+      "vendor": null,
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "IDMZ is the most security-critical architectural element in the facility."
+      ]
+    },
+    {
+      "id": "spine_a",
+      "label": "Core spine A",
+      "kind": "Spine switch",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_core_spine_arista7800_a",
+      "zone": "Z0",
+      "purdue": "L4-L5",
+      "sl_target": "SL-T 2",
+      "vendor": "Arista 7800",
+      "standards": "IEC 62443-4-2, OCP S.A.F.E.",
+      "attributes": {
+        "fabric": "400G"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "spine_b",
+      "label": "Core spine B",
+      "kind": "Spine switch",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_core_spine_arista7800_b",
+      "zone": "Z0",
+      "purdue": "L4-L5",
+      "sl_target": "SL-T 2",
+      "vendor": "Arista 7800",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "leaf_a",
+      "label": "Leaf aggregation A",
+      "kind": "Leaf switch",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_leaf_agg_a",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": "Arista / Cisco",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "leaf_b",
+      "label": "Leaf aggregation B",
+      "kind": "Leaf switch",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_leaf_agg_b",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "fiber_spine",
+      "label": "Hall fibre spine",
+      "kind": "Fibre trunk",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_hall_fiber_spine",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "TIA-942",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "row1_eor",
+      "label": "Row 01 distribution switch",
+      "kind": "Distribution switch",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_row01_eor_rack_dist_switch_0",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": "Arista / Cisco",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "row1_patch",
+      "label": "Row 01 patch panel",
+      "kind": "Structured cabling",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_row01_eor_rack_patch_panel",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": "TIA-942",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "row1_oob",
+      "label": "Row 01 OOB console",
+      "kind": "Serial console server",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_row01_eor_rack_oob_console",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": "Vertiv ACS8000",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": [
+        "Out-of-band path bypasses in-band controls — SL-T 3 and jump-host-only access."
+      ]
+    },
+    {
+      "id": "row1_tor",
+      "label": "Row 01 rack 01 ToR A",
+      "kind": "Top-of-rack switch",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "row01_rack01_tor_switch_0",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": "Arista / Cisco",
+      "standards": null,
+      "attributes": {
+        "uplink": "2 × 100G"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "row1_tor_b",
+      "label": "Row 01 rack 01 ToR B",
+      "kind": "Top-of-rack switch",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "row01_rack01_tor_switch_1",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {
+        "role": "redundant"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "jumpbox",
+      "label": "Jump host / PAM A",
+      "kind": "Bastion + privileged access",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_jumpbox_bastion_a",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": "CyberArk / Azure Bastion class",
+      "standards": "IEC 62443-3-3 SR 1.13",
+      "attributes": {
+        "controls": "MFA, session recording"
+      },
+      "attack_surface": [
+        "Sole sanctioned path for vendor and engineering access into Z2/Z3 — SL-T 3."
+      ]
+    },
+    {
+      "id": "jumpbox_b",
+      "label": "Jump host / PAM B",
+      "kind": "Bastion",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_jumpbox_bastion_b",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "oob",
+      "label": "OOB console server",
+      "kind": "Console server",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_oob_console_acs8000",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": "Vertiv ACS8000",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "kvm",
+      "label": "OOB KVM",
+      "kind": "KVM over IP",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_oob_kvm_raritan",
+      "zone": "Z5",
+      "purdue": "L3.5",
+      "sl_target": "SL-T 3",
+      "vendor": "Raritan / Legrand",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "wlc",
+      "label": "WLAN controller",
+      "kind": "WLAN controller",
+      "system": "DATA",
+      "location": "MMR",
+      "mesh": "DATA_wlan_controller",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "wap",
+      "label": "Ceiling access point 1",
+      "kind": "Wi-Fi access point",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_wap_0",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": [
+        "Wireless in the white space is an additional radio attack surface — 802.1X and rogue-AP monitoring."
+      ]
+    },
+    {
+      "id": "wap_b",
+      "label": "Ceiling access point 2",
+      "kind": "Wi-Fi access point",
+      "system": "DATA",
+      "location": "Data hall",
+      "mesh": "DATA_wap_1",
+      "zone": "Z0",
+      "purdue": "L4",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "ot_sw",
+      "label": "OT switch TN-4900",
+      "kind": "Industrial managed switch",
+      "system": "OT",
+      "location": "NOC",
+      "mesh": "DATA_OT_switch_moxa_tn4900",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Moxa TN-4900",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "High priority for firmware code review (whitebox)."
+      ]
+    },
+    {
+      "id": "ot_fw",
+      "label": "OT firewall EDR-9010",
+      "kind": "Industrial firewall",
+      "system": "OT",
+      "location": "NOC",
+      "mesh": "DATA_OT_firewall_moxa_edr9010",
+      "zone": "Z1",
+      "purdue": "L3.5 (IDMZ)",
+      "sl_target": "SL-T 3",
+      "vendor": "Moxa EDR-9010",
+      "standards": "IEC 62443-4-2",
+      "attributes": {},
+      "attack_surface": [
+        "Enforces the Z2 → Z1 conduit; deny-by-default with per-protocol allow lists."
+      ]
+    },
+    {
+      "id": "diode",
+      "label": "Data diode",
+      "kind": "Unidirectional gateway",
+      "system": "OT",
+      "location": "NOC",
+      "mesh": "DATA_OT_data_diode",
+      "zone": "Z1",
+      "purdue": "L3.5 (IDMZ)",
+      "sl_target": "SL-T 3",
+      "vendor": "Owl / Waterfall class",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "direction": "OT → IT only"
+      },
+      "attack_surface": [
+        "Hardware-enforced one-way path; the only sanctioned Z2 → Z1 data export."
+      ]
+    },
+    {
+      "id": "gw",
+      "label": "Protocol gateway L-Gate",
+      "kind": "Protocol gateway",
+      "system": "OT",
+      "location": "NOC",
+      "mesh": "DATA_OT_gw_loytec_lgate",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "LOYTEC L-Gate",
+      "standards": "IEC 62443-4-2",
+      "attributes": {
+        "translates": "BACnet MS/TP, Modbus RTU, LON, 4-20 mA → BACnet/IP"
+      },
+      "attack_surface": [
+        "Protocol translation collapses many field conduits into one — a single high-value target."
+      ]
+    },
+    {
+      "id": "bms_ebi",
+      "label": "BMS head-end (EBI)",
+      "kind": "BMS supervisory server",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_srv_honeywell_ebi",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Honeywell EBI",
+      "standards": "IEC 62443 SL2 → SL-3/4 target",
+      "attributes": {},
+      "attack_surface": [
+        "Vendor remote access to the BMS is an explicitly documented Z2 → external conduit."
+      ]
+    },
+    {
+      "id": "bms_metasys",
+      "label": "BMS head-end (Metasys)",
+      "kind": "BMS supervisory server",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_srv_jci_metasys",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Johnson Controls Metasys",
+      "standards": "IEC 62443 SL2 → SL-3/4 target",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "dcim",
+      "label": "DCIM (Environet)",
+      "kind": "DCIM platform",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_dcim_environet",
+      "zone": "Z1",
+      "purdue": "L3-L3.5",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Vertiv Environet / Schneider EcoStruxure IT",
+      "standards": null,
+      "attributes": {},
+      "attack_surface": [
+        "Historian must be read-only toward Z2 — it must never push commands downward.",
+        "DCIM cloud connectivity is a Z1 → external conduit."
+      ]
+    },
+    {
+      "id": "ids",
+      "label": "OT IDS (Nozomi)",
+      "kind": "OT intrusion detection",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_ot_ids_nozomi",
+      "zone": "Z1",
+      "purdue": "L3-L3.5",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Nozomi / Claroty / Dragos",
+      "standards": null,
+      "attributes": {
+        "mode": "passive SPAN / mirror"
+      },
+      "attack_surface": [
+        "Passive only — no active scanning of live process networks."
+      ]
+    },
+    {
+      "id": "console",
+      "label": "Operator workstation",
+      "kind": "HMI / engineering workstation",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_console_monitor_0",
+      "zone": "Z1",
+      "purdue": "L3",
+      "sl_target": "SL-T 2-3",
+      "vendor": null,
+      "standards": "IEC 62443-4-2 (host devices)",
+      "attributes": {},
+      "attack_surface": [
+        "Engineering workstations are the classic pivot into Z2 — application allow-listing and no direct internet."
+      ]
+    },
+    {
+      "id": "wall_display",
+      "label": "NOC video wall",
+      "kind": "Supervisory display",
+      "system": "BMS",
+      "location": "NOC",
+      "mesh": "BMS_wall_display",
+      "zone": "Z1",
+      "purdue": "L3",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "acs",
+      "label": "Access control head end",
+      "kind": "ACS / IACS",
+      "system": "SEC",
+      "location": "NOC",
+      "mesh": "SEC_acs_lenels2_onguard",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "LenelS2 OnGuard / Genetec",
+      "standards": "IEC 62443, NIS2, SOCI",
+      "attributes": {},
+      "attack_surface": [
+        "Physical access control is a cyber-physical system — compromise holds doors and defeats zone boundaries."
+      ]
+    },
+    {
+      "id": "reader",
+      "label": "Mantrap card reader",
+      "kind": "Card reader",
+      "system": "SEC",
+      "location": "Mantrap",
+      "mesh": "SEC_mantrap_reader_0",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": "HID / LenelS2",
+      "standards": "OSDP v2 secure channel",
+      "attributes": {
+        "credential": "MIFARE / DESFire"
+      },
+      "attack_surface": [
+        "Legacy MIFARE Classic credentials are cryptographically broken — migrate to DESFire EV3.",
+        "Use OSDP secure channel; Wiegand is clear-text and cloneable."
+      ]
+    },
+    {
+      "id": "mantrap_door",
+      "label": "Mantrap door",
+      "kind": "Interlocked door",
+      "system": "SEC",
+      "location": "Mantrap",
+      "mesh": "SEC_mantrap_door_0",
+      "zone": "Z3",
+      "purdue": "L0-L1",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "IEC 62443-2-1 §7",
+      "attributes": {
+        "interlock": "two-door anti-passback"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "biometric",
+      "label": "Biometric reader",
+      "kind": "Face recognition terminal",
+      "system": "SEC",
+      "location": "Mantrap",
+      "mesh": "SEC_biometric_facestation",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2-3",
+      "vendor": null,
+      "standards": "GDPR (biometric data)",
+      "attributes": {},
+      "attack_surface": [
+        "Biometric templates are special-category personal data under GDPR."
+      ]
+    },
+    {
+      "id": "cctv",
+      "label": "Perimeter camera 1",
+      "kind": "Network video camera",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_cctv_cam_0",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": "Fortinet / JCI / Honeywell",
+      "standards": "IEC 62443",
+      "attributes": {},
+      "attack_surface": [
+        "Camera firmware is a recurring gap — component gap analysis required.",
+        "IP cameras are a common initial-access foothold; isolate on a dedicated VLAN."
+      ]
+    },
+    {
+      "id": "cctv_b",
+      "label": "Perimeter camera 2",
+      "kind": "Network video camera",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_cctv_cam_1",
+      "zone": "Z2",
+      "purdue": "L2",
+      "sl_target": "SL-T 2-3",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "pids",
+      "label": "Perimeter intrusion detection",
+      "kind": "Fence fibre sensor",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_pids_fiber_north",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": "IEC 62443, SL-3/SL-4 target",
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "gate",
+      "label": "Vehicle gate",
+      "kind": "Access barrier",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_gate",
+      "zone": "Z3",
+      "purdue": "L1",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    },
+    {
+      "id": "bollards",
+      "label": "HVM bollards",
+      "kind": "Hostile vehicle mitigation",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_hvm_bollard_0",
+      "zone": "Z3",
+      "purdue": "L0",
+      "sl_target": "SL-T 1",
+      "vendor": null,
+      "standards": null,
+      "attributes": {
+        "rating": "IWA 14-1 class"
+      },
+      "attack_surface": []
+    },
+    {
+      "id": "guard",
+      "label": "Guard house",
+      "kind": "Security post",
+      "system": "SEC",
+      "location": "Perimeter",
+      "mesh": "SEC_guard_house",
+      "zone": "Z1",
+      "purdue": "L3",
+      "sl_target": "SL-T 2",
+      "vendor": null,
+      "standards": null,
+      "attributes": {},
+      "attack_surface": []
+    }
+  ],
+  "connections": [
+    {
+      "id": "e0",
+      "from": "grid",
+      "to": "gis",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "150 kV overhead",
+      "physical_run": "PWR_sub_to_gis",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e1",
+      "from": "gis",
+      "to": "pad_xfmr",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "150 kV cable",
+      "physical_run": "PWR_gis_to_pad",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e2",
+      "from": "pad_xfmr",
+      "to": "mv_swg",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "33 kV feeder",
+      "physical_run": "PWR_mv_feed",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e3",
+      "from": "pad_xfmr",
+      "to": "mv_swg_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "33 kV feeder (B)",
+      "physical_run": "PWR_mv_feed",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e4",
+      "from": "mv_swg",
+      "to": "xfmr",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "33 kV cable",
+      "physical_run": "PWR_mv_to_xfmr",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e5",
+      "from": "mv_swg_b",
+      "to": "xfmr_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "33 kV cable (B)",
+      "physical_run": "PWR_mv_to_xfmr",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e6",
+      "from": "xfmr",
+      "to": "lv_swg",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "400 V LV feeder",
+      "physical_run": "PWR_xfmr_lv_feeder",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e7",
+      "from": "xfmr_b",
+      "to": "lv_swg",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "400 V LV feeder (B)",
+      "physical_run": "PWR_xfmr_lv_feeder",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e8",
+      "from": "lv_swg",
+      "to": "ats",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "LV bus",
+      "physical_run": "PWR_lv_to_ats",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e9",
+      "from": "lv_swg",
+      "to": "ats_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "LV bus (B)",
+      "physical_run": "PWR_lv_to_ats",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e10",
+      "from": "gen",
+      "to": "ats",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "generator feeder",
+      "physical_run": "PWR_gen_feeder",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e11",
+      "from": "gen_b",
+      "to": "ats",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "generator feeder",
+      "physical_run": "PWR_gen_feeder",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e12",
+      "from": "gen_c",
+      "to": "ats_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "generator feeder",
+      "physical_run": "PWR_gen_feeder",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e13",
+      "from": "bess",
+      "to": "lv_swg",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "BESS tie",
+      "physical_run": "PWR_bess_tie",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e14",
+      "from": "bess_b",
+      "to": "lv_swg",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "BESS tie (B)",
+      "physical_run": "PWR_bess_tie",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e15",
+      "from": "ats",
+      "to": "ups",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS input",
+      "physical_run": "PWR_ats_to_ups",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e16",
+      "from": "ats_b",
+      "to": "ups_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS input (B)",
+      "physical_run": "PWR_ats_to_ups",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e17",
+      "from": "ats",
+      "to": "ups_c",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS input",
+      "physical_run": "PWR_ats_to_ups",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e18",
+      "from": "ats_b",
+      "to": "ups_d",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS input (B)",
+      "physical_run": "PWR_ats_to_ups",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e19",
+      "from": "battery",
+      "to": "ups",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC bus",
+      "physical_run": "PWR_batt_dc_bus",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e20",
+      "from": "battery_b",
+      "to": "ups_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "DC bus (B)",
+      "physical_run": "PWR_batt_dc_bus",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e21",
+      "from": "ups",
+      "to": "sts",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS output",
+      "physical_run": "PWR_ups_to_sts",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e22",
+      "from": "ups_b",
+      "to": "sts",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "UPS output (B)",
+      "physical_run": "PWR_ups_to_sts",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e23",
+      "from": "ups",
+      "to": "rpp",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "distribution",
+      "physical_run": "PWR_ups_to_rpp",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e24",
+      "from": "ups_b",
+      "to": "rpp_b",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "distribution (B)",
+      "physical_run": "PWR_ups_to_rpp",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e25",
+      "from": "rpp",
+      "to": "busway",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "busway riser",
+      "physical_run": "PWR_rpp_riser",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e26",
+      "from": "rpp_b",
+      "to": "busway",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "busway riser (B)",
+      "physical_run": "PWR_rpp_riser",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e27",
+      "from": "busway",
+      "to": "row1_busway",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "row feed",
+      "physical_run": "PWR_spine_to_row01",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e28",
+      "from": "row1_busway",
+      "to": "row1_tap",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "tap-off",
+      "physical_run": "PWR_row01_tapbox_0",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e29",
+      "from": "row1_tap",
+      "to": "rack1_psu",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "rack drop",
+      "physical_run": "PWR_row01_drop_0",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e30",
+      "from": "rack1_psu",
+      "to": "rack1_busbar",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "48 V DC busbar",
+      "physical_run": "row01_rack01_busbar",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e31",
+      "from": "rack1_busbar",
+      "to": "rack1_compute",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "tray power",
+      "physical_run": "row01_rack01_busbar",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e32",
+      "from": "rack1_busbar",
+      "to": "rack1_storage",
+      "service": "electricity",
+      "protocol": "Physical flow",
+      "description": "tray power",
+      "physical_run": "row01_rack01_busbar",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e33",
+      "from": "fuel_tank",
+      "to": "daytank",
+      "service": "fuel",
+      "protocol": "Physical flow",
+      "description": "fuel transfer",
+      "physical_run": "PWR_fuel_line",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e34",
+      "from": "daytank",
+      "to": "gen",
+      "service": "fuel",
+      "protocol": "Physical flow",
+      "description": "engine supply",
+      "physical_run": "PWR_fuel_line",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e35",
+      "from": "tower",
+      "to": "chiller",
+      "service": "condenser",
+      "protocol": "Physical flow",
+      "description": "condenser supply",
+      "physical_run": "CHW_cond_supply",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e36",
+      "from": "chiller",
+      "to": "tower",
+      "service": "condenser",
+      "protocol": "Physical flow",
+      "description": "condenser return",
+      "physical_run": "CHW_cond_return",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e37",
+      "from": "tower_b",
+      "to": "chiller_b",
+      "service": "condenser",
+      "protocol": "Physical flow",
+      "description": "condenser supply",
+      "physical_run": "CHW_cond_supply",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e38",
+      "from": "drycooler",
+      "to": "chiller",
+      "service": "condenser",
+      "protocol": "Physical flow",
+      "description": "economiser loop",
+      "physical_run": "CHW_econo_loop",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e39",
+      "from": "drycooler_b",
+      "to": "chiller_c",
+      "service": "condenser",
+      "protocol": "Physical flow",
+      "description": "economiser loop",
+      "physical_run": "CHW_econo_loop",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e40",
+      "from": "chiller",
+      "to": "pump",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "chilled water out",
+      "physical_run": "CHW_fws_supply_main",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e41",
+      "from": "chiller_b",
+      "to": "pump_b",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "chilled water out",
+      "physical_run": "CHW_fws_supply_main",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e42",
+      "from": "pump",
+      "to": "fws_spine",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "facility water supply",
+      "physical_run": "CHW_fws_supply_main",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e43",
+      "from": "pump_b",
+      "to": "fws_spine",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "facility water supply (B)",
+      "physical_run": "CHW_fws_supply_main",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e44",
+      "from": "fws_spine",
+      "to": "row1_cdu",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "FWS drop to CDU",
+      "physical_run": "CHW_fws_to_row01_s",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e45",
+      "from": "row1_cdu",
+      "to": "fws_spine",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "FWS return",
+      "physical_run": "CHW_fws_to_row01_r",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e46",
+      "from": "row1_cdu",
+      "to": "row1_tcs",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "TCS header (secondary loop)",
+      "physical_run": "CHW_row01_tcs_header_supply",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e47",
+      "from": "row1_tcs",
+      "to": "row1_rack1",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "rack manifold via quick-disconnect",
+      "physical_run": "CHW_row01_drop_supply_0",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e48",
+      "from": "row1_rack1",
+      "to": "rack1_compute",
+      "service": "water",
+      "protocol": "Physical flow",
+      "description": "cold plate on die",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e49",
+      "from": "ahu",
+      "to": "crah",
+      "service": "air",
+      "protocol": "Physical flow",
+      "description": "outside air duct",
+      "physical_run": "AIR_ahu_duct",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e50",
+      "from": "crah",
+      "to": "row1_rack1",
+      "service": "air",
+      "protocol": "Physical flow",
+      "description": "cold aisle supply",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e51",
+      "from": "crah_b",
+      "to": "row1_rack1",
+      "service": "air",
+      "protocol": "Physical flow",
+      "description": "cold aisle supply",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e52",
+      "from": "h2_fan",
+      "to": "bess",
+      "service": "air",
+      "protocol": "Physical flow",
+      "description": "H2 exhaust duct",
+      "physical_run": "AIR_batt_h2_duct",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e53",
+      "from": "h2_fan",
+      "to": "battery",
+      "service": "air",
+      "protocol": "Physical flow",
+      "description": "battery room exhaust",
+      "physical_run": "AIR_batt_h2_duct",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e54",
+      "from": "carrier_a",
+      "to": "isp_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "carrier handoff",
+      "physical_run": "DATA_carrier_entry_0",
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "external → Z0",
+      "note": "Diverse carrier entry; outermost untrusted boundary."
+    },
+    {
+      "id": "e55",
+      "from": "isp_a",
+      "to": "ddos_a",
+      "service": "data",
+      "protocol": "BGP",
+      "description": "transit peering",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e56",
+      "from": "isp_b",
+      "to": "ddos_b",
+      "service": "data",
+      "protocol": "BGP",
+      "description": "transit peering (diverse)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e57",
+      "from": "ddos_a",
+      "to": "wan_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "scrubbed transit",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e58",
+      "from": "ddos_b",
+      "to": "wan_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "scrubbed transit (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e59",
+      "from": "wan_a",
+      "to": "fw_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "WAN uplink",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e60",
+      "from": "wan_a",
+      "to": "fw_b",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "WAN uplink (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e61",
+      "from": "fw_a",
+      "to": "dmz_sw",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "DMZ segment",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z0 → Z1",
+      "note": "IDMZ boundary — the facility’s most security-critical element."
+    },
+    {
+      "id": "e62",
+      "from": "fw_a",
+      "to": "spine_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "inside interface",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e63",
+      "from": "fw_b",
+      "to": "spine_b",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "inside interface (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e64",
+      "from": "spine_a",
+      "to": "leaf_a",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "400G fabric",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e65",
+      "from": "spine_b",
+      "to": "leaf_b",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "400G fabric (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e66",
+      "from": "leaf_a",
+      "to": "fiber_spine",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "hall trunk",
+      "physical_run": "DATA_core_to_hall_spine",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e67",
+      "from": "leaf_b",
+      "to": "fiber_spine",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "hall trunk (B)",
+      "physical_run": "DATA_core_to_hall_spine",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e68",
+      "from": "fiber_spine",
+      "to": "row1_eor",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "row trunk",
+      "physical_run": "DATA_spine_to_row01",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e69",
+      "from": "row1_eor",
+      "to": "row1_patch",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "structured cabling",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e70",
+      "from": "row1_patch",
+      "to": "row1_tor",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "rack uplink 2×100G",
+      "physical_run": "DATA_row01_drop_0",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e71",
+      "from": "row1_patch",
+      "to": "row1_tor_b",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "rack uplink (B)",
+      "physical_run": "DATA_row01_drop_0",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e72",
+      "from": "row1_tor",
+      "to": "rack1_compute",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "host attachment",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e73",
+      "from": "row1_tor_b",
+      "to": "rack1_storage",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "storage attachment",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e74",
+      "from": "wlc",
+      "to": "wap",
+      "service": "data",
+      "protocol": "CAPWAP",
+      "description": "AP control tunnel",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e75",
+      "from": "wlc",
+      "to": "wap_b",
+      "service": "data",
+      "protocol": "CAPWAP",
+      "description": "AP control tunnel",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e76",
+      "from": "jumpbox",
+      "to": "oob",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "SSH to console server",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z5 internal",
+      "note": "Privileged access path; MFA and session recording required."
+    },
+    {
+      "id": "e77",
+      "from": "jumpbox_b",
+      "to": "oob",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "SSH (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e78",
+      "from": "oob",
+      "to": "row1_oob",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "OOB management network",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e79",
+      "from": "row1_oob",
+      "to": "row1_tor",
+      "service": "data",
+      "protocol": "RS-232 console",
+      "description": "serial console",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e80",
+      "from": "kvm",
+      "to": "rack1_mgmt",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "KVM over IP",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z5 → Z0 (OOB)",
+      "note": "Out-of-band control of IT hosts; isolated OOB VLAN only."
+    },
+    {
+      "id": "e81",
+      "from": "rack1_mgmt",
+      "to": "rack1_compute",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "BMC / Redfish",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "Embedded management plane with power and firmware authority over the host."
+    },
+    {
+      "id": "e82",
+      "from": "dcim",
+      "to": "row1_tor",
+      "service": "data",
+      "protocol": "SNMP",
+      "description": "device polling",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e83",
+      "from": "jumpbox",
+      "to": "ot_fw",
+      "service": "data",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "engineering access into OT",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z5 → Z1",
+      "note": "Sole sanctioned vendor/engineering path toward Z2."
+    },
+    {
+      "id": "e84",
+      "from": "row1_cdu_plc",
+      "to": "row1_cdu",
+      "service": "control",
+      "protocol": "Modbus RTU",
+      "description": "pump + valve control",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "Direct cyber-physical authority; thermal runaway within ~90 s if defeated."
+    },
+    {
+      "id": "e85",
+      "from": "row1_cdu_plc",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "CDU telemetry",
+      "physical_run": "DATA_OT_branch_hall_bms",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e86",
+      "from": "row1_leak",
+      "to": "row1_cdu_plc",
+      "service": "control",
+      "protocol": "Dry contact",
+      "description": "leak alarm contact",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e87",
+      "from": "row1_th",
+      "to": "gw",
+      "service": "control",
+      "protocol": "BACnet MS/TP",
+      "description": "aisle temp / RH",
+      "physical_run": "DATA_OT_branch_hall_bms",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e88",
+      "from": "chiller_ctl",
+      "to": "chiller",
+      "service": "control",
+      "protocol": "Modbus RTU",
+      "description": "compressor + valve control",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e89",
+      "from": "chiller_ctl",
+      "to": "chiller_b",
+      "service": "control",
+      "protocol": "Modbus RTU",
+      "description": "plant sequencing",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e90",
+      "from": "chiller_ctl",
+      "to": "gw",
+      "service": "control",
+      "protocol": "BACnet/IP",
+      "description": "chiller plant telemetry",
+      "physical_run": "DATA_OT_trunk",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e91",
+      "from": "wts_plc",
+      "to": "vfd",
+      "service": "control",
+      "protocol": "PROFINET",
+      "description": "pump speed command",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e92",
+      "from": "wts_plc",
+      "to": "vfd_b",
+      "service": "control",
+      "protocol": "PROFINET",
+      "description": "pump speed command (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e93",
+      "from": "vfd",
+      "to": "pump",
+      "service": "control",
+      "protocol": "Physical flow",
+      "description": "motor drive output",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e94",
+      "from": "vfd_b",
+      "to": "pump_b",
+      "service": "control",
+      "protocol": "Physical flow",
+      "description": "motor drive output",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e95",
+      "from": "wts_plc",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "PROFINET",
+      "description": "water treatment telemetry",
+      "physical_run": "DATA_OT_trunk",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e96",
+      "from": "wts_plc",
+      "to": "tower",
+      "service": "control",
+      "protocol": "Modbus RTU",
+      "description": "dosing + blowdown control",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e97",
+      "from": "crah_ctl",
+      "to": "crah",
+      "service": "control",
+      "protocol": "BACnet MS/TP",
+      "description": "fan + valve control",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e98",
+      "from": "crah_ctl",
+      "to": "crah_b",
+      "service": "control",
+      "protocol": "BACnet MS/TP",
+      "description": "fan + valve control",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e99",
+      "from": "crah_ctl",
+      "to": "gw",
+      "service": "control",
+      "protocol": "BACnet/IP",
+      "description": "CRAH telemetry",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e100",
+      "from": "relay",
+      "to": "epms",
+      "service": "control",
+      "protocol": "IEC 61850 MMS",
+      "description": "protection + metering",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z3 → Z2",
+      "note": "Station-bus conduit from protection IEDs to EPMS."
+    },
+    {
+      "id": "e101",
+      "from": "relay_b",
+      "to": "epms",
+      "service": "control",
+      "protocol": "IEC 61850 MMS",
+      "description": "protection + metering (B)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e102",
+      "from": "gis",
+      "to": "relay",
+      "service": "control",
+      "protocol": "IEC 61850 MMS",
+      "description": "breaker status / trip",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e103",
+      "from": "epms",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "power quality telemetry",
+      "physical_run": "DATA_OT_branch_epms",
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e104",
+      "from": "rpp",
+      "to": "epms",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "branch circuit monitoring",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e105",
+      "from": "busway",
+      "to": "epms",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "busway critical power monitor",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e106",
+      "from": "gen_ctl",
+      "to": "gen",
+      "service": "control",
+      "protocol": "CAN bus",
+      "description": "engine control (J1939)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e107",
+      "from": "gen_ctl",
+      "to": "gen_b",
+      "service": "control",
+      "protocol": "CAN bus",
+      "description": "engine control",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e108",
+      "from": "gen_ctl",
+      "to": "ats",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "paralleling + transfer command",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "Dispatch authority over standby generation."
+    },
+    {
+      "id": "e109",
+      "from": "gen_ctl",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "Modbus RTU",
+      "description": "genset status",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e110",
+      "from": "daytank",
+      "to": "gen_ctl",
+      "service": "control",
+      "protocol": "4-20 mA analog",
+      "description": "day tank level",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e111",
+      "from": "bess_bms",
+      "to": "bess",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "charge / discharge dispatch",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "Microgrid controller authority over on-site storage."
+    },
+    {
+      "id": "e112",
+      "from": "bess_bms",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "DNP3",
+      "description": "state of charge, alarms",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z2 → external (grid operator)",
+      "note": "IEEE 2030.7 / DNP3 grid interface."
+    },
+    {
+      "id": "e113",
+      "from": "h2_sensor",
+      "to": "gw",
+      "service": "control",
+      "protocol": "4-20 mA analog",
+      "description": "H2 concentration",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e114",
+      "from": "h2_sensor",
+      "to": "h2_fan",
+      "service": "control",
+      "protocol": "Dry contact",
+      "description": "ventilation interlock",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "Safety interlock — hard-wired at the starter, not operator-overridable."
+    },
+    {
+      "id": "e115",
+      "from": "ats",
+      "to": "epms",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "transfer status",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e116",
+      "from": "ups",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "UPS management card",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "SNMP / Modbus / web on the NMC — isolate in a UPS management VLAN."
+    },
+    {
+      "id": "e117",
+      "from": "battery",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "Modbus TCP",
+      "description": "battery monitoring (cell V, T, ohmic)",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e118",
+      "from": "gw",
+      "to": "ot_sw",
+      "service": "control",
+      "protocol": "BACnet/IP",
+      "description": "normalised field data",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e119",
+      "from": "ot_sw",
+      "to": "ot_fw",
+      "service": "control",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "OT zone uplink",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z2 → Z1",
+      "note": "Deny-by-default with per-protocol allow lists."
+    },
+    {
+      "id": "e120",
+      "from": "ot_fw",
+      "to": "diode",
+      "service": "control",
+      "protocol": "OPC UA",
+      "description": "supervisory export",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z1 internal",
+      "note": null
+    },
+    {
+      "id": "e121",
+      "from": "diode",
+      "to": "dcim",
+      "service": "control",
+      "protocol": "OPC UA",
+      "description": "one-way data feed",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": true,
+      "zone_crossing": "Z2 → Z1",
+      "note": "Historian is read-only toward Z2 — it must never push commands downward."
+    },
+    {
+      "id": "e122",
+      "from": "diode",
+      "to": "ids",
+      "service": "control",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "mirrored OT traffic",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": true,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e123",
+      "from": "ot_sw",
+      "to": "bms_ebi",
+      "service": "control",
+      "protocol": "BACnet/IP",
+      "description": "building supervision",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e124",
+      "from": "ot_sw",
+      "to": "bms_metasys",
+      "service": "control",
+      "protocol": "BACnet/IP",
+      "description": "building supervision",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e125",
+      "from": "bms_ebi",
+      "to": "dcim",
+      "service": "control",
+      "protocol": "OPC UA",
+      "description": "supervisory rollup",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e126",
+      "from": "console",
+      "to": "bms_ebi",
+      "service": "control",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "operator HMI session",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z1 → Z2",
+      "note": "Engineering workstation is the classic pivot into Z2."
+    },
+    {
+      "id": "e127",
+      "from": "dcim",
+      "to": "wall_display",
+      "service": "control",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "NOC display feed",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e128",
+      "from": "vesda",
+      "to": "facp",
+      "service": "fire",
+      "protocol": "Dry contact",
+      "description": "supervised detection loop",
+      "physical_run": "FA_row01_vesda_pipe",
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z3 → Z4",
+      "note": "Supervised SLC loop from field detector to panel."
+    },
+    {
+      "id": "e129",
+      "from": "facp",
+      "to": "bottles",
+      "service": "fire",
+      "protocol": "Dry contact",
+      "description": "suppression release",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "15-30 s pre-discharge abort interval required (NFPA 2001)."
+    },
+    {
+      "id": "e130",
+      "from": "bottles",
+      "to": "nozzle",
+      "service": "fire",
+      "protocol": "Physical flow",
+      "description": "agent discharge",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e131",
+      "from": "facp",
+      "to": "ot_sw",
+      "service": "fire",
+      "protocol": "Dry contact",
+      "description": "alarm state to BMS",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": true,
+      "zone_crossing": "Z4 → Z2",
+      "note": "One-way hardened dry contact only — no bidirectional Ethernet between Z4 and Z2."
+    },
+    {
+      "id": "e132",
+      "from": "facp",
+      "to": "crah_ctl",
+      "service": "fire",
+      "protocol": "Dry contact",
+      "description": "HVAC shutdown on alarm",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": true,
+      "zone_crossing": "Z4 → Z2",
+      "note": "Supervised safety output."
+    },
+    {
+      "id": "e133",
+      "from": "facp",
+      "to": "epo",
+      "service": "fire",
+      "protocol": "Dry contact",
+      "description": "emergency power off circuit",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e134",
+      "from": "reader",
+      "to": "acs",
+      "service": "security",
+      "protocol": "OSDP RS-485",
+      "description": "credential read",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": "OSDP secure channel; Wiegand is clear-text and cloneable."
+    },
+    {
+      "id": "e135",
+      "from": "reader",
+      "to": "mantrap_door",
+      "service": "security",
+      "protocol": "Dry contact",
+      "description": "door strike release",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e136",
+      "from": "biometric",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "biometric verification",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e137",
+      "from": "cctv",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "video stream",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e138",
+      "from": "cctv_b",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "video stream",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e139",
+      "from": "pids",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "fence intrusion alarm",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e140",
+      "from": "gate",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Dry contact",
+      "description": "barrier status / release",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e141",
+      "from": "guard",
+      "to": "acs",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "guard workstation",
+      "physical_run": null,
+      "critical_conduit": false,
+      "one_way": false,
+      "zone_crossing": null,
+      "note": null
+    },
+    {
+      "id": "e142",
+      "from": "acs",
+      "to": "dcim",
+      "service": "security",
+      "protocol": "Ethernet/TCP-IP",
+      "description": "event forwarding",
+      "physical_run": null,
+      "critical_conduit": true,
+      "one_way": false,
+      "zone_crossing": "Z2 → Z1",
+      "note": null
+    }
+  ]
+}

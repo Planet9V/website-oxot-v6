@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OXOT Cyber Digital Twin — Sample Artifact Pack</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html{ -webkit-text-size-adjust:100% }
+  doc-page:not(:defined){visibility:hidden}
+  body{font-family:Inter,system-ui,sans-serif;color:#1a1a1c}
+  h1{font:700 27px/1.16 Inter,sans-serif;letter-spacing:-.017em;margin:0 0 6px;color:#0f0f10}
+  .lede{font:400 13.5px/1.6 Inter,sans-serif;color:#4a4a4d;margin:0 0 22px;max-width:44em}
+  h2{font:700 15.5px/1.25 Inter,sans-serif;letter-spacing:-.008em;margin:30px 0 3px;color:#0f0f10;
+     padding-top:11px;border-top:2px solid #EE7623}
+  h2 .num{color:#EE7623;margin-right:8px}
+  h3{font:650 12px/1.3 Inter,sans-serif;letter-spacing:.055em;text-transform:uppercase;color:#6a6a6d;margin:20px 0 7px}
+  h4{font:650 12.5px/1.35 Inter,sans-serif;margin:15px 0 4px;color:#1a1a1c}
+  p,li{font:400 11.4px/1.62 Inter,sans-serif;color:#26262a;margin:0 0 8px;orphans:3;widows:3}
+  ul,ol{margin:0 0 10px;padding-left:17px} li{margin-bottom:3px}
+  strong,b{font-weight:650;color:#0f0f10}
+  code{font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;background:#f1efea;padding:1.5px 4px;border-radius:3px;color:#3a3a3d}
+  table{width:100%;border-collapse:collapse;margin:9px 0 14px;font:400 9.4px/1.4 Inter,sans-serif}
+  thead th{text-align:left;font:650 8.4px/1.3 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+    color:#6a6a6d;padding:0 7px 5px 0;border-bottom:1.5px solid #26262a;white-space:nowrap}
+  tbody td{padding:5px 7px 5px 0;border-bottom:.5px solid #ddd9d0;vertical-align:top;color:#26262a}
+  tbody tr{break-inside:avoid}
+  table.tight tbody td{padding:3.5px 7px 3.5px 0}
+  .tag{font:650 7.6px/1 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:2.5px 5px;
+       border-radius:3px;white-space:nowrap}
+  .tag.r{background:#fde9e6;color:#a8281f} .tag.h{background:#e4f2e6;color:#1f6b34} .tag.n{background:#eeece7;color:#6a6a6d}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#ddd9d0;border:1px solid #ddd9d0;
+        margin:14px 0 18px;break-inside:avoid}
+  .kpi{background:#fff;padding:10px 11px}
+  .kpi .v{font:700 19px/1 Inter,sans-serif;letter-spacing:-.02em;color:#0f0f10}
+  .kpi .k{font:600 7.8px/1.3 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#7a7a7d;margin-top:4px}
+  .kpi .s{font:400 8.6px/1.35 Inter,sans-serif;color:#8a8a8d;margin-top:3px}
+  .note{background:#faf8f4;border-left:2.5px solid #EE7623;padding:10px 13px;margin:12px 0 16px;break-inside:avoid}
+  .note p{margin:0;font-size:10.8px;color:#3a3a3d} .note p+p{margin-top:6px}
+  .note .lbl{font:650 8.2px/1 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#EE7623;
+             display:block;margin-bottom:5px}
+  .caption{font:400 8.8px/1.45 Inter,sans-serif;color:#8a8a8d;margin:-8px 0 16px}
+  .phase{display:grid;grid-template-columns:26px 1fr;gap:11px;margin:0 0 13px;break-inside:avoid}
+  .phase .n{width:26px;height:26px;border-radius:50%;background:#0f0f10;color:#fff;
+            font:700 10.5px/26px Inter,sans-serif;text-align:center}
+  .phase.ws .n{background:#EE7623}
+  .phase h4{margin:3px 0 3px}
+  .phase p{margin:0 0 4px;font-size:10.8px}
+  .arts{font:400 9.4px/1.5 Inter,sans-serif;color:#6a6a6d}
+  .arts b{font:650 8.2px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#EE7623}
+  .bar{height:7px;background:#eeece7;border-radius:2px;overflow:hidden;margin-top:3px}
+  .bar i{display:block;height:100%;background:#EE7623}
+  .two{column-count:2;column-gap:26px}
+  .two h3{column-span:all}
+  .pagebreak{break-before:page}
+  .ft{display:flex;justify-content:space-between;align-items:baseline;
+      font:500 8.4px/1 Inter,sans-serif;color:#9a9a9d;border-top:.5px solid #ddd9d0;padding-top:7px}
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font:600 8.4px/1 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#9a9a9d;
+       border-bottom:.5px solid #ddd9d0;padding-bottom:7px}
+  .hdr b{color:#EE7623}
+  a{color:#c05a12} a:hover{color:#EE7623}
+</style>
+</head>
+<body>
+<doc-page margin="0.7in">
+
+<div slot="header" class="hdr"><span><b>OXOT</b> &nbsp;Cyber Digital Twin</span><span>Sample artifact pack — illustrative</span></div>
+<div slot="footer" class="ft"><span>Hyperscale AI campus · reference model</span><span>IEC 62443 · CLC/TS 50701</span></div>
+
+<h1>Cyber Digital Twin — sample artifact pack</h1>
+<p class="lede">A worked example of how OXOT builds a Cyber Digital Twin of an operating facility, and what each phase produces. The subject is a reference hyperscale AI campus: one data hall of 96 liquid-cooled 120 kW GPU racks, organised into two independently operable cells. Every figure in this pack is queried from the model itself, not estimated.</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">449</div><div class="k">Assets</div><div class="s">register with zone, Purdue level and SL-T</div></div>
+  <div class="kpi"><div class="v">1,155</div><div class="k">Connections</div><div class="s">each with service, protocol and direction</div></div>
+  <div class="kpi"><div class="v">216</div><div class="k">Critical conduits</div><div class="s">IEC 62443-3-2 §5.6</div></div>
+  <div class="kpi"><div class="v">188</div><div class="k">Hardwired</div><div class="s">no network path — cannot be reached remotely</div></div>
+</div>
+
+<div class="note"><span class="lbl">How to read this pack</span>
+<p>This is a <b>sample</b>. Each artifact below is truncated to at most twenty rows to show structure, format and the reasoning behind it. A live engagement produces the complete set — the full asset register, every conduit, every hazard, and the long-form report aligned to IEC 62443 and CLC/TS 50701.</p>
+<p>The model is the single source. The asset register, the network diagram, the threat pathways, the consequence figures and the executive dashboard are all views of one dataset, so a change in the field propagates to every artifact at once rather than being reconciled by hand across documents.</p></div>
+
+<h2><span class="num">1</span>The facility</h2>
+<p>The subject facility is a hyperscale AI campus built on a <b>cell architecture</b>: the hall is divided into self-contained blocks that can be deployed, commissioned and operated independently. Each cell carries 48 racks at 120 kW, giving 5.76 MW of IT load and 6.91 MW total at PUE 1.2. Generation is shared across the campus; distribution is not.</p>
+
+<h3>Key systems</h3>
+<table>
+<thead><tr><th>System</th><th>Scope</th><th>What the model carries</th></tr></thead>
+<tbody>
+<tr><td><b>Power train</b></td><td>Per cell</td><td>Utility feed and MV switchgear, transformers, LV and ATS/STS, two UPS blocks in 2N, VRLA strings, RPP, and a cell-bounded busway spine to each row. Generators, bulk fuel, BESS and the microgrid controller are campus-shared.</td></tr>
+<tr><td><b>Cooling</b></td><td>Shared plant, cell CDUs</td><td>Central chiller plant with N+1 across three chillers, cooling towers, dry-cooler economiser, facility water spine, and a row CDU per row bridging facility water to the technology loop. CRAH wall units and containment differential pressure.</td></tr>
+<tr><td><b>Compute</b></td><td>Per rack</td><td>96 liquid-cooled 48U racks — compute trays, ToR switching, cold-plate manifolds, switched rack PDUs on A and B buses, and a BMC estate of 128 controllers per row.</td></tr>
+<tr><td><b>Network</b></td><td>Campus + per cell</td><td>Carrier demarcations north and south, ISP routers, DDoS scrubbing, perimeter and DMZ firewall pairs, dual core and spine, per-row distribution, out-of-band console, and an isolated guest network.</td></tr>
+<tr><td><b>OT</b></td><td>Per cell</td><td>A dedicated OT segment per cell — hardened switch, zone firewall and protocol gateway on a cell VLAN with no inter-cell routing — aggregating to a campus data diode. DDC field controllers at Purdue L1.</td></tr>
+<tr><td><b>Safety and fire</b></td><td>Per cell</td><td>A Z4 fire panel per cell with its own detection and agent release, VESDA aspirating detection per row, nozzle banks, EPO, and hardwired interlocks to HVAC and ventilation.</td></tr>
+<tr><td><b>Security</b></td><td>Campus</td><td>Perimeter intrusion detection, gates, bollards, guardhouse, mantrap and biometrics, hall cameras, supervised door contacts, and a CCTV storage estate.</td></tr>
+<tr><td><b>Applications</b></td><td>Core IT / DCS room</td><td>Twelve racks: BMS and EPMS applications, CCTV VMS, access control, SQL cluster, historians, DCS controllers and OPC UA, domain controllers and PKI, SIEM and SOAR, DMZ and jump infrastructure, SCADA, backup, virtualisation and SAN.</td></tr>
+</tbody></table>
+<p class="caption">Table 1. System scope. "Per cell" means the model carries an independent instance for each of the two cells, which is what makes the isolation argument testable rather than asserted.</p>
+
+<h2 class="pagebreak"><span class="num">2</span>How we build it — the process</h2>
+<p>Three phases, two client workshops, and a floor walk at each end. The model is built from documentation first, then corrected against the physical plant, then loaded with safety and reliability data before any control is recommended.</p>
+
+<div class="phase"><div class="n">1</div><div>
+<h4>Phase 1 — gather artifacts and build the model</h4>
+<p>We build from the client's own documentation: high-level design, detailed design, and interface control documents. From those we derive an asset list, establish every connection, and classify the services and protocols each one carries. Nothing is inferred where a document states it.</p>
+<div class="arts"><b>Produces</b> &nbsp;Asset register · connection graph · service and protocol inventory · 3D model</div></div></div>
+
+<div class="phase ws"><div class="n">W1</div><div>
+<h4>Workshop 1 — review, walk the floor, frame the threat</h4>
+<p>We review the model with the client and walk the floor to confirm it against the as-is plant, adjusting where the documentation and the installation disagree. We then frame the threat landscape. CLC/TS 50701 works from worst case; we instead apply comparative sector threats through our <b>Attacker Threat Quotient</b>, weighted by client profile, equipment and facility type, and geography.</p>
+<div class="arts"><b>Produces</b> &nbsp;As-is corrections · initial SL-T zones and conduits · asset registry with SIL-rated items marked</div></div></div>
+
+<div class="phase"><div class="n">2</div><div>
+<h4>Phase 2 — load safety, reliability and operations data</h4>
+<p>We take the safety team's FMEA, hazard log and safety critical item list; the reliability team's critical item list; and the ConOps with its minimum operating requirements. Failure modes, impacts and consequences are built into the model so that a threat pathway can be traced through to a physical outcome.</p>
+<div class="arts"><b>Produces</b> &nbsp;Failure modes on assets · consequence model · minimum operating requirements · operating modes</div></div></div>
+
+<div class="phase ws"><div class="n">W2</div><div>
+<h4>Workshop 2 — threat actors, pathways and reasonable controls</h4>
+<p>We show threat actors and pathways on the model through <b>TACAM</b>, which carries typical vulnerabilities by equipment class, and trace them to fat-tail losses, critical losses and safety consequences using our own ALE model. We review the controls the SL-T ratings require, and why they matter, grounded in the pathways and consequences shown rather than in a generic catalogue. Architectural gaps are then tested against <b>ALARP/SFAIRP</b> to arrive at a reasonable SL-C, and the result is drawn as the ZCR diagram — the flat network view of the same 3D model.</p>
+<div class="arts"><b>Produces</b> &nbsp;Threat pathways · consequence and ALE · SL-C rationale · ZCR zone and conduit diagram</div></div></div>
+
+<div class="phase"><div class="n">3</div><div>
+<h4>Phase 3 — raise fidelity, verify, and report</h4>
+<p>We enter SL-C and the security requirements for every asset by zone, and produce the gap analysis. We then request samples and configurations, SBOMs and HBOMs, and switch and firewall configurations to raise the model's fidelity to the actual facility, and walk the floor once more with the improved model to confirm it still matches the as-is plant.</p>
+<div class="arts"><b>Produces</b> &nbsp;NOW/NEXT/NEVER report · target reference architecture (IEC 62443) · SL-C to SL-A gap analysis · roadmap, priority actions and quick wins</div></div></div>
+
+<h3>Where the outputs go</h3>
+<p>The engagement ends with a common set of information rather than a single report. Executive briefings carry the readout; the long-form report carries the full detail aligned to IEC 62443 and CLC/TS 50701. Facility managers receive a SecRAC; where the sponsor is organisational, risk management receives input to the risk ledger. Reliability and safety critical items go back to the safety team's hazard log.</p>
+<p>That gives IT, OT, controls, operations, network and security teams, facility managers, safety and reliability teams, and executives one dataset to work from. The consequence-driven top-down view builds awareness tied to numbers; the bottom-up engineering, controls and operations view earns trust. Both are needed to prioritise resources, and both are defensible — which is what an IEC 62443 determination of SL-C requires when it is negotiated down to SL-A.</p>
+
+<h2 class="pagebreak"><span class="num">3</span>Artifact A1 — asset register</h2>
+<p>Every asset carries a stable id, its system, its IEC 62443 zone and Purdue level, its SL-T target, and its cell. The id is the join key across every other artifact and binds to a named node in the 3D model, so a row in this table and a mesh in the twin are the same object.</p>
+<table class="tight">
+<thead><tr><th>Id</th><th>Asset</th><th>Kind</th><th>Sys</th><th>Zone</th><th>Purdue</th><th>SL-T</th><th>Cell</th></tr></thead>
+<tbody>
+<tr><td><code>grid</code></td><td>Utility grid intake</td><td>HV overhead termination</td><td>PWR</td><td><b>Z3</b></td><td>L0</td><td>SL-T 1</td><td>Campus (shared)</td></tr>
+<tr><td><code>gis</code></td><td>GIS switchgear</td><td>Gas-insulated switchgear</td><td>PWR</td><td><b>Z3</b></td><td>L0-L1</td><td>SL-T 1-2</td><td>Campus (shared)</td></tr>
+<tr><td><code>xfmr</code></td><td>Dry transformer RESIBLOC</td><td>MV/LV transformer</td><td>PWR</td><td><b>Z3</b></td><td>L0</td><td>SL-T 1</td><td>Campus (shared)</td></tr>
+<tr><td><code>ups</code></td><td>UPS 9395XR</td><td>Modular double-conversion UPS</td><td>PWR</td><td><b>Z2</b></td><td>L2</td><td>SL-T 2-3</td><td>Cell A</td></tr>
+<tr><td><code>battery</code></td><td>Battery string 1</td><td>VRLA string + monitoring</td><td>PWR</td><td><b>Z3</b></td><td>L0-L1</td><td>SL-T 1-2</td><td>Campus (shared)</td></tr>
+<tr><td><code>rpp</code></td><td>RPP 1 (with BCMS)</td><td>Remote power panel</td><td>PWR</td><td><b>Z3</b></td><td>L0-L1</td><td>SL-T 1-2</td><td>Cell A</td></tr>
+<tr><td><code>busway</code></td><td>Cell A busway spine</td><td>Busway / bus duct</td><td>PWR</td><td><b>Z3</b></td><td>L0</td><td>SL-T 1</td><td>Cell A</td></tr>
+<tr><td><code>busway_b</code></td><td>Cell B busway spine</td><td>Busway / bus duct</td><td>PWR</td><td><b>Z3</b></td><td>L0</td><td>SL-T 1</td><td>Cell B</td></tr>
+<tr><td><code>gen</code></td><td>Generator CAT 3516C</td><td>Diesel generator</td><td>PWR</td><td><b>Z3</b></td><td>L1</td><td>SL-T 1-2</td><td>Campus (shared)</td></tr>
+<tr><td><code>chiller</code></td><td>Chiller 30XW</td><td>Water-cooled centrifugal chiller</td><td>CHW</td><td><b>Z2</b></td><td>L2</td><td>SL-T 2-3</td><td>Campus (shared)</td></tr>
+<tr><td><code>fws_spine</code></td><td>Facility water spine (FWS)</td><td>Primary header</td><td>CHW</td><td><b>Z3</b></td><td>L0</td><td>SL-T 1</td><td>Campus (shared)</td></tr>
+<tr><td><code>row01_cdu</code></td><td>Row 1 CDU</td><td>Coolant distribution unit</td><td>CHW</td><td><b>Z2</b></td><td>L2</td><td>SL-T 2-3</td><td>Cell A</td></tr>
+<tr><td><code>row01_cdu_plc</code></td><td>Row 1 CDU controller</td><td>PLC</td><td>BMS</td><td><b>Z2</b></td><td>L1-L2</td><td>SL-T 3</td><td>Cell A</td></tr>
+<tr><td><code>row01_rack01</code></td><td>Row 1 rack 01</td><td>GPU rack (48U, direct-to-chip liquid)</td><td>IT</td><td><b>Z0</b></td><td>L4-L5</td><td>SL-T 2</td><td>Cell A</td></tr>
+<tr><td><code>cellA_ot_sw</code></td><td>Cell A OT switch</td><td>Industrial managed switch</td><td>OT</td><td><b>Z2</b></td><td>L2</td><td>SL-T 2-3</td><td>Cell A</td></tr>
+<tr><td><code>cellA_ot_fw</code></td><td>Cell A OT firewall</td><td>Industrial firewall</td><td>OT</td><td><b>Z1</b></td><td>L3.5 (IDMZ)</td><td>SL-T 3</td><td>Cell A</td></tr>
+<tr><td><code>diode</code></td><td>Data diode</td><td>Unidirectional gateway</td><td>OT</td><td><b>Z1</b></td><td>L3.5 (IDMZ)</td><td>SL-T 3</td><td>Campus (shared)</td></tr>
+<tr><td><code>cellA_bms_zc</code></td><td>Cell A BMS zone controller</td><td>BMS zone controller</td><td>BMS</td><td><b>Z2</b></td><td>L2</td><td>SL-T 2-3</td><td>Cell A</td></tr>
+<tr><td><code>cellA_facp</code></td><td>Cell A fire panel</td><td>Addressable FACP (SIS)</td><td>FA</td><td><b>Z4</b></td><td>SIS (isolated)</td><td>SL-T 2-3</td><td>Cell A</td></tr>
+<tr><td><code>dcs_a</code></td><td>DCS controller A</td><td>Distributed control system</td><td>OT</td><td><b>Z2</b></td><td>L2</td><td>SL-T 3</td><td>Campus (shared)</td></tr>
+</tbody></table>
+<p class="caption">Table 2. Asset register extract — 20 of 449. Spans every zone and every system so the shape of the full register is visible.</p>
+
+<h2><span class="num">4</span>Artifact A2 — services and protocols</h2>
+<p>Each connection carries a service (what flows) and a protocol (how it is carried). The distinction matters more than it appears: it determines which links an attacker can traverse.</p>
+<table>
+<thead><tr><th>Service</th><th>Connections</th><th>Share</th><th>What it carries</th></tr></thead>
+<tbody>
+<tr><td>data</td><td>419</td><td>36.3%</td><td>IT and management traffic, including BMC and console</td></tr>
+<tr><td>water</td><td>221</td><td>19.1%</td><td>Facility and technology cooling water</td></tr>
+<tr><td>electricity</td><td>170</td><td>14.7%</td><td>Power distribution, MV through rack drop</td></tr>
+<tr><td>control</td><td>142</td><td>12.3%</td><td>OT supervisory and field control</td></tr>
+<tr><td>air</td><td>102</td><td>8.8%</td><td>CRAH, containment and room air</td></tr>
+<tr><td>security</td><td>62</td><td>5.4%</td><td>Access control, CCTV, perimeter</td></tr>
+<tr><td>fire</td><td>30</td><td>2.6%</td><td>Detection, suppression, interlocks</td></tr>
+<tr><td>condenser</td><td>5</td><td>0.4%</td><td>Condenser water to cooling towers</td></tr>
+<tr><td>fuel</td><td>4</td><td>0.3%</td><td>Diesel to day tanks and gensets</td></tr>
+</tbody></table>
+<p class="caption">Table 3. Services across all 1,155 connections.</p>
+<table class="tight">
+<thead><tr><th>Protocol</th><th>Count</th><th>Class</th><th>Reachability</th></tr></thead>
+<tbody>
+<tr><td>Physical flow</td><td>525</td><td><span class="tag n">no protocol</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>Ethernet/TCP-IP</td><td>369</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>RS-232 console</td><td>96</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>Dry contact</td><td>35</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>Modbus RTU</td><td>24</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>Modbus TCP</td><td>24</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>BACnet/IP</td><td>23</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>BACnet MS/TP</td><td>19</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>4-20 mA analog</td><td>9</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>OPC UA</td><td>9</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>PROFINET</td><td>5</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>CAPWAP</td><td>3</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>IEC 61850 MMS</td><td>3</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>OSDP RS-485</td><td>3</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>BGP</td><td>2</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>SNMP</td><td>2</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>CAN bus</td><td>2</td><td><span class="tag h">hardwired / serial</span></td><td>Cannot be reached remotely</td></tr>
+<tr><td>DNP3</td><td>1</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+<tr><td>IEEE 1588 PTP</td><td>1</td><td><span class="tag r">routable</span></td><td>Traversable by an attacker</td></tr>
+</tbody></table>
+<p class="caption">Table 4. Protocol inventory — top 20 by count. 188 interfaces are hardwired or serial and 525 runs carry no protocol at all.</p>
+<div class="note"><span class="lbl">Why this artifact carries weight</span>
+<p>Of 1,155 connections, 525 are physical flow — pipe, duct, busway and cable, where the flow itself is the interface — and a further 188 are hardwired or serial: dry contact, RS-232, RS-485, 4–20 mA, CAN and Modbus RTU. None of those can be reached or defeated remotely. Establishing that boundary early prevents a threat assessment from treating the plant as uniformly reachable, which is the most common way these exercises overstate exposure.</p></div>
+
+<h2 class="pagebreak"><span class="num">5</span>Artifact A3 — zones, conduits and SL-T</h2>
+<p>Assets are grouped into zones by function and exposure, following the Purdue reference model. SL-T is set per zone, and every connection that crosses a zone boundary becomes a conduit.</p>
+<table>
+<thead><tr><th>Zone</th><th>Description</th><th>Purdue</th><th>SL-T</th><th>Assets</th></tr></thead>
+<tbody>
+<tr><td><b>Z0</b></td><td>Enterprise IT / compute payload</td><td>L4–L5</td><td><b>SL-T 2</b></td><td>183</td></tr>
+<tr><td><b>Z1</b></td><td>DCIM / BMS management (IDMZ)</td><td>L3–L3.5</td><td><b>SL-T 2–3</b></td><td>34</td></tr>
+<tr><td><b>Z2</b></td><td>Building automation / supervisory control</td><td>L2</td><td><b>SL-T 2–3</b></td><td>70</td></tr>
+<tr><td><b>Z3</b></td><td>Field device / physical process</td><td>L0–L1</td><td><b>SL-T 1–2</b></td><td>127</td></tr>
+<tr><td><b>Z4</b></td><td>Safety instrumented systems</td><td>isolated SIS</td><td><b>SL-T 2–3</b></td><td>17</td></tr>
+<tr><td><b>Z5</b></td><td>Out-of-band / jump infrastructure</td><td>DMZ segment</td><td><b>SL-T 3</b></td><td>18</td></tr>
+</tbody></table>
+<p class="caption">Table 5. Zone definitions and population.</p>
+<h3>Critical conduits</h3>
+<table class="tight">
+<thead><tr><th>Id</th><th>From</th><th>To</th><th>Crossing</th><th>Protocol</th><th>Direction</th></tr></thead>
+<tbody>
+<tr><td><code>e54</code></td><td>Carrier entry A</td><td>ISP router A</td><td>external → Z0</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e61</code></td><td>Perimeter firewall A</td><td>DMZ switch</td><td>Z0 → Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e76</code></td><td>Jump host / PAM A</td><td>OOB console server</td><td>Z5 internal</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e80</code></td><td>OOB KVM</td><td>Rack 01 management tray</td><td>Z5 → Z0 (OOB)</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e83</code></td><td>Jump host / PAM A</td><td>OT firewall EDR-9010</td><td>Z5 → Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e100</code></td><td>Protection relay SEL-751A</td><td>EPMS meter ION9000</td><td>Z3 → Z2</td><td>IEC 61850 MMS</td><td>—</td></tr>
+<tr><td><code>e112</code></td><td>BESS controller / microgrid</td><td>OT switch TN-4900</td><td>Z2 → external (grid operator)</td><td>DNP3</td><td>—</td></tr>
+<tr><td><code>e119</code></td><td>OT switch TN-4900</td><td>OT firewall EDR-9010</td><td>Z2 → Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e120</code></td><td>OT firewall EDR-9010</td><td>Data diode</td><td>Z1 internal</td><td>OPC UA</td><td>—</td></tr>
+<tr><td><code>e121</code></td><td>Data diode</td><td>DCIM (Environet)</td><td>Z2 → Z1</td><td>OPC UA</td><td><span class="tag h">one-way</span></td></tr>
+<tr><td><code>e126</code></td><td>Operator workstation</td><td>BMS head-end (EBI)</td><td>Z1 → Z2</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e131</code></td><td>Fire alarm panel</td><td>OT switch TN-4900</td><td>Z4 → Z2</td><td>Dry contact</td><td><span class="tag h">one-way</span></td></tr>
+<tr><td><code>e132</code></td><td>Fire alarm panel</td><td>CRAH 1 controller</td><td>Z4 → Z2</td><td>Dry contact</td><td><span class="tag h">one-way</span></td></tr>
+<tr><td><code>e142</code></td><td>Access control head end</td><td>DCIM (Environet)</td><td>Z2 → Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e143</code></td><td>Internet / cloud</td><td>North demarcation</td><td>external \u2192 Z0</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e144</code></td><td>Internet / cloud</td><td>South demarcation</td><td>external \u2192 Z0</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e148</code></td><td>Perimeter firewall A</td><td>DMZ firewall A</td><td>Z0 \u2192 Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e149</code></td><td>Perimeter firewall B</td><td>DMZ firewall B</td><td>Z0 \u2192 Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e151</code></td><td>DMZ firewall A</td><td>Remote access gateway</td><td>external \u2192 Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+<tr><td><code>e153</code></td><td>DMZ jump host</td><td>OT firewall EDR-9010</td><td>Z5 \u2192 Z1</td><td>Ethernet/TCP-IP</td><td>—</td></tr>
+</tbody></table>
+<p class="caption">Table 6. Critical conduit extract — 20 of 216 requiring explicit documentation under IEC 62443-3-2 §5.6.</p>
+
+<h2><span class="num">6</span>Artifact A4 — threat scenarios</h2>
+<p>ATQ sets who is plausibly interested in this facility and how capable they are. TACAM then applies typical vulnerabilities by equipment class to the model, and the pathway is walked over routable protocols only — hardwired, analogue, serial and one-way links stop it.</p>
+<table>
+<thead><tr><th>Entry point</th><th>Zone</th><th>Vector</th><th>Assets reached</th><th>Blocked at</th></tr></thead>
+<tbody>
+<tr><td>Guest Wi-Fi access point</td><td><b>Z0</b></td><td>Untrusted visitor network</td><td><b>102</b></td><td>37</td></tr>
+<tr><td>Reception workstation</td><td><b>Z0</b></td><td>Phishing / commodity malware</td><td><b>106</b></td><td>39</td></tr>
+<tr><td>Security officer workstation</td><td><b>Z1</b></td><td>Four systems on one host</td><td><b>120</b></td><td>41</td></tr>
+<tr><td>Vendor remote access gateway</td><td><b>Z1</b></td><td>Supply-chain / vendor credential</td><td><b>26</b></td><td>13</td></tr>
+<tr><td>DCS engineering workstation</td><td><b>Z2</b></td><td>Insider or stolen engineering credential</td><td><b>24</b></td><td>13</td></tr>
+<tr><td>BMC estate (row 1)</td><td><b>Z5</b></td><td>Out-of-band firmware (N14)</td><td><b>23</b></td><td>112</td></tr>
+<tr><td>Cell A OT segment</td><td><b>Z2</b></td><td>Foothold inside a cell</td><td><b>2</b></td><td>3</td></tr>
+<tr><td>Cell B OT segment</td><td><b>Z2</b></td><td>Foothold inside a cell</td><td><b>2</b></td><td>3</td></tr>
+<tr><td>Compromised GPU rack</td><td><b>Z0</b></td><td>Tenant workload escape</td><td><b>0</b></td><td>1</td></tr>
+</tbody></table>
+<p class="caption">Table 7. Threat pathways from nine entry points, computed against the model.</p>
+<div class="note"><span class="lbl">What the pathways show</span>
+<p>A compromised <b>security officer workstation</b> reaches 120 assets — the widest blast radius of any single seat, because four systems share one host. A foothold <b>inside a cell OT segment</b> reaches 2, because the cell VLAN has no inter-cell routing and terminates at a one-way diode. That difference is the cell architecture doing its job, and it is measurable rather than asserted.</p>
+<p>No Z4 asset is reachable from any entry point. Safety instrumented systems terminate at supervised dry contacts and one-way interfaces, so no routable path exists.</p></div>
+
+<h3>Hazard log — cyber deviations</h3>
+<table class="tight">
+<thead><tr><th>Id</th><th>Guide word</th><th>Parameter</th><th>Deviation</th><th>ATT&CK</th><th>Sev</th><th>RPN</th><th>SL-T</th></tr></thead>
+<tbody>
+<tr><td><code>N6-CY-003</code></td><td>SPOOFED</td><td>TCS return temperature</td><td>BMS reads artificially low return temperature while actual supply temperature rises</td><td>T0856</td><td>9</td><td>294</td><td><b>SL-3</b></td></tr>
+<tr><td><code>N5-CY-003</code></td><td>SPOOFED</td><td>CHW supply temp</td><td>Operator sees 7 C while actual is 20 C</td><td>T0856</td><td>9</td><td>243</td><td><b>SL-3</b></td></tr>
+<tr><td><code>N2-CY-001</code></td><td>NO</td><td>Power output</td><td>All UPS blocks offline simultaneously</td><td>T0826</td><td>9</td><td>216</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N2-CY-003</code></td><td>SPOOFED</td><td>Battery SOC</td><td>False battery state-of-charge reporting</td><td>T0856</td><td>9</td><td>216</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N2-CY-002</code></td><td>COORDINATED</td><td>Power output</td><td>All blocks forced to bypass simultaneously</td><td>T0858</td><td>8</td><td>200</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N5-CY-005</code></td><td>REVERSE</td><td>Staging logic</td><td>Chillers unloaded during peak demand</td><td>T0836</td><td>8</td><td>192</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N5-CY-002</code></td><td>MORE</td><td>CHW supply temp</td><td>Supply temperature raised above design basis</td><td>T0836</td><td>8</td><td>160</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N5-CY-001</code></td><td>NO</td><td>Chilled water flow</td><td>All CHW pumps offline</td><td>T0855</td><td>10</td><td>150</td><td><b>SL-2</b></td></tr>
+<tr><td><code>N2-CY-005</code></td><td>PERSISTED</td><td>Firmware</td><td>NMC firmware contains persistent implant</td><td>T0839</td><td>8</td><td>144</td><td><b>SL-3</b></td></tr>
+<tr><td><code>N2-CY-004</code></td><td>MORE</td><td>Charge voltage</td><td>Overcharge of Li-ion battery string</td><td>T0836</td><td>10</td><td>140</td><td><b>SL-3</b></td></tr>
+<tr><td><code>N5-CY-004</code></td><td>COORDINATED</td><td>Chiller + tower</td><td>All chillers tripped AND cooling tower fans disabled</td><td>T0831</td><td>10</td><td>120</td><td><b>SL-3</b></td></tr>
+</tbody></table>
+<p class="caption">Table 8. CyHAZOPs extract — 11 hazards across three nodes, ranked by RPN. Guide words follow HAZOP convention applied to cyber causes.</p>
+
+<h2 class="pagebreak"><span class="num">7</span>Artifact A5 — consequence and cascading failure</h2>
+<p>A threat pathway is only meaningful if it ends somewhere. Failures propagate through the model's hard service dependencies — electricity, water, condenser air and fuel — with redundancy taken from the design where it is stated and inferred from feed count where it is not.</p>
+
+<h4>Scenario 1 — Cell A busway loss</h4>
+<p>The Cell A busway spine is lost. Propagation reaches 66 assets over four waves, including all 48 racks in Cell A. <b>No Cell B rack is affected.</b> At $15K per rack-hour the cell exposure is $720K in the first hour, $5.76M at eight hours.</p>
+<table>
+<thead><tr><th>Duration</th><th>1 hour</th><th>2 hours</th><th>4 hours</th><th>8 hours</th></tr></thead>
+<tbody>
+<tr><td><b>Cell A only</b></td><td>$720K</td><td>$1.44M</td><td>$2.88M</td><td>$5.76M</td></tr>
+<tr><td><b>If isolation failed (×14.5)</b></td><td>$10.44M</td><td>$20.88M</td><td>$41.76M</td><td>$83.52M</td></tr>
+</tbody></table>
+<p class="caption">Table 9. Consequence of a single busway loss, with and without cell isolation. The second row is the campus-wide figure the WP10 node ALEs assume.</p>
+
+<h4>Scenario 2 — Row 1 CDU loss</h4>
+<p>A row CDU is lost. Because internal pump redundancy does not survive loss of the unit, the row's water dependency is <code>all-of</code> rather than <code>any-of</code> — an authored override, taken from the design rather than inferred. Propagation stops 18 assets including 16 racks, at $240K per hour. The thermal clock is short: throttle at 45 seconds, protective shutdown at 90.</p>
+
+<h3>Minimum operating requirements</h3>
+<table class="tight">
+<thead><tr><th>Id</th><th>System</th><th>Minimum</th><th>Violation response</th></tr></thead>
+<tbody>
+<tr><td><code>MoR-P01</code></td><td>Utility feed</td><td>At least 1 of 2 independent feeds energised</td><td>M3; start generators to standby</td></tr>
+<tr><td><code>MoR-P02</code></td><td>MV switchgear</td><td>All bus sections energised; protective relays functional</td><td>M3; engineering assessment within 4 hours</td></tr>
+<tr><td><code>MoR-P03</code></td><td>UPS blocks</td><td>N blocks serving N-1 load (one block may be offline)</td><td>M3 if mechanical; M4 if NMC compromise suspected</td></tr>
+<tr><td><code>MoR-P04</code></td><td>Generator sets</td><td>All generators available (tested within 30 days); fuel for 48 h</td><td>M3; emergency fuel contract activation</td></tr>
+<tr><td><code>MoR-P05</code></td><td>ATS / STS</td><td>All transfer switches functional; tested within 90 days</td><td>M3; manual transfer procedure available</td></tr>
+<tr><td><code>MoR-C01</code></td><td>Central chiller plant</td><td>N of N+1 chillers operational</td><td>M3; begin IT load assessment</td></tr>
+<tr><td><code>MoR-C02</code></td><td>Cooling towers / dry coolers</td><td>Sufficient heat rejection for N chiller load</td><td>M3</td></tr>
+<tr><td><code>MoR-C03</code></td><td>CDU (per hall)</td><td>All CDUs serving active IT load operational</td><td>M3/M5 — CDU failure means immediate GPU throttle</td></tr>
+<tr><td><code>MoR-C04</code></td><td>TCS water quality</td><td>Conductivity under 1 uS/cm; pH 6.5-7.5; oxygen under 20 ppb</td><td>M3; water treatment investigation</td></tr>
+<tr><td><code>MoR-C05</code></td><td>CRAH / AHU</td><td>N of N+1 units per zone</td><td>M3</td></tr>
+<tr><td><code>MoR-S01</code></td><td>BMS supervisory</td><td>Primary BMS operational; backup hot-standby confirmed</td><td>M4 — BMS compromise means loss of visibility</td></tr>
+<tr><td><code>MoR-S02</code></td><td>Fire detection</td><td>All detection zones reporting; none masked or inhibited</td><td>M6 if unavailable; evacuation</td></tr>
+<tr><td><code>MoR-S03</code></td><td>Fire suppression</td><td>Pre-action valves armed; clean agent cylinders charged</td><td>M6 if unavailable</td></tr>
+<tr><td><code>MoR-S04</code></td><td>EPO system</td><td>All EPO stations functional and tested</td><td>M7 if inoperable</td></tr>
+<tr><td><code>MoR-S05</code></td><td>Physical security</td><td>All access control zones operational; CCTV recording</td><td>M4 if perimeter breach detected</td></tr>
+<tr><td><code>MoR-S06</code></td><td>OT network monitoring</td><td>OT IDS operational; passive TAP/SPAN feeds confirmed</td><td>M4 — loss of OT visibility is assumed compromise</td></tr>
+</tbody></table>
+<p class="caption">Table 10. MoR extract — 16 requirements with their violation responses and mode transitions across 7 operating modes.</p>
+
+<h2 class="pagebreak"><span class="num">8</span>Artifact A6 — SL-C rationale (ALARP/SFAIRP)</h2>
+<p>SL-T states what the zone requires. SL-C states what is reasonably achievable once cost, operability and consequence are weighed. The gap between them is the negotiation, and it has to be documented to be defensible.</p>
+<h3>Hazard-level safeguards</h3>
+<table>
+<thead><tr><th>Priority</th><th>Safeguard</th><th>Addresses</th><th>Cost</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td>P1</td><td>Isolate NMCs on a dedicated management VLAN; segment blocks A/B onto separate VLANs</td><td>N2-CY-001, N2-CY-002</td><td>$50K</td><td>per campus</td></tr>
+<tr><td>P2</td><td>Independent battery monitoring not via the NMC; physical battery load test schedule</td><td>N2-CY-003</td><td>$20K</td><td>per campus</td></tr>
+<tr><td>P1</td><td>Hardwired BMS overvoltage protection relay (SIL-2), independent of the software setpoint</td><td>N2-CY-004</td><td>$30K</td><td>per battery string</td></tr>
+<tr><td>P2</td><td>Specify SL-2 certified NMC in procurement; validate firmware hash against vendor baseline</td><td>N2-CY-005</td><td>$0K</td><td>no incremental cost</td></tr>
+<tr><td>P1</td><td>VFD Modbus write-enable gated by a physical keyswitch; remote write disabled by default</td><td>N5-CY-001</td><td>$5K</td><td>per VFD</td></tr>
+<tr><td>P1</td><td>Independent hardwired temperature alarm at CDU intake, bypassing the BMS, alerting the NOC directly</td><td>N5-CY-002, N5-CY-003</td><td>$100K</td><td>per campus</td></tr>
+<tr><td>P1</td><td>Chiller plant and cooling towers on separate OT VLANs so compromise of one cannot reach the other</td><td>N5-CY-004</td><td>$50K</td><td>per campus</td></tr>
+<tr><td>P2</td><td>Manual chiller staging override physically available at the plant room panel, not network-accessible</td><td>N5-CY-005</td><td>$20K</td><td>per campus</td></tr>
+</tbody></table>
+<p class="caption">Table 11. Safeguards priced per hazard, from the safety team's hazard log rather than from a control catalogue.</p>
+<h3>Portfolio controls by return</h3>
+<table class="tight">
+<thead><tr><th>Control</th><th>Annual cost</th><th>Mitigation</th><th>ALE reduced</th><th>ROSI</th><th>Clause</th></tr></thead>
+<tbody>
+<tr><td>SL-2 certified NMC procurement mandate</td><td>$50K</td><td>70%</td><td>$1.40M</td><td><b>2700%</b></td><td>IEC 62443-4-2 FR1-FR7; ISASecure CSA</td></tr>
+<tr><td>Hardwired independent alarms (thermocouples, flow, not via BMS)</td><td>$200K</td><td>50%</td><td>$2.50M</td><td><b>1150%</b></td><td>ASHRAE TC 9.9 rate-of-change; NFPA 76 off-gas detection</td></tr>
+<tr><td>OT network segmentation (SL-2 switches, zone firewalls)</td><td>$500K</td><td>60%</td><td>$5.33M</td><td><b>966%</b></td><td>IEC 62443-3-2 ZCR 5</td></tr>
+<tr><td>BMS access control (MFA, audit logging, credential rotation)</td><td>$100K</td><td>40%</td><td>$1M</td><td><b>900%</b></td><td>IEC 62443-4-2 FR1 (CR 1.1, CR 1.5, CR 2.8)</td></tr>
+<tr><td>Unidirectional gateways on CDU telemetry</td><td>$300K</td><td>70%</td><td>$2.80M</td><td><b>833%</b></td><td>IEC 62443-3-2 Conduit C0-1; data diode per IEC 62351</td></tr>
+<tr><td>CDU firmware write-protection plus hash verification</td><td>$150K</td><td>60%</td><td>$900K</td><td><b>500%</b></td><td>IEC 62443-4-2 CR 3.4; OCP S.A.F.E. Scope 1</td></tr>
+<tr><td>Fire system physical isolation (one-way dry contacts)</td><td>$100K</td><td>80%</td><td>$540K</td><td><b>444%</b></td><td>NFPA 75 Ch. 8 EPO; NFPA 855 Ch. 4</td></tr>
+<tr><td>BMC firmware validation (OCP S.A.F.E.)</td><td>$200K</td><td>50%</td><td>$600K</td><td><b>200%</b></td><td>OCP S.A.F.E. Scope 1-2; NIST SP 800-193</td></tr>
+</tbody></table>
+<p class="caption">Table 12. Controls ranked by ROSI, each mapped to the zone or conduit it protects and the clause that requires it.</p>
+<div class="note"><span class="lbl">Method note</span>
+<p>Mitigation rates are <b>not compounded</b>. Where several controls address one scenario, the highest single rate is applied rather than the product, because overlapping controls do not multiply in practice. This understates portfolio benefit and is the conservative choice.</p></div>
+
+<h2><span class="num">9</span>Artifact A7 — risk portfolio</h2>
+<table class="tight">
+<thead><tr><th>Node</th><th>Scenario</th><th>Asset value</th><th>EF</th><th>SLE</th><th>ARO</th><th>ALE</th></tr></thead>
+<tbody>
+<tr><td><b>N8</b></td><td>Full BMS compromise; facility blind 8 hours</td><td>$100M</td><td>0.50</td><td>$50M</td><td>0.05</td><td><b>$2.50M</b></td></tr>
+<tr><td><b>N2</b></td><td>Coordinated NMC ransomware; all blocks offline 4 hours</td><td>$50M</td><td>0.80</td><td>$40M</td><td>0.05</td><td><b>$2M</b></td></tr>
+<tr><td><b>N6</b></td><td>Pump stop plus spoofed telemetry; 8 racks offline 2 hours, 4 GPUs damaged</td><td>$14.25M</td><td>0.70</td><td>$9.98M</td><td>0.15</td><td><b>$1.50M</b></td></tr>
+<tr><td><b>N14</b></td><td>Persistent firmware implant; 30-day dwell, data exfiltration</td><td>$20M</td><td>0.60</td><td>$12M</td><td>0.10</td><td><b>$1.20M</b></td></tr>
+<tr><td><b>N5</b></td><td>Staging logic manipulation; 6-hour thermal excursion</td><td>$25M</td><td>0.40</td><td>$10M</td><td>0.10</td><td><b>$1M</b></td></tr>
+<tr><td><b>N10</b></td><td>False suppression plus EPO; 72-hour recommissioning</td><td>$38M</td><td>0.90</td><td>$34.20M</td><td>0.02</td><td><b>$680K</b></td></tr>
+</tbody></table>
+<p class="caption">Table 13. Annualised loss expectancy by node. Total $8.88M per year.</p>
+<div class="kpis">
+  <div class="kpi"><div class="v">$8.88M</div><div class="k">Total ALE</div><div class="s">before controls</div></div>
+  <div class="kpi"><div class="v">$720K</div><div class="k">Per cell-hour</div><div class="s">48 racks at $15K</div></div>
+  <div class="kpi"><div class="v">2,700%</div><div class="k">Best ROSI</div><div class="s">SL-2 NMC procurement mandate</div></div>
+  <div class="kpi"><div class="v">90 s</div><div class="k">To shutdown</div><div class="s">on loss of technology cooling</div></div>
+</div>
+
+<h2 class="pagebreak"><span class="num">10</span>Artifact A8 — executive briefing</h2>
+<p>The readout answers four questions in order: what could happen, how likely it is, what it would cost, and what to do first.</p>
+<h4>What we found</h4>
+<ul>
+<li><b>Cell isolation is the highest-value control in the facility.</b> A busway loss bounded to one cell costs $720K per hour. The same event across a shared distribution plane costs $10.44M per hour. The isolation is worth roughly $44M of the $50M exposure in the largest node scenario — a stronger argument than any individual control's return.</li>
+<li><b>The widest single-seat exposure is administrative, not industrial.</b> The security officer workstation reaches 120 assets because BMS, fire graphics, CCTV and access control share one host. Splitting that seat costs less than most network controls and removes more reachable surface.</li>
+<li><b>Telemetry integrity is the controlling property.</b> The highest-RPN hazards are all spoofing deviations, where the operator is shown a plausible but false value and acts on it. The answer is out-of-band measurement the attacker cannot write to, not more monitoring on the same path.</li>
+<li><b>Safety held in every scenario tested.</b> No Z4 asset is reachable from any modelled entry point, and no cascade reached one. That is a finding worth stating plainly, because it is the boundary the rest of the argument rests on.</li>
+</ul>
+<h4>What to do</h4>
+<table>
+<thead><tr><th>Horizon</th><th>Action</th><th>Rationale</th></tr></thead>
+<tbody>
+<tr><td><b>NOW</b></td><td>Split the security officer workstation; isolate UPS network management cards on a dedicated VLAN</td><td>Removes the widest single-seat reach and the highest-RPN power hazard for $70K</td></tr>
+<tr><td><b>NOW</b></td><td>Hardwired independent temperature alarm at CDU intake</td><td>Answers the spoofing class directly — an out-of-band measurement, ROSI 1,150%</td></tr>
+<tr><td><b>NEXT</b></td><td>Mandate SL-2 certified network management cards at procurement</td><td>No CDU or UPS vendor in the current estate holds 62443-4-2 certification</td></tr>
+<tr><td><b>NEXT</b></td><td>VLAN separation between chiller plant and cooling towers</td><td>Prevents the coordinated cooling attack; the cell logic applied one level down</td></tr>
+<tr><td><b>NEVER</b></td><td>Bidirectional network path from the fire panel to the BMS</td><td>The one-way dry contact is the control; replacing it with Ethernet for convenience would defeat the Z4 boundary</td></tr>
+</tbody></table>
+<p class="caption">Table 14. NOW/NEXT/NEVER extract. The NEVER column is as important as the others — it records decisions that should not be revisited, and why.</p>
+
+<h2><span class="num">11</span>Artifact A9 — assumptions and provenance</h2>
+<p>Every figure in this pack is either sourced from a client document, derived from the model, or assumed. The three are marked differently, and the assumptions are listed rather than buried.</p>
+<table>
+<thead><tr><th>Item</th><th>Status</th><th>Consequence if wrong</th></tr></thead>
+<tbody>
+<tr><td>Node crosswalk — hazard log nodes to model asset ids</td><td><b>Proposed, needs confirmation</b></td><td>Every ALE figure attaches to the wrong assets; consequence ranking shifts</td></tr>
+<tr><td>Revenue basis — $125K per MW-hour, $15K per rack-hour</td><td><b>Assumed</b></td><td>All consequence figures scale linearly; ranking unaffected</td></tr>
+<tr><td>Redundancy where the design does not state it</td><td><b>Inferred from feed count</b></td><td>Cascades under- or over-propagate at the affected asset only</td></tr>
+<tr><td>CDU internal pump redundancy does not survive unit loss</td><td><b>Sourced</b> — vendor tables</td><td>Row cooling dependency would be any-of, halving Scenario 2</td></tr>
+<tr><td>Cell boundary at rows 01–03 / 04–06</td><td><b>Derived</b> from the 5–10 MW cell band</td><td>Cell-scoped figures rescale</td></tr>
+<tr><td>Hazard coverage — three of six nodes have CY-numbered rows</td><td><b>Source limitation</b></td><td>Three nodes carry ALE and controls but no hazard rows; noted, not invented</td></tr>
+</tbody></table>
+<p class="caption">Table 15. Assumption register extract. The model records these inline, so a reader who disagrees can see exactly which figures move.</p>
+<div class="note"><span class="lbl">Provenance</span>
+<p>This pack draws on the client's high-level and detailed design documents, the interface control document, the OT equipment tables, the CyHAZOPs hazard logs and safeguard tables, the ConOps and minimum operating requirements, and the quantified risk paper. Artifacts A1–A3 come from Phase 1 and Workshop 1. A4–A5 come from Phase 2 and Workshop 2. A6–A9 come from Phase 3.</p>
+<p>Where a document and the installation disagreed, the floor walk decided. Where two documents disagreed, the interface control document won. Both rules are recorded per connection in the model.</p></div>
+
+</doc-page>
+<script src="./doc-page.js"></script>
+</body>
+</html>
