@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72.0 100.0" width="72.0" height="100.0">
+  <rect x="0" y="0" width="72" height="100" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 25 L 72 25 M 0 75 L 72 75 M 18 25 L 18 75 M 36 25 L 36 75 M 54 25 L 54 75" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="12.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="88.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="27.0" cy="12.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="45.0" cy="12.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="27.0" cy="88.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="45.0" cy="88.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="4" y="70" width="10" height="2" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="22" y="70" width="10" height="2" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="40" y="70" width="10" height="2" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="58" y="70" width="10" height="2" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="63.0" cy="12.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="63.0" cy="88.0" rx="5.0" ry="5.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

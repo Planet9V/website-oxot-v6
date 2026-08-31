@@ -1,0 +1,66 @@
+# Full local dev stack — app + database, both in Docker, portable across
+# machines. `docker compose up -d --build` and the whole thing runs.
+#
+# postgres: pgvector/pgvector:pg17, matching Railway's existing pgvector
+# service for this project exactly (confirmed via `railway status`).
+#
+# app: builds the Dockerfile's `dev` target. Source is bind-mounted for hot
+# reload; node_modules is a container-owned named volume (see Dockerfile's
+# dev stage comment) so Linux-native binaries never collide with the host's
+# node_modules. Talks to postgres over the compose network by service name.
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: oxot-website-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-oxot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-oxot_dev_local_only}
+      POSTGRES_DB: ${POSTGRES_DB:-oxot_website_dev}
+    ports:
+      # 5433, not 5432/5434 — both already in use by unrelated local
+      # containers on this machine.
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - oxot_website_postgres_dev_data:/var/lib/postgresql/data
+      - ./docker/init-db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-oxot} -d ${POSTGRES_DB:-oxot_website_dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: oxot-website-app-dev
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      # NODE_ENV deliberately NOT set here — Next.js sets it internally per
+      # command (dev/build/start). Forcing "development" broke `npm run
+      # build`/`npm test` run in this same container/image with a
+      # `Cannot read properties of null (reading 'useContext')` prerender
+      # crash — confirmed by bisection, not guessed.
+      NEXT_TELEMETRY_DISABLED: "1"
+      # postgres, not localhost — reached over the compose network by
+      # service name, on its internal port, not the host-mapped one.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-oxot}:${POSTGRES_PASSWORD:-oxot_dev_local_only}@postgres:5432/${POSTGRES_DB:-oxot_website_dev}
+      OXOT_PUBLIC_SITE: "true"
+      IP_HASH_SALT: ${IP_HASH_SALT:-}
+      CONTACT_WEBHOOK_URL: ${CONTACT_WEBHOOK_URL:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - oxot_website_node_modules_dev:/app/node_modules
+      - oxot_website_next_cache_dev:/app/.next
+
+volumes:
+  oxot_website_postgres_dev_data:
+  oxot_website_node_modules_dev:
+  oxot_website_next_cache_dev:

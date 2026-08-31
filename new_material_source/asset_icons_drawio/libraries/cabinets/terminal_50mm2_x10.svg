@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.0 110.0" width="250.0" height="110.0">
+  <rect x="0" y="0" width="250" height="110" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 30 L 250 30 M 0 80 L 250 80 M 25 0 L 25 110 M 50 0 L 50 110 M 75 0 L 75 110 M 100 0 L 100 110 M 125 0 L 125 110 M 150 0 L 150 110 M 175 0 L 175 110 M 200 0 L 200 110 M 225 0 L 225 110" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="12.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="12.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="37.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="37.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="62.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="62.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="87.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="87.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="112.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="112.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="137.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="137.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="162.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="162.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="187.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="187.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="212.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="212.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="237.5" cy="15.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="237.5" cy="95.0" rx="6.0" ry="6.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

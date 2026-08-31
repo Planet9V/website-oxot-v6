@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150.0 199.0" width="150.0" height="199.0">
+  <path d="M 0 157 L 0 16 L 13.5 11.5 L 13.5 3.7 L 24.5 0 L 31 2.5 L 31 16.5 L 119 42.5 L 119 35 L 131 31.5 L 137.5 34 L 137.5 47.5 L 150 51 L 150 194.5 L 137.5 199 Z M 21 13.5 L 24.5 14.5 L 24.5 7.5 L 21 8.5 Z M 127.5 44.5 L 131 45.5 L 131 38.5 L 127.5 39.5 Z" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 16 L 14 11.5 L 150 51 L 137.5 55.5 Z" fill="#c35857" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 137.5 199 L 137.5 55.5 L 150 51 L 150 194.5 Z" fill="#974841" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 137.5 87 L 150 82.5 L 150 194.5 L 137.5 199 Z" fill="#98a2b4" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 24.5 14.5 L 24.5 7.2 L 27 6.5 L 27 15.3 Z" fill="#404a51" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 131 45.5 L 131 38.5 L 133.5 38 L 133.5 46.3 Z" fill="#404a51" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 16 L 137.5 55.5 L 137.5 87 L 0 44.5 Z" fill="#8e433c" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.5 36.5 L 72.5 48.5 M 29.5 46 L 57 54" fill="#8e433c" stroke="#ffffff" stroke-width="1.8" />
+  <path d="M 7 58.5 L 126.5 95 M 7 82 L 126.5 118.5 M 7 105 L 126.5 142 M 7 128.5 L 126.5 165" fill="#8e433c" stroke="#999999" stroke-width="1.8" />
+  <rect x="0" y="0" width="0" height="0" fill="#8e433c" stroke="#999999" stroke-width="1.8" />
+  <path d="M 91.5 185 L 117.5 169.5 L 137.5 181 Z Z" fill="#cbced7" stroke="#999999" stroke-width="1.8" />
+  <rect x="0" y="0" width="0" height="0" fill="#cbced7" stroke="#999999" stroke-width="1.8" />
+  <path d="M 137.7 112.5 L 97.4 39.2 L 137.7 52.75 Z" fill="#ffffff" stroke="#999999" stroke-width="1.8" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#999999" stroke-width="1.8" />
+  <path d="M 125 65 L 125 37.5 L 137.5 34 L 137.5 47.5 L 133.5 46.3 L 133.5 38 L 127.5 39.5 L 127.5 64 Z" fill="#575f66" stroke="#999999" stroke-width="1.8" />
+  <path d="M 119 63.5 L 119 35 L 131 31.5 L 138 34 L 125 37.5 L 125 65 Z" fill="#aab2c5" stroke="#999999" stroke-width="1.8" />
+  <path d="M 18 34 L 18 6.5 L 31 2.5 L 31 16.5 L 27 15.2 L 27 6.5 L 21 8.5 L 21 32.5 Z" fill="#575f66" stroke="#999999" stroke-width="1.8" />
+  <path d="M 12.5 32.5 L 12.5 4 L 24.5 0 L 31 2.5 L 18 6.5 L 18 34 Z" fill="#aab2c5" stroke="#999999" stroke-width="1.8" />
+  <path d="M 0 157 L 0 16 L 13.5 11.5 L 13.5 3.7 L 24.5 0 L 31 2.5 L 31 16.5 L 119 42.5 L 119 35 L 131 31.5 L 137.5 34 L 137.5 47.5 L 150 51 L 150 194.5 L 137.5 199 Z" fill="#aab2c5" stroke="#000000" stroke-width="1.2" />
+</svg>

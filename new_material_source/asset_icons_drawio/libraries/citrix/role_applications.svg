@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76.0 76.0" width="76.0" height="76.0">
+  <ellipse cx="38.0" cy="38.0" rx="38.0" ry="38.0" fill="#d2d1cf" stroke="#5d6368" stroke-width="0.9" />
+  <ellipse cx="38.0" cy="38.0" rx="35.5" ry="35.5" fill="#646464" stroke="#212121" stroke-width="0.9" />
+  <path d="M 17.5 40.7 L 13.8 17.3 L 40 18.3 L 41.5 37.5 Z M 18.9 38.9 L 15.58 18.79 L 38.94 19.65 L 40.28 36.17 Z" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <path d="M 15.7 21.3 L 15.7 19.2 L 38.9 19.7 L 40.3 22.5 Z" fill="#303030" stroke="#303030" stroke-width="0.4" />
+  <path d="M 26.01 47.48 L 21.91 19.45 L 50.95 20.64 L 52.61 43.64 Z M 27.56 45.32 L 23.88 21.23 L 49.77 22.26 L 51.26 42.05 Z" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <path d="M 24.02 24.24 L 24.02 21.72 L 49.73 22.32 L 51.28 25.68 Z" fill="#303030" stroke="#303030" stroke-width="0.4" />
+  <path d="M 39.32 60 L 35.24 30.95 L 64.07 30.2 L 65.72 54.33 Z M 40.86 57.5 L 37.2 32.67 L 62.91 31.7 L 64.38 52.79 Z" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#303030" stroke-width="0.4" />
+  <path d="M 37.33 35.58 L 37.33 33.15 L 62.86 31.7 L 64.4 35 Z" fill="#303030" stroke="#303030" stroke-width="0.4" />
+</svg>

@@ -1,0 +1,555 @@
+@import "tailwindcss";
+@source "..";
+
+/* ───────────────────────────────────────────────────────────────────────────
+   OXOT design system — Tailwind 4, CSS-first.
+
+   THE SOURCE OF TRUTH IS ../../../docs/OXOT-DESIGN-SYSTEM.md
+   Its literal-token companion is ../../../docs/OXOT-DESIGN-SYSTEM.css
+   Both come from the owner's "OXOT Conformity — Design System Spec", which
+   cites artifacts/conformity/src file:line for every value. Nothing here is
+   invented, and this file is the ONLY place a token may be declared.
+
+   THE RULE THAT MAKES THE REST WORK: components never carry a raw colour.
+   They carry a token. That is what makes dark mode, contrast compliance and
+   the whole palette changeable in one place — and it is why the previous site
+   accumulated 41 contrast failures on a single page from one hard-coded
+   #e8700a in a page-local <style> block.
+
+   THREE ORANGES, THREE JOBS — the thing people get wrong:
+     --primary             28 90% 55%   ACCENT FILL. ~3.0:1. Fails AA under 24px.
+     --primary-ink         28 100% 33% / 62%   TEXT orange. Use for any orange
+                                        text under 24px. Every time.
+     --primary-foreground  210 50% 12%  The ink that sits ON an orange fill.
+                                        Dark navy. NOT white.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* THE DARK SIGNAL IS AN ATTRIBUTE, NOT A CLASS, AND THAT IS LOAD-BEARING.
+   `<html>`'s className is rendered by the [locale] layout (the three font
+   variables). Switching language is a client-side navigation that re-renders
+   that layout, so React reconciles className back to what it rendered — which
+   silently STRIPPED a `.dark` added imperatively by the pre-paint script, and
+   dropped every reader into light mode the moment they pressed EN or NL.
+
+   React only reconciles props it renders. It never renders `data-theme`, so an
+   attribute survives navigation where a class does not. `.dark` is kept as an
+   alias so any stray `dark:`-adjacent selector or third-party markup still
+   resolves. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+:root {
+  --radius: 0.75rem;
+
+  --background: 24 10% 98%;
+  --foreground: 220 10% 15%;
+  --border: 24 10% 90%;
+  --input: 24 10% 86%;                 /* deliberately darker than --border  */
+  --ring: 28 90% 55%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 10% 15%;
+  --card-border: 24 10% 90%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 10% 15%;
+
+  --primary: 28 90% 55%;               /* "Dutch Orange" — accent fill only  */
+  --primary-ink: 28 100% 33%;          /* AA text orange on light            */
+  --primary-foreground: 210 50% 12%;   /* dark navy: the ink ON orange       */
+  --on-accent: 210 50% 12%;            /* alias of --primary-foreground, kept
+                                          so existing text-on-accent call
+                                          sites stay correct */
+
+  --secondary: 215 30% 40%;            /* "Steel blue"                        */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 24 10% 94%;
+  --muted-foreground: 220 10% 40%;
+  --accent: 24 10% 92%;
+  --accent-foreground: 220 10% 15%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Per-regulation accents — the spec's "signature device". */
+  --reg-cra: 28 88% 48%;
+  --reg-aia: 275 55% 52%;
+  --reg-machinery: 12 78% 50%;
+  --reg-iec: 190 70% 36%;
+  --reg-nis2: 158 62% 36%;
+
+  /* Twin diagram semantic signals. Source: OXOT_Visual_Foundation_Spec.md §3.1
+     (oxot_website_public_sept repo) + docs/OXOT-DIAGRAMMING-SPEC.md §3 here.
+     Hue/chroma held constant per signal in OKLCH; only lightness differs
+     between this block and the dark redefinition below — same mechanism as
+     --primary-ink above, not a new pattern. Values are the light-mode-safe
+     variant: the spec's canonical hex values (tuned for --ink-900) measured
+     as low as 1.65:1 against this file's --background here and failed WCAG
+     1.4.11's 3:1 non-text minimum on 5 of 6 signals; these clear 3.3:1+.
+     Colour encodes SystemPath.status only (open/controlled/closed/unknown)
+     — never SystemAsset.type, which AssetNode encodes by silhouette instead. */
+  --signal-cyan: 178 100% 30%;
+  --signal-blue: 212 80% 56%;
+  --signal-amber: 33 100% 40%;
+  --signal-red: 360 74% 63%;
+  --signal-green: 145 46% 41%;
+  --signal-slate: 162 11% 36%;
+
+  /* THE SIGNATURE SHADOWS. Two layers: a flat 2px "shelf" at 2-3% under a
+     soft blur — not one blurred shadow. Light is WARM-tinted, never neutral
+     black. sm and lg are verbatim from the spec; the rest interpolate the
+     blur while holding the shelf constant. */
+  --shadow-2xs: 0px 1px 0px 0px hsl(28 20% 15% / 0.02);
+  --shadow-xs:  0px 2px 0px 0px hsl(28 20% 15% / 0.02), 0px 1px 1px -1px hsl(28 20% 15% / 0.04);
+  --shadow-sm:  0px 2px 0px 0px hsl(28 20% 15% / 0.02), 0px 1px 2px -1px hsl(28 20% 15% / 0.06);
+  --shadow-df:  0px 2px 0px 0px hsl(28 20% 15% / 0.02), 0px 2px 4px -1px hsl(28 20% 15% / 0.07);
+  --shadow-md:  0px 2px 0px 0px hsl(28 20% 15% / 0.03), 0px 4px 6px -1px hsl(28 20% 15% / 0.08);
+  --shadow-lg:  0px 2px 0px 0px hsl(28 20% 15% / 0.03), 0px 10px 15px -3px hsl(28 20% 15% / 0.1);
+  --shadow-xl:  0px 2px 0px 0px hsl(28 20% 15% / 0.03), 0px 20px 25px -5px hsl(28 20% 15% / 0.12);
+  --shadow-2xl: 0px 25px 50px -12px hsl(28 20% 15% / 0.2);
+
+  /* §7b — the page canvas. The design spec's container is max-w-7xl with a
+     px-4 / sm:px-6 / lg:px-8 gutter. */
+  --canvas-max: 80rem;                 /* max-w-7xl = 1280px                  */
+}
+
+[data-theme="dark"],
+.dark {
+  --background: 220 15% 6%;
+  --foreground: 220 10% 96%;
+  --border: 220 15% 15%;
+  --input: 220 15% 20%;
+
+  --card: 220 15% 8%;
+  --card-foreground: 220 10% 96%;
+  --card-border: 220 15% 15%;
+  --popover: 220 15% 8%;
+  --popover-foreground: 220 10% 96%;
+
+  --primary: 28 90% 55%;               /* the SAME orange in both themes     */
+  --primary-ink: 28 100% 62%;          /* brighter, to clear a dark ground   */
+  /* --primary-foreground / --on-accent stay 210 50% 12%: an orange fill is
+     light in both themes, so its ink stays dark. */
+
+  --secondary: 215 30% 45%;
+  --muted: 220 15% 12%;
+  --muted-foreground: 220 10% 65%;
+  --accent: 220 15% 15%;
+  --accent-foreground: 220 10% 96%;
+  --destructive: 0 62% 45%;
+
+  --reg-cra: 28 90% 58%;
+  --reg-aia: 275 60% 68%;
+  --reg-machinery: 12 82% 62%;
+  --reg-iec: 190 75% 50%;
+  --reg-nis2: 158 60% 50%;
+
+  /* Twin signals, dark redefinition. Re-equalized to ~6:1 against --ink-900
+     across all six (the spec's canonical values ranged 3.02:1 to 10.32:1 —
+     cyan visually "shouted" while slate "whispered," an unintended
+     importance ordering the resolved values remove). */
+  --signal-cyan: 178 100% 33%;
+  --signal-blue: 212 91% 61%;
+  --signal-amber: 33 87% 46%;
+  --signal-red: 0 87% 68%;
+  --signal-green: 144 41% 46%;
+  --signal-slate: 161 10% 56%;
+
+  /* Dark: near-opaque black PLUS an inset top highlight. That rim-light is
+     what stops a dark card reading flat. */
+  --shadow-2xs: 0px 1px 0px 0px hsl(0 0% 0% / 0.5);
+  --shadow-xs:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 1px 1px -1px hsl(0 0% 0% / 0.7),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.04);
+  --shadow-sm:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 1px 2px -1px hsl(0 0% 0% / 0.8),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.05);
+  --shadow-df:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 2px 4px -1px hsl(0 0% 0% / 0.8),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.06);
+  --shadow-md:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 3px 5px -1px hsl(0 0% 0% / 0.8),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.07);
+  --shadow-lg:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 4px 6px -1px hsl(0 0% 0% / 0.8),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.08);
+  --shadow-xl:  0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 20px 25px -5px hsl(0 0% 0% / 0.85),
+                inset 0 1px 0 0 hsl(220 10% 96% / 0.1);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.9);
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-ink: hsl(var(--primary-ink));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-on-accent: hsl(var(--on-accent));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-reg-cra: hsl(var(--reg-cra));
+  --color-reg-aia: hsl(var(--reg-aia));
+  --color-reg-machinery: hsl(var(--reg-machinery));
+  --color-reg-iec: hsl(var(--reg-iec));
+  --color-reg-nis2: hsl(var(--reg-nis2));
+
+  --color-signal-cyan: hsl(var(--signal-cyan));
+  --color-signal-blue: hsl(var(--signal-blue));
+  --color-signal-amber: hsl(var(--signal-amber));
+  --color-signal-red: hsl(var(--signal-red));
+  --color-signal-green: hsl(var(--signal-green));
+  --color-signal-slate: hsl(var(--signal-slate));
+
+  /* Three typefaces, three jobs, no overlap. Self-hosted via next/font — the
+     browser never contacts Google. A GDPR requirement for EU/NL visitors
+     (OXOT-STYLEGUIDE §3.1), and the one deliberate deviation from the spec,
+     which uses a Google Fonts @import. Same families, weights and roles. */
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);   /*  8px                           */
+  --radius-md: calc(var(--radius) - 2px);   /* 10px — buttons, inputs         */
+  --radius-lg: var(--radius);               /* 12px                           */
+  --radius-xl: calc(var(--radius) + 4px);   /* 16px                           */
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow-df);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * { border-color: hsl(var(--border)); }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    /* DUTCH COMPOUND NOUNS. This is not cosmetic.
+       Dutch writes compounds as one word: "conformiteitsbeoordelingscapaciteit"
+       is 35 characters and, by default, unbreakable — so it sets a min-content
+       width wider than a 390px screen and scrolls the whole page sideways. The
+       measure harness caught exactly that on /nl/cra and nowhere in English.
+
+       `hyphens: auto` breaks at a real syllable boundary and shows the hyphen,
+       which is why <html lang> is set per locale: the browser picks the Dutch
+       hyphenation dictionary from it. `overflow-wrap: break-word` is the
+       fallback for anything the dictionary cannot split (a URL, a part number)
+       — ugly, but a hard break beats a sideways-scrolling page.
+
+       The design-system spec does not cover this because the app it documents
+       is English-only. It is ours.
+
+       `overflow-wrap: break-word` is what actually PREVENTS the sideways
+       scroll, and it stays global. Hyphenation only makes the break land at a
+       nicer place. That distinction is why the rule below can be narrow. */
+    overflow-wrap: break-word;
+  }
+
+  /* HYPHENATION IS OPT-IN, DUTCH-ONLY, AND NARROW-ONLY.
+     ────────────────────────────────────────────────────────────────────────
+     It has been wrong twice, in opposite directions, and both times because
+     it was written as an exclusion list.
+
+     v1 put `hyphens: auto` on `body` unscoped. At 1440 the measure is ~490px
+     inside a 1440px screen, so there is no overflow to prevent and it spent
+     its budget breaking things that must not break: "European Cybersecurity
+     Compe-tence Centre", "Ar-tikel 69", and the Regulation's own words as
+     "market en-try".
+
+     v2 scoped it to <=640px and added an exclusion list ending in
+     `[lang="en"]`. That list was INERT and shipped believing it worked:
+     `[lang="en"]` matches <html>, but `body { hyphens: auto }` sets body's own
+     computed value, and every descendant inherits `auto` from body rather than
+     `none` from html. Measured at 390: 14 of 21 leaf text nodes computed
+     `auto`, and English broke as "hin-drances", "de-cide", "be-fore". The
+     exclusion list also never reached the proof panel, whose values are plain
+     <dd>, so "Compe-tence Centre" survived — just at 390 instead of 1440.
+
+     So it is stated positively now. ENGLISH NEVER HYPHENATES — English has no
+     35-character compounds and `overflow-wrap` covers the rare long token.
+     Dutch prose does, below 640px, where the column really is narrower than
+     the word. Anything whose exact characters are load-bearing is excluded
+     BY ELEMENT rather than by language: link text (a hyphenated "Ar-tikel 69"
+     is a broken clause reference the reader is being asked to click), data,
+     and the proof panel's values, which is the one surface whose whole job is
+     looking exact. */
+  @media (max-width: 640px) {
+    :lang(nl) p,
+    :lang(nl) li,
+    :lang(nl) h1,
+    :lang(nl) h2,
+    :lang(nl) h3 {
+      hyphens: auto;
+    }
+  }
+
+  /* Never hyphenated, in either language, at any width. A part number, a
+     clause reference or an SL-T value broken across lines with an inserted
+     hyphen reads as a different value — on this site that is a correctness
+     problem, not a typographic one. `dd` is here because the credential panel
+     renders its values as definition data, and it carries proper nouns
+     ("European Cybersecurity Competence Centre") on the page's proof surface. */
+  code, kbd, samp, pre,
+  .mono-label, .font-mono, [class*="font-mono"],
+  a, blockquote, cite, q, dd, time, [data-nohyphen] {
+    hyphens: none;
+  }
+
+  /* A DATE MUST NEVER BREAK. "11 decem-/ber 2027" rendered at 390 in Dutch
+     prose. On a site whose thesis is that the wrong date is worse than no
+     date, a hyphen inside one is the same class of error as a hyphen inside a
+     clause reference. Dutch month names are long enough to tempt the
+     hyphenator, so the whole paragraph containing a date opts out. */
+  [data-has-date] {
+    hyphens: none;
+  }
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary-ink));
+  }
+
+  /* ── THE UNIFORM HEADING SCALE ──────────────────────────────────────────
+     By ROLE, never by page. The element defaults below ARE the roles, so
+     plain <h1>/<h2>/<h3> markup lands on-spec with no class at all. Use the
+     .h-* classes only when the semantic level and the visual role differ
+     (e.g. an <h2> that is really a card title).
+
+     Never write a raw text-{size} on a heading. 25+ files each choosing their
+     own size between text-2xl and text-7xl is the documented failure this
+     replaces — the spec names oversized improvised headings as a real,
+     measurable part of why the previous site looked worse.
+
+     Role 1  page title    serif, NORMAL weight   30 → 36px   one per page
+     Role 2  section head  serif, BOLD            30px
+     Role 3  subsection    serif, BOLD            24px
+     Role 4  card title    serif, BOLD            20px
+     Role 5  micro         serif, BOLD            16px
+     ─────────────────────────────────────────────────────────────────────── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;          /* tracking-tight, globally            */
+    text-wrap: balance;
+  }
+  h1 { font-size: 1.875rem; font-weight: 400; line-height: 1.15; }
+  @media (min-width: 640px) { h1 { font-size: 2.25rem; } }
+  h2 { font-size: 1.875rem; font-weight: 700; line-height: 1.18; }
+  h3 { font-size: 1.5rem;   font-weight: 700; line-height: 1.25; }
+  h4 { font-size: 1.25rem;  font-weight: 700; line-height: 1.3; }
+  h5, h6 { font-size: 1rem; font-weight: 700; line-height: 1.4; }
+
+  /* Focus rings are deliberately THIN — 1px. */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px hsl(var(--ring));
+  }
+  [disabled], .is-disabled { opacity: 0.5; pointer-events: none; }
+
+  /* THE PER-NAVIGATION ENTRANCE — see app/[locale]/template.tsx for why this
+     is a CSS animation on a remounting wrapper rather than React's
+     <ViewTransition> (absent on React 19.2.8 stable) or startViewTransition
+     (documented App Router scroll pitfall).
+
+     8px and 280ms: enough to register as a settle, short enough that a reader
+     clicking through four pages never waits on it. Transform only — a fade
+     would trip the ghosted-text gate and make the copy briefly unreadable.
+
+     NO `fill-mode`. The animation must not hold its final state: a lingering
+     transform would remain a containing block for fixed descendants and can
+     disturb the sticky rails inside <main>. Ending with no transform removes
+     the containing block the instant the animation completes. */
+  @keyframes oxot-page-enter {
+    from { transform: translateY(8px); }
+    to   { transform: none; }
+  }
+
+  .page-enter { animation: oxot-page-enter 280ms var(--ease-brand); }
+
+  /* ANCHOR TARGETS CLEAR THE STICKY HEADER.
+     Measured 2026-08-09 on the live site: /en/cra#phases put the target
+     heading at top: 0px behind a 65px sticky header — the heading you followed
+     the link to see was the one thing hidden. Every deep link on the site did
+     this: #phases, #record, #engagements, #stage.
+
+     6rem matches the `scroll-mt-24` already used on long-form headings, so
+     there is one offset in the codebase rather than two. `scroll-margin-top`
+     only affects where scrolling STOPS, so it cannot move, resize or reflow
+     anything — which is why it is safe to apply broadly.
+
+     Scoped to <main> so it never fights the header or the skip link. */
+  main [id] { scroll-margin-top: 6rem; }
+
+  /* NO `scroll-behavior: smooth`. I shipped it here and it broke navigation.
+     `html { scroll-behavior: smooth }` does not only affect in-page anchors —
+     it also animates the scroll reset Next performs on a route change, so a
+     newly-opened page no longer starts at the top. The chrome guard caught it
+     on the live site: "changing page still starts at the top — scrollY 65".
+
+     The anchor fix above is the part that mattered and it stands on its own;
+     gliding to the target was decoration, and it cost correct navigation. If
+     smooth in-page scrolling is ever wanted, it belongs on the individual
+     scrollIntoView call, not on the document. */
+
+  /* The global reduced-motion guard. The reference implementation has none —
+     the spec names that as its honest gap and says not to repeat it. Paired
+     with <MotionConfig reducedMotion="user"> at the app root for Framer. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Heading ROLES, for when the semantic level and the visual role differ. */
+  .h-page    { font-family: var(--font-serif); font-size: 1.875rem; font-weight: 400; line-height: 1.15; letter-spacing: -0.025em; }
+  @media (min-width: 640px) { .h-page { font-size: 2.25rem; } }
+  .h-section { font-family: var(--font-display); font-size: 1.875rem; font-weight: 700; line-height: 1.18; letter-spacing: -0.025em; }
+  .h-sub     { font-family: var(--font-display); font-size: 1.5rem;   font-weight: 700; line-height: 1.25; letter-spacing: -0.025em; }
+  .h-card    { font-family: var(--font-display); font-size: 1.25rem;  font-weight: 700; line-height: 1.3;  letter-spacing: -0.025em; }
+  .h-micro   { font-family: var(--font-display); font-size: 1rem;     font-weight: 700; line-height: 1.4;  letter-spacing: -0.025em; }
+
+  /* BODY ROLES. These declare a scale the site was ALREADY using, rather than
+     introducing one: `text-[1.0625rem]` appears 363 times and `text-[0.9375rem]`
+     297 times across src/ — together 63% of every raw arbitrary size in the
+     codebase. Both sit deliberately between Tailwind's steps (17px between
+     text-base 16 and text-lg 18; 15px between text-sm 14 and text-base 16), so
+     neither can be swapped for a standard class without a visible change, and
+     rounding them is how a "cleanup" silently reflows every page.
+
+     Declaring them turns the remaining ~660 raw values into a mechanical,
+     zero-visual-change replacement instead of a permanent backlog. The sizes are
+     exactly what those brackets already render; nothing is invented. */
+  .body-lead { font-size: 1.0625rem; }
+  .body-copy { font-size: 0.9375rem; }
+
+  /* THE PAGE CANVAS. Every page's content sits in this, so a page's left edge
+     always lands under the "O" of OXOT and its right edge under the language
+     toggle, at 390 / 834 / 1440 / 2560 alike. The header and footer use the
+     same class — that is what makes the alignment hold.
+
+     Never introduce a new `mx-auto max-w-*` page wrapper. Reading measure
+     belongs INSIDE the canvas (.prose-measure), never on the canvas itself.
+     A narrow column is fine; a narrow canvas is not. */
+  .oxot-canvas {
+    width: 100%;
+    max-width: var(--canvas-max);
+    margin-inline: auto;
+    padding-inline: 1rem;                                    /* px-4          */
+  }
+  @media (min-width: 640px)  { .oxot-canvas { padding-inline: 1.5rem; } }  /* sm:px-6 */
+  @media (min-width: 1024px) { .oxot-canvas { padding-inline: 2rem; } }    /* lg:px-8 */
+
+  /* The kicker / eyebrow. 12px, 600, 0.18em, uppercase, and ALWAYS
+     --primary-ink rather than --primary, because 12px orange text at 3.0:1
+     fails AA. This is the single rule the old site broke most often.
+     `.eyebrow` is kept as an alias so existing call sites stay correct. */
+  .oxot-kicker,
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--primary-ink));
+  }
+
+  /* Data, not decoration: anything the reader should parse as a value. */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;              /* text-[11px]                         */
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Reading measure for long-form prose — inside the canvas, never on it. */
+  .prose-measure { max-width: 68ch; }
+
+  /* The one real named motion utility. 150ms. Hover AND focus-visible, so a
+     keyboard user gets identical feedback — that is a hard rule, not a
+     nicety. Transform and shadow only; never a layout property. */
+  .cta-lift {
+    transition: transform 150ms var(--ease-brand), box-shadow 150ms var(--ease-brand);
+    will-change: transform;
+  }
+  .cta-lift:hover, .cta-lift:focus-visible { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-lift, .cta-lift:hover, .cta-lift:focus-visible {
+      transition-duration: 0.01ms; transform: none;
+    }
+  }
+
+  /* Glass — Recipe A, token-based, theme-safe. Only for a surface genuinely
+     floating OVER something. The spec's Recipe B (raw slate/cyan "cyber-ops"
+     glass) is deliberately absent: it bypasses the tokens and is dark-only. */
+  .oxot-glass {
+    border-radius: 1rem;               /* rounded-2xl — the signature radius  */
+    border: 1px solid hsl(var(--border) / 0.8);
+    background: hsl(var(--card) / 0.8);
+    padding: 1.25rem;                  /* p-5                                 */
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(12px);
+    transition: all 300ms var(--ease-brand);
+  }
+  .oxot-glass:hover, .oxot-glass:focus-within {
+    border-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-0.25rem);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .oxot-glass, .oxot-glass:hover, .oxot-glass:focus-within { transition: none; transform: none; }
+  }
+
+  /* Icon-in-chip. */
+  .icon-chip {
+    display: grid; place-items: center;
+    width: 2.25rem; height: 2.25rem;
+    border-radius: var(--radius-lg);
+    background: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary-ink));
+  }
+
+  /* Nav active state: a thin underline bar, NOT a filled background. Note the
+     12px inset each side — it is not full-bleed. */
+  .nav-link {
+    position: relative;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: color 200ms var(--ease-brand);
+  }
+  .nav-link[data-active="true"] { color: hsl(var(--primary-ink)); }
+  .nav-link[data-active="true"]::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 12px; right: 12px;
+    height: 2px;
+    border-radius: 9999px;
+    background: hsl(var(--primary));
+  }
+}

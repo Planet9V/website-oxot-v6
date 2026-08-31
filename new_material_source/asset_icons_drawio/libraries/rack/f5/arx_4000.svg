@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 161.85 50.85" width="161.85" height="50.85">
+  <path d="M 0 0 L 0 0.5 L 0 50.85 L 161.85 50.85 L 161.85 0 Z" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 0 C 0 16.95 0 33.9 0 50.85 L 161.85 50.85 L 161.85 0 Z M 1 1 L 160.85 1 L 160.85 49.85 L 1 49.85 Z M 148.5 20 C 142.71 20 138 24.71 138 30.5 C 138 31.65 138.19 32.76 138.54 33.8 L 100.4 33.8 L 100.4 39.8 L 14.4 39.8 L 14.4 48.7 L 140.4 48.7 L 140.4 37.18 C 142.33 39.51 145.24 41 148.5 41 C 154.29 41 159 36.29 159 30.5 C 159 24.71 154.29 20 148.5 20 Z M 101.4 34.8 L 138.93 34.8 C 139.07 35.12 139.23 35.42 139.4 35.72 L 139.4 47.7 L 15.4 47.7 L 15.4 40.8 L 101.4 40.8 L 101.4 40.3 Z" fill="#545454" stroke="#0f172a" stroke-width="1" />
+  <path d="M 1 1 L 1 49.85 L 160.85 49.85 L 160.85 1 Z M 148.5 20 C 154.29 20 159 24.71 159 30.5 C 159 36.29 154.29 41 148.5 41 C 145.24 41 142.33 39.51 140.4 37.18 L 140.4 48.7 L 14.4 48.7 L 14.4 39.8 L 100.4 39.8 L 100.4 33.8 L 138.54 33.8 C 138.19 32.76 138 31.65 138 30.5 C 138 24.71 142.71 20 148.5 20 Z M 101.4 34.8 L 101.4 40.3 L 101.4 40.8 L 15.4 40.8 L 15.4 47.7 L 139.4 47.7 L 139.4 35.72 C 139.23 35.42 139.07 35.12 138.93 34.8 Z" fill="#000000" stroke="#0f172a" stroke-width="0.301" />
+  <rect x="0" y="0" width="0" height="0" fill="#000000" stroke="#0f172a" stroke-width="0.301" />
+  <ellipse cx="32.5" cy="32.5" rx="25.0" ry="5.0" fill="#bb0000" stroke="#0f172a" stroke-width="0.301" />
+  <rect x="132.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="0.301" />
+  <path d="M 60 41 C 60 43 60 45 60 47 L 75 47 L 75 41 Z M 42 41 C 42 43 42 45 42 47 L 57 47 L 57 41 Z M 105 35.5 C 105 38.17 105 40.83 105 43.5 L 136 43.5 C 136 40.83 136 38.17 136 35.5 Z" fill="#ffffff" stroke="#0f172a" stroke-width="0.301" />
+  <path d="M 61 42 L 74 42 L 74 46 L 61 46 Z M 43 42 L 56 42 L 56 46 L 43 46 Z" fill="#f4f4f4" stroke="#0f172a" stroke-width="0.301" />
+  <path d="M 148.5 21 C 153.75 21 158 25.25 158 30.5 C 158 35.75 153.75 40 148.5 40 C 143.25 40 139 35.75 139 30.5 C 139 25.25 143.25 21 148.5 21 Z" fill="#ff0000" stroke="#0f172a" stroke-width="1" />
+  <rect x="0" y="0" width="0" height="0" fill="#ff0000" stroke="#0f172a" stroke-width="1" />
+  <rect x="128.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="124.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="120.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="114.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="110.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="106.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <rect x="102.5" y="45" width="2" height="2.5" fill="#ccffcc" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="23.5" cy="42.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="20.5" cy="42.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="17.5" cy="42.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="17.5" cy="45.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="20.5" cy="45.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <ellipse cx="23.5" cy="45.5" rx="1.0" ry="1.0" fill="#ffff00" stroke="#0f172a" stroke-width="1" />
+  <path d="M 131 40 L 135 40 L 135 42.5 L 131 42.5 Z M 126 40 L 130 40 L 130 42.5 L 126 42.5 Z M 121 40 L 125 40 L 125 42.5 L 121 42.5 Z M 116 40 L 120 40 L 120 42.5 L 116 42.5 Z M 111 40 L 115 40 L 115 42.5 L 111 42.5 Z M 106 40 L 110 40 L 110 42.5 L 106 42.5 Z M 131 36.5 L 135 36.5 L 135 39 L 131 39 Z M 126 36.5 L 130 36.5 L 130 39 L 126 39 Z M 121 36.5 L 125 36.5 L 125 39 L 121 39 Z M 116 36.5 L 120 36.5 L 120 39 L 116 39 Z M 111 36.5 L 115 36.5 L 115 39 L 111 39 Z M 106 36.5 L 110 36.5 L 110 39 L 106 39 Z" fill="#000000" stroke="#0f172a" stroke-width="0.301" />
+  <path d="M 61 42 L 74 42 L 74 46 L 61 46 Z M 43 42 L 56 42 L 56 46 L 43 46 Z" fill="#000000" stroke="#0f172a" stroke-width="0.301" />
+</svg>

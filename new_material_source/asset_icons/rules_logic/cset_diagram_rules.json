@@ -1,0 +1,83 @@
+[
+  {
+    "rule_id": "CSET-RULE-01",
+    "title": "Subnet Ingress IDS/IPS Inspection",
+    "severity": "High",
+    "iec_62443_reference": "SR 5.1, SR 5.2 (Network Segmentation & Monitoring)",
+    "summary": "Validates that all external ingress paths and perimeter subnet boundaries pass through an active IDS/IPS or DPI sensor to monitor for lateral penetration.",
+    "violation_condition": "A firewall or boundary routing node connects into a zone/subnet without an inline IDS/IPS or SPAN-monitored sensor in the same zone.",
+    "remediation": "Deploy inline IPS or tap the firewall interior interface to an IDS / Zeek network security monitor."
+  },
+  {
+    "rule_id": "CSET-RULE-02",
+    "title": "Firewall Lateral Inspection Validation",
+    "severity": "High",
+    "iec_62443_reference": "SR 5.3 (General Purpose Person-to-Person Communication)",
+    "summary": "Validates that firewall configurations are audited with inline traffic inspection to confirm malware has not bypassed firewall rule sets.",
+    "violation_condition": "A firewall node connects directly to downstream operational assets without an IDS/IPS in its broadcast or conduit path.",
+    "remediation": "Add an inline IPS or deep-packet inspection proxy (DPI) immediately downstream of the firewall."
+  },
+  {
+    "rule_id": "CSET-RULE-03",
+    "title": "Multi-SAL Shared Physical Interface Violation",
+    "severity": "Critical",
+    "iec_62443_reference": "SR 5.1 (Network Segmentation) / IEC 62443-3-2 Target SALs",
+    "summary": "Detects single physical components (e.g., non-isolated switches or routers) bridging distinct Security Assurance Levels (e.g. SAL-1 Enterprise and SAL-3 Safety).",
+    "violation_condition": "A network component has multiple subnets/interfaces whose connected zones have distinct SAL levels, creating a single point of failure where compromise exposes critical traffic.",
+    "remediation": "Physically separate the networks onto dedicated hardware or deploy an intervening firewall / unidirectional security gateway."
+  },
+  {
+    "rule_id": "CSET-RULE-04",
+    "title": "Multi-SAL VLAN Shared Switch Exposure",
+    "severity": "Critical",
+    "iec_62443_reference": "SR 5.1 (Network Segmentation - Logical vs. Physical)",
+    "summary": "Detects multi-tenant VLAN switches carrying different SAL levels without physical isolation or Layer 7 boundary filtering.",
+    "violation_condition": "A VLAN-enabled switch handles subnets with differing SAL levels without intermediate cryptographic or physical boundary enforcement.",
+    "remediation": "Migrate high-SAL (SAL-3/SAL-4) control networks to dedicated physical switching hardware and conduits."
+  },
+  {
+    "rule_id": "CSET-RULE-05",
+    "title": "Unfiltered External/Partner/Vendor Ingress",
+    "severity": "Critical",
+    "iec_62443_reference": "SR 1.13 (Access via Untrusted Networks), SR 3.8 (Session Integrity)",
+    "summary": "Flags direct connections between internal OT assets and external endpoints (Web, Vendor, Partner, single-connection Modems) lacking firewall filtering.",
+    "violation_condition": "A direct link exists from a Web, Vendor, Partner, or Modem component into the internal OT network without a filtering firewall.",
+    "remediation": "Place an industrial DMZ firewall and VPN concentrator with MFA between external entities and internal zones."
+  },
+  {
+    "rule_id": "CSET-RULE-06",
+    "title": "Untrusted Link / Lack of Transit Cryptography",
+    "severity": "High",
+    "iec_62443_reference": "SR 4.1 (Information Protection in Transit)",
+    "summary": "Flags communication paths traversing untrusted media (e.g., leased lines, public microwave, campus serial backhauls) without link encryption or dual-sided firewalls.",
+    "violation_condition": "A path between two operational nodes is marked untrusted and lacks link encryption or firewalls on both endpoints.",
+    "remediation": "Deploy MACsec / IPsec link encryption hardware or install firewalls at both endpoints of the transit path."
+  },
+  {
+    "rule_id": "CSET-RULE-07",
+    "title": "Unidirectional Data Diode Flow Direction Enforcement",
+    "severity": "Critical",
+    "iec_62443_reference": "SR 5.1 (Boundary Protection - Unidirectional Control)",
+    "summary": "Enforces that physical hardware Data Diodes only permit traffic flowing from High SAL (e.g. Purdue L2/L3) to Low SAL (e.g. Purdue L4/Cloud), never in reverse (except for classified zones).",
+    "violation_condition": "A unidirectional device is oriented such that data flows from a low SAL zone into a higher SAL zone.",
+    "remediation": "Reverse the optical transmitter/receiver orientation so data strictly egresses from higher to lower SAL."
+  },
+  {
+    "rule_id": "CSET-RULE-08",
+    "title": "Malcolm / CISA Passive OT Sensor Placement",
+    "severity": "Medium",
+    "iec_62443_reference": "SR 6.1 (Audit Log Generation), SR 6.2 (Continuous Monitoring)",
+    "summary": "Validates that critical industrial control conduits are monitored by CISA Malcolm / Zeek / Arkime passive network sensors for continuous protocol baseline auditing.",
+    "violation_condition": "High-criticality OT conduits (Purdue L1-L2 to L3) lack passive sensor taps.",
+    "remediation": "Deploy network TAPs or SPAN mirror ports feeding a Malcolm / Zeek sensor instance."
+  },
+  {
+    "rule_id": "CSET-RULE-09",
+    "title": "Malcolm Network Visibility & Protocol Dissection",
+    "severity": "Medium",
+    "iec_62443_reference": "SR 5.2 (Zone Boundary Traffic Filtering)",
+    "summary": "Ensures proprietary and industrial protocol streams (Modbus, DNP3, CIP, BACnet, S7comm) are actively parsed for anomaly detection.",
+    "violation_condition": "Industrial communications cross zone boundaries without protocol-aware DPI parsers.",
+    "remediation": "Configure Malcolm protocol analyzers for the specific ICS protocols in use."
+  }
+]

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.0 30.0" width="174.0" height="30.0">
+  <rect x="0" y="0" width="174" height="30" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 17.25 6.75 L 19.72 13.05 L 26.25 13.05 L 21.05 16.45 L 23.55 22.95 L 17.25 18.88 L 10.95 22.95 L 13.45 16.45 L 8.25 13.05 L 14.8 13.05 Z M 52 6.25 L 52 15.25 L 47 15.25 M 78.8 21.15 M 149 19.5 L 163.25 19.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="52.0" cy="15.25" rx="10.0" ry="10.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="87.0" cy="15.0" rx="10.25" ry="10.25" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="114.085" cy="7.585" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="121.375" cy="7.585" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="128.665" cy="7.585" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="114.085" cy="14.875" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="121.375" cy="14.875" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="128.665" cy="14.875" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="114.085" cy="22.165" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="121.375" cy="22.165" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="128.665" cy="22.165" rx="2.835" ry="2.835" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="149.0" cy="14.75" rx="4.75" ry="4.75" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="163.25" cy="14.75" rx="4.75" ry="4.75" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

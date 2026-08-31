@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="54" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <circle cx="60" cy="60" r="46" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <text x="60" y="62" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#14532d" text-anchor="middle" dominant-baseline="middle">Multi-Process</text>
+</svg>

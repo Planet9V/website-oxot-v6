@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57.75 62.25" width="57.75" height="62.25">
+  <rect x="0" y="0" width="0" height="0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="39.75" cy="24.25" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="18.25" cy="14.25" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 14.25 L 15 14.25 M 42.75 24.25 L 57.75 24.25 M 20.75 13.5 L 39.75 6.5 M 42.75 3 L 57.75 3 M 0.25 49.25 L 15.25 49.25 M 20.75 48.5 L 39.75 41.5 M 42.75 59.25 L 57.75 59.25 M 42.75 38 L 57.75 38" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="39.75" cy="3.0" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="18.25" cy="49.25" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="39.75" cy="59.25" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="39.75" cy="38.0" rx="3.0" ry="3.0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.75 10.25 L 29.75 45.25" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

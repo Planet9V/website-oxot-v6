@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150.0 166.25" width="150.0" height="166.25">
+  <rect x="0" y="0" width="150" height="166.25" fill="#ffffff" stroke="#0f172a" stroke-width="1" />
+  <rect x="0" y="0" width="150" height="85" fill="#f5f5f5" stroke="#0f172a" stroke-width="1" />
+  <path d="M 103 0 Z Z" fill="#ffffff" stroke="#0f172a" stroke-width="1" />
+  <path d="M 0 105 L 25 105 L 25 108 L 150 108 L 150 166 L 0 166 Z" fill="#33b5e5" stroke="#0f172a" stroke-width="1" />
+  <rect x="1" y="109.5" width="148" height="55" fill="#f5f5f5" stroke="#0f172a" stroke-width="1" />
+  <path d="M 1 137 L 149 137" fill="#f5f5f5" stroke="#cccccc" stroke-width="1" />
+  <path d="M 45 55 L 105 55 Z" fill="#f5f5f5" stroke="#cccccc" stroke-width="1" />
+  <rect x="0" y="65" width="150" height="20" fill="#000000" stroke="#cccccc" stroke-width="1" />
+  <rect x="0" y="0" width="0" height="0" fill="#000000" stroke="#cccccc" stroke-width="1" />
+  <path d="M 120 142 L 120 159" fill="#000000" stroke="#cccccc" stroke-width="1" />
+  <path d="M 128 118 L 145 118 L 142 120 L 142 127 L 128 127 Z" fill="#666666" stroke="#cccccc" stroke-width="1" />
+  <path d="M 130 121 L 136 121 M 130 124 L 139 124" fill="#666666" stroke="#f5f5f5" stroke-width="1" />
+  <path d="M 126.68 79.5 Z Z" fill="#ffffff" stroke="#f5f5f5" stroke-width="1" />
+  <ellipse cx="132.375" cy="70.94999999999999" rx="4.135" ry="4.13" fill="#ffffff" stroke="#f5f5f5" stroke-width="1" />
+  <path d="M 129.5 72 L 135.5 72 Z" fill="#666666" stroke="#f5f5f5" stroke-width="1" />
+  <rect x="0" y="0" width="0" height="0" fill="#666666" stroke="#f5f5f5" stroke-width="1" />
+  <path d="M 120 115 L 120 132" fill="#666666" stroke="#cccccc" stroke-width="1" />
+  <path d="M 128 146 L 145 146 L 142 148 L 142 155 L 128 155 Z" fill="#666666" stroke="#cccccc" stroke-width="1" />
+  <path d="M 130 149 L 136 149 M 130 152 L 139 152" fill="#666666" stroke="#f5f5f5" stroke-width="1" />
+</svg>

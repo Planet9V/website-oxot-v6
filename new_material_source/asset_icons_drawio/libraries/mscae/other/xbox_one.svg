@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.4 32.2" width="99.4" height="32.2">
+  <path d="M 2.8 32.2 L 0 27.9 L 0 22.8 L 1.2 22.1 L 2.6 22.1 L 2.6 18.1 L 1.2 18.1 L 0 17.6 L 0 10.6 L 10.3 0 L 89.4 0 L 99.4 10.6 L 99.4 27.9 L 96.6 32.2 Z M 87.3 22.7 Z M 93.8 21.8 Z M 92.6 16.1 Z M 87.5 16.6 Z" fill="#000000" stroke="none" stroke-width="1.5" />
+  <path d="M 2.8 32.2 L 0 27.9 L 0 22.8 L 1.2 22.1 L 2.6 22.1 L 2.6 18.1 L 1.2 18.1 L 0 17.6 L 0 10.6 L 10.3 0 L 89.4 0 L 99.4 10.6 L 99.4 27.9 L 96.6 32.2 Z" fill="none" stroke="#000000" stroke-width="0.9" />
+  <path d="M 0.2 10.7 L 99.2 10.7" fill="none" stroke="#242424" stroke-width="0.9" />
+  <path d="M 48.3 0 L 48.3 10.7" fill="none" stroke="#00cc00" stroke-width="0.9" />
+  <rect x="0" y="0" width="0" height="0" fill="none" stroke="#00cc00" stroke-width="0.9" />
+  <path d="M 48.3 10.7 L 48.3 0 L 89.3 0 L 99.2 10.7 Z" fill="#7e7e7e" stroke="#252525" stroke-width="0.9" />
+  <rect x="0" y="0" width="0" height="0" fill="#7e7e7e" stroke="#252525" stroke-width="0.9" />
+  <path d="M 48.3 7.5 L 55.4 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 48.3 5.8 L 59.2 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 48.3 4.3 L 63 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 48.3 2.6 L 66.6 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 48.3 0.9 L 70.3 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 49.9 0 L 74 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 53.6 0 L 77.4 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 57.1 0 L 81.2 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 61.1 0 L 84.9 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 64.9 0 L 88.6 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 68.4 0 L 92.3 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 72.1 0 L 95.9 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 75.6 0 L 98.6 10.3" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 79.4 0 L 96 7.4" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 83.3 0 L 94.4 5" fill="none" stroke="#000000" stroke-width="0.4" />
+  <rect x="1.6" y="18.1" width="46.5" height="4.1" fill="#dbdbdb" stroke="none" stroke-width="0.9" />
+  <rect x="4.4" y="19.4" width="38.4" height="2" fill="#000000" stroke="none" stroke-width="0.9" />
+  <path d="M 43.3 20.6 L 46.3 20.6 L 44.8 19.1 Z" fill="#ffffff" stroke="none" stroke-width="0.9" />
+  <rect x="43.3" y="21.1" width="3" height="0.5" fill="#ffffff" stroke="none" stroke-width="0.9" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="none" stroke-width="0.9" />
+  <path d="M 48.3 9 L 51.7 10.7" fill="none" stroke="#000000" stroke-width="0.4" />
+  <path d="M 48.3 10.7 L 48.3 32.1" fill="none" stroke="#242424" stroke-width="0.4" />
+  <path d="M 48.3 10.7 L 48.3 0 L 89.3 0 L 99.2 10.7 Z" fill="none" stroke="#252525" stroke-width="0.9" />
+</svg>

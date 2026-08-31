@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.75 14.707" width="35.75" height="14.707">
+  <rect x="0" y="0.622" width="35.75" height="14.085" fill="#334155" stroke="#b1bec2" stroke-width="0.28" />
+  <rect x="0" y="0" width="0" height="0" fill="#334155" stroke="#b1bec2" stroke-width="0.28" />
+  <rect x="3.339" y="0" width="29.308" height="4.003" fill="#688db9" stroke="#7f8081" stroke-width="0.28" />
+  <rect x="2.211" y="9.044" width="31.373" height="5.634" fill="#e6e6e6" stroke="#666" stroke-width="0.28" />
+  <path d="M 33.584 9.044 L 33.592 0.616 M 2.211 9.044 L 2.237 0.662" fill="#e6e6e6" stroke="#666" stroke-width="0.28" />
+  <rect x="0" y="0" width="0" height="0" fill="#e6e6e6" stroke="#666" stroke-width="0.28" />
+  <path d="M 20.316 14.598 L 20.316 11.484 L 21.847 11.484 L 21.847 8.956 L 20.571 8.956 L 20.571 6.652 L 22.896 6.652 L 22.896 4.06 L 29.451 4.06 L 29.451 6.652 L 31.88 6.652 L 31.88 8.956 L 30.542 8.956 L 30.542 11.484 L 32.199 11.484 L 32.199 14.622 L 20.316 14.598 Z M 3.699 14.598 L 3.699 11.484 L 5.23 11.484 L 5.23 8.956 L 3.954 8.956 L 3.954 6.652 L 6.279 6.652 L 6.279 4.06 L 12.834 4.06 L 12.834 6.652 L 15.263 6.652 L 15.263 8.956 L 13.925 8.956 L 13.925 11.484 L 15.582 11.484 L 15.582 14.622 L 3.699 14.598 Z" fill="#666" stroke="#666" stroke-width="0.28" />
+</svg>

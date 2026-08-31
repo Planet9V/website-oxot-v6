@@ -1,0 +1,64 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# THIS REPO IS THE WEBSITE, and nothing else. The workflow it grew from lived
+# in a repo whose root was a CMS application with the site in a `web/`
+# subdirectory, and it carried a step that linted `db/migrations/**`. There are
+# no migrations here and no `db/` — that step would have failed on the first
+# push, so it is gone rather than left to rot.
+#
+# `next build` DOES run here, which it never did in the old repo. It could not
+# there: the old app needed a Postgres service container to build. This one
+# does not — `src/lib/db.ts` guards on `hasDatabase`, so the site builds and
+# serves without a database and only the lead-capture path needs one.
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci || npm install
+      - name: Lint
+        run: npm run lint --if-present
+      # BUILD BEFORE TYPECHECK, and the order is not cosmetic. `PageProps` is a
+      # global Next GENERATES into .next/types during a build. On a fresh
+      # checkout it does not exist yet, so a bare `tsc --noEmit` fails on every
+      # route file with "Cannot find name 'PageProps'" — a red CI run that says
+      # nothing about the code. Verified by doing exactly that here.
+      #
+      # The build is also the real bilingual gate: a missing Dutch dictionary
+      # key is a TYPE error, because `nl.ts` must satisfy the shape `en.ts`
+      # defines. Language coverage is enforced by the compiler, not by review.
+      - name: Build
+        run: npm run build
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Test
+        run: npm test --if-present
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    # gitleaks-action lists the PR's commits via the API. Without an explicit
+    # pull-requests:read the default GITHUB_TOKEN gets 403 "Resource not
+    # accessible by integration" and the job dies BEFORE scanning anything —
+    # a green-looking guard that never ran.
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

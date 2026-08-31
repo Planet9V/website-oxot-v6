@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142.2 194.5" width="142.2" height="194.5">
+  <path d="M 0 22 L 71 4.5 L 130.5 22.5 L 130.5 158 L 60.5 174.5 L 0 156 Z" fill="#abb4c5" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 60.5 39.5 L 0 22 L 71 4.5 L 130.5 22.5 Z" fill="#b8bfd1" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 60.5 174.5 L 60.5 39.5 L 130.5 22.5 L 130.5 158 Z" fill="#5b6369" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 62.61 109.86 L 123.81 20.86 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 52.5 56.5 L 7 42.5 L 7 39 L 52.5 53 Z M 42.5 156.5 L 14.5 148.5 L 14.5 145 L 42.5 153 Z" fill="#52595e" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 22 L 71 4.5 L 130.5 22.5 L 130.5 158 L 60.5 174.5 L 0 156 Z" fill="#52595e" stroke="#000000" stroke-width="1.201" />
+  <path d="M 142.29 192.62 L 135.44 194.78 L 74.16 176.76 L 74.16 93.14 L 82.81 90.62 L 142.29 107.19 Z" fill="#ffffff" stroke="#000000" stroke-width="1.201" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#000000" stroke-width="1.201" />
+  <path d="M 135.44 109.72 L 135.44 194.78 L 74.16 176.76 L 74.16 93.14 Z" fill="#e4e6ec" stroke="#000000" stroke-width="1.201" />
+  <path d="M 142.29 192.62 L 135.44 194.78 L 135.44 109.72 L 142.29 107.19 Z" fill="#838da0" stroke="#000000" stroke-width="1.201" />
+  <path d="M 123.9 123.77 L 84.26 112.6 L 84.26 110.8 L 123.9 121.97 Z M 123.9 142.16 L 84.26 130.98 L 84.26 129.18 L 123.9 140.35 Z M 123.9 160.18 L 84.26 149.01 L 84.26 147.2 L 123.9 158.38 Z M 123.9 178.2 L 84.26 167.03 L 84.26 165.22 L 123.9 176.4 Z" fill="#000000" stroke="#000000" stroke-width="1.201" />
+  <path d="M 142.29 192.62 L 135.44 194.78 L 74.16 176.76 L 74.16 93.14 L 82.81 90.62 L 142.29 107.19 Z" fill="#000000" stroke="#000000" stroke-width="1.2" />
+  <rect x="0" y="0" width="0" height="0" fill="#000000" stroke="#000000" stroke-width="1.2" />
+  <path d="M 95.34 143.28 Z" fill="#000000" stroke="#000000" stroke-width="1.2" />
+  <rect x="1.2" y="0.5" width="141" height="194" fill="#000000" stroke="#000000" stroke-width="1.2" />
+</svg>

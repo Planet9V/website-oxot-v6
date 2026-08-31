@@ -1,0 +1,18 @@
+node_modules
+.next
+.git
+.worktrees
+*.log
+.env.local
+.DS_Store
+
+# SOURCE MATERIAL, NOT SHIPPED CODE — ~85 MB that was being copied into every
+# production image. `new_material_source` alone holds the 9,532 draw.io
+# stencils, the CSET raster originals and the layout specification set. They are
+# inputs to build scripts that run on a developer machine, never at deploy time,
+# and their compiled outputs (`src/components/twin/*-glyphs.tsx`) are checked
+# in — so the image needs the results, not the raw material.
+new_material_source
+docs
+website_strategy
+reviews

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 183.5 176.0" width="183.5" height="176.0">
+  <path d="M 0 149 L 0 30.5 L 22 25 L 22 18.5 L 98 0 L 163.5 19.5 L 163.5 25 L 183.5 31 L 183.5 151.5 L 86 176 Z" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 30.5 L 86 55.5 L 86 176 L 0 149 Z" fill="#98a1b2" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 86 55.5 L 183.5 31.5 L 183.5 151.5 L 86 176 Z" fill="#626a71" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 22 18.5 L 87.5 38.5 L 87.5 50 L 22 29.5 Z" fill="#98a2b2" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 87.5 38.5 L 163.5 19.5 L 163.5 31 L 87.5 50 Z" fill="#51595e" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 86 147 L 22.5 104 L 19.5 55 L 39 34.6 L 40 24 L 159.6 20.4 L 159.6 32.4 L 165.8 36.8 L 171.4 79.6 L 170.4 107.2 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 86 147 L 178 124.5 L 178 136.5 L 86 159.5 Z M 86 121 L 178 99 L 178 110.5 L 86 133.5 Z M 86 95 L 178 73 L 178 84.5 L 86 107.5 Z M 86 69 L 178 47 L 178 58.5 L 86 81.5 Z" fill="#959fb0" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 7 46 L 86 69 L 86 81.5 L 7 57.5 Z M 7 72 L 86 95 L 86 107.5 L 7.5 83.5 Z M 7 98 L 86 121 L 86 133.5 L 7 109.5 Z M 7 124 L 86 147 L 86 159.5 L 7 135.5 Z" fill="#e2e5ee" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 149 L 0 30.5 L 22 25 L 22 18.5 L 98 0 L 163.5 19.5 L 163.5 25 L 183.5 31 L 183.5 151.5 L 86 176 Z" fill="#e2e5ee" stroke="#000000" stroke-width="1.2" />
+</svg>

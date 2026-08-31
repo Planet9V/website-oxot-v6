@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 59.14 72.0" width="59.14" height="72.0">
+  <path d="M 3.81 49.8 L 29.71 57.56 L 29.82 53.1 L 12.04 48.64 Z" fill="#B7CA9D" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.82 19.21 L 12.04 23.36 L 3.81 22.2 L 29.71 14.43 Z" fill="#3C4929" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 55.33 49.8 L 29.44 57.56 L 29.32 53.1 L 47.11 48.64 Z" fill="#B7CA9D" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.32 19.21 L 47.11 23.36 L 55.33 22.2 L 29.44 14.43 Z" fill="#3C4929" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 12.04 48.64 L 3.81 49.8 L 3.81 22.2 L 12.04 23.36 Z" fill="#759C3E" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.54 0 L 0 14.91 L 0.01 57.1 L 29.54 72 L 29.54 0 Z M 20.9 54.92 L 3.81 49.8 L 3.81 22.2 L 20.9 17.08 L 20.9 54.92 Z" fill="#4B612C" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 47.11 48.64 L 55.33 49.8 L 55.33 22.2 L 47.11 23.36 Z" fill="#4B612C" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 29.54 72 L 59.13 57.1 L 59.15 14.91 L 29.54 0 L 29.54 72 Z M 38.24 17.08 L 55.33 22.2 L 55.33 49.8 L 38.24 54.92 L 38.24 17.08 Z" fill="#759C3E" stroke="#0f172a" stroke-width="1.5" />
+</svg>

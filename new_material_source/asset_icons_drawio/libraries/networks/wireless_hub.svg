@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.0 85.6" width="100.0" height="85.6">
+  <rect x="0" y="56.6" width="100" height="25" rx="4" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="10" y="81.6" width="80" height="4" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 67 56.6 L 67.5 11.6 L 70.5 56.6 Z" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="88.0" cy="69.1" rx="8.0" ry="8.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="75.0" cy="61.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="75.0" cy="76.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="75.0" cy="69.1" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="65.5" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="57.0" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="48.5" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="40.0" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="31.5" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="23.0" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="14.5" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="6.0" cy="73.6" rx="2.0" ry="2.0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 3 63.6 L 9 63.6 L 9 66.6 L 7 66.6 L 7 67.6 L 5 67.6 L 5 66.6 L 3 66.6 Z M 11.5 63.6 L 17.5 63.6 L 17.5 66.6 L 15.5 66.6 L 15.5 67.6 L 13.5 67.6 L 13.5 66.6 L 11.5 66.6 Z M 20 63.6 L 26 63.6 L 26 66.6 L 24 66.6 L 24 67.6 L 22 67.6 L 22 66.6 L 20 66.6 Z M 28.5 63.6 L 34.5 63.6 L 34.5 66.6 L 32.5 66.6 L 32.5 67.6 L 30.5 67.6 L 30.5 66.6 L 28.5 66.6 Z M 37 63.6 L 43 63.6 L 43 66.6 L 41 66.6 L 41 67.6 L 39 67.6 L 39 66.6 L 37 66.6 Z M 45.5 63.6 L 51.5 63.6 L 51.5 66.6 L 49.5 66.6 L 49.5 67.6 L 47.5 67.6 L 47.5 66.6 L 45.5 66.6 Z M 54 63.6 L 60 63.6 L 60 66.6 L 58 66.6 L 58 67.6 L 56 67.6 L 56 66.6 L 54 66.6 Z M 62.5 63.6 L 68.5 63.6 L 68.5 66.6 L 66.5 66.6 L 66.5 67.6 L 64.5 67.6 L 64.5 66.6 L 62.5 66.6 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 90 67.1 L 92 69.1 L 90 71.1 M 83 69.1 L 92 69.1" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 73.8 5.9 L 72.3 15.9 Z M 77.8 2.9 L 76.3 19 Z M 81.8 0 L 80.3 21.9 Z M 63.8 5.9 L 65.3 15.9 Z M 59.8 2.9 L 61.3 18.9 Z M 55.8 0.1 L 57.3 21.9 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+</svg>

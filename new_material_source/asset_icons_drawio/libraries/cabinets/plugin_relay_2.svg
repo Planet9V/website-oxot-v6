@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.0 80.0" width="24.0" height="80.0">
+  <rect x="0" y="0" width="24" height="80" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 10 L 24 10 M 0 25 L 24 25 M 0 30 L 24 30 M 0 50 L 24 50 M 0 55 L 24 55 M 0 70 L 24 70" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="3.0" cy="5.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="3.0" cy="17.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="3.0" cy="62.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="3.0" cy="75.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="75.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="62.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="5.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="9.0" cy="17.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="15.0" cy="75.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="15.0" cy="62.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="15.0" cy="5.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="15.0" cy="17.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="21.0" cy="75.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="21.0" cy="62.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="21.0" cy="5.0" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="21.0" cy="17.5" rx="1.5" ry="1.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="18" y="34" width="3" height="4" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

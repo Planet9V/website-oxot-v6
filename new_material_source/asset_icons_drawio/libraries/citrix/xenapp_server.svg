@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.5 178.5" width="152.5" height="178.5">
+  <path d="M 0 151.5 L 0 17.5 L 71 0 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#abb4c5" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 17.5 L 71 0 L 130.5 18 L 60.5 35 Z" fill="#b8bfd1" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 60.5 35 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#5b6369" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 61.2 108.7 L 122.4 19.7 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 7 38 L 7 34.5 L 52.5 48.5 L 52.5 52 Z M 14.5 144 L 14.5 140.5 L 42.5 148.5 L 42.5 152 Z" fill="#52595e" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 151.5 L 0 17.5 L 71 0 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#52595e" stroke="#000000" stroke-width="1.2" />
+  <ellipse cx="114.5" cy="140.5" rx="38.0" ry="38.0" fill="#d2d1cf" stroke="#5d6368" stroke-width="0.9" />
+  <ellipse cx="114.5" cy="140.5" rx="35.5" ry="35.5" fill="#005cf1" stroke="#061580" stroke-width="0.9" />
+  <path d="M 94 143.2 L 90.3 119.8 L 116.5 120.8 L 118 140 Z M 95.4 141.4 L 92.08 121.29 L 115.44 122.15 L 116.78 138.67 Z" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <path d="M 92.2 123.8 L 92.2 121.7 L 115.4 122.2 L 116.8 125 Z" fill="#0126b5" stroke="#0126b5" stroke-width="0.4" />
+  <path d="M 102.51 149.98 L 98.41 121.95 L 127.45 123.14 L 129.11 146.14 Z M 104.06 147.82 L 100.38 123.73 L 126.27 124.76 L 127.76 144.55 Z" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <path d="M 100.52 126.74 L 100.52 124.22 L 126.23 124.82 L 127.78 128.18 Z" fill="#0126b5" stroke="#0126b5" stroke-width="0.4" />
+  <path d="M 115.82 162.5 L 111.74 133.45 L 140.57 132.7 L 142.22 156.83 Z M 117.36 160 L 113.7 135.17 L 139.41 134.2 L 140.88 155.29 Z" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0126b5" stroke-width="0.4" />
+  <path d="M 113.83 138.08 L 113.83 135.65 L 139.36 134.2 L 140.9 137.5 Z" fill="#0126b5" stroke="#0126b5" stroke-width="0.4" />
+</svg>

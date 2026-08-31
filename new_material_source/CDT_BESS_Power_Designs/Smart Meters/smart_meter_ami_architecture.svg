@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2200 1300" width="100%" height="100%" style="background-color: #0d1117; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;">
+  <defs>
+    <!-- Background Grid Pattern -->
+    <pattern id="engGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#161b22" stroke-width="1" />
+    </pattern>
+
+    <!-- Arrow Markers (White, Slate Grey & Subtle Accents) -->
+    <marker id="arrowWhite" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f0f6fc" />
+    </marker>
+    <marker id="arrowGrey" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8b949e" />
+    </marker>
+    <marker id="arrowMuted" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#30363d" />
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#d29922" />
+    </marker>
+  </defs>
+
+  <!-- Background Grid -->
+  <rect width="2200" height="1300" fill="#0d1117" />
+  <rect width="2200" height="1300" fill="url(#engGrid)" />
+
+  <!-- ==================== HEADER BANNER ==================== -->
+  <rect x="40" y="30" width="2120" height="75" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1100" y="60" text-anchor="middle" fill="#f0f6fc" font-size="16" font-weight="700" letter-spacing="1.5">ADVANCED METERING INFRASTRUCTURE (AMI) &amp; SMART GRID DISTRIBUTION — REFERENCE ARCHITECTURE</text>
+  <text x="1100" y="84" text-anchor="middle" fill="#8b949e" font-size="11" letter-spacing="0.5">STANDARDS: IEC 62443 (ZONES &amp; CONDUITS) • IEC 62056 (DLMS/COSEM) • IEEE 2030.5 • PURDUE L0-L4 SEGMENTATION • DERMS INTEGRATION</text>
+
+
+  <!-- ==================== ZONE 1: FIELD EDGE (PURDUE L0/L1) ==================== -->
+  <rect x="40" y="130" width="480" height="1120" rx="4" fill="#161b22" fill-opacity="0.6" stroke="#30363d" stroke-width="1.5" stroke-dasharray="4 4" />
+  <text x="60" y="160" fill="#f0f6fc" font-size="13" font-weight="700">[ZONE 1] FIELD EDGE &amp; PREMISES (PURDUE L0/L1)</text>
+  <text x="60" y="178" fill="#6e7681" font-size="10">GRID CONNECTION POINTS • SUB-SECOND SAMPLING • 30-MIN INTERVAL NVRAM LOGGING • BIDIRECTIONAL METROLOGY</text>
+
+  <!-- Solar PV Inverter -->
+  <rect x="70" y="200" width="420" height="120" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="90" y="230" fill="#f0f6fc" font-size="12" font-weight="700">Distributed Energy Resource (DER) / Solar Inverter</text>
+  <text x="90" y="252" fill="#8b949e" font-size="10">Protocol: Modbus-TCP / SunSpec • Port: 502</text>
+  <text x="90" y="270" fill="#8b949e" font-size="10">Profile: Base Allocation / Dynamic Operating Envelope (DOE)</text>
+  <text x="90" y="292" fill="#d29922" font-size="10" font-weight="600">● Dynamic Curtailment &amp; Volt/Var Support Active</text>
+
+  <!-- Smart Meter Enclosure -->
+  <rect x="70" y="355" width="420" height="690" rx="4" fill="#0d1117" stroke="#30363d" stroke-width="1.5" />
+  <text x="280" y="382" text-anchor="middle" fill="#f0f6fc" font-size="13" font-weight="700">Modular Type 4 Advanced Smart Meter</text>
+  <text x="280" y="400" text-anchor="middle" fill="#6e7681" font-size="10">Unique Connection Identifier • IEC 62056-5-3 • Class 0.5 Metrology</text>
+
+  <!-- Primary Metrology Core -->
+  <rect x="95" y="420" width="370" height="75" rx="3" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="115" y="445" fill="#f0f6fc" font-size="11" font-weight="600">Primary Metrology Core</text>
+  <text x="115" y="465" fill="#8b949e" font-size="10">Voltage (V), Current (A), Power Factor (PF), Frequency (Hz)</text>
+  <text x="115" y="481" fill="#6e7681" font-size="9">True RMS Sampling @ 4 kHz • 4-Quadrant (kW / kVAr)</text>
+
+  <!-- Meter Controller & Crypto Engine -->
+  <rect x="95" y="520" width="370" height="90" rx="3" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="115" y="545" fill="#f0f6fc" font-size="11" font-weight="600">Meter Controller &amp; Cryptographic Core</text>
+  <text x="115" y="565" fill="#8b949e" font-size="10">DLMS/COSEM Object Dictionary • <tspan fill="#3fb950">AES-128-GCM Session Auth</tspan></text>
+  <text x="115" y="582" fill="#8b949e" font-size="10">90-Day Non-Volatile Memory (NVRAM) Storage Ring</text>
+  <text x="115" y="598" fill="#6e7681" font-size="9">Tamper Seal Sensors: Magnetic, Neutral &amp; Terminal Cover</text>
+
+  <!-- Remote Disconnect Contactor -->
+  <rect x="95" y="635" width="370" height="75" rx="3" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="115" y="660" fill="#f0f6fc" font-size="11" font-weight="600">Remote Service Disconnect Contactor (UC3)</text>
+  <text x="115" y="680" fill="#8b949e" font-size="10">Motorized Breaking Contactor • State: <tspan fill="#3fb950">CLOSED</tspan></text>
+  <text x="115" y="697" fill="#6e7681" font-size="9">Safety Interlocks: Neutral Continuity &amp; Downstream Voltage Check</text>
+
+  <!-- Modular Comms Card -->
+  <rect x="95" y="735" width="370" height="75" rx="3" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="115" y="760" fill="#f0f6fc" font-size="11" font-weight="600">Modular Swappable Transceiver Card</text>
+  <text x="115" y="780" fill="#8b949e" font-size="10">Dual Path: Cellular LTE Cat-M1 eSIM + Sub-GHz RF Mesh</text>
+  <text x="115" y="797" fill="#6e7681" font-size="9">Transit IP: Private APN Subnet / IPv6 6LoWPAN Mesh</text>
+
+  <!-- Local Optical Port -->
+  <rect x="95" y="835" width="370" height="45" rx="3" fill="#161b22" stroke="#21262d" stroke-width="1" />
+  <text x="115" y="862" fill="#6e7681" font-size="10">ANSI/IEC Optical Maintenance Port (Protected Field Calibration)</text>
+
+  <!-- Customer Distribution Board -->
+  <rect x="70" y="1075" width="420" height="60" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="90" y="1102" fill="#f0f6fc" font-size="11" font-weight="600">Facility Electrical Service &amp; Distribution Board</text>
+  <text x="90" y="1120" fill="#6e7681" font-size="10">Grid Connection: Low-Voltage 1-Phase / 3-Phase Main Switchboard</text>
+
+
+  <!-- ==================== ZONE 2: TELECOM TRANSIT (PURDUE L2) ==================== -->
+  <rect x="560" y="130" width="480" height="1120" rx="4" fill="#161b22" fill-opacity="0.6" stroke="#30363d" stroke-width="1.5" stroke-dasharray="4 4" />
+  <text x="580" y="160" fill="#f0f6fc" font-size="13" font-weight="700">[ZONE 2] FIELD TELECOM &amp; CARRIER WAN (PURDUE L2)</text>
+  <text x="580" y="178" fill="#6e7681" font-size="10">CARRIER VRF • ENCRYPTED IPSEC BACKHAUL • MULTI-BEARER REDUNDANCY</text>
+
+  <!-- LTE Gateway -->
+  <rect x="590" y="210" width="420" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="610" y="240" fill="#f0f6fc" font-size="12" font-weight="700">Cellular LTE Cat-M1 Private APN Gateway</text>
+  <text x="610" y="262" fill="#8b949e" font-size="10">Private APN Gateway • Dedicated Carrier VRF</text>
+  <text x="610" y="280" fill="#8b949e" font-size="10">Zero Public Internet Exposure • QoS Priority Class 1</text>
+  <text x="610" y="302" fill="#6e7681" font-size="9">Band: Multi-Band Cellular • QoS Profile: High-Priority M2M</text>
+
+  <!-- Wi-SUN Gateway -->
+  <rect x="590" y="410" width="420" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="610" y="440" fill="#f0f6fc" font-size="12" font-weight="700">Wi-SUN Mesh Field Area Network (FAN)</text>
+  <text x="610" y="462" fill="#8b949e" font-size="10">IEEE 802.15.4g Sub-GHz RF Mesh Collector Gateway</text>
+  <text x="610" y="480" fill="#8b949e" font-size="10">Pole-Top Border Router -&gt; High-Speed Fiber / WAN Backhaul</text>
+  <text x="610" y="502" fill="#6e7681" font-size="9">Routing: RPL (IPv6) • Self-Healing Multi-Hop Topology</text>
+
+  <!-- IPsec VPN Gateway -->
+  <rect x="590" y="615" width="420" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="610" y="645" fill="#f0f6fc" font-size="12" font-weight="700">Carrier Interconnect IPsec Concentrator</text>
+  <text x="610" y="667" fill="#8b949e" font-size="10">Tunnel: IKEv2 / IPsec ESP (<tspan fill="#3fb950">AES-256-GCM / SHA-384</tspan>)</text>
+  <text x="610" y="685" fill="#8b949e" font-size="10">BGP Peering • Dual Redundant Cryptographic Endpoints</text>
+  <text x="610" y="707" fill="#6e7681" font-size="9">Throughput: Wire-Speed Hardware Crypto Acceleration</text>
+
+  <!-- Real-time Outage Queue -->
+  <rect x="590" y="810" width="420" height="85" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="610" y="835" fill="#f0f6fc" font-size="12" font-weight="700">Real-Time High-Priority Event Bus (Distributed)</text>
+  <text x="610" y="855" fill="#8b949e" font-size="10">Last-Gasp Outage Alarms (&lt;2 sec SLA) • Tamper Alarms</text>
+  <text x="610" y="873" fill="#6e7681" font-size="9">High-Throughput Message Queue Partitioned by Endpoint ID</text>
+
+  <!-- Scheduled Interval Queue -->
+  <rect x="590" y="950" width="420" height="85" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="610" y="975" fill="#f0f6fc" font-size="12" font-weight="700">Bulk Interval Telemetry Ingestion Buffer</text>
+  <text x="610" y="995" fill="#8b949e" font-size="10">DLMS/COSEM Push Messages &amp; Scheduled Sweeps</text>
+  <text x="610" y="1013" fill="#6e7681" font-size="9">Scalable Clustered Ingestion Buffer Architecture</text>
+
+
+  <!-- ==================== ZONE 3: HEAD-END & IDMZ (PURDUE L3/L3.5) ==================== -->
+  <rect x="1080" y="130" width="500" height="1120" rx="4" fill="#161b22" fill-opacity="0.6" stroke="#30363d" stroke-width="1.5" stroke-dasharray="4 4" />
+  <text x="1100" y="160" fill="#f0f6fc" font-size="13" font-weight="700">[ZONE 3] AMI HEAD-END OPERATIONS &amp; IDMZ (PURDUE L3/L3.5)</text>
+  <text x="1100" y="178" fill="#6e7681" font-size="10">METERING COORDINATION • NEXT-GEN FW • VEE ENGINE • MDMS VAULT</text>
+
+  <!-- IDMZ Firewalls -->
+  <rect x="1120" y="200" width="420" height="130" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1140" y="230" fill="#f0f6fc" font-size="12" font-weight="700">IDMZ Next-Gen Perimeter Firewalls (HA Pair)</text>
+  <text x="1140" y="252" fill="#8b949e" font-size="10">Stateful Inspection • DLMS Protocol Deep Packet Inspection</text>
+  <text x="1140" y="270" fill="#8b949e" font-size="10">Port 4059 Ingress Only • Zero Trust Network Access (ZTNA)</text>
+  <text x="1140" y="292" fill="#6e7681" font-size="9">Clustered Active-Passive Failover (&lt;50ms)</text>
+
+  <!-- AMI HES FEP -->
+  <rect x="1120" y="370" width="420" height="130" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1140" y="400" fill="#f0f6fc" font-size="12" font-weight="700">AMI Head-End System (HES) FEP Cluster</text>
+  <text x="1140" y="422" fill="#8b949e" font-size="10">Centralized AMI Head-End • Device Lifecycle &amp; Discovery</text>
+  <text x="1140" y="440" fill="#8b949e" font-size="10">HSM Key Management Vault • AES-128 GCM Session Broker</text>
+  <text x="1140" y="462" fill="#6e7681" font-size="9">Firmware OTA Cryptographic Signer (ECDSA P-256)</text>
+
+  <!-- VEE Engine -->
+  <rect x="1120" y="540" width="420" height="90" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="1140" y="565" fill="#f0f6fc" font-size="11" font-weight="600">VEE Engine (Validation, Editing &amp; Estimation)</text>
+  <text x="1140" y="585" fill="#8b949e" font-size="10">Metrology Compliance Procedures • Gap Detection &amp; Interpolation</text>
+  <text x="1140" y="602" fill="#8b949e" font-size="10">Suspect Data Flagging • High-Precision Clock Drift Synchronization</text>
+
+  <!-- MDMS Database -->
+  <rect x="1120" y="670" width="420" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1140" y="700" fill="#f0f6fc" font-size="12" font-weight="700">MDMS Historical Master Database Cluster</text>
+  <text x="1140" y="722" fill="#8b949e" font-size="10">High-Performance Timescale/Relational Database Cluster</text>
+  <text x="1140" y="740" fill="#8b949e" font-size="10">Master Meter Records • Multi-Year Interval Profiles • Market Aggregator</text>
+  <text x="1140" y="762" fill="#6e7681" font-size="9">Storage: Enterprise Tiered Flash Storage (Multi-Year Archive)</text>
+
+  <!-- Service Order Dispatcher -->
+  <rect x="1120" y="845" width="420" height="85" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="1140" y="870" fill="#f0f6fc" font-size="12" font-weight="700">Remote Service Order Command Dispatcher</text>
+  <text x="1140" y="890" fill="#8b949e" font-size="10">Cryptographically Signed Command Queue • Audit Trail Engine</text>
+  <text x="1140" y="908" fill="#6e7681" font-size="9">Automated Interlock Safety Proof Verification before Switching</text>
+
+  <!-- Core Switch Fabric -->
+  <rect x="1120" y="970" width="420" height="110" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="1140" y="1000" fill="#f0f6fc" font-size="12" font-weight="700">AMI Core L3 10GbE Switch Fabric (VLAN Segmentation)</text>
+  <text x="1140" y="1022" fill="#8b949e" font-size="10">VLAN 100 (Ingress) • VLAN 200 (MDMS DB)</text>
+  <text x="1140" y="1040" fill="#8b949e" font-size="10">VLAN 300 (DERMS) • VLAN 400 (B2B)</text>
+
+
+  <!-- ==================== ZONE 4: ENTERPRISE & DERMS (PURDUE L4) ==================== -->
+  <rect x="1620" y="130" width="540" height="1120" rx="4" fill="#161b22" fill-opacity="0.6" stroke="#30363d" stroke-width="1.5" stroke-dasharray="4 4" />
+  <text x="1640" y="160" fill="#f0f6fc" font-size="13" font-weight="700">[ZONE 4] ENTERPRISE, DERMS &amp; MARKET INTERFACES (PURDUE L4)</text>
+  <text x="1640" y="178" fill="#6e7681" font-size="10">DISTRIBUTION GRID OPERATIONS • DYNAMIC DER MANAGEMENT • WHOLESALE MARKET • CONSUMER PORTAL</text>
+
+  <!-- DERMS -->
+  <rect x="1660" y="200" width="460" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1680" y="230" fill="#f0f6fc" font-size="12" font-weight="700">DERMS &amp; Dynamic Grid Export Controller</text>
+  <text x="1680" y="252" fill="#8b949e" font-size="10">Distributed Energy Resource Management System</text>
+  <text x="1680" y="270" fill="#8b949e" font-size="10">Dynamic Operating Envelopes (DOE) • Transformer Thermal Limits</text>
+  <text x="1680" y="292" fill="#6e7681" font-size="9">Low-Voltage Reverse Power Flow Mitigation Algorithms</text>
+
+  <!-- ADMS / OMS -->
+  <rect x="1660" y="400" width="460" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1680" y="430" fill="#f0f6fc" font-size="12" font-weight="700">ADMS / Outage Management System (OMS)</text>
+  <text x="1680" y="452" fill="#8b949e" font-size="10">Advanced Distribution Management System</text>
+  <text x="1680" y="470" fill="#8b949e" font-size="10">Low-Voltage (LV) Topology Visibility &amp; Phase Load Balancing</text>
+  <text x="1680" y="492" fill="#6e7681" font-size="9">Automated Fault Scope Pinpointing via Last-Gasp Telemetry</text>
+
+  <!-- Market Gateway -->
+  <rect x="1660" y="600" width="460" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1680" y="630" fill="#f0f6fc" font-size="12" font-weight="700">Energy Market Operator (EMO) B2B Gateway</text>
+  <text x="1680" y="652" fill="#8b949e" font-size="10">Wholesale Market Settlement Interface (Standard XML Schemas)</text>
+  <text x="1680" y="670" fill="#8b949e" font-size="10">Retailer B2B Service Orders: Remote Disconnect / Reconnect</text>
+  <text x="1680" y="692" fill="#6e7681" font-size="9">Standard Transaction Data Feeds &amp; Market Participant Gateway</text>
+
+  <!-- Customer Mobile App -->
+  <rect x="1660" y="800" width="460" height="135" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+  <text x="1680" y="830" fill="#f0f6fc" font-size="12" font-weight="700">Consumer Web Portal &amp; Mobile App Gateway</text>
+  <text x="1680" y="852" fill="#8b949e" font-size="10">Consumer Interval Consumption &amp; Solar Export Visualizer</text>
+  <text x="1680" y="870" fill="#8b949e" font-size="10">Dynamic Time-of-Use Signals • Outage &amp; Restoration Tracker</text>
+  <text x="1680" y="892" fill="#6e7681" font-size="9">API Gateway: GraphQL / mTLS Authenticated</text>
+
+  <!-- OT SOC SIEM -->
+  <rect x="1660" y="975" width="460" height="105" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="1680" y="1005" fill="#f0f6fc" font-size="12" font-weight="700">OT Security Operations Center (SOC) &amp; SIEM</text>
+  <text x="1680" y="1025" fill="#8b949e" font-size="10">Enterprise OT SIEM Platform • Tamper Anomaly Alarms</text>
+  <text x="1680" y="1043" fill="#6e7681" font-size="9">NetFlow, Syslog &amp; TLS Handshake Telemetry Ingestion</text>
+
+
+  <!-- ==================== NETWORK CONNECTIONS & CONDUITS ==================== -->
+
+  <!-- Solar to Meter (Power Feed) -->
+  <path d="M 280 320 L 280 355" fill="none" stroke="#8b949e" stroke-width="2" marker-end="url(#arrowGrey)" />
+  <rect x="210" y="328" width="140" height="16" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="280" y="340" text-anchor="middle" fill="#f0f6fc" font-size="9">AC Power (kW/kVAr)</text>
+
+  <!-- Comms to LTE -->
+  <path d="M 465 765 L 530 765 L 530 277 L 590 277" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  
+  <!-- Comms to Wi-SUN -->
+  <path d="M 465 775 L 545 775 L 545 477 L 590 477" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  <rect x="475" y="620" width="105" height="24" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="527" y="632" text-anchor="middle" fill="#f0f6fc" font-size="8">DLMS/COSEM</text>
+  <text x="527" y="640" text-anchor="middle" fill="#6e7681" font-size="7">AES-128 Session</text>
+
+  <!-- LTE to VPN -->
+  <path d="M 800 345 L 800 615" fill="none" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrowMuted)" />
+  <text x="810" y="480" fill="#6e7681" font-size="8">Private APN Transit</text>
+
+  <!-- Wi-SUN to VPN -->
+  <path d="M 1010 477 L 1040 477 L 1040 682 L 1010 682" fill="none" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrowMuted)" />
+
+  <!-- VPN to IDMZ Firewall -->
+  <path d="M 1010 682 L 1120 265" fill="none" stroke="#f0f6fc" stroke-width="2" marker-end="url(#arrowWhite)" />
+  <rect x="1025" y="440" width="80" height="18" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="1065" y="452" text-anchor="middle" fill="#f0f6fc" font-size="8">IPsec (AES-256)</text>
+
+  <!-- Firewall to HES -->
+  <path d="M 1330 330 L 1330 370" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  <text x="1340" y="352" fill="#8b949e" font-size="8">Port 4059 DLMS</text>
+
+  <!-- HES to VEE -->
+  <path d="M 1330 500 L 1330 540" fill="none" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrowMuted)" />
+  <text x="1340" y="522" fill="#6e7681" font-size="8">gRPC Stream</text>
+
+  <!-- VEE to MDMS -->
+  <path d="M 1330 630 L 1330 670" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  <text x="1340" y="652" fill="#8b949e" font-size="8">VLAN 200 Validated</text>
+
+  <!-- Outage Stream to OMS -->
+  <path d="M 1010 852 L 1050 852 L 1050 467 L 1660 467" fill="none" stroke="#f0f6fc" stroke-width="1.5" marker-end="url(#arrowWhite)" />
+  <rect x="1060" y="650" width="75" height="16" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="1097" y="662" text-anchor="middle" fill="#f0f6fc" font-size="8">Last-Gasp (&lt;2s)</text>
+
+  <!-- MDMS to DERMS -->
+  <path d="M 1540 710 L 1580 710 L 1580 267 L 1660 267" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  <rect x="1550" y="480" width="60" height="16" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="1580" y="492" text-anchor="middle" fill="#8b949e" font-size="8">Volt/Var</text>
+
+  <!-- DERMS Dynamic Curtailment Loop -->
+  <path d="M 1890 200 L 1890 170 L 530 170 L 530 260 L 490 260" fill="none" stroke="#30363d" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrowMuted)" />
+  <rect x="1050" y="162" width="110" height="16" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="1105" y="174" text-anchor="middle" fill="#d29922" font-size="8">Dynamic DOE Downlink</text>
+
+  <!-- MDMS to Market Gateway -->
+  <path d="M 1540 750 L 1660 667" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arrowGrey)" />
+  <text x="1570" y="730" fill="#8b949e" font-size="8">Settlement Data</text>
+
+  <!-- Retailer Disconnect Order to Dispatcher -->
+  <path d="M 1660 700 L 1600 700 L 1600 887 L 1540 887" fill="none" stroke="#f0f6fc" stroke-width="1.5" marker-end="url(#arrowWhite)" />
+  <rect x="1560" y="790" width="80" height="16" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="1600" y="802" text-anchor="middle" fill="#f0f6fc" font-size="8">Disconnect Order</text>
+
+  <!-- Service Dispatcher to Switch (Remote Trip Cross-Zone) -->
+  <path d="M 1120 887 L 1060 887 L 1060 672 L 465 672" fill="none" stroke="#f0f6fc" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrowWhite)" />
+  <rect x="740" y="878" width="120" height="18" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="1" />
+  <text x="800" y="890" text-anchor="middle" fill="#f0f6fc" font-size="8">Signed Remote Trip/Close</text>
+
+  <!-- MDMS to Customer App -->
+  <path d="M 1540 790 L 1590 790 L 1590 867 L 1660 867" fill="none" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrowMuted)" />
+  <text x="1600" y="840" fill="#6e7681" font-size="8">Portal Publish</text>
+
+  <!-- Switch Fabric to SIEM -->
+  <path d="M 1540 1025 L 1660 1025" fill="none" stroke="#30363d" stroke-width="1" stroke-dasharray="2 2" marker-end="url(#arrowMuted)" />
+  <text x="1560" y="1018" fill="#6e7681" font-size="7">Syslog / NetFlow</text>
+
+</svg>

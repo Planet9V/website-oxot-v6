@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 161.85 30.9" width="161.85" height="30.9">
+  <path d="M 0 0 L 0 0.5 L 0 30.9 L 161.85 30.9 L 161.85 0 Z" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 0 L 0 30.9 L 161.85 30.9 L 161.85 0 Z M 1 1 L 160.85 1 L 160.85 29.9 L 1 29.9 Z M 4 2.5 L 4 28.5 L 5 28.5 L 5 16 L 90 16 L 90 28.5 L 91 28.5 L 91 16 L 144 16 L 144 28.5 L 145 28.5 L 145 2.5 L 144 2.5 L 144 15 L 5 15 L 5 2.5 Z M 84 5 L 84 7.5 L 90.5 7.5 L 90.5 5 Z M 85 6 L 89.5 6 L 89.5 6.5 L 85 6.5 Z M 153 9 C 149.42 9 146.5 11.92 146.5 15.5 C 146.5 19.08 149.42 22 153 22 C 156.58 22 159.5 19.08 159.5 15.5 C 159.5 11.92 156.58 9 153 9 Z M 6.5 17 L 6.5 18 L 88.5 18 L 88.5 17 Z M 95.5 17 C 93.84 17 92.5 18.34 92.5 20 L 92.5 24.5 C 92.5 26.16 93.84 27.5 95.5 27.5 L 139.5 27.5 C 141.16 27.5 142.5 26.16 142.5 24.5 L 142.5 20 C 142.5 18.34 141.16 17 139.5 17 Z M 6.5 19 L 6.5 20 L 88.5 20 L 88.5 19 Z M 6.5 21 L 6.5 22 L 88.5 22 L 88.5 21 Z M 6.5 23 L 6.5 24 L 88.5 24 L 88.5 23 Z M 6.5 25 L 6.5 26 L 88.5 26 L 88.5 25 Z M 6.5 27 L 6.5 28 L 88.5 28 L 88.5 27 Z" fill="#000000" stroke="#0f172a" stroke-width="1" />
+  <path d="M 153 10 C 156.04 10 158.5 12.46 158.5 15.5 C 158.5 18.54 156.04 21 153 21 C 149.96 21 147.5 18.54 147.5 15.5 C 147.5 12.46 149.96 10 153 10 Z" fill="#ff0000" stroke="#0f172a" stroke-width="1" />
+  <rect x="0" y="0" width="0" height="0" fill="#ff0000" stroke="#0f172a" stroke-width="1" />
+  <path d="M 5 2.5 L 5 15 L 144 15 L 144 2.5 Z M 84 5 L 90.5 5 L 90.5 7.5 L 84 7.5 Z M 5 16 L 5 28.5 L 90 28.5 L 90 16 Z M 91 16 L 91 28.5 L 144 28.5 L 144 16 Z M 6.5 17 L 88.5 17 L 88.5 18 L 6.5 18 Z M 95.5 17 L 139.5 17 C 141.16 17 142.5 18.34 142.5 20 L 142.5 24.5 C 142.5 26.16 141.16 27.5 139.5 27.5 L 95.5 27.5 C 93.84 27.5 92.5 26.16 92.5 24.5 L 92.5 20 C 92.5 18.34 93.84 17 95.5 17 Z M 6.5 19 L 88.5 19 L 88.5 20 L 6.5 20 Z M 6.5 21 L 88.5 21 L 88.5 22 L 6.5 22 Z M 6.5 23 L 88.5 23 L 88.5 24 L 6.5 24 Z M 6.5 25 L 88.5 25 L 88.5 26 L 6.5 26 Z M 6.5 27 L 88.5 27 L 88.5 28 L 6.5 28 Z" fill="#000000" stroke="#0f172a" stroke-width="1" />
+  <rect x="0" y="0" width="0" height="0" fill="#000000" stroke="#0f172a" stroke-width="1" />
+  <rect x="102.5" y="18.5" width="20" height="7.5" rx="4" fill="#99ccff" stroke="#ffffff" stroke-width="1" />
+  <path d="M 65 9.5 C 65 11 65 12.5 65 14 C 68.67 14 72.33 14 76 14 L 76 9.5 C 72.33 9.5 68.67 9.5 65 9.5 Z M 52 9.5 C 52 11 52 12.5 52 14 C 55.67 14 59.33 14 63 14 L 63 9.5 C 59.33 9.5 55.67 9.5 52 9.5 Z M 6 8 C 6 10 6 12 6 14 L 13 14 L 13 8 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.301" />
+  <path d="M 16 10.5 L 24 10.5 L 24 13.5 L 16 13.5 Z M 15 9.5 C 15 11.17 15 12.83 15 14.5 L 25 14.5 L 25 9.5 Z M 16 4 L 24 4 L 24 7 L 16 7 Z M 15 3 C 15 4.67 15 6.33 15 8 L 25 8 L 25 3 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#ffffff" stroke-width="0.301" />
+  <path d="M 85.5 10 L 90.5 10 L 90.5 13.5 L 85.5 13.5 Z M 79.5 10 L 84.5 10 L 84.5 13.5 L 79.5 13.5 Z M 71 10.5 L 75 10.5 L 75 13 L 71 13 Z M 66 10.5 L 70 10.5 L 70 13 L 66 13 Z M 58 10.5 L 62 10.5 L 62 13 L 58 13 Z M 53 10.5 L 57 10.5 L 57 13 L 53 13 Z M 7 9 L 12 9 L 12 13 L 7 13 Z" fill="#000000" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="131" y="20.75" width="9" height="3" fill="#ffffff" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="134" y="17.75" width="3" height="9" fill="#ffffff" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="94.5" y="18" width="1" height="1" fill="#ccffcc" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="94.5" y="19.9" width="1" height="1" fill="#ccffcc" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="94.5" y="21.8" width="1" height="1" fill="#ccffcc" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="94.5" y="23.7" width="1" height="1" fill="#ccffcc" stroke="#ffffff" stroke-width="0.301" />
+  <rect x="94.5" y="25.6" width="1" height="1" fill="#ccffcc" stroke="#ffffff" stroke-width="0.301" />
+</svg>

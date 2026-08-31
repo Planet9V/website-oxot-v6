@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135.5 25.0" width="135.5" height="25.0">
+  <rect x="0" y="0" width="91" height="25" rx="4" fill="#fbfbfb" stroke="#666666" stroke-width="1.5" />
+  <rect x="97.5" y="0" width="38" height="25" rx="4" fill="#e9eaeb" stroke="#666666" stroke-width="1.5" />
+  <rect x="106" y="4" width="21" height="17" fill="#ecf5fc" stroke="#0033ff" stroke-width="1.5" />
+  <rect x="109.5" y="7.5" width="14" height="11" fill="#ecf5fc" stroke="#5a6ec4" stroke-width="1" />
+  <rect x="110" y="8" width="13" height="2" fill="#ffffff" stroke="none" stroke-width="1" />
+  <path d="M 109.5 10.5 L 123.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 109.5 12.5 L 123.5 12.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 109.5 14.5 L 123.5 14.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 109.5 16.5 L 123.5 16.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 111.5 18.5 L 111.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 113.5 18.5 L 113.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 115.5 18.5 L 115.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 117.5 18.5 L 117.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 119.5 18.5 L 119.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <path d="M 121.5 18.5 L 121.5 10.5" fill="none" stroke="#5a6ec4" stroke-width="1" />
+  <rect x="117.5" y="12.5" width="2" height="2" fill="none" stroke="#ff3300" stroke-width="1" />
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448.0 252.0" width="448.0" height="252.0">
+  <rect x="0" y="0" width="448" height="252" rx="4" fill="#f2f2f2" stroke="#000000" stroke-width="1.5" />
+  <rect x="58" y="55" width="377" height="147" fill="#ffffff" stroke="none" stroke-width="1.5" />
+  <path d="M 58 55 L 58 203 L 436 203" fill="none" stroke="#808080" stroke-width="2" />
+  <path d="M 120 55 L 120 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 180 55 L 180 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 240 55 L 240 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 298 55 L 298 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 358 55 L 358 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 418 55 L 418 203" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 57.334 70 L 435.334 70" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 59.334 96.667 L 434.667 96" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58 124 L 435.334 123.334" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58 150 L 436.667 150" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58.667 177.334 L 436 177.334" fill="none" stroke="#808080" stroke-width="1" />
+  <rect x="59" y="70" width="307" height="8" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="59" y="79" width="291" height="8" fill="#3a5ba6" stroke="#3a5ba6" stroke-width="1" />
+  <rect x="59" y="88" width="230" height="8" fill="#4c77d9" stroke="#4c77d9" stroke-width="1" />
+  <rect x="59" y="110" width="341" height="8" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="59" y="119" width="349" height="8" fill="#3a5ba6" stroke="#3a5ba6" stroke-width="1" />
+  <rect x="59" y="128" width="330" height="8" fill="#4c77d9" stroke="#4c77d9" stroke-width="1" />
+  <rect x="59" y="160" width="201" height="8" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="59" y="169" width="252" height="8" fill="#3a5ba6" stroke="#3a5ba6" stroke-width="1" />
+  <rect x="59" y="178" width="243" height="8" fill="#4c77d9" stroke="#4c77d9" stroke-width="1" />
+</svg>

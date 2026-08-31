@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448.0 232.0" width="448.0" height="232.0">
+  <rect x="0" y="0" width="448" height="232" rx="4" fill="#f2f2f2" stroke="#000000" stroke-width="1.5" />
+  <rect x="58" y="55" width="377" height="147" fill="#ffffff" stroke="none" stroke-width="1.5" />
+  <path d="M 58 55 L 58 203 L 436 203" fill="none" stroke="#808080" stroke-width="2" />
+  <path d="M 57.334 70 L 435.334 70" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 59.334 96.667 L 434.667 96" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58 124 L 435.334 123.334" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58 150 L 436.667 150" fill="none" stroke="#808080" stroke-width="1" />
+  <path d="M 58.667 177.334 L 436 177.334" fill="none" stroke="#808080" stroke-width="1" />
+  <rect x="80" y="82" width="35" height="120" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="179" y="146" width="35" height="56" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="275" y="182" width="35" height="20" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+  <rect x="367" y="110" width="35" height="92" fill="#2c457e" stroke="#2c457e" stroke-width="1" />
+</svg>

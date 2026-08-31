@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.76 55.84" width="40.76" height="55.84">
+  <rect x="0" y="0" width="0" height="0" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 40.76 50.36 L 40.76 52.86 C 40.76 53.01 40.75 53.15 40.73 53.29 L 40.73 50.78 C 40.75 50.65 40.76 50.5 40.76 50.36" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 40.73 50.78 L 40.73 53.29 C 40.71 53.45 40.67 53.61 40.62 53.77 L 40.62 51.27 C 40.67 51.11 40.71 50.95 40.73 50.78" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 40.62 51.26 L 40.62 53.77 C 40.56 53.95 40.49 54.13 40.4 54.29 L 40.4 51.79 C 40.49 51.62 40.57 51.45 40.62 51.26" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 40.4 51.79 L 40.4 54.29 C 39.89 55.21 38.9 55.84 37.76 55.84 L 37.76 53.34 C 38.9 53.34 39.89 52.71 40.4 51.79" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 40.76 50.36 L 40.76 52.86 C 40.76 54.5 39.43 55.84 37.76 55.84 L 37.76 53.34 C 39.43 53.34 40.76 52 40.76 50.36 Z" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 39.05 52.83 L 37.76 55.84 L 3 55.84 L 2.18 52.7 Z" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 3 53.34 L 3 55.84 C 1.34 55.84 0 54.5 0 52.86 L 0 50.36 C 0 52 1.34 53.34 3 53.34" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 3 53.34 L 3 55.84 C 1.34 55.84 0 54.5 0 52.86 L 0 50.36 C 0 52 1.34 53.34 3 53.34 Z" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 37.76 0 C 39.43 0 40.76 1.33 40.76 2.97 L 40.76 50.36 C 40.76 52 39.43 53.34 37.76 53.34 L 3 53.34 C 1.34 53.34 0 52 0 50.36 L 0 2.97 C 0 1.33 1.34 0 3 0 L 37.76 0 Z" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#769B3F" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="19.74" cy="17.63" rx="13.02" ry="13.02" fill="#FFFFFF" stroke="#444444" stroke-width="3" />
+  <path d="M 20.81 9.46 L 20.74 20.83" fill="#FFFFFF" stroke="#444444" stroke-width="3" />
+  <path d="M 14.31 19.7 L 21.31 19.7" fill="#FFFFFF" stroke="#444444" stroke-width="3" />
+</svg>

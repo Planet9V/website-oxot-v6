@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.35 56.89" width="52.35" height="56.89">
+  <path d="M 25.17 54.65 L 0 54.65 L 0 39.65 L 25.17 39.65 L 25.17 54.65 Z" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="54.65" width="25.17" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="39.65" width="24.01" height="15" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="54.65" width="24.01" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 25.17 35.2 L 0 35.2 L 0 20.39 L 25.17 20.39 L 25.17 35.2 Z" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="35.2" width="25.17" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 25.17 15.95 L 0 15.95 L 0 0 L 25.17 0 L 25.17 15.95 Z" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="15.95" width="25.17" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="20.39" width="24.01" height="14.8" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="35.2" width="24.01" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="0" width="24.01" height="15.95" fill="#2E73B7" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="28.35" y="15.95" width="24.01" height="2.24" fill="#19486F" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="13.0" cy="8.335" rx="4.92" ry="4.885" fill="#F6F7F7" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="13.0" cy="27.665" rx="4.92" ry="4.885" fill="#F6F7F7" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 17.92 47.21 C 17.92 49.91 15.73 52.1 13 52.1 C 10.29 52.1 8.08 49.91 8.08 47.21 C 8.08 44.52 10.29 42.33 13 42.33 C 15.73 42.33 17.92 44.52 17.92 47.21 Z" fill="#F6F7F7" stroke="#0f172a" stroke-width="1.5" />
+</svg>

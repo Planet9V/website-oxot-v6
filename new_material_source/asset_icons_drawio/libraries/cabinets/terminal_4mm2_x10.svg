@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.0 50.0" width="40.0" height="50.0">
+  <rect x="0" y="0" width="40" height="50" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 14 L 40 14 M 0 36 L 40 36 M 4 0 L 4 50 M 8 0 L 8 50 M 12 0 L 12 50 M 16 0 L 16 50 M 20 0 L 20 50 M 24 0 L 24 50 M 28 0 L 28 50 M 32 0 L 32 50 M 36 0 L 36 50" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="2.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="2.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="6.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="6.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="10.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="10.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="14.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="14.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="18.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="18.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="22.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="22.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="26.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="26.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="30.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="30.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="38.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="38.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="34.0" cy="43.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="34.0" cy="7.0" rx="0.5" ry="0.5" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+</svg>

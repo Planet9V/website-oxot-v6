@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.0 100.0" width="174.0" height="100.0">
+  <rect x="0" y="0" width="174" height="100" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="46" y="78" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="23.5" y="78" width="18.27" height="19" rx="4" fill="#c0c0c0" stroke="#0f172a" stroke-width="1.5" />
+  <ellipse cx="32.5" cy="87.5" rx="6.0" ry="6.0" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <path d="M 26.5 87.5 L 38.5 87.5 M 32.5 81.5 L 32.5 93.5 M 32.5 93.5 Z M 28 83.5 M 28 91.5 M 50.5 83.5 L 55 88 Z M 49 87.5 L 49 88 L 56.5 87.5 M 52.75 91.75 L 52.75 95 M 50.5 95 L 55 95" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <rect x="2" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="20" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="38" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="56" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="63" y="78" width="72" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="73" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="90" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="107" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="124" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="141" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="158" y="3" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="11" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="29" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="47" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="65" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="82" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="99" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="116" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="133" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="150" y="29" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="133" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="116" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="99" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="82" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="65" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="47" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="29" y="53.5" width="13.5" height="19" rx="4" fill="#ffffff" stroke="#222222" stroke-width="1.5" />
+  <rect x="150" y="53.5" width="21.9" height="19" rx="4" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <rect x="2" y="53.5" width="22" height="19" rx="4" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <rect x="2" y="78" width="18.27" height="19" rx="4" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <rect x="138" y="78" width="34" height="19" rx="4" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+  <path d="M 11 63 L 9 63 L 13 58 L 17 63 L 15 63 L 15 67 L 11 67 Z M 159 59 L 167 59 L 167 67 L 159 67 L 155 63 Z M 161 61 L 165 65 M 165 61 L 161 65" fill="#c0c0c0" stroke="#222222" stroke-width="1.5" />
+</svg>

@@ -1,0 +1,245 @@
+{
+  "meta": {
+    "project": "OXOT hyperscale AI datacenter — reference graph",
+    "purpose": "Asset register, connection graph and solved routing accompanying the Babylon scene. Assets bind to GLB nodes by `mesh`.",
+    "authority": "icd-graph.json is the specified interface truth (from the DLD/ICD). facility-graph.json and hall-graph.json carry the modelled geometry and the IEC 62443 assessment layer. routes.json holds solved containment paths. Where they disagree on a connection, the ICD wins.",
+    "integrity": {
+      "danglers": 0,
+      "phantom_endpoints": 0,
+      "unrouted_connections": 0
+    },
+    "glb_sources": {
+      "campus": "hyperscale-campus.html -> Download GLB (facility + hall, 5761 meshes)",
+      "rack": "hyperscale-rack.html -> Download GLB (single high-detail 48U rack)",
+      "plc": "plc.html -> Download GLB (DIN-rail PLC assembly)"
+    },
+    "files": {
+      "icd-graph.json": {
+        "role": "specified interfaces",
+        "systems": 18,
+        "equipment": 134,
+        "interfaces": 184,
+        "instrument_loops": 7
+      },
+      "facility-graph.json": {
+        "role": "modelled facility + 62443 layer",
+        "assets": 199,
+        "connections": 296
+      },
+      "hall-graph.json": {
+        "role": "modelled hall",
+        "assets": 216,
+        "connections": 709
+      },
+      "rack-graph.json": {
+        "role": "rack template",
+        "components": 10,
+        "connections": 22,
+        "instances": 96
+      },
+      "routes.json": {
+        "role": "solved containment routing",
+        "routes": 1005,
+        "total_length_m": 15693
+      },
+      "positions.json": {
+        "role": "asset anchors in GLB world space",
+        "count": 416
+      },
+      "routing.js": {
+        "role": "re-runnable route solver"
+      }
+    },
+    "totals": {
+      "modelled_assets": 415,
+      "modelled_connections": 1005,
+      "pid_tagged_equipment": 134,
+      "specified_interfaces": 184,
+      "instrument_loops": 7,
+      "routed_runs": 1005,
+      "routed_length_m": 15693,
+      "hardwired_or_serial_connections": 167,
+      "critical_conduits": 97,
+      "assets_by_zone": {
+        "Z3": 108,
+        "Z2": 62,
+        "Z0": 185,
+        "Z5": 13,
+        "Z4": 16,
+        "Z1": 31
+      },
+      "connections_by_protocol": {
+        "Physical flow": 512,
+        "Ethernet/TCP-IP": 223,
+        "BGP": 2,
+        "CAPWAP": 2,
+        "RS-232 console": 97,
+        "SNMP": 2,
+        "Modbus RTU": 13,
+        "Modbus TCP": 25,
+        "Dry contact": 31,
+        "BACnet MS/TP": 16,
+        "BACnet/IP": 10,
+        "PROFINET": 5,
+        "IEC 61850 MMS": 3,
+        "CAN bus": 2,
+        "4-20 mA analog": 3,
+        "DNP3": 1,
+        "OPC UA": 9,
+        "OSDP RS-485": 2
+      }
+    }
+  },
+  "legends": {
+    "zones": {
+      "Z0": {
+        "label": "Z0 / Zone 4 — Enterprise IT",
+        "purdue": "L4-L5",
+        "slt": "SL-T 2",
+        "color": 10199464
+      },
+      "Z1": {
+        "label": "Z1 / Zone 3 — DCIM / IDMZ",
+        "purdue": "L3-L3.5",
+        "slt": "SL-T 2-3",
+        "color": 3523273
+      },
+      "Z2": {
+        "label": "Z2 / Zone 2 — Supervisory control",
+        "purdue": "L2",
+        "slt": "SL-T 2-3",
+        "color": 9064400
+      },
+      "Z3": {
+        "label": "Z3 / Zone 1 — Field device",
+        "purdue": "L0-L1",
+        "slt": "SL-T 1-2",
+        "color": 14201402
+      },
+      "Z4": {
+        "label": "Z4 — Safety instrumented (SIS)",
+        "purdue": "isolated SIS",
+        "slt": "SL-T 2-3",
+        "color": 13120298
+      },
+      "Z5": {
+        "label": "Z5 — Out-of-band / jump",
+        "purdue": "DMZ segment",
+        "slt": "SL-T 3",
+        "color": 14711334
+      }
+    },
+    "services": {
+      "water": {
+        "label": "Water / coolant",
+        "color": 2060240
+      },
+      "condenser": {
+        "label": "Condenser water",
+        "color": 3050327
+      },
+      "air": {
+        "label": "Air / HVAC",
+        "color": 10134700
+      },
+      "electricity": {
+        "label": "Electricity",
+        "color": 14201402
+      },
+      "fuel": {
+        "label": "Fuel",
+        "color": 14205498
+      },
+      "data": {
+        "label": "Data (IT)",
+        "color": 3523273
+      },
+      "control": {
+        "label": "Control (OT)",
+        "color": 9064400
+      },
+      "fire": {
+        "label": "Fire & life safety",
+        "color": 13120298
+      },
+      "security": {
+        "label": "Physical security",
+        "color": 14711334
+      }
+    },
+    "protocols": {
+      "Ethernet/TCP-IP": {
+        "color": 3523273,
+        "layer": "IT"
+      },
+      "BGP": {
+        "color": 2795957,
+        "layer": "IT"
+      },
+      "SNMP": {
+        "color": 5880009,
+        "layer": "IT"
+      },
+      "CAPWAP": {
+        "color": 4630736,
+        "layer": "IT"
+      },
+      "RS-232 console": {
+        "color": 8359834,
+        "layer": "IT"
+      },
+      "OPC UA": {
+        "color": 10186464,
+        "layer": "OT"
+      },
+      "Modbus TCP": {
+        "color": 9064400,
+        "layer": "OT"
+      },
+      "Modbus RTU": {
+        "color": 7289520,
+        "layer": "OT"
+      },
+      "PROFINET": {
+        "color": 11554768,
+        "layer": "OT"
+      },
+      "BACnet/IP": {
+        "color": 6254544,
+        "layer": "OT"
+      },
+      "BACnet MS/TP": {
+        "color": 4872365,
+        "layer": "OT"
+      },
+      "IEC 61850 MMS": {
+        "color": 13655984,
+        "layer": "OT"
+      },
+      "DNP3": {
+        "color": 10506122,
+        "layer": "OT"
+      },
+      "CAN bus": {
+        "color": 9071312,
+        "layer": "OT"
+      },
+      "OSDP RS-485": {
+        "color": 14711334,
+        "layer": "OT"
+      },
+      "Dry contact": {
+        "color": 10134700,
+        "layer": "OT"
+      },
+      "4-20 mA analog": {
+        "color": 11576458,
+        "layer": "OT"
+      },
+      "Physical flow": {
+        "color": 8359834,
+        "layer": "Process"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.69 178.9" width="156.69" height="178.9">
+  <path d="M 0 151.5 L 0 17.5 L 71 0 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#abb4c5" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 17.5 L 71 0 L 130.5 18 L 60.5 35 Z" fill="#b8bfd1" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 60.5 35 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#5b6369" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 61.2 108.7 L 122.4 19.7 Z" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 7 38 L 7 34.5 L 52.5 48.5 L 52.5 52 Z M 14.5 144 L 14.5 140.5 L 42.5 148.5 L 42.5 152 Z" fill="#52595e" stroke="#0f172a" stroke-width="1.5" />
+  <path d="M 0 151.5 L 0 17.5 L 71 0 L 130.5 18 L 130.5 153.5 L 60.5 170 Z" fill="#52595e" stroke="#000000" stroke-width="1.2" />
+  <path d="M 92.9 119.02 L 156.01 164.73 Z" fill="#9ea5b5" stroke="#000000" stroke-width="0.871" />
+  <rect x="0" y="0" width="0" height="0" fill="#9ea5b5" stroke="#000000" stroke-width="0.871" />
+  <ellipse cx="124.375" cy="120.11" rx="31.555" ry="15.09" fill="#b7bfd1" stroke="#000000" stroke-width="0.871" />
+  <path d="M 95.22 161.1 L 95.43 126.28 L 156.01 154.57 Z" fill="#ffffff" stroke="#000000" stroke-width="0.4" />
+  <rect x="0" y="0" width="0" height="0" fill="#ffffff" stroke="#000000" stroke-width="0.4" />
+  <path d="M 92.9 119.02 L 156.01 164.73 Z" fill="#ffffff" stroke="#000000" stroke-width="0.871" />
+</svg>
