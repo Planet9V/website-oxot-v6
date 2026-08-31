@@ -1,0 +1,61 @@
+ # **full website package** 
+ 
+ From sitemap and copy through interactive prototypes and production-ready frontend code.
+
+## What I can build
+
+- **Website architecture:** Final sitemap, page hierarchy, navigation, conversion paths, and CTA strategy.
+- **Page content:** Headlines, section copy, product messaging, technical explanations, case-study templates, SEO titles/descriptions.
+- **Design system:** Dark/light theme tokens, typography scale, color palette, components, icon usage, animation rules, and accessibility specifications.
+- **Wireframes:** Detailed desktop and mobile page layouts for Home, Platform, Decisions, Industry, Assurance, Resources, and Contact.
+- **Interactive components:**  
+  - Cyber Digital Twin hero visualization  
+  - Process / Purdue / network / consequence viewer  
+  - “Baseline vs. simulated control” scenario experience  
+  - NOW / NEXT / NEVER priority board  
+  - Investment-risk curve  
+  - Deployment-option selector  
+  - Industry and regulatory-framework filters
+- **Frontend code:** Next.js, React, TypeScript, Tailwind, shadcn/Radix components, Framer Motion, accessible dark/light mode, and responsive layouts.
+- **Technical diagrams:** SVG-based architecture, P&ID-inspired process diagrams, attack-path visuals, control-simulation flows, and data-provenance chains.
+- **Content structure:** MDX/CMS schemas for insights, industries, case studies, product modules, and regulatory pages.
+- **Launch readiness:** WCAG-minded component requirements, analytics events, cookie/privacy content structure, performance targets, and SEO checklist.
+
+## Build first
+
+Start with a focused **minimum viable marketing site**, rather than attempting every page at once:
+
+```text
+1. Home
+2. Cyber Digital Twin product page
+3. The four Decisions overview page
+4. “Can We Change Safely?” interactive scenario page
+5. Deployment & Data Sovereignty
+6. Work With OXOT
+7. Resources landing page
+8. Contact / Technical Briefing request
+```
+
+That is enough to communicate the product, establish technical credibility, and generate qualified conversations.
+
+## Suggested build sequence
+
+1. **Finalize messaging and visual direction**  
+   Establish the product promise, terminology, primary buyer audiences, typography, colors, and the first CTA.
+
+2. **Create wireframes**  
+   Produce detailed layouts for the eight core pages, including mobile behavior.
+
+3. **Build the reusable design system**  
+   Navigation, buttons, cards, diagrams, accordions, filters, forms, theme switcher, and responsive rules.
+
+4. **Build the interactive demo**  
+   Use illustrative plant data to demonstrate:
+   `Baseline → attack path → physical consequence → virtual control → risk reduction`
+
+5. **Implement content and publish**  
+   Add your product sheets, technical specification, resources, privacy/legal pages, analytics, and hosting configuration.
+
+## Important boundary
+
+For OXOT specifically,  begin with **Home + Cyber Digital Twin + Can We Change Safely?** Those three pages express the core proposition most clearly: model the plant, simulate decisions safely, and make defensible OT-security investments.
