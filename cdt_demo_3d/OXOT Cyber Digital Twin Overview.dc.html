@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#0b0b0c">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#0b0b0c"/>
+  <rect x="30" y="30" width="40" height="40" rx="4" fill="none" stroke="#EE7623" stroke-width="3"/>
+  <circle cx="30" cy="30" r="5" fill="#EE7623"/>
+  <circle cx="70" cy="30" r="5" fill="#EE7623"/>
+  <circle cx="30" cy="70" r="5" fill="#EE7623"/>
+  <circle cx="70" cy="70" r="5" fill="#EE7623"/>
+  <path d="M50 42v16M42 50h16" stroke="#f2f1ee" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</template>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0b0b0c}
+  a{color:#EE7623;text-decoration:none}
+  a:hover{color:#f79350}
+  ::selection{background:#EE7623;color:#0b0b0c}
+</style>
+</helmet>
+
+<div style="font-family:Inter,system-ui,sans-serif;background:#0b0b0c;color:#f2f1ee;min-height:100vh">
+
+  <div style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:rgba(11,11,12,.86);backdrop-filter:blur(10px);border-bottom:1px solid #232326">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <span style="font:800 14px/1 Inter,sans-serif;letter-spacing:.14em;color:#EE7623">OXOT</span>
+      <span style="font:600 10px/1 Inter,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#8a8a8d">Cyber Digital Twin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:22px">
+      <a href="#method" style="font:600 11px/1 Inter,sans-serif;color:#c8c8c6">Method</a>
+      <a href="#workshops" style="font:600 11px/1 Inter,sans-serif;color:#c8c8c6">Workshops</a>
+      <a href="#artifacts" style="font:600 11px/1 Inter,sans-serif;color:#c8c8c6">Artifacts</a>
+      <a href="OXOT Cyber Digital Twin Platform.dc.html" style="display:inline-block;padding:8px 15px;border-radius:5px;background:#EE7623;color:#0b0b0c;font:700 11px/1 Inter,sans-serif">Guided demo</a>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;padding:78px 40px 60px;max-width:1320px;margin:0 auto">
+    <div>
+      <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:20px">Consequence-driven OT risk, built on your architecture</div>
+      <h1 style="font:800 52px/1.06 Inter,sans-serif;letter-spacing:-.028em;margin:0 0 22px;color:#fff;text-wrap:balance">Your facility, as a model that answers questions</h1>
+      <p style="font:400 15.5px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 18px;max-width:38em;text-wrap:pretty">A Cyber Digital Twin is a working model of your facility — every asset, every connection, every protocol — loaded with your own safety and reliability data. Ask it what a compromised workstation can reach, what a cooling failure costs per hour, and which control actually breaks the path.</p>
+      <p style="font:400 15.5px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 30px;max-width:38em;text-wrap:pretty">It answers from your architecture, not from a benchmark.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="OXOT Cyber Digital Twin Platform.dc.html" style="display:inline-block;padding:13px 22px;border-radius:6px;background:#EE7623;color:#0b0b0c;font:700 12.5px/1 Inter,sans-serif">Walk through the process</a>
+        <a href="oxot-cdt-sample-report.html" style="display:inline-block;padding:13px 22px;border-radius:6px;border:1px solid #3a3a3d;color:#f2f1ee;font:600 12.5px/1 Inter,sans-serif">See the artifact pack</a>
+      </div>
+    </div>
+
+    <div style="border:1px solid #232326;border-radius:10px;background:#111113;overflow:hidden">
+      <div style="padding:13px 18px;border-bottom:1px solid #232326;font:650 9.5px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8d">Reference model — hyperscale AI datacentre</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#232326">
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#fff;letter-spacing:-.02em">449</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">modelled assets</div></div>
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#fff;letter-spacing:-.02em">1,155</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">typed connections</div></div>
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#EE7623;letter-spacing:-.02em">216</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">critical conduits</div></div>
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#fff;letter-spacing:-.02em">188</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">hardwired / serial links</div></div>
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#fff;letter-spacing:-.02em">17,720 m</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">solved cable &amp; pipe runs</div></div>
+        <div style="padding:18px;background:#111113"><div style="font:800 27px/1 Inter,sans-serif;color:#fff;letter-spacing:-.02em">5,981</div><div style="font:500 10px/1.4 Inter,sans-serif;color:#8a8a8d;margin-top:5px">meshes, individually selectable</div></div>
+      </div>
+      <div style="padding:13px 18px;border-top:1px solid #232326;font:400 10.5px/1.5 Inter,sans-serif;color:#6a6a6d">Every figure on this page is queried from that model. Nothing is illustrative unless it says so.</div>
+    </div>
+  </div>
+
+  <div style="padding:56px 40px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start">
+        <div>
+          <h2 style="font:700 30px/1.14 Inter,sans-serif;letter-spacing:-.02em;margin:0 0 16px;color:#fff">Why a model rather than a report</h2>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0 0 12px;text-wrap:pretty">A report states a conclusion. A model can be interrogated, and it can be wrong in ways you can see.</p>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0 0 12px;text-wrap:pretty">When we say cell isolation is worth $44M of a $50M exposure, that number comes from walking the actual dependency graph — and you can open the model and watch the propagation stop at the cell boundary. When we say no safety instrumented system is reachable from any entry point, that is a query across 1,155 connections, not an assurance.</p>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0;text-wrap:pretty">It also means the assumptions are visible. Every figure is marked as sourced, derived, or assumed — and each assumption is listed with the consequence of it being wrong. A reader who disagrees can see exactly which numbers move.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="border:1px solid #232326;border-radius:8px;padding:18px;background:#111113">
+            <div style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623;margin-bottom:9px">One dataset</div>
+            <p style="font:400 11.8px/1.55 Inter,sans-serif;color:#a8a8a6;margin:0">The asset register, the ZCR diagram, the threat pathways, the consequence figures and the executive dashboard are views of the same data. A correction on the floor propagates to every artifact at once.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:18px;background:#111113">
+            <div style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623;margin-bottom:9px">Two directions</div>
+            <p style="font:400 11.8px/1.55 Inter,sans-serif;color:#a8a8a6;margin:0">Top-down consequence figures for executives and risk ledgers. Bottom-up engineering detail for controls, operations and network teams. Same model, so the two never contradict each other.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:18px;background:#111113">
+            <div style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623;margin-bottom:9px">Defensible</div>
+            <p style="font:400 11.8px/1.55 Inter,sans-serif;color:#a8a8a6;margin:0">A formal trail for IEC 62443 SL-C determinations — including where SL-A was negotiated down, on what rationale, and with which residual risk accepted by whom.</p>
+          </div>
+          <div style="border:1px solid #232326;border-radius:8px;padding:18px;background:#111113">
+            <div style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623;margin-bottom:9px">It outlives us</div>
+            <p style="font:400 11.8px/1.55 Inter,sans-serif;color:#a8a8a6;margin:0">You keep the model. Add a system, patch a firmware, change a firewall rule — re-run the queries and the answers move with the facility instead of ageing on a shelf.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="method" style="padding:64px 40px;border-top:1px solid #1a1a1c">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:16px">The method</div>
+      <h2 style="font:700 34px/1.12 Inter,sans-serif;letter-spacing:-.022em;margin:0 0 14px;color:#fff">Four phases, two workshops</h2>
+      <p style="font:400 14px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 34px;max-width:52em;text-wrap:pretty">Each phase ends in something you can hold. The workshops are where the model meets the people who run the facility — and where it gets corrected. Select a phase to see what goes in, what happens, and what comes out.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px">
+        <div onClick="{{ sel1 }}" style="border:1px solid {{ bd1 }};border-radius:8px;padding:16px 18px;background:{{ bg1 }};cursor:pointer;transition:border-color .14s,background .14s">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:{{ bbg1 }};color:{{ bfg1 }};font:800 10px/1 Inter,sans-serif;flex:0 0 auto">1</span>
+            <span style="font:650 9px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#8a8a8d">Phase</span>
+          </div>
+          <div style="font:700 15px/1.22 Inter,sans-serif;color:#fff;margin-bottom:5px">Build Model</div>
+          <div style="font:400 11px/1.45 Inter,sans-serif;color:#8a8a8d">Documents in, queryable model out</div>
+        </div>
+        <div onClick="{{ sel2 }}" style="border:1px solid {{ bd2 }};border-radius:8px;padding:16px 18px;background:{{ bg2 }};cursor:pointer;transition:border-color .14s,background .14s">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:{{ bbg2 }};color:{{ bfg2 }};font:800 10px/1 Inter,sans-serif;flex:0 0 auto">2</span>
+            <span style="font:650 9px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623">Workshop</span>
+          </div>
+          <div style="font:700 15px/1.22 Inter,sans-serif;color:#fff;margin-bottom:5px">WS-1 · Initial Risk Assessment</div>
+          <div style="font:400 11px/1.45 Inter,sans-serif;color:#8a8a8d">Walk the floor, set SL-T</div>
+        </div>
+        <div onClick="{{ sel3 }}" style="border:1px solid {{ bd3 }};border-radius:8px;padding:16px 18px;background:{{ bg3 }};cursor:pointer;transition:border-color .14s,background .14s">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:{{ bbg3 }};color:{{ bfg3 }};font:800 10px/1 Inter,sans-serif;flex:0 0 auto">3</span>
+            <span style="font:650 9px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#8a8a8d">Phase</span>
+          </div>
+          <div style="font:700 15px/1.22 Inter,sans-serif;color:#fff;margin-bottom:5px">Detail Risk Assessment</div>
+          <div style="font:400 11px/1.45 Inter,sans-serif;color:#8a8a8d">Consequence, pathways, ALE</div>
+        </div>
+        <div onClick="{{ sel4 }}" style="border:1px solid {{ bd4 }};border-radius:8px;padding:16px 18px;background:{{ bg4 }};cursor:pointer;transition:border-color .14s,background .14s">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:{{ bbg4 }};color:{{ bfg4 }};font:800 10px/1 Inter,sans-serif;flex:0 0 auto">4</span>
+            <span style="font:650 9px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623">Workshop</span>
+          </div>
+          <div style="font:700 15px/1.22 Inter,sans-serif;color:#fff;margin-bottom:5px">WS-2 · Risk Alignment</div>
+          <div style="font:400 11px/1.45 Inter,sans-serif;color:#8a8a8d">ALARP to SL-C, then the roadmap</div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #232326;border-radius:10px;background:#111113;overflow:hidden">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:20px 26px;border-bottom:1px solid #232326;background:#0f0f10">
+          <div>
+            <div style="font:700 19px/1.2 Inter,sans-serif;letter-spacing:-.012em;color:#fff">{{ phaseTitle }}</div>
+            <div style="font:400 12px/1.5 Inter,sans-serif;color:#8a8a8d;margin-top:4px">{{ phaseLede }}</div>
+          </div>
+          <div style="flex:0 0 auto;font:650 9.5px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#EE7623">{{ phaseKicker }}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:1px;background:#232326">
+          <div style="padding:22px 26px;background:#111113">
+            <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:12px">Inputs</div>
+            <sc-for list="{{ phaseInputs }}" as="row" hint-placeholder-count="4">
+              <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:8px">
+                <span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#4a4a4d;margin-top:7px"></span>
+                <span>{{ row }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:22px 26px;background:#111113">
+            <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:12px">What happens</div>
+            <sc-for list="{{ phaseWork }}" as="row" hint-placeholder-count="5">
+              <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:8px">
+                <span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span>
+                <span>{{ row }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:22px 26px;background:#0d0d0e">
+            <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:12px">Outputs</div>
+            <sc-for list="{{ phaseOut }}" as="row" hint-placeholder-count="4">
+              <div style="display:flex;gap:9px;font:600 12px/1.55 Inter,sans-serif;color:#fff;margin-bottom:8px">
+                <span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span>
+                <span>{{ row }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:16px 26px;border-top:1px solid #232326;background:#0f0f10;display:flex;align-items:center;gap:12px">
+          <span style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;flex:0 0 auto">In the model</span>
+          <span style="font:400 12px/1.5 Inter,sans-serif;color:#a8a8a6">{{ phaseTool }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="workshops" style="padding:64px 40px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:16px">The workshops</div>
+      <h2 style="font:700 34px/1.12 Inter,sans-serif;letter-spacing:-.022em;margin:0 0 14px;color:#fff">Where the model meets the facility</h2>
+      <p style="font:400 14px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 32px;max-width:52em;text-wrap:pretty">Both workshops are run against the live model on screen, not slides. Disagreement is the point — every correction goes straight into the dataset and every downstream artifact moves with it.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="border:1px solid #232326;border-radius:10px;background:#111113;overflow:hidden">
+          <div style="padding:20px 24px;border-bottom:1px solid #232326;background:linear-gradient(180deg,#161617,#111113)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#EE7623;color:#0b0b0c;font:800 11px/1 Inter,sans-serif">1</span>
+              <span style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623">Workshop one</span>
+            </div>
+            <div style="font:700 20px/1.18 Inter,sans-serif;letter-spacing:-.014em;color:#fff;margin-bottom:6px">Initial Risk Assessment</div>
+            <div style="font:400 12.5px/1.55 Inter,sans-serif;color:#8a8a8d">Validate the model, frame the threat, agree the target</div>
+          </div>
+          <div style="padding:22px 24px">
+            <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:10px">On the agenda</div>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0 0 10px">We walk the model with your team, then walk the floor. What we drew from the documents and what is actually installed are rarely the same thing — the model is corrected to as-is in the room.</p>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0 0 10px">Then the threat landscape. TS 50701 works from worst case; we instead use comparative threat — our <strong style="color:#fff;font-weight:650">Attacker Threat Quotient</strong>, scoped to your sector, equipment class, facility type and geography. That gives a defensible threat basis rather than a hypothetical one.</p>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0">We close by organising assets into a registry, marking those carrying SIL ratings, and setting initial SL-T by zone.</p>
+            <div style="margin-top:18px;padding-top:16px;border-top:1px solid #232326">
+              <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:10px">You leave with</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">Corrected as-is model</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">Asset registry</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">SIL-rated item list</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">Initial zones &amp; conduits</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">SL-T per zone</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">ATQ threat basis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #232326;border-radius:10px;background:#111113;overflow:hidden">
+          <div style="padding:20px 24px;border-bottom:1px solid #232326;background:linear-gradient(180deg,#161617,#111113)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#EE7623;color:#0b0b0c;font:800 11px/1 Inter,sans-serif">2</span>
+              <span style="font:650 9.5px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623">Workshop two</span>
+            </div>
+            <div style="font:700 20px/1.18 Inter,sans-serif;letter-spacing:-.014em;color:#fff;margin-bottom:6px">Risk Alignment</div>
+            <div style="font:400 12.5px/1.55 Inter,sans-serif;color:#8a8a8d">Show the consequence, agree what is reasonable</div>
+          </div>
+          <div style="padding:22px 24px">
+            <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6d;margin-bottom:10px">On the agenda</div>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0 0 10px">We run <strong style="color:#fff;font-weight:650">TACAM</strong> against the model — threat actors and pathways, carrying the typical vulnerabilities of each equipment class — and show where those paths land: fat-tail losses, safety functions, critical process.</p>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0 0 10px">Then the controls the SL-T ratings demand, and why each matters — argued from the pathway on screen and the consequence at the end of it, not from a checklist.</p>
+            <p style="font:400 12.3px/1.6 Inter,sans-serif;color:#c8c8c6;margin:0">Architecture gaps get tested against <strong style="color:#fff;font-weight:650">ALARP / SFAIRP</strong> to arrive at a reasonable SL-C. The output is the ZCR diagram — the flat network view of the same 3D model, with zones and conduits agreed.</p>
+            <div style="margin-top:18px;padding-top:16px;border-top:1px solid #232326">
+              <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:10px">You leave with</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">TACAM pathways</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">Cascading failure scenarios</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">ALE by scenario</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">ALARP / SFAIRP rationale</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">Agreed SL-C</span>
+                <span style="padding:5px 10px;border:1px solid #2c2c2e;border-radius:4px;font:600 10.5px/1 Inter,sans-serif;color:#c8c8c6">ZCR diagram</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:64px 40px;border-top:1px solid #1a1a1c">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start">
+        <div>
+          <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:16px">The reference model</div>
+          <h2 style="font:700 30px/1.14 Inter,sans-serif;letter-spacing:-.02em;margin:0 0 16px;color:#fff">A hyperscale AI datacentre, in full</h2>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0 0 12px;text-wrap:pretty">We built one to show the method on something hard: a two-cell campus with liquid-cooled GPU racks, a full power train from the grid intake down to the rack tray, and every control network that ties them together.</p>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0 0 12px;text-wrap:pretty">Each cell is independently deployable — its own MV/LV distribution, CDU cluster, BMS zone controller, fire detection and suppression, and OT network segment. That claim is tested rather than asserted: a compromise of Cell A's OT segment reaches four assets and stops at two boundaries; a Cell A busway loss stops 67 assets and no Cell B rack.</p>
+          <p style="font:400 13.5px/1.68 Inter,sans-serif;color:#a8a8a6;margin:0;text-wrap:pretty">Zoom to a single tray, trace a Modbus path from a workstation to a chiller, or fail a CDU and watch the wave propagate. It is the same model we build for a client — only the name on it is ours.</p>
+        </div>
+        <div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#d8b23a;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Power train</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Grid intake, MV switchgear, transformers, four UPS models in 2N, battery room, generators with bulk fuel, BESS, per-cell busway to rack PDU.</p>
+            </div>
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#1f6fd0;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Cooling</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Central chillers, cooling towers, dry-cooler economiser, row CDUs with direct-to-chip loops, CRAH wall, and the condenser loop between them.</p>
+            </div>
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#2bd0c8;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">IT &amp; network</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Carrier demarcs north and south, DDoS and edge, firewall pair, dual spine, per-row distribution to ToR, jumpbox, out-of-band console.</p>
+            </div>
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#a06fd0;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">OT boundary</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Per-cell OT switch, OT firewall, data diode and protocol gateway, with DCIM and passive IDS monitoring from the NOC.</p>
+            </div>
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#e0483a;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Life safety</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Per-cell fire panel and VESDA aspirating detection, suppression bottle banks, EPO, and the hardwired interlocks that bypass the network entirely.</p>
+            </div>
+            <div style="border:1px solid #232326;border-radius:8px;padding:16px;background:#111113">
+              <div style="width:22px;height:3px;border-radius:2px;background:#8a8a8d;margin-bottom:11px"></div>
+              <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Physical security</div>
+              <p style="font:400 11px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0">Perimeter detection, mantrap and biometrics, cameras to a storage server, door contacts, badge issuance at the security officer's desk.</p>
+            </div>
+          </div>
+          <div style="margin-top:14px;border:1px solid #232326;border-left:2px solid #EE7623;border-radius:6px;padding:15px 18px;background:#111113">
+            <p style="font:400 11.8px/1.58 Inter,sans-serif;color:#a8a8a6;margin:0">188 of the 1,155 connections are hardwired or serial — dry contacts, 4–20 mA loops, RS-485, Modbus RTU. They carry no network path, which is exactly why they are usually missing from an assessment and exactly why they matter when one fails.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="artifacts" style="padding:64px 40px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:16px">What you receive</div>
+      <h2 style="font:700 34px/1.12 Inter,sans-serif;letter-spacing:-.022em;margin:0 0 14px;color:#fff">Nine artifacts, one dataset</h2>
+      <p style="font:400 14px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 32px;max-width:52em;text-wrap:pretty">Every artifact is a view of the model rather than a separate document, so they cannot drift apart. The sample pack shows each one at twenty rows against the reference facility.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Asset register</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">449 rows</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Every asset with zone, Purdue level, SL-T, vendor, firmware or OS, and the cell it belongs to. SIL-rated items flagged.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Connection &amp; protocol register</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">1,155 rows</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Each link typed by service, protocol, direction and medium — including the 188 hardwired and serial interfaces with no network path.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">ZCR diagram</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">216 conduits</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Zones and conduits per IEC 62443 — the flat network view of the 3D model, with each boundary crossing named and classified.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">SL-T and SL-C rationale</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">Per zone</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Target and capability levels with the ALARP / SFAIRP argument for each gap — including where SL-A was negotiated down and on what basis.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Threat scenarios</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">ATQ · TACAM</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Actors scoped to your sector and geography, with pathways traced through the model and the equipment-class vulnerabilities they exploit.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Cascading failure scenarios</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">With cost per hour</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Consequence propagation over real service dependencies, wave by wave, with racks lost and revenue at risk at each step.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Risk portfolio</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">ALE · ROSI</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Hazards ranked by cyber RPN with annualised loss expectancy, safeguard cost, and the return on each control.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">NOW / NEXT / NEVER</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">Prioritised</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Action list ordered by consequence rather than severity score, with quick wins separated from structural work and a target reference architecture.</p>
+        </div>
+        <div style="border:1px solid #232326;border-radius:8px;padding:19px;background:#111113">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+            <span style="font:700 13px/1.2 Inter,sans-serif;color:#fff">Assumptions &amp; provenance</span>
+            <span style="font:600 9.5px/1 Inter,sans-serif;color:#EE7623">Every figure</span>
+          </div>
+          <p style="font:400 11.3px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Which artifact and which workshop each number came from, what was assumed, and what changes if the assumption is wrong.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+        <a href="oxot-cdt-sample-report.html" style="display:inline-block;padding:12px 20px;border-radius:6px;background:#EE7623;color:#0b0b0c;font:700 12px/1 Inter,sans-serif">Open the sample artifact pack</a>
+        <a href="oxot-cdt-process.html" style="display:inline-block;padding:12px 20px;border-radius:6px;border:1px solid #3a3a3d;color:#f2f1ee;font:600 12px/1 Inter,sans-serif">See the process diagram</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:64px 40px;border-top:1px solid #1a1a1c">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="font:650 10px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#EE7623;margin-bottom:16px">Who it serves</div>
+      <h2 style="font:700 30px/1.14 Inter,sans-serif;letter-spacing:-.02em;margin:0 0 14px;color:#fff">One set of facts for every team</h2>
+      <p style="font:400 14px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 30px;max-width:52em;text-wrap:pretty">The usual failure of an OT assessment is that each team gets a different document and none of them reconcile. Here every team reads the same model through the view that suits their work.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="border-top:2px solid #EE7623;padding:14px 2px 0">
+          <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Executives &amp; risk</div>
+          <p style="font:400 11.2px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Consequence in money and hours, feeding straight into the risk ledger. A briefing that says what is at stake before it says what to buy.</p>
+        </div>
+        <div style="border-top:2px solid #2c2c2e;padding:14px 2px 0">
+          <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Controls &amp; operations</div>
+          <p style="font:400 11.2px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Their equipment, their protocols, their interlocks — modelled correctly enough that they trust the conclusions drawn from it.</p>
+        </div>
+        <div style="border-top:2px solid #2c2c2e;padding:14px 2px 0">
+          <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">Safety &amp; reliability</div>
+          <p style="font:400 11.2px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Cyber-initiated failure modes returned to the hazard log, and reliability-critical items carried through with their consequence intact.</p>
+        </div>
+        <div style="border-top:2px solid #2c2c2e;padding:14px 2px 0">
+          <div style="font:700 12.5px/1.25 Inter,sans-serif;color:#fff;margin-bottom:6px">IT, network &amp; security</div>
+          <p style="font:400 11.2px/1.55 Inter,sans-serif;color:#8a8a8d;margin:0">Zones, conduits and pathways they can act on, prioritised by what the compromise actually reaches rather than by CVSS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:64px 40px 78px;border-top:1px solid #1a1a1c;background:#0f0f10">
+    <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:center">
+      <div>
+        <h2 style="font:700 32px/1.14 Inter,sans-serif;letter-spacing:-.022em;margin:0 0 14px;color:#fff;text-wrap:balance">Bring us your HLD, DLD and interface control documents</h2>
+        <p style="font:400 14px/1.62 Inter,sans-serif;color:#a8a8a6;margin:0 0 24px;max-width:44em;text-wrap:pretty">That is enough to start. We build the model from what you already have, correct it on the floor with your team, and load it with your safety and reliability work. The first workshop follows within weeks, not quarters.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="mailto:info@oxot.nl" style="display:inline-block;padding:13px 22px;border-radius:6px;background:#EE7623;color:#0b0b0c;font:700 12.5px/1 Inter,sans-serif">info@oxot.nl</a>
+          <a href="OXOT Cyber Digital Twin Platform.dc.html" style="display:inline-block;padding:13px 22px;border-radius:6px;border:1px solid #3a3a3d;color:#f2f1ee;font:600 12.5px/1 Inter,sans-serif">Try the guided demo</a>
+        </div>
+      </div>
+      <div style="border:1px solid #232326;border-radius:10px;padding:22px 24px;background:#111113">
+        <div style="font:650 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#EE7623;margin-bottom:13px">What we ask for</div>
+        <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:7px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>High and detailed level design documents</span></div>
+        <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:7px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>Interface control documents and P&amp;IDs</span></div>
+        <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:7px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>FMEA, hazard log, safety-critical item list</span></div>
+        <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6;margin-bottom:7px"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>ConOps and minimum operating requirements</span></div>
+        <div style="display:flex;gap:9px;font:400 12px/1.55 Inter,sans-serif;color:#c8c8c6"><span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:#EE7623;margin-top:7px"></span><span>Later: SBOMs, HBOMs, switch and firewall configurations</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:22px 40px;border-top:1px solid #1a1a1c;display:flex;justify-content:space-between;align-items:baseline;gap:20px">
+    <span style="font:600 10px/1 Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#4a4a4d">OXOT · OT security engineering</span>
+    <span style="font:400 10px/1 Inter,sans-serif;color:#4a4a4d">IEC 62443 · TS 50701 · info@oxot.nl</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const PHASES = [
+  { kicker: 'Phase one · before the first workshop',
+    title: 'Build Model',
+    lede: 'Documents in, queryable model out. Nothing is asked of your team yet.',
+    inputs: ['High level design (HLD)', 'Detailed level design (DLD)', 'Interface control documents (ICD)', 'P&IDs and single line diagrams', 'Equipment schedules and descriptions'],
+    work: ['Extract every asset named in the documents into a register',
+           'Build the connections between them — service, protocol, direction, medium',
+           'Type each interface: routable, serial, hardwired, or fluid',
+           'Solve physical cable and pipe routes through real containment',
+           'Model the geometry so each component can be selected and zoomed',
+           'Run integrity checks — no danglers, no phantom endpoints, no unrouted links'],
+    out: ['Asset list', 'Connection and protocol register', 'Routed 3D model', 'Open questions for the floor walk'],
+    tool: 'Panel 1 — Build Model: viewpoint, view, search, service, asset list, protocol.' },
+
+  { kicker: 'Workshop one · with your team, on site',
+    title: 'WS-1 · Initial Risk Assessment',
+    lede: 'Review the model, walk the floor, correct to as-is, then frame the threat.',
+    inputs: ['The built model', 'Your engineering and operations teams', 'Site access for the floor walk', 'Sector and geography context'],
+    work: ['Walk the model with the people who run the facility',
+           'Walk the floor and correct the model to as-is in the room',
+           'Frame the threat landscape using ATQ — comparative rather than worst case',
+           'Scope actors by sector, equipment class, facility type and geography',
+           'Organise assets into a registry and mark those carrying SIL ratings',
+           'Agree initial zones, conduits and SL-T targets'],
+    out: ['Corrected as-is model', 'Asset registry with SIL flags', 'Initial zones and conduits', 'SL-T per zone', 'ATQ threat basis'],
+    tool: 'Panel 2 — WS-1: adds threat paths, cascading failures, zones and conduits to the build view.' },
+
+  { kicker: 'Phase three · between the workshops',
+    title: 'Detail Risk Assessment',
+    lede: 'Load the safety and reliability work, then quantify what a compromise costs.',
+    inputs: ['FMEA and hazard log', 'Safety-critical item list', 'Reliability-critical item list', 'ConOps and minimum operating requirements', 'Uptime and impact values'],
+    work: ['Attach failure modes and consequences to the assets that carry them',
+           'Model cascading failure over real service dependencies, wave by wave',
+           'Trace attacker pathways over routable protocols only — TACAM',
+           'Cross-reference equipment classes against typical vulnerabilities',
+           'Compute annualised loss expectancy per scenario, including fat-tail cases',
+           'Record every assumption with the consequence of it being wrong'],
+    out: ['Cascading failure scenarios with cost per hour', 'TACAM pathways', 'Risk portfolio with ALE', 'Assumptions and provenance register'],
+    tool: 'Panel 3 — Detail Risk Assessment: adds marker colour, IEC 62443 zone, assumptions and risk portfolio.' },
+
+  { kicker: 'Workshop two, then delivery',
+    title: 'WS-2 · Risk Alignment',
+    lede: 'Show the consequence, argue what is reasonable, then deliver the roadmap.',
+    inputs: ['The quantified model', 'Your risk, safety and security stakeholders', 'Sample configurations, SBOMs and HBOMs', 'Switch and firewall configurations'],
+    work: ['Show threat actors and pathways landing on real consequence',
+           'Review the controls each SL-T demands, argued from the pathway on screen',
+           'Test architecture gaps against ALARP / SFAIRP to reach a reasonable SL-C',
+           'Produce the ZCR diagram — the flat view of the same model',
+           'Raise fidelity with configurations and bills of material, then walk the floor again',
+           'Return cyber-initiated failure modes to the safety team hazard log'],
+    out: ['ZCR diagram with agreed SL-C', 'Gap analysis SL-C to SL-A', 'NOW / NEXT / NEVER report', 'Target reference architecture', 'Executive briefing and full IEC 62443 report', 'SecRAC input to the risk ledger'],
+    tool: 'Panel 4 — WS-2: the full set, including assurance views and the risk portfolio dashboard.' }
+];
+
+class Component extends DCLogic {
+  state = { i: 0 };
+
+  bd(n)  { return this.state.i === n ? '#EE7623' : '#232326'; }
+  bg(n)  { return this.state.i === n ? '#17120e' : '#111113'; }
+  bbg(n) { return this.state.i === n ? '#EE7623' : '#232326'; }
+  bfg(n) { return this.state.i === n ? '#0b0b0c' : '#8a8a8d'; }
+
+  renderVals() {
+    const p = PHASES[this.state.i] || PHASES[0];
+    const pick = n => () => this.setState({ i: n });
+    return {
+      sel1: pick(0), sel2: pick(1), sel3: pick(2), sel4: pick(3),
+      bd1: this.bd(0), bd2: this.bd(1), bd3: this.bd(2), bd4: this.bd(3),
+      bg1: this.bg(0), bg2: this.bg(1), bg3: this.bg(2), bg4: this.bg(3),
+      bbg1: this.bbg(0), bbg2: this.bbg(1), bbg3: this.bbg(2), bbg4: this.bbg(3),
+      bfg1: this.bfg(0), bfg2: this.bfg(1), bfg3: this.bfg(2), bfg4: this.bfg(3),
+      phaseTitle: p.title, phaseLede: p.lede, phaseKicker: p.kicker,
+      phaseInputs: p.inputs, phaseWork: p.work, phaseOut: p.out, phaseTool: p.tool
+    };
+  }
+}
+</script>
+</body>
+</html>

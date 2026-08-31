@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OXOT Cyber Digital Twin — Hyperscale Reference Model</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #070a0e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .popout-frame {
+    width: 50vw;
+    height: 50vh;
+    min-width: 50vw;
+    max-width: 50vw;
+    min-height: 50vh;
+    max-height: 50vh;
+    background: #070a0e;
+    border: 1px solid rgba(238, 118, 35, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(238, 118, 35, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    resize: none;
+  }
+  .popout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: rgba(15, 20, 28, 0.96);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    user-select: none;
+  }
+  .popout-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+  .popout-tag {
+    font-size: 0.68rem;
+    color: #8794AE;
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    font-family: monospace;
+  }
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #8794AE;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+  }
+  .close-btn:hover {
+    color: #EE7623;
+  }
+  .iframe-container {
+    flex: 1;
+    width: 100%;
+    height: calc(100% - 38px);
+    position: relative;
+    background: #070a0e;
+  }
+  iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+</head>
+<body>
+<div class="popout-frame">
+  <div class="popout-header">
+    <div class="popout-title">
+      <span style="color: #EE7623;">🌐</span>
+      <span>HYPERSCALE REFERENCE MODEL</span>
+      <span class="popout-tag">Fixed 50% Viewport</span>
+    </div>
+    <a href="index.html" class="close-btn" title="Close & Return to Home">✕</a>
+  </div>
+  <div class="iframe-container">
+    <iframe src="babylon/master-campus-explorer.html" title="Hyperscale Reference Model Popout"></iframe>
+  </div>
+</div>
+</body>
+</html>

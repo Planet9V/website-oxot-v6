@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale Hall — 2 Cells</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+  html,body{margin:0;height:100%}
+  three-d-stage:not(:defined){visibility:hidden}
+</style>
+</head>
+<body>
+<three-d-stage name="hyperscale_hall" background="#e8e6e0"></three-d-stage>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+
+// ======================= materials ======================================
+const M = {};
+const mat = (n, c, r, mt, opts = {}) => M[n] = new THREE.MeshStandardMaterial({
+  name: n, color: c, roughness: r, metalness: mt, ...opts });
+mat('concrete',      0xb9b6ae, 0.9,  0.0);
+mat('slab_hall',     0xd4d2cb, 0.85, 0.0);
+mat('wall',          0xdedbd3, 0.9,  0.0);
+mat('wall_int',      0xcfd3d8, 0.85, 0.0);
+mat('frame_black',   0x21242a, 0.55, 0.25);
+mat('panel_gray',    0x3a3f46, 0.6,  0.15);
+mat('tray_silver',   0xb8bdc4, 0.4,  0.5);
+mat('compute_face',  0x272b31, 0.45, 0.2);
+mat('nvsw_face',     0x1d2b3a, 0.45, 0.2);
+mat('psu_face',      0x383d45, 0.5,  0.15);
+mat('drive_face',    0x454a52, 0.5,  0.2);
+mat('copper',        0xc27a45, 0.35, 0.7);
+mat('chw_supply',    0x1f6fd0, 0.4,  0.2);
+mat('chw_return',    0xc23a2e, 0.4,  0.2);
+mat('chw_primary_s', 0x155a9e, 0.45, 0.25);
+mat('chw_primary_r', 0x9e2c22, 0.45, 0.25);
+mat('pwr_busway',    0xd8b23a, 0.5,  0.3);
+mat('pwr_conduit',   0x8a8f96, 0.4,  0.5);
+mat('data_tray',     0xe8c53f, 0.55, 0.2);
+mat('fiber_aqua',    0x35c2c9, 0.55, 0.1);
+mat('air_duct',      0x9aa4ac, 0.5,  0.4);
+mat('fire_red',      0xc8332a, 0.5,  0.2);
+mat('sec_dark',      0x2a2d33, 0.5,  0.2);
+mat('cabinet_gray',  0x6b7178, 0.55, 0.2);
+mat('cabinet_light', 0x9ba1a8, 0.55, 0.2);
+mat('ups_beige',     0xc9c4b6, 0.6,  0.1);
+mat('battery_blue',  0x2d4a6b, 0.55, 0.15);
+mat('yard_steel',    0x8d939a, 0.45, 0.5);
+mat('louver',        0x5a6067, 0.6,  0.3);
+mat('screen',        0x0a1420, 0.25, 0.1, { emissive: 0x0a2a40, emissiveIntensity: 1 });
+mat('led_green',     0x2bd96a, 0.3, 0, { emissive: 0x1faf4e, emissiveIntensity: 1 });
+mat('led_amber',     0xf2b736, 0.3, 0, { emissive: 0xc78a12, emissiveIntensity: 1 });
+mat('light_bar',     0xf5f5ee, 0.4, 0, { emissive: 0xd8d8c8, emissiveIntensity: 0.7 });
+mat('glass', 0xbcd6de, 0.15, 0.1, { transparent: true, opacity: 0.28 });
+mat('leak_ring',     0xe07a26, 0.6,  0.1);
+mat('white_box',     0xe8e8e2, 0.6,  0.0);
+
+const hall = new THREE.Group(); hall.name = 'hyperscale_hall';
+function box(name, m, w, h, d, x, y, z, parent = hall) {
+  const g = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+  g.name = name; g.position.set(x, y, z); parent.add(g); return g;
+}
+function cylZ(name, m, r, len, x, y, z, axis, parent = hall) {
+  const g = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 16), m);
+  g.name = name;
+  if (axis === 'x') g.rotation.z = Math.PI / 2;
+  if (axis === 'z') g.rotation.x = Math.PI / 2;
+  g.position.set(x, y, z); parent.add(g); return g;
+}
+// polyline pipe with elbow spheres
+function pipe(name, m, r, pts, parent = hall) {
+  const g = new THREE.Group(); g.name = name; parent.add(g);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = new THREE.Vector3(...pts[i]), b = new THREE.Vector3(...pts[i + 1]);
+    const len = a.distanceTo(b);
+    const seg = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 14), m);
+    seg.name = name + '_seg' + i;
+    seg.position.copy(a).lerp(b, 0.5);
+    seg.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
+    g.add(seg);
+    if (i < pts.length - 2) {
+      const el = new THREE.Mesh(new THREE.SphereGeometry(r * 1.15, 12, 10), m);
+      el.name = name + '_elbow' + i; el.position.copy(b); g.add(el);
+    }
+  }
+  return g;
+}
+
+// ======================= building shell =================================
+// Hall interior: x -13..9, z -8..8. Partition at x=-6 (electrical/control wing west).
+const WH = 4;
+{
+  const g = new THREE.Group(); g.name = 'building'; hall.add(g);
+  box('slab', M.concrete, 30, 0.2, 20, -0.5, -0.1, 0, g);
+  box('slab_hall_finish', M.slab_hall, 21.9, 0.04, 15.9, -2, 0.02, 0, g);
+  box('wall_south', M.wall, 22.4, WH, 0.2, -2, WH / 2, -8.1, g);
+  box('wall_north', M.wall, 22.4, WH, 0.2, -2, WH / 2, 8.1, g);
+  box('wall_east_a', M.wall, 0.2, WH, 6.6, 9.1, WH / 2, -4.8, g);   // gaps at pipe/duct penetrations
+  box('wall_east_b', M.wall, 0.2, WH, 6.6, 9.1, WH / 2, 4.8, g);
+  box('wall_east_c', M.wall, 0.2, 1.8, 3.2, 9.1, 0.9, 0, g);
+  box('wall_east_top', M.wall, 0.2, 0.8, 3.2, 9.1, WH - 0.4, 0, g);
+  box('wall_west_a', M.wall, 0.2, WH, 9.0, -13.1, WH / 2, -3.5, g);
+  box('wall_west_b', M.wall, 0.2, WH, 5.0, -13.1, WH / 2, 5.5, g);
+  box('wall_west_door_top', M.wall, 0.2, WH - 2.2, 2.0, -13.1, (WH + 2.2) / 2, 2.0, g); // personnel door opening below
+  // partition electrical wing / data hall, doorway at z=0.5
+  box('partition_a', M.wall_int, 0.15, WH, 7.3, -6, WH / 2, -4.35, g);
+  box('partition_b', M.wall_int, 0.15, WH, 6.1, -6, WH / 2, 4.95, g);
+  box('partition_door_top', M.wall_int, 0.15, WH - 2.2, 1.5, -6, (WH + 2.2) / 2, 1.2, g);
+  // divider between electrical room (south) and control room (north)
+  box('divider_elec_ctrl', M.wall_int, 6.9, WH, 0.15, -9.55, WH / 2, 0, g);
+}
+
+// ======================= LOD rack builder ===============================
+const U = 0.04445, RKW = 0.6, RKD = 1.2, RKH = 2.3, IW = 0.538;
+function rackLOD(name, parent) {
+  const g = new THREE.Group(); g.name = name; parent.add(g);
+  box(name + '_frame', M.frame_black, RKW, RKH, RKD, 0, RKH / 2, 0, g);
+  // slot plan: [count, height-U, material, prefix]
+  const plan = [
+    [3, 1, M.psu_face,     'power_shelf'],
+    [9, 1, M.compute_face, 'compute_tray'],
+    [9, 1, M.nvsw_face,    'nvswitch_tray'],
+    [9, 1, M.compute_face, 'compute_tray'],
+    [3, 1, M.psu_face,     'power_shelf'],
+    [1, 2, M.drive_face,   'storage_node'],
+    [1, 1, M.cabinet_gray, 'mgmt_tray'],
+    [2, 1, M.frame_black,  'tor_switch'],
+  ];
+  let u = 1; const counters = {};
+  for (const [count, hU, m, prefix] of plan) {
+    for (let i = 0; i < count; i++) {
+      const idx = counters[prefix] = (counters[prefix] ?? -1) + 1;
+      const y = 0.1 + (u - 1) * U + hU * U / 2;
+      box(name + '_' + prefix + '_' + idx, m, IW, hU * U - 0.006, 0.03, 0, y, RKD / 2 - 0.015, g);
+      box(name + '_' + prefix + '_' + idx + '_led', idx % 6 === 4 ? M.led_amber : M.led_green,
+          0.05, 0.006, 0.004, -0.18, y, RKD / 2 + 0.002, g);
+      u += hU;
+    }
+  }
+  box(name + '_blanking', M.panel_gray, IW, (48 - (u - 1)) * U, 0.02, 0, 0.1 + ((u - 1) + (48 - (u - 1)) / 2) * U, RKD / 2 - 0.012, g);
+  // rear: busbar + rack manifolds
+  box(name + '_busbar', M.copper, 0.05, 1.9, 0.03, 0, 1.15, -RKD / 2 + 0.08, g);
+  cylZ(name + '_manifold_supply', M.chw_supply, 0.025, 1.8, -0.22, 1.15, -RKD / 2 + 0.06, 'y', g);
+  cylZ(name + '_manifold_return', M.chw_return, 0.025, 1.8, 0.22, 1.15, -RKD / 2 + 0.06, 'y', g);
+  return g;
+}
+// row-level CDU rack
+function cduRack(name, parent) {
+  const g = new THREE.Group(); g.name = name; parent.add(g);
+  box(name + '_cabinet', M.panel_gray, RKW, RKH, RKD, 0, RKH / 2, 0, g);
+  box(name + '_screen', M.screen, 0.28, 0.16, 0.02, 0, 1.75, RKD / 2 + 0.005, g);
+  box(name + '_grille', M.frame_black, 0.4, 0.9, 0.02, 0, 0.65, RKD / 2 + 0.005, g);
+  box(name + '_led', M.led_green, 0.05, 0.008, 0.004, -0.18, 1.5, RKD / 2 + 0.008, g);
+  for (const [i, x] of [-0.14, 0.14].entries())
+    cylZ(name + '_pump_' + i, M.tray_silver, 0.09, 0.3, x, 0.35, 0, 'z', g);
+  box(name + '_hx', M.copper, 0.42, 0.7, 0.5, 0, 1.35, -0.2, g);
+  return g;
+}
+
+// ======================= cells ==========================================
+// Cell = 5 racks (CDU rack center), hot aisle at -z(rear), containment, overhead systems.
+const PITCH = 0.64, CELLX = 1.5;
+function cell(cellIdx, rowZ) {
+  const cn = 'cell' + String(cellIdx).padStart(2, '0');
+  const g = new THREE.Group(); g.name = cn; hall.add(g);
+  const rackXs = [];
+  for (let i = 0; i < 5; i++) {
+    const x = CELLX + (i - 2) * PITCH; rackXs.push(x);
+    if (i === 2) { cduRack(cn + '_cdu_rack', g).position.set(x, 0, rowZ); }
+    else {
+      const rn = cn + '_rack' + String(i < 2 ? i + 1 : i).padStart(2, '0');
+      rackLOD(rn, g).position.set(x, 0, rowZ);
+    }
+  }
+  const x0 = rackXs[0] - 0.5, x1 = rackXs[4] + 0.5, xc = CELLX;
+  // --- hot-aisle containment (rear, translucent) ---
+  const hz = rowZ - RKD / 2 - 0.55;
+  box(cn + '_containment_roof', M.glass, x1 - x0, 0.04, 1.1, xc, 2.62, hz, g);
+  box(cn + '_containment_back', M.glass, x1 - x0, 2.6, 0.04, xc, 1.3, hz - 0.55, g);
+  for (const [i, ex] of [x0, x1].entries()) {
+    box(cn + '_containment_door_' + i, M.glass, 0.05, 2.6, 1.1, ex, 1.3, hz, g);
+    box(cn + '_door_frame_' + i, M.sec_dark, 0.06, 0.08, 1.1, ex, 2.62, hz, g);
+  }
+  // --- PWR: overhead busway + tap-off drops ---
+  box('PWR_' + cn + '_busway', M.pwr_busway, x1 - x0 + 0.6, 0.14, 0.22, xc - 0.3, 3.0, rowZ - 0.5, g);
+  rackXs.forEach((x, i) => {
+    if (i === 2) return;
+    box('PWR_' + cn + '_tapbox_' + i, M.sec_dark, 0.18, 0.12, 0.24, x, 2.88, rowZ - 0.5, g);
+    cylZ('PWR_' + cn + '_drop_' + i, M.pwr_conduit, 0.02, 0.5, x, 2.57, rowZ - 0.5, 'y', g);
+  });
+  // --- CHW secondary: row headers from CDU rack + drops to each rack ---
+  for (const [nm, m, off] of [['supply', M.chw_supply, -0.15], ['return', M.chw_return, 0.15]]) {
+    cylZ('CHW_' + cn + '_row_header_' + nm, m, 0.05, x1 - x0, xc, 2.62 + 0.12, rowZ - 0.72 + off, 'x', g);
+    cylZ('CHW_' + cn + '_cdu_riser_' + nm, m, 0.045, 0.45, CELLX + off * 0.8, 2.52, rowZ - 0.5, 'y', g);
+    rackXs.forEach((x, i) => {
+      if (i === 2) return;
+      pipe('CHW_' + cn + '_drop_' + nm + '_' + i, m, 0.018,
+        [[x + off * 0.5, 2.72, rowZ - 0.72 + off], [x + off * 0.5, 2.15, rowZ - 0.72 + off], [x + off * 0.5, 2.05, rowZ - 0.52]], g);
+    });
+  }
+  // --- DATA: fiber tray over cold aisle + drops ---
+  box('DATA_' + cn + '_fiber_tray', M.data_tray, x1 - x0 + 3, 0.05, 0.3, xc - 1.5, 3.2, rowZ + 0.9, g);
+  cylZ('DATA_' + cn + '_trunk', M.fiber_aqua, 0.04, x1 - x0 + 3, xc - 1.5, 3.27, rowZ + 0.9, 'x', g);
+  rackXs.forEach((x, i) => {
+    if (i === 2) return;
+    pipe('DATA_' + cn + '_drop_' + i, M.fiber_aqua, 0.015,
+      [[x, 3.2, rowZ + 0.9], [x, 2.45, rowZ + 0.62], [x, 2.32, rowZ + 0.55]], g);
+  });
+  // --- FA: nozzles over aisles ---
+  for (const [i, nz] of [rowZ + 0.9, hz].entries())
+    for (const x of [xc - 1.1, xc + 1.1])
+      cylZ('FA_' + cn + '_nozzle_' + i + '_' + Math.round(x * 10), M.fire_red, 0.03, 0.12, x, 3.44, nz, 'y', g);
+  // --- SEC: low-voltage light bars ---
+  for (const [i, nz] of [rowZ + 0.9, hz].entries())
+    box('SEC_' + cn + '_lightbar_' + i, M.light_bar, x1 - x0, 0.03, 0.12, xc, 3.6, nz, g);
+  // --- BMS sensors: aisle temp/humidity pucks + leak ring under row ---
+  for (const [i, [sx, sz]] of [[x0, rowZ + 0.8], [x1, rowZ + 0.8], [xc, hz - 0.5]].entries())
+    box('BMS_' + cn + '_th_sensor_' + i, M.white_box, 0.08, 0.12, 0.04, sx, 1.6, sz, g);
+  box('BMS_' + cn + '_leak_ring', M.leak_ring, x1 - x0 + 0.3, 0.012, 0.05, xc, 0.05, rowZ - RKD / 2 - 0.15, g);
+  box('BMS_' + cn + '_leak_ring_f', M.leak_ring, x1 - x0 + 0.3, 0.012, 0.05, xc, 0.05, rowZ + RKD / 2 + 0.15, g);
+  return { rowZ, xc, x0, x1 };
+}
+const cellA = cell(1, -3.5);
+const cellB = cell(2, 3.5);
+
+// ======================= upstream power (electrical wing, z<0) =========
+{
+  const g = new THREE.Group(); g.name = 'power_train'; hall.add(g);
+  // outdoor: utility transformer + generator (west yard)
+  box('PWR_transformer', M.yard_steel, 1.6, 1.6, 1.4, -14.6, 0.8, -4, g);
+  for (let i = 0; i < 5; i++) box('PWR_transformer_fin_' + i, M.louver, 0.06, 1.2, 1.2, -15.45 + 0, 0.8, -4 - 0.5 + i * 0.25, g).position.x = -15.45;
+  box('PWR_generator', M.yard_steel, 3.2, 1.8, 1.4, -14.8, 0.9, -6.8, g);
+  box('PWR_generator_exhaust', M.sec_dark, 0.15, 0.7, 0.15, -13.8, 2.1, -6.8, g);
+  // indoor lineup: switchgear (3), UPS (2), battery cabinets (4), RPPs (2)
+  for (let i = 0; i < 3; i++) {
+    box('PWR_switchgear_' + i, M.cabinet_gray, 0.9, 2.2, 1.2, -12.2, 1.1, -6.5 + i * 1.1, g);
+    box('PWR_switchgear_' + i + '_screen', M.screen, 0.3, 0.15, 0.02, -12.2, 1.7, -5.88 + i * 1.1, g);
+  }
+  for (let i = 0; i < 2; i++) {
+    box('PWR_ups_' + i, M.ups_beige, 1.1, 2.0, 0.9, -10.2 + i * 1.3, 1.0, -6.6, g);
+    box('PWR_ups_' + i + '_screen', M.screen, 0.35, 0.2, 0.02, -10.2 + i * 1.3, 1.55, -6.14, g);
+  }
+  for (let i = 0; i < 4; i++)
+    box('PWR_battery_cab_' + i, M.battery_blue, 0.8, 2.0, 0.9, -10.6 + i * 0.95, 1.0, -4.4, g);
+  for (let i = 0; i < 2; i++)
+    box('PWR_rpp_' + i, M.cabinet_gray, 0.8, 2.0, 0.5, -6.6, 1.0, -3.0 + i * 1.6, g);
+  // conduit chain: transformer -> switchgear -> UPS -> batteries -> RPP -> busway feeds
+  pipe('PWR_feed_utility', M.pwr_conduit, 0.05, [[-14.6, 1.6, -4], [-12.2, 1.6, -4], [-12.2, 2.6, -4], [-12.2, 2.6, -5.4]], g);
+  pipe('PWR_feed_gen', M.pwr_conduit, 0.04, [[-14.8, 1.8, -6.8], [-12.2, 1.8, -6.8], [-12.2, 2.6, -6.8]], g);
+  pipe('PWR_sg_to_ups', M.pwr_conduit, 0.05, [[-12.2, 2.6, -6.0], [-12.2, 2.9, -6.0], [-10.2, 2.9, -6.0], [-10.2, 2.9, -6.6], [-10.2, 2.0, -6.6]], g);
+  pipe('PWR_ups_to_batt', M.pwr_conduit, 0.04, [[-8.9, 2.0, -6.6], [-8.9, 2.7, -6.6], [-8.9, 2.7, -4.4], [-8.9, 2.0, -4.4]], g);
+  pipe('PWR_ups_to_rpp', M.pwr_conduit, 0.05, [[-10.2, 2.0, -6.6], [-10.2, 3.1, -6.6], [-6.6, 3.1, -6.6], [-6.6, 3.1, -3.0], [-6.6, 2.0, -3.0]], g);
+  // busway feeds through partition to each cell busway
+  pipe('PWR_rpp_to_cell01', M.pwr_busway, 0.06, [[-6.6, 2.0, -3.0], [-6.6, 3.0, -3.0], [-6.6, 3.0, -4.0], [CELLX - 1.9, 3.0, -4.0]], g);
+  pipe('PWR_rpp_to_cell02', M.pwr_busway, 0.06, [[-6.6, 2.0, -1.4], [-6.6, 3.0, -1.4], [-6.6, 3.0, 3.0], [CELLX - 1.9, 3.0, 3.0]], g);
+}
+
+// ======================= upstream cooling (east yard) ===================
+{
+  const g = new THREE.Group(); g.name = 'cooling_plant'; hall.add(g);
+  // 2 air-cooled chiller / dry-cooler units
+  for (const [i, z] of [-3.5, 3.5].entries()) {
+    const b = 'CHW_drycooler_' + i;
+    box(b, M.yard_steel, 2.6, 1.7, 2.2, 12.2, 0.95, z, g);
+    for (const [j, fz] of [z - 0.55, z + 0.55].entries())
+      for (const [k, fx] of [11.6, 12.8].entries()) {
+        cylZ(b + '_fan_' + j + '_' + k, M.louver, 0.42, 0.1, fx, 1.85, fz, 'y', g);
+        cylZ(b + '_hub_' + j + '_' + k, M.tray_silver, 0.08, 0.14, fx, 1.87, fz, 'y', g);
+      }
+    for (let s = 0; s < 6; s++)
+      box(b + '_louver_' + s, M.louver, 0.04, 1.3, 2.0, 10.88, 0.95, z, g).position.y = 0.35 + s * 0.25;
+    box('BMS_drycooler_' + i + '_controller', M.white_box, 0.25, 0.35, 0.1, 12.2, 1.0, z + 1.16, g);
+  }
+  // pump skid + expansion tank
+  box('CHW_pump_skid', M.frame_black, 2.2, 0.15, 1.4, 10.6, 0.1, 0, g);
+  for (const [i, x] of [10.0, 11.2].entries()) {
+    cylZ('CHW_pump_' + i, M.chw_primary_s, 0.16, 0.5, x, 0.45, 0.3, 'z', g);
+    cylZ('CHW_pump_' + i + '_motor', M.yard_steel, 0.13, 0.35, x, 0.45, -0.25, 'z', g);
+  }
+  cylZ('CHW_expansion_tank', M.chw_primary_s, 0.28, 0.9, 10.6, 0.65, -1.4, 'y', g);
+  // primary loop: dry coolers -> yard headers -> pumps -> wall penetration
+  pipe('CHW_primary_supply_yard', M.chw_primary_s, 0.07,
+    [[12.2, 0.6, -3.5], [10.2, 0.6, -3.5], [10.2, 0.6, 0.3], [9.4, 0.6, 0.3], [9.4, 2.2, 0.3], [9.0, 2.2, 0.3]], g);
+  pipe('CHW_primary_supply_yard_b', M.chw_primary_s, 0.07,
+    [[12.2, 0.6, 3.5], [10.2, 0.6, 3.5], [10.2, 0.6, 0.3]], g);
+  pipe('CHW_primary_return_yard', M.chw_primary_r, 0.07,
+    [[9.0, 2.2, -0.3], [9.4, 2.2, -0.3], [9.4, 0.9, -0.3], [11.0, 0.9, -0.3], [11.0, 0.9, -3.5], [11.0, 0.6, -3.5]], g);
+  pipe('CHW_primary_return_yard_b', M.chw_primary_r, 0.07,
+    [[11.0, 0.9, -0.3], [11.0, 0.9, 3.5], [11.0, 0.6, 3.5]], g);
+  // inside hall: header along ceiling splitting to both cells
+  pipe('CHW_primary_supply_hall', M.chw_primary_s, 0.06,
+    [[9.0, 2.2, 0.3], [8.4, 3.1, 0.3], [CELLX + 0.1, 3.1, 0.3], [CELLX + 0.1, 3.1, -2.8], [CELLX + 0.1, 2.75, -3.0]], g);
+  pipe('CHW_primary_supply_hall_b', M.chw_primary_s, 0.06,
+    [[CELLX + 0.1, 3.1, 0.3], [CELLX + 0.1, 3.1, 4.2], [CELLX + 0.1, 2.75, 4.0]], g);
+  pipe('CHW_primary_return_hall', M.chw_primary_r, 0.06,
+    [[CELLX - 0.1, 2.75, -3.0], [CELLX - 0.1, 3.25, -2.8], [CELLX - 0.1, 3.25, 0], [8.4, 3.25, -0.3], [9.0, 2.2, -0.3]], g);
+  pipe('CHW_primary_return_hall_b', M.chw_primary_r, 0.06,
+    [[CELLX - 0.1, 2.75, 4.0], [CELLX - 0.1, 3.25, 3.8], [CELLX - 0.1, 3.25, 0]], g);
+  // isolation valves at each cell takeoff
+  for (const [i, z] of [-2.9, 3.9].entries()) {
+    cylZ('CHW_valve_supply_' + i, M.led_amber, 0.06, 0.1, CELLX + 0.1, 2.95, z, 'y', g);
+    cylZ('CHW_valve_return_' + i, M.led_amber, 0.06, 0.1, CELLX - 0.1, 2.95, z, 'y', g);
+  }
+}
+
+// ======================= HVAC ===========================================
+{
+  const g = new THREE.Group(); g.name = 'hvac'; hall.add(g);
+  for (const [i, z] of [-3.5, 3.5].entries()) {
+    box('AIR_crah_' + i, M.cabinet_light, 0.8, 2.4, 2.2, 8.5, 1.2, z, g);
+    box('AIR_crah_' + i + '_grille', M.louver, 0.05, 1.6, 1.8, 8.07, 1.0, z, g);
+    box('AIR_crah_' + i + '_top', M.air_duct, 0.6, 0.4, 0.6, 8.5, 2.6, z, g);
+    pipe('AIR_duct_' + i, M.air_duct, 0.18, [[8.5, 2.8, z], [8.5, 3.5, z], [6.0, 3.5, z], [4.4, 3.5, z]], g);
+    box('BMS_crah_' + i + '_controller', M.white_box, 0.2, 0.3, 0.06, 8.5, 1.9, z + 1.14, g);
+  }
+  // outside air handling unit on east slab + duct through wall
+  box('AIR_ahu_outdoor', M.cabinet_light, 2.0, 1.4, 1.2, 10.6, 0.75, 6.8, g);
+  pipe('AIR_ahu_duct', M.air_duct, 0.2, [[10.6, 1.5, 6.8], [10.6, 3.4, 6.8], [9.0, 3.4, 6.8], [8.2, 3.4, 6.0]], g);
+}
+
+// ======================= fire & life safety =============================
+{
+  const g = new THREE.Group(); g.name = 'fire_safety'; hall.add(g);
+  for (let i = 0; i < 3; i++)
+    cylZ('FA_agent_bottle_' + i, M.fire_red, 0.16, 1.5, -5.0 + i * 0.45, 0.75, 7.4, 'y', g);
+  box('FA_bottle_manifold', M.tray_silver, 1.2, 0.08, 0.08, -4.55, 1.6, 7.4, g);
+  // main overhead loop feeding both cell nozzle sets
+  pipe('FA_main_loop', M.fire_red, 0.035,
+    [[-4.55, 1.65, 7.4], [-4.55, 3.44, 7.4], [-4.55, 3.44, -4.6], [4.6, 3.44, -4.6], [4.6, 3.44, 4.4], [-1.5, 3.44, 4.4]], g);
+  box('FA_alarm_panel', M.fire_red, 0.5, 0.7, 0.12, -6.1, 1.6, 1.9, g);
+  box('FA_alarm_panel_screen', M.screen, 0.2, 0.12, 0.02, -6.02, 1.75, 1.9, g);
+  // VESDA aspirating pipes above each cell + smoke detectors
+  for (const [i, z] of [-2.6, 4.4].entries())
+    cylZ('FA_vesda_pipe_' + i, M.white_box, 0.02, 5.5, CELLX - 0.5, 3.72, z, 'x', g);
+  for (const [i, [x, z]] of [[-3, -6], [4, -6], [-3, 6], [4, 6], [7, 0]].entries())
+    cylZ('FA_smoke_det_' + i, M.white_box, 0.07, 0.05, x, 3.9, z, 'y', g);
+}
+
+// ======================= security & low voltage =========================
+{
+  const g = new THREE.Group(); g.name = 'security'; hall.add(g);
+  // personnel door (west wall into control room) + card reader + camera
+  box('SEC_entry_door', M.sec_dark, 0.08, 2.2, 1.0, -13.1, 1.1, 2.0, g);
+  box('SEC_card_reader_entry', M.white_box, 0.06, 0.14, 0.09, -13.2, 1.2, 2.75, g);
+  box('SEC_card_reader_entry_led', M.led_green, 0.02, 0.02, 0.095, -13.2, 1.3, 2.75, g);
+  // partition door data hall + reader
+  box('SEC_hall_door', M.sec_dark, 0.06, 2.2, 1.2, -6, 1.1, 1.2, g);
+  box('SEC_card_reader_hall', M.white_box, 0.05, 0.14, 0.09, -5.9, 1.2, 0.4, g);
+  box('SEC_card_reader_hall_led', M.led_green, 0.055, 0.02, 0.02, -5.9, 1.3, 0.4, g);
+  // cameras + motion detectors at hall corners
+  for (const [i, [x, z, ry]] of [[-5.5, -7.5, 0.7], [8.5, -7.5, 2.4], [8.5, 7.5, -2.4], [-5.5, 7.5, -0.7]].entries()) {
+    const cam = box('SEC_camera_' + i, M.sec_dark, 0.12, 0.12, 0.3, x, 3.6, z, g);
+    cam.rotation.y = ry;
+    box('SEC_motion_det_' + i, M.white_box, 0.09, 0.12, 0.07, x, 3.2, z, g);
+  }
+  // general hall lighting rows
+  for (const z of [-6.2, 0, 6.2])
+    box('SEC_lv_light_row_' + Math.round(z * 10), M.light_bar, 12, 0.03, 0.12, 1.5, 3.75, z, g);
+}
+
+// ======================= BMS / DCS control room (z>0 west wing) =========
+{
+  const g = new THREE.Group(); g.name = 'bms_scada'; hall.add(g);
+  const cabs = [['BMS_plc_cabinet_0', 1.4], ['BMS_plc_cabinet_1', 2.4], ['BMS_dcs_cabinet_0', 3.6], ['BMS_dcs_cabinet_1', 4.6], ['SEC_access_ctrl_cabinet', 5.8]];
+  for (const [nm, z] of cabs) {
+    box(nm, M.cabinet_gray, 0.7, 2.0, 0.6, -12.4, 1.0, z, g);
+    box(nm + '_door_leds', M.led_green, 0.04, 0.25, 0.02, -12.2, 1.55, z + 0.31, g);
+  }
+  // operator console: desk + 3 monitors
+  box('BMS_console_desk', M.cabinet_light, 2.2, 0.06, 0.9, -9.2, 0.75, 4.5, g);
+  for (let i = 0; i < 3; i++) {
+    box('BMS_console_monitor_' + i, M.screen, 0.55, 0.34, 0.03, -9.9 + i * 0.7, 1.1, 4.8, g);
+    box('BMS_console_stand_' + i, M.sec_dark, 0.06, 0.25, 0.06, -9.9 + i * 0.7, 0.9, 4.8, g);
+  }
+  for (const [i, x] of [-9.2, -8.4].entries())
+    box('BMS_console_leg_' + i, M.sec_dark, 0.05, 0.72, 0.05, x - 0.4, 0.36, 4.5, g);
+  // wall SCADA display
+  box('BMS_wall_display', M.screen, 1.8, 1.0, 0.06, -12.9, 2.0, 3.0, g).rotation.y = Math.PI / 2;
+}
+
+const bb = new THREE.Box3().setFromObject(hall);
+hall.position.y = -bb.min.y;
+stage.setObject(hall);
+stage._loop && stage._loop();  // hidden iframes never tick rAF
+</script>
+</body>
+</html>

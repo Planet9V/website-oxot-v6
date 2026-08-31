@@ -1,0 +1,1573 @@
+{
+  "meta": {
+    "source": "WP06_enhanced.md (cooling architecture), WP09_enhanced.md (node analysis, CyHAZOPs hazard logs), WP10_enhanced.md (ALE / ROSI); WP16_ConOps_MOR.md (operating modes, MoR registers); WP08_Fat_Tail_Risk.md (MITRE mapping)",
+    "role": "Authored redundancy, timing thresholds, failure modes and consequence values. Overrides anything the model infers.",
+    "note": "RPN-C = severity x occurrence-cyber x detection-cyber, per the CyHAZOPs method in WP09. MITRE identifiers are ATT&CK for ICS technique IDs.",
+    "revenue_basis": {
+      "facility_mw": 100,
+      "blended_rate_usd_per_kwh": 12.5,
+      "revenue_usd_per_hour_full_capacity": 12500000,
+      "annual_revenue_usd": 1095000000,
+      "per_mw_hour_usd": 125000,
+      "source": "WP10 section 2.2",
+      "cell_structure": {
+        "source": "WP06 section 3.2 — pod/cell architecture",
+        "cell_mw_range": "5-10 MW power/cooling block, deployed and operated independently",
+        "contains": [
+          "independent MV/LV power train",
+          "dedicated chiller/CDU cluster",
+          "independent BMS zone controller",
+          "independent fire detection and suppression",
+          "dedicated OT network segment"
+        ],
+        "isolation": "Cell-level isolation creates IEC 62443 zones inherently. A compromise in one cell does not propagate to another provided the cells are on separate OT segments with no shared management plane.",
+        "modelled_cell": {
+          "racks": 48,
+          "rack_kw": 120,
+          "it_load_mw": 5.76,
+          "total_load_mw": 6.91,
+          "pue": 1.2,
+          "revenue_usd_per_hour": 720000,
+          "per_rack_hour_usd": 15000,
+          "note": "The model contains TWO cells of 48 racks each (rows 01-03 = Cell A, rows 04-06 = Cell B). At 6.91 MW total load per cell this sits inside the stated 5-10 MW band. Campus figures are one cell multiplied by the cell count."
+        },
+        "cells_per_campus": 14.5,
+        "cells_in_model": [
+          {
+            "id": "Cell A",
+            "rows": [
+              "row01",
+              "row02",
+              "row03"
+            ],
+            "racks": 48,
+            "it_load_mw": 5.76,
+            "total_load_mw": 6.91
+          },
+          {
+            "id": "Cell B",
+            "rows": [
+              "row04",
+              "row05",
+              "row06"
+            ],
+            "racks": 48,
+            "it_load_mw": 5.76,
+            "total_load_mw": 6.91
+          }
+        ],
+        "cells_per_campus_note": "100 MW campus / 6.91 MW total load per cell = 14.5 cells. An earlier revision used 8.7, which came from treating the whole 96-rack hall as one cell."
+      },
+      "correction": "Two corrections. (1) An earlier revision divided the whole 100 MW campus revenue across 96 racks, giving $130K/rack-hour — the cell basis gives $15K/rack-hour. (2) The 96-rack hall was then treated as a single 11.52 MW cell, above the stated 5-10 MW band; it is two cells of 48 racks, so per-cell consequence halves and the campus cell count rises from 8.7 to 14.5.",
+      "scope_note": "WP10 node ALEs are campus-wide worst case (all cells affected). Cell isolation is the control that prevents that. A single-cell event is roughly 1/14.5 of the WP10 figure. Report both. The N2 and N8 ratios landing on exactly 8.7 against the old single-cell reading was an artefact of the wrong cell size, not confirmation."
+    },
+    "coverage": {
+      "nodes_with_hazards": [
+        "N2",
+        "N5",
+        "N6"
+      ],
+      "hazards": 11,
+      "critical_items": 15,
+      "mor_requirements": 16,
+      "note": "WP09 provides worked hazard logs for six nodes; N2, N5 and N6 are transcribed. N8, N10 and N14 have ALE and controls but no hazard rows yet.",
+      "reconciliation": [
+        {
+          "node": "N2",
+          "scenario": "all UPS offline 4 h",
+          "wp10_av_usd": 50000000,
+          "one_cell_usd": 5760000,
+          "ratio": 8.7,
+          "reading": "WP10 assumes every cell loses UPS simultaneously — the shared-management-plane case cell isolation is designed to prevent."
+        },
+        {
+          "node": "N5",
+          "scenario": "thermal excursion 6 h",
+          "wp10_av_usd": 25000000,
+          "one_cell_usd": 8640000,
+          "ratio": 2.9,
+          "reading": "Closest to single-cell scale; central chiller plant is genuinely shared across cells, so partial campus impact is credible."
+        },
+        {
+          "node": "N6",
+          "scenario": "8 racks offline 2 h",
+          "wp10_av_usd": 6250000,
+          "one_cell_usd": 240000,
+          "ratio": 26,
+          "reading": "WP10 values 16 rack-hours at $390K/rack-hour. Either the GPU damage is double-counted in the revenue line, or the outage is wider than 8 racks. Worth resolving at source."
+        },
+        {
+          "node": "N8",
+          "scenario": "facility blind 8 h",
+          "wp10_av_usd": 100000000,
+          "one_cell_usd": 11520000,
+          "ratio": 8.7,
+          "reading": "Explicitly campus-wide — a single BMS serving all cells. If BMS is per-cell as WP06 states, this is 1/8.7 per cell."
+        }
+      ]
+    },
+    "safeguard_summary": {
+      "count": 8,
+      "p1_count": 5,
+      "p1_fixed_capex_usd": 200000,
+      "unit_priced": [
+        {
+          "safeguard": "Hardwired BMS overvoltage protection relay (SIL-",
+          "cost_usd": 30000,
+          "basis": "per battery string"
+        },
+        {
+          "safeguard": "Specify SL-2 certified NMC in procurement; valid",
+          "cost_usd": 0,
+          "basis": "no incremental cost"
+        },
+        {
+          "safeguard": "VFD Modbus write-enable gated by a physical keys",
+          "cost_usd": 5000,
+          "basis": "per VFD"
+        }
+      ],
+      "note": "WP09 Tables 9.4 and 9.7 price safeguards per hazard. These are hazard-level remediations; the WP10 controls block is the portfolio view. Some are unit-priced (per VFD, per battery string) so campus totals depend on quantities.",
+      "systemic_finding": "WP09 conclusion: protocol-level insecurity of BACnet/IP and Modbus TCP is the single greatest systemic risk across all nodes. Telemetry integrity (SPOOFED) produces the highest cyber RPNs."
+    },
+    "counts": {
+      "assets": 449,
+      "connections": 1155,
+      "routes": 1155
+    }
+  },
+  "node_crosswalk": {
+    "N2": {
+      "label": "UPS power conversion (distributed block)",
+      "zone": "Zone 2: Electrical",
+      "sl_t": "SL 3",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d",
+        "battery",
+        "battery_b",
+        "sts"
+      ]
+    },
+    "N5": {
+      "label": "Central chiller plant and heat rejection",
+      "zone": "Zone 1: BMS/HVAC",
+      "sl_t": "SL 2-3",
+      "assets": [
+        "chiller",
+        "chiller_b",
+        "chiller_c",
+        "chiller_ctl",
+        "tower",
+        "tower_b",
+        "pump",
+        "pump_b",
+        "vfd",
+        "vfd_b",
+        "drycooler",
+        "drycooler_b"
+      ]
+    },
+    "N6": {
+      "label": "CDU and technology cooling system",
+      "zone": "Zone 1: BMS/HVAC",
+      "sl_t": "SL 3",
+      "assets": [
+        "row01_cdu",
+        "row01_cdu_plc",
+        "row02_cdu",
+        "row02_cdu_plc",
+        "row03_cdu",
+        "row03_cdu_plc",
+        "row04_cdu",
+        "row04_cdu_plc",
+        "row05_cdu",
+        "row05_cdu_plc",
+        "row06_cdu",
+        "row06_cdu_plc",
+        "fws_spine"
+      ]
+    },
+    "N8": {
+      "label": "Building management system",
+      "zone": "Zone 1",
+      "sl_t": "SL 3",
+      "assets": [
+        "bms_ebi",
+        "bms_metasys",
+        "app_bms",
+        "app_hvac",
+        "app_cooling",
+        "gw",
+        "ot_sw",
+        "dcim"
+      ]
+    },
+    "N10": {
+      "label": "Fire detection and suppression",
+      "zone": "Zone 4 (SIS)",
+      "sl_t": "SL 2-3",
+      "assets": [
+        "facp",
+        "bottles",
+        "row01_vesda",
+        "row01_nozzle_0",
+        "epo",
+        "app_fire",
+        "app_supp"
+      ]
+    },
+    "N14": {
+      "label": "Baseboard management controller estate",
+      "zone": "Zone 0 (IT)",
+      "sl_t": "SL 2",
+      "assets": [
+        "rack1_mgmt",
+        "rack1_compute",
+        "kvm",
+        "oob"
+      ]
+    },
+    "_confirm": "Crosswalk proposed from the WP09 node descriptions — confirm before relying on the ALE figures."
+  },
+  "redundancy": {
+    "_rule": "Authored from WP06 Table 6.5 and the WP09 critical items lists. Overrides the feed-count inference in the cascade.",
+    "row01_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      },
+      "note": "Row CDU is a single unit with internal N+1 pumps. Internal redundancy does not survive loss of the unit, so the row has no fallback."
+    },
+    "row02_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      }
+    },
+    "row03_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      }
+    },
+    "row04_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      }
+    },
+    "row05_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      }
+    },
+    "row06_cdu": {
+      "internal_pumps": "N+1",
+      "service_override": {
+        "water": "all-of"
+      }
+    },
+    "chiller": {
+      "plant_config": "N+1 (3 units, 2 required)"
+    },
+    "chiller_b": {
+      "plant_config": "N+1 (3 units, 2 required)"
+    },
+    "chiller_c": {
+      "plant_config": "N+1 (3 units, 2 required)"
+    },
+    "ups": {
+      "config": "2N+1",
+      "note": "WP09 N2: distributed block architecture"
+    },
+    "ups_b": {
+      "config": "2N+1"
+    },
+    "ups_c": {
+      "config": "2N+1"
+    },
+    "ups_d": {
+      "config": "2N+1"
+    },
+    "_cdu_vendor_reference": {
+      "CoolIT CHx2000": "N+N hot-swappable with ultracapacitor ride-through",
+      "Vertiv CoolChip 2300": "N+2 with VSD",
+      "Motivair MCDU-70": "N+1 VFD",
+      "Schneider Uniflair L2L": "built-in N+1",
+      "Boyd ROL4000": "N+1 seal-less"
+    }
+  },
+  "timing": {
+    "_source": "WP06 abstract and section 3",
+    "dlc_throttle_seconds": 45,
+    "dlc_shutdown_seconds": 90,
+    "air_cooled_margin_minutes": 5,
+    "generator_start_seconds": 10,
+    "generator_load_transfer_seconds": 15,
+    "note": "At densities above 80 kW/rack a CDU pump failure throttles GPUs within 45 s and forces protective shutdown within 90 s. Air cooling at 20 kW/rack provides minutes, not seconds."
+  },
+  "hazards": [
+    {
+      "id": "N2-CY-001",
+      "node": "N2",
+      "guide_word": "NO",
+      "parameter": "Power output",
+      "deviation": "All UPS blocks offline simultaneously",
+      "cyber_cause": "Ransomware encrypts all NMC firmware via shared VLAN",
+      "mitre": "T0826",
+      "consequence": "Total IT load loss; generator start delay 10-15 s",
+      "severity": 9,
+      "occurrence": 4,
+      "detection": 6,
+      "rpn": 216,
+      "sl_t": "SL-2",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "id": "N2-CY-002",
+      "node": "N2",
+      "guide_word": "COORDINATED",
+      "parameter": "Power output",
+      "deviation": "All blocks forced to bypass simultaneously",
+      "cyber_cause": "Attacker sends bypass command via Modbus TCP to all NMCs",
+      "mitre": "T0858",
+      "consequence": "IT load on raw utility power; no UPS protection",
+      "severity": 8,
+      "occurrence": 5,
+      "detection": 5,
+      "rpn": 200,
+      "sl_t": "SL-2",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d",
+        "sts"
+      ]
+    },
+    {
+      "id": "N2-CY-003",
+      "node": "N2",
+      "guide_word": "SPOOFED",
+      "parameter": "Battery SOC",
+      "deviation": "False battery state-of-charge reporting",
+      "cyber_cause": "Attacker modifies SOC register to report 100% when depleted",
+      "mitre": "T0856",
+      "consequence": "Operator believes backup is available; next utility event drops the load",
+      "severity": 9,
+      "occurrence": 3,
+      "detection": 8,
+      "rpn": 216,
+      "sl_t": "SL-2",
+      "assets": [
+        "battery",
+        "battery_b"
+      ]
+    },
+    {
+      "id": "N2-CY-004",
+      "node": "N2",
+      "guide_word": "MORE",
+      "parameter": "Charge voltage",
+      "deviation": "Overcharge of Li-ion battery string",
+      "cyber_cause": "Attacker modifies charge voltage setpoint via BMS Modbus",
+      "mitre": "T0836",
+      "consequence": "Thermal runaway; fire; toxic gas; EPO activation",
+      "severity": 10,
+      "occurrence": 2,
+      "detection": 7,
+      "rpn": 140,
+      "sl_t": "SL-3",
+      "assets": [
+        "battery",
+        "battery_b",
+        "h2_sensor",
+        "h2_fan"
+      ]
+    },
+    {
+      "id": "N2-CY-005",
+      "node": "N2",
+      "guide_word": "PERSISTED",
+      "parameter": "Firmware",
+      "deviation": "NMC firmware contains persistent implant",
+      "cyber_cause": "Supply chain compromise of NMC firmware image",
+      "mitre": "T0839",
+      "consequence": "Implant survives factory reset; persistent access",
+      "severity": 8,
+      "occurrence": 2,
+      "detection": 9,
+      "rpn": 144,
+      "sl_t": "SL-3",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "id": "N5-CY-001",
+      "node": "N5",
+      "guide_word": "NO",
+      "parameter": "Chilled water flow",
+      "deviation": "All CHW pumps offline",
+      "cyber_cause": "Attacker sends stop command to all pump VFDs via Modbus TCP",
+      "mitre": "T0855",
+      "consequence": "Zero cooling capacity; GPU throttling in 2-5 min; shutdown in 10-15 min",
+      "severity": 10,
+      "occurrence": 3,
+      "detection": 5,
+      "rpn": 150,
+      "sl_t": "SL-2",
+      "assets": [
+        "pump",
+        "pump_b",
+        "vfd",
+        "vfd_b"
+      ]
+    },
+    {
+      "id": "N5-CY-002",
+      "node": "N5",
+      "guide_word": "MORE",
+      "parameter": "CHW supply temp",
+      "deviation": "Supply temperature raised above design basis",
+      "cyber_cause": "Attacker modifies chiller leaving water setpoint from 7 C to 20 C",
+      "mitre": "T0836",
+      "consequence": "Insufficient cooling; CDUs cannot maintain TCS temperature; gradual thermal drift",
+      "severity": 8,
+      "occurrence": 5,
+      "detection": 4,
+      "rpn": 160,
+      "sl_t": "SL-2",
+      "assets": [
+        "chiller_ctl",
+        "chiller",
+        "chiller_b",
+        "chiller_c"
+      ]
+    },
+    {
+      "id": "N5-CY-003",
+      "node": "N5",
+      "guide_word": "SPOOFED",
+      "parameter": "CHW supply temp",
+      "deviation": "Operator sees 7 C while actual is 20 C",
+      "cyber_cause": "Attacker intercepts BACnet sensor value; spoofs normal reading to BMS",
+      "mitre": "T0856",
+      "consequence": "Operator unaware of thermal drift; damage occurs before detection",
+      "severity": 9,
+      "occurrence": 3,
+      "detection": 9,
+      "rpn": 243,
+      "sl_t": "SL-3",
+      "assets": [
+        "chiller_ctl",
+        "gw",
+        "bms_ebi"
+      ]
+    },
+    {
+      "id": "N5-CY-004",
+      "node": "N5",
+      "guide_word": "COORDINATED",
+      "parameter": "Chiller + tower",
+      "deviation": "All chillers tripped AND cooling tower fans disabled",
+      "cyber_cause": "Simultaneous BACnet commands to chiller controllers and tower VFDs",
+      "mitre": "T0831",
+      "consequence": "Complete loss of heat rejection; campus-wide thermal emergency",
+      "severity": 10,
+      "occurrence": 2,
+      "detection": 6,
+      "rpn": 120,
+      "sl_t": "SL-3",
+      "assets": [
+        "chiller",
+        "chiller_b",
+        "chiller_c",
+        "tower",
+        "tower_b",
+        "tower_vfd"
+      ]
+    },
+    {
+      "id": "N5-CY-005",
+      "node": "N5",
+      "guide_word": "REVERSE",
+      "parameter": "Staging logic",
+      "deviation": "Chillers unloaded during peak demand",
+      "cyber_cause": "Attacker modifies plant optimiser demand signal",
+      "mitre": "T0836",
+      "consequence": "Capacity removed when most needed; thermal excursion during peak AI training load",
+      "severity": 8,
+      "occurrence": 4,
+      "detection": 6,
+      "rpn": 192,
+      "sl_t": "SL-2",
+      "assets": [
+        "app_cooling",
+        "chiller_ctl"
+      ]
+    },
+    {
+      "id": "N6-CY-003",
+      "node": "N6",
+      "guide_word": "SPOOFED",
+      "parameter": "TCS return temperature",
+      "deviation": "BMS reads artificially low return temperature while actual supply temperature rises",
+      "cyber_cause": "Attacker writes to CDU Modbus holding registers; BMS has no independent measurement to validate against",
+      "mitre": "T0856",
+      "consequence": "BMS reduces chiller output, amplifying the thermal excursion instead of correcting it; GPU throttling begins before the independent high-temperature trip fires",
+      "severity": 9,
+      "occurrence": 7,
+      "detection": 4.67,
+      "rpn": 294,
+      "sl_t": "SL-3",
+      "assets": [
+        "row01_cdu_plc",
+        "row02_cdu_plc",
+        "row03_cdu_plc",
+        "row04_cdu_plc",
+        "row05_cdu_plc",
+        "row06_cdu_plc",
+        "bms_ebi",
+        "gw"
+      ],
+      "note": "Highest cyber RPN in the WP09 hazard log; cyber multiplier 13.4x over the mechanical equivalent. Telemetry integrity is the controlling security property."
+    }
+  ],
+  "critical_items": [
+    {
+      "component": "UPS NMC (Schneider NMC3)",
+      "node": "N2",
+      "function": "Remote monitoring and control",
+      "ot_interface": "SNMP v3, Modbus TCP, HTTPS",
+      "sl_a": "SL-2",
+      "failure_mode": "Firmware compromise leading to remote power control",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "component": "Battery management system",
+      "node": "N2",
+      "function": "Charge/discharge management; cell balancing",
+      "ot_interface": "Modbus to NMC",
+      "sl_a": "none",
+      "failure_mode": "Overcharge leading to thermal runaway (Li-ion)",
+      "assets": [
+        "battery",
+        "battery_b"
+      ]
+    },
+    {
+      "component": "Static bypass switch",
+      "node": "N2",
+      "function": "Bypass UPS for maintenance",
+      "ot_interface": "Hardware plus NMC command",
+      "sl_a": "n/a",
+      "failure_mode": "Premature bypass leaving unprotected load",
+      "assets": [
+        "sts"
+      ]
+    },
+    {
+      "component": "CDU controller (PLC)",
+      "node": "N6",
+      "function": "Flow, temperature and pump control",
+      "ot_interface": "Modbus TCP / BACnet to BMS",
+      "sl_a": "no vendor certified",
+      "failure_mode": "GPU thermal shutdown in 45-90 s",
+      "assets": [
+        "row01_cdu_plc",
+        "row02_cdu_plc",
+        "row03_cdu_plc",
+        "row04_cdu_plc",
+        "row05_cdu_plc",
+        "row06_cdu_plc"
+      ]
+    },
+    {
+      "component": "CRAH unit controller",
+      "node": "N5",
+      "function": "Fan speed and chilled water valve control",
+      "ot_interface": "BACnet/IP or Modbus TCP to BMS",
+      "sl_a": "no vendor holds 62443-4-2 certification",
+      "failure_mode": "Loss of precision cooling",
+      "assets": [
+        "crah_ctl",
+        "itroom_crac_ctl"
+      ]
+    },
+    {
+      "component": "Chilled water valve (motorised)",
+      "node": "N5",
+      "function": "Flow modulation",
+      "ot_interface": "BACnet / Modbus from BMS",
+      "sl_a": "no certification",
+      "failure_mode": "Valve driven closed; loss of cooling",
+      "assets": [
+        "chiller_ctl"
+      ]
+    },
+    {
+      "component": "Pump VFD",
+      "node": "N5",
+      "function": "Variable speed pump drive",
+      "ot_interface": "Modbus RTU to local controller",
+      "sl_a": "no certification",
+      "failure_mode": "Speed command manipulation; loss of flow",
+      "assets": [
+        "vfd",
+        "vfd_b",
+        "crah_vfd",
+        "tower_vfd"
+      ]
+    },
+    {
+      "component": "Centrifugal chiller (York YZ / Trane CTV)",
+      "node": "N5",
+      "function": "Generate chilled water",
+      "ot_interface": "BACnet/IP controller",
+      "sl_a": "SL-1 (York only)",
+      "failure_mode": "Compressor trip leading to capacity reduction",
+      "assets": [
+        "chiller",
+        "chiller_b",
+        "chiller_c"
+      ]
+    },
+    {
+      "component": "Chiller plant optimiser",
+      "node": "N5",
+      "function": "Staging, sequencing, setpoint",
+      "ot_interface": "BACnet/IP to BMS",
+      "sl_a": "none",
+      "failure_mode": "Wrong staging leading to insufficient capacity",
+      "assets": [
+        "app_cooling"
+      ]
+    },
+    {
+      "component": "Cooling tower (BAC / Evapco)",
+      "node": "N5",
+      "function": "Heat rejection to atmosphere",
+      "ot_interface": "Modbus / Profibus VFD",
+      "sl_a": "none",
+      "failure_mode": "Fan failure leading to condenser pressure rise",
+      "assets": [
+        "tower",
+        "tower_b",
+        "tower_vfd"
+      ]
+    },
+    {
+      "component": "Primary CHW pump and VFD",
+      "node": "N5",
+      "function": "Circulate chilled water",
+      "ot_interface": "Modbus RTU/TCP",
+      "sl_a": "none",
+      "failure_mode": "Pump failure leading to flow loss",
+      "assets": [
+        "pump",
+        "pump_b",
+        "vfd",
+        "vfd_b"
+      ]
+    },
+    {
+      "component": "CHW supply temperature sensor",
+      "node": "N5",
+      "function": "Measure supply temperature",
+      "ot_interface": "Analog 4-20 mA to DDC",
+      "sl_a": "n/a",
+      "failure_mode": "Drift leading to incorrect staging",
+      "assets": [
+        "chiller_ctl"
+      ]
+    },
+    {
+      "component": "CDU pump array (N+1)",
+      "node": "N6",
+      "function": "Circulate TCS coolant",
+      "ot_interface": "Modbus RTU from PLC",
+      "sl_a": "none",
+      "failure_mode": "Flow loss leading to thermal throttle at 45 s",
+      "assets": [
+        "row01_cdu",
+        "row02_cdu",
+        "row03_cdu",
+        "row04_cdu",
+        "row05_cdu",
+        "row06_cdu"
+      ]
+    },
+    {
+      "component": "FWS control valve (FCV)",
+      "node": "N6",
+      "function": "Modulate FWS to maintain TCS temperature",
+      "ot_interface": "BACnet / Modbus from BMS",
+      "sl_a": "none",
+      "failure_mode": "Valve position leading to temperature deviation",
+      "assets": [
+        "fws_spine"
+      ]
+    },
+    {
+      "component": "TCS supply temperature sensor",
+      "node": "N6",
+      "function": "Measure coolant temperature to racks",
+      "ot_interface": "Analog / Modbus to PLC",
+      "sl_a": "n/a",
+      "failure_mode": "Drift leading to incorrect valve position",
+      "assets": [
+        "row01_tcs_supply",
+        "row02_tcs_supply",
+        "row03_tcs_supply"
+      ]
+    }
+  ],
+  "ale": [
+    {
+      "node": "N2",
+      "scenario": "Coordinated NMC ransomware; all blocks offline 4 hours",
+      "asset_value_usd": 50000000,
+      "ef": 0.8,
+      "sle_usd": 40000000,
+      "aro": 0.05,
+      "ale_usd": 2000000,
+      "basis": "IT revenue at $12.5M/hr x 4 hr"
+    },
+    {
+      "node": "N5",
+      "scenario": "Staging logic manipulation; 6-hour thermal excursion",
+      "asset_value_usd": 25000000,
+      "ef": 0.4,
+      "sle_usd": 10000000,
+      "aro": 0.1,
+      "ale_usd": 1000000,
+      "basis": "Throttled compute plus hardware stress"
+    },
+    {
+      "node": "N6",
+      "scenario": "Pump stop plus spoofed telemetry; 8 racks offline 2 hours, 4 GPUs damaged",
+      "asset_value_usd": 14250000,
+      "ef": 0.7,
+      "sle_usd": 9980000,
+      "aro": 0.15,
+      "ale_usd": 1500000,
+      "basis": "$8M GPU replacement plus $6.25M revenue"
+    },
+    {
+      "node": "N8",
+      "scenario": "Full BMS compromise; facility blind 8 hours",
+      "asset_value_usd": 100000000,
+      "ef": 0.5,
+      "sle_usd": 50000000,
+      "aro": 0.05,
+      "ale_usd": 2500000,
+      "basis": "Revenue at $12.5M/hr x 8 hr"
+    },
+    {
+      "node": "N10",
+      "scenario": "False suppression plus EPO; 72-hour recommissioning",
+      "asset_value_usd": 38000000,
+      "ef": 0.9,
+      "sle_usd": 34200000,
+      "aro": 0.02,
+      "ale_usd": 680000,
+      "basis": "$37.5M revenue plus $0.5M clean agent"
+    },
+    {
+      "node": "N14",
+      "scenario": "Persistent firmware implant; 30-day dwell, data exfiltration",
+      "asset_value_usd": 20000000,
+      "ef": 0.6,
+      "sle_usd": 12000000,
+      "aro": 0.1,
+      "ale_usd": 1200000,
+      "basis": "IP loss plus remediation"
+    }
+  ],
+  "ale_total_usd": 8880000,
+  "controls": [
+    {
+      "control": "OT network segmentation (SL-2 switches, zone firewalls)",
+      "nodes": [
+        "all"
+      ],
+      "annual_cost_usd": 500000,
+      "mitigation_rate": 0.6,
+      "ale_reduced_usd": 5330000,
+      "net_benefit_usd": 4830000,
+      "rosi": 9.66,
+      "mapping": "Conduits C0-1, C0-2; Zones 1-6",
+      "clause": "IEC 62443-3-2 ZCR 5"
+    },
+    {
+      "control": "Hardwired independent alarms (thermocouples, flow, not via BMS)",
+      "nodes": [
+        "N5",
+        "N6",
+        "N8"
+      ],
+      "annual_cost_usd": 200000,
+      "mitigation_rate": 0.5,
+      "ale_reduced_usd": 2500000,
+      "net_benefit_usd": 2300000,
+      "rosi": 11.5,
+      "mapping": "Zone 1 and 3 boundary",
+      "clause": "ASHRAE TC 9.9 rate-of-change; NFPA 76 off-gas detection"
+    },
+    {
+      "control": "SL-2 certified NMC procurement mandate",
+      "nodes": [
+        "N2"
+      ],
+      "annual_cost_usd": 50000,
+      "mitigation_rate": 0.7,
+      "ale_reduced_usd": 1400000,
+      "net_benefit_usd": 1350000,
+      "rosi": 27,
+      "mapping": "Zone 2",
+      "clause": "IEC 62443-4-2 FR1-FR7; ISASecure CSA"
+    },
+    {
+      "control": "Fire system physical isolation (one-way dry contacts)",
+      "nodes": [
+        "N10"
+      ],
+      "annual_cost_usd": 100000,
+      "mitigation_rate": 0.8,
+      "ale_reduced_usd": 540000,
+      "net_benefit_usd": 440000,
+      "rosi": 4.44,
+      "mapping": "Conduit C1-3",
+      "clause": "NFPA 75 Ch. 8 EPO; NFPA 855 Ch. 4"
+    },
+    {
+      "control": "CDU firmware write-protection plus hash verification",
+      "nodes": [
+        "N6"
+      ],
+      "annual_cost_usd": 150000,
+      "mitigation_rate": 0.6,
+      "ale_reduced_usd": 900000,
+      "net_benefit_usd": 750000,
+      "rosi": 5,
+      "mapping": "Zone 1",
+      "clause": "IEC 62443-4-2 CR 3.4; OCP S.A.F.E. Scope 1"
+    },
+    {
+      "control": "BMC firmware validation (OCP S.A.F.E.)",
+      "nodes": [
+        "N14"
+      ],
+      "annual_cost_usd": 200000,
+      "mitigation_rate": 0.5,
+      "ale_reduced_usd": 600000,
+      "net_benefit_usd": 400000,
+      "rosi": 2,
+      "mapping": "Zone 0 (IT)",
+      "clause": "OCP S.A.F.E. Scope 1-2; NIST SP 800-193"
+    },
+    {
+      "control": "Unidirectional gateways on CDU telemetry",
+      "nodes": [
+        "N6",
+        "N8"
+      ],
+      "annual_cost_usd": 300000,
+      "mitigation_rate": 0.7,
+      "ale_reduced_usd": 2800000,
+      "net_benefit_usd": 2500000,
+      "rosi": 8.33,
+      "mapping": "Conduit C0-1",
+      "clause": "IEC 62443-3-2 Conduit C0-1; data diode per IEC 62351"
+    },
+    {
+      "control": "BMS access control (MFA, audit logging, credential rotation)",
+      "nodes": [
+        "N8"
+      ],
+      "annual_cost_usd": 100000,
+      "mitigation_rate": 0.4,
+      "ale_reduced_usd": 1000000,
+      "net_benefit_usd": 900000,
+      "rosi": 9,
+      "mapping": "Zone 1",
+      "clause": "IEC 62443-4-2 FR1 (CR 1.1, CR 1.5, CR 2.8)"
+    }
+  ],
+  "cve_watch": [
+    {
+      "cve": "CVE-2025-3936",
+      "cvss": 9.8,
+      "product": "Honeywell Niagara < 4.14u2",
+      "impact": "Remote code execution on JACE controllers",
+      "assets": [
+        "bms_ebi",
+        "app_bms"
+      ]
+    },
+    {
+      "cve": "CVE-2025-26385",
+      "cvss": 10,
+      "product": "Johnson Controls Metasys ADS/ADX <= 14.1",
+      "impact": "SQL injection leading to chiller setpoint manipulation",
+      "assets": [
+        "bms_metasys",
+        "chiller_ctl"
+      ]
+    },
+    {
+      "cve": "CVE-2025-47809",
+      "cvss": 8.2,
+      "product": "Siemens Desigo CC (CodeMeter)",
+      "impact": "Privilege escalation to admin",
+      "assets": [
+        "app_hvac"
+      ]
+    },
+    {
+      "cve": "CVE-2026-1226",
+      "cvss": null,
+      "severity": "High",
+      "product": "Schneider EcoStruxure B.O. Workstation",
+      "impact": "XXE injection",
+      "assets": [
+        "app_power"
+      ]
+    }
+  ],
+  "operating_modes": [
+    {
+      "mode": "M1",
+      "name": "Normal operations",
+      "description": "All systems within design parameters; N+1 maintained"
+    },
+    {
+      "mode": "M2",
+      "name": "Planned maintenance",
+      "description": "Systems offline for scheduled work; reduced redundancy"
+    },
+    {
+      "mode": "M3",
+      "name": "Degraded — mechanical",
+      "description": "Capacity below N+1 but above MoR"
+    },
+    {
+      "mode": "M4",
+      "name": "Degraded — cyber",
+      "description": "Confirmed or suspected compromise; systems still functional"
+    },
+    {
+      "mode": "M5",
+      "name": "Graceful degradation",
+      "description": "Capacity reduced intentionally; IT load shedding"
+    },
+    {
+      "mode": "M6",
+      "name": "Emergency operations",
+      "description": "Life safety event; EPO may be activated"
+    },
+    {
+      "mode": "M7",
+      "name": "Emergency shutdown",
+      "description": "Full shutdown; cooling maintained for thermal rundown"
+    }
+  ],
+  "mor": [
+    {
+      "id": "MoR-P01",
+      "system": "Utility feed",
+      "minimum": "At least 1 of 2 independent feeds energised",
+      "ot_requirement": "EPMS monitoring of both feeds; protective relay status visible",
+      "violation_response": "M3; start generators to standby",
+      "assets": [
+        "grid",
+        "gis",
+        "epms"
+      ]
+    },
+    {
+      "id": "MoR-P02",
+      "system": "MV switchgear",
+      "minimum": "All bus sections energised; protective relays functional",
+      "ot_requirement": "IEC 61850 relay communication confirmed; relay firmware integrity verified",
+      "violation_response": "M3; engineering assessment within 4 hours",
+      "assets": [
+        "mv_swg",
+        "mv_swg_b",
+        "relay",
+        "relay_b"
+      ]
+    },
+    {
+      "id": "MoR-P03",
+      "system": "UPS blocks",
+      "minimum": "N blocks serving N-1 load (one block may be offline)",
+      "ot_requirement": "NMC accessible; battery SOC independently verified; firmware baseline matched",
+      "violation_response": "M3 if mechanical; M4 if NMC compromise suspected",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "id": "MoR-P04",
+      "system": "Generator sets",
+      "minimum": "All generators available (tested within 30 days); fuel for 48 h",
+      "ot_requirement": "Generator controller communication confirmed; load test data current",
+      "violation_response": "M3; emergency fuel contract activation",
+      "assets": [
+        "gen",
+        "gen_b",
+        "gen_c",
+        "gen_ctl",
+        "fuel_tank"
+      ]
+    },
+    {
+      "id": "MoR-P05",
+      "system": "ATS / STS",
+      "minimum": "All transfer switches functional; tested within 90 days",
+      "ot_requirement": "Controller firmware integrity verified; transfer time under 10 ms confirmed",
+      "violation_response": "M3; manual transfer procedure available",
+      "assets": [
+        "ats",
+        "ats_b",
+        "sts"
+      ]
+    },
+    {
+      "id": "MoR-C01",
+      "system": "Central chiller plant",
+      "minimum": "N of N+1 chillers operational",
+      "ot_requirement": "Chiller controller communication confirmed; setpoints within design range",
+      "violation_response": "M3; begin IT load assessment",
+      "assets": [
+        "chiller",
+        "chiller_b",
+        "chiller_c",
+        "chiller_ctl"
+      ]
+    },
+    {
+      "id": "MoR-C02",
+      "system": "Cooling towers / dry coolers",
+      "minimum": "Sufficient heat rejection for N chiller load",
+      "ot_requirement": "Tower fan VFD control confirmed; basin water level sensors functional",
+      "violation_response": "M3",
+      "assets": [
+        "tower",
+        "tower_b",
+        "drycooler",
+        "drycooler_b",
+        "tower_vfd"
+      ]
+    },
+    {
+      "id": "MoR-C03",
+      "system": "CDU (per hall)",
+      "minimum": "All CDUs serving active IT load operational",
+      "ot_requirement": "CDU controller accessible; supply/return delta-T within 2 C of design; flow sensors calibrated",
+      "violation_response": "M3/M5 — CDU failure means immediate GPU throttle",
+      "assets": [
+        "row01_cdu",
+        "row02_cdu",
+        "row03_cdu",
+        "row04_cdu",
+        "row05_cdu",
+        "row06_cdu"
+      ]
+    },
+    {
+      "id": "MoR-C04",
+      "system": "TCS water quality",
+      "minimum": "Conductivity under 1 uS/cm; pH 6.5-7.5; oxygen under 20 ppb",
+      "ot_requirement": "Water quality analyser communication confirmed; trend data logging",
+      "violation_response": "M3; water treatment investigation",
+      "assets": [
+        "wts_plc"
+      ]
+    },
+    {
+      "id": "MoR-C05",
+      "system": "CRAH / AHU",
+      "minimum": "N of N+1 units per zone",
+      "ot_requirement": "BACnet communication confirmed; discharge air temperature within 2 C of setpoint",
+      "violation_response": "M3",
+      "assets": [
+        "crah",
+        "crah_b",
+        "crah_c",
+        "crah_ctl",
+        "ahu"
+      ]
+    },
+    {
+      "id": "MoR-S01",
+      "system": "BMS supervisory",
+      "minimum": "Primary BMS operational; backup hot-standby confirmed",
+      "ot_requirement": "BMS network connectivity verified; polling all endpoints; alarm system functional",
+      "violation_response": "M4 — BMS compromise means loss of visibility",
+      "assets": [
+        "bms_ebi",
+        "bms_metasys",
+        "app_bms"
+      ]
+    },
+    {
+      "id": "MoR-S02",
+      "system": "Fire detection",
+      "minimum": "All detection zones reporting; none masked or inhibited",
+      "ot_requirement": "Fire panel communication confirmed; detector count matches baseline",
+      "violation_response": "M6 if unavailable; evacuation",
+      "assets": [
+        "facp",
+        "row01_vesda"
+      ]
+    },
+    {
+      "id": "MoR-S03",
+      "system": "Fire suppression",
+      "minimum": "Pre-action valves armed; clean agent cylinders charged",
+      "ot_requirement": "Suppression controller status confirmed via hardwired annunciation, not the OT network",
+      "violation_response": "M6 if unavailable",
+      "assets": [
+        "bottles",
+        "row01_nozzle_0"
+      ]
+    },
+    {
+      "id": "MoR-S04",
+      "system": "EPO system",
+      "minimum": "All EPO stations functional and tested",
+      "ot_requirement": "EPO is hardwired — no OT dependency by design",
+      "violation_response": "M7 if inoperable",
+      "assets": [
+        "epo"
+      ]
+    },
+    {
+      "id": "MoR-S05",
+      "system": "Physical security",
+      "minimum": "All access control zones operational; CCTV recording",
+      "ot_requirement": "Access control communication confirmed; no unauthorised access events",
+      "violation_response": "M4 if perimeter breach detected",
+      "assets": [
+        "acs",
+        "app_vms",
+        "cctv_nvr",
+        "pids"
+      ]
+    },
+    {
+      "id": "MoR-S06",
+      "system": "OT network monitoring",
+      "minimum": "OT IDS operational; passive TAP/SPAN feeds confirmed",
+      "ot_requirement": "IDS sensor connectivity verified; log forwarding to SOC confirmed",
+      "violation_response": "M4 — loss of OT visibility is assumed compromise",
+      "assets": [
+        "ids",
+        "siem_col"
+      ]
+    }
+  ],
+  "safeguards": [
+    {
+      "hazards": [
+        "N2-CY-001",
+        "N2-CY-002"
+      ],
+      "node": "N2",
+      "priority": "P1",
+      "cost_usd": 50000,
+      "cost_basis": "per campus",
+      "safeguard": "Isolate NMCs on a dedicated management VLAN; segment blocks A/B onto separate VLANs",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "hazards": [
+        "N2-CY-003"
+      ],
+      "node": "N2",
+      "priority": "P2",
+      "cost_usd": 20000,
+      "cost_basis": "per campus",
+      "safeguard": "Independent battery monitoring not via the NMC; physical battery load test schedule",
+      "assets": [
+        "battery",
+        "battery_b"
+      ]
+    },
+    {
+      "hazards": [
+        "N2-CY-004"
+      ],
+      "node": "N2",
+      "priority": "P1",
+      "cost_usd": 30000,
+      "cost_basis": "per battery string",
+      "safeguard": "Hardwired BMS overvoltage protection relay (SIL-2), independent of the software setpoint",
+      "assets": [
+        "battery",
+        "battery_b"
+      ],
+      "note": "SIL-2 hardwired — survives compromise of the setpoint path."
+    },
+    {
+      "hazards": [
+        "N2-CY-005"
+      ],
+      "node": "N2",
+      "priority": "P2",
+      "cost_usd": 0,
+      "cost_basis": "no incremental cost",
+      "safeguard": "Specify SL-2 certified NMC in procurement; validate firmware hash against vendor baseline",
+      "assets": [
+        "ups",
+        "ups_b",
+        "ups_c",
+        "ups_d"
+      ]
+    },
+    {
+      "hazards": [
+        "N5-CY-001"
+      ],
+      "node": "N5",
+      "priority": "P1",
+      "cost_usd": 5000,
+      "cost_basis": "per VFD",
+      "safeguard": "VFD Modbus write-enable gated by a physical keyswitch; remote write disabled by default",
+      "assets": [
+        "vfd",
+        "vfd_b",
+        "tower_vfd",
+        "crah_vfd"
+      ]
+    },
+    {
+      "hazards": [
+        "N5-CY-002",
+        "N5-CY-003"
+      ],
+      "node": "N5",
+      "priority": "P1",
+      "cost_usd": 100000,
+      "cost_basis": "per campus",
+      "safeguard": "Independent hardwired temperature alarm at CDU intake, bypassing the BMS, alerting the NOC directly",
+      "assets": [
+        "row01_cdu",
+        "row02_cdu",
+        "row03_cdu",
+        "row04_cdu",
+        "row05_cdu",
+        "row06_cdu"
+      ],
+      "note": "Directly answers the SPOOFED guide word: an out-of-band measurement the attacker cannot write to."
+    },
+    {
+      "hazards": [
+        "N5-CY-004"
+      ],
+      "node": "N5",
+      "priority": "P1",
+      "cost_usd": 50000,
+      "cost_basis": "per campus",
+      "safeguard": "Chiller plant and cooling towers on separate OT VLANs so compromise of one cannot reach the other",
+      "assets": [
+        "chiller",
+        "chiller_b",
+        "chiller_c",
+        "tower",
+        "tower_b"
+      ]
+    },
+    {
+      "hazards": [
+        "N5-CY-005"
+      ],
+      "node": "N5",
+      "priority": "P2",
+      "cost_usd": 20000,
+      "cost_basis": "per campus",
+      "safeguard": "Manual chiller staging override physically available at the plant room panel, not network-accessible",
+      "assets": [
+        "chiller_ctl",
+        "app_cooling"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A1",
+      "topic": "Cell boundary",
+      "status": "revised",
+      "severity": "high",
+      "statement": "The model contains 96 racks at 120 kW = 11.52 MW IT, 13.82 MW at PUE 1.2. The stated cell band is 5-10 MW, so the model is 1.4-2.8x one cell. Half the hall (48 racks, 5.76 MW IT / 6.91 MW total) sits squarely in band.",
+      "consequence": "Every per-cell consequence figure is currently computed over 96 racks. If a cell is 48 racks, all cell-scoped losses halve and the campus cell count rises from 8.7 to ~14.5.",
+      "resolution": "Resolved: the hall is two cells of 48 racks (6.91 MW each), not one of 11.52 MW. Per-cell figures halved; campus cell count 14.5."
+    },
+    {
+      "id": "A2",
+      "topic": "Revenue denominator",
+      "status": "ambiguous",
+      "severity": "medium",
+      "statement": "WP10 gives 100 MW and $12.5M/hr but does not say whether 100 MW is IT load or total facility power.",
+      "consequence": "IT load basis gives $125K/MW-hr and $15K/rack-hour. Total-facility basis (83 MW IT at PUE 1.2) gives $150K/MW-hr and $18K/rack-hour, 20% higher.",
+      "resolution": "Confirm the denominator. The model uses the conservative IT-load basis."
+    },
+    {
+      "id": "A3",
+      "topic": "Node crosswalk",
+      "status": "unconfirmed",
+      "severity": "high",
+      "statement": "WP09/WP10 node IDs were mapped to model asset ids by description. N2 to the four UPS blocks plus batteries and STS, N5 to chillers and towers, N6 to the six CDUs and their PLCs, N8 to the BMS platforms, N10 to the fire system, N14 to rack BMCs.",
+      "consequence": "Every ALE and hazard attribution hangs off this mapping.",
+      "resolution": "Review graph/hazard-log.json meta.node_crosswalk against the source papers."
+    },
+    {
+      "id": "A4",
+      "topic": "Redundancy inference fallback",
+      "status": "partially resolved",
+      "severity": "medium",
+      "statement": "Six assets carry authored redundancy from WP06 Table 6.5. Everything else infers redundancy from inbound feed count: two or more feeds of a service hold, one does not.",
+      "consequence": "Inferred redundancy may be optimistic where a load genuinely requires both feeds rather than either.",
+      "resolution": "Extend REDUNDANCY_OVERRIDE from the DLD single-line diagrams."
+    },
+    {
+      "id": "A5",
+      "topic": "Threat traversal direction",
+      "status": "resolved",
+      "severity": "medium",
+      "statement": "Threat paths follow the direction of initiated sessions, not physical adjacency. The ToR management plane was made bidirectional on instruction, since a compromised host can initiate back up its own uplink.",
+      "consequence": "Bidirectional traversal of all edges reported 127 assets reachable from guest Wi-Fi, making segmentation look worthless. Session-direction traversal is the defensible reading.",
+      "resolution": "Settled."
+    },
+    {
+      "id": "A6",
+      "topic": "Control effectiveness",
+      "status": "method choice",
+      "severity": "low",
+      "statement": "Where several controls address one scenario the model reports the highest single mitigation rate rather than the product.",
+      "consequence": "Conservative. Compounding would overstate the benefit of overlapping controls.",
+      "resolution": "Stated method, not a defect."
+    },
+    {
+      "id": "A7",
+      "topic": "Hazard coverage",
+      "status": "source limitation",
+      "severity": "medium",
+      "statement": "WP09 claims worked hazard logs for six nodes but contains CY-numbered rows for N2 and N5 only, plus one N6 entry recovered from a field observation. N8, N10 and N14 have ALE and controls but no hazard rows.",
+      "consequence": "Those three nodes cannot be seeded from hazards, only from assets.",
+      "resolution": "Complete during a live engagement, as WP09 itself states."
+    },
+    {
+      "id": "A8",
+      "topic": "Chiller plant scope",
+      "status": "inconsistent",
+      "severity": "medium",
+      "statement": "The model places three chillers and two towers as if dedicated to this hall. WP06 describes the central chiller plant as shared across cells, which is why the N5 reconciliation came out at 2.9x rather than 8.7x.",
+      "consequence": "A chiller failure in the model stops only this hall. In reality it would degrade several cells.",
+      "resolution": "Either scope the chiller plant as campus-shared, or confirm per-cell chiller clusters."
+    }
+  ],
+  "cell_conformance": {
+    "source": "WP06 section 3.2",
+    "requirements": [
+      {
+        "requirement": "Independent MV/LV power train",
+        "status": "met",
+        "evidence": "Each cell has its own distribution path: 2 UPS in 2N (Cell A: 9395XR + Liebert EXL; Cell B: Galaxy VXL + MegaFlex), its own RPP, and its own busway spine (PWR_cellA_busway_spine / PWR_cellB_busway_spine). Verified by cascade: a Cell A busway loss stops 67 assets and no Cell B rack, where the shared spine previously stopped 127 across both cells. A single UPS loss now stops 1 asset — the 2N pair holds.",
+        "shared_upstream": "The substation, MV lineup, generators, bulk fuel and BESS remain campus-shared by design — cells share generation, not distribution."
+      },
+      {
+        "requirement": "Dedicated chiller/CDU cluster",
+        "status": "met",
+        "evidence": "6 row CDUs are cell-scoped (3 per cell). The 3 chillers and 2 towers are now correctly scoped as shared central plant per WP06, not cell-dedicated."
+      },
+      {
+        "requirement": "Independent BMS zone controller",
+        "status": "met",
+        "evidence": "cellA_bms_zc and cellB_bms_zc — Z2, SL-T 2-3, hold last-good setpoints if the campus BMS is lost. Campus BMS supervises but does not control."
+      },
+      {
+        "requirement": "Independent fire detection and suppression",
+        "status": "met",
+        "evidence": "cellA_facp and cellB_facp — Z4 addressable panels with their own detection and agent release, reporting one-way by dry contact to the campus panel. Per-row VESDA and nozzles unchanged."
+      },
+      {
+        "requirement": "Dedicated OT network segment",
+        "status": "met",
+        "evidence": "Per cell: OT switch, OT firewall and protocol gateway on a cell OT VLAN with no inter-cell routing. Each cell firewall aggregates to the campus diode; deny-by-default with no cell-to-cell rules. All 18 row telemetry conduits now terminate on their own cell segment."
+      }
+    ],
+    "significance": "All five cell requirements are met in the topology, and each one is verified by a query against the model rather than by inspection. The OT boundary bounds a compromise to 4 assets; the power boundary bounds a busway loss to one cell. The residual exposure is the shared central chiller plant — correctly shared per WP06, and the reason N5 reconciles at 2.9x rather than the full campus multiple.",
+    "campus_shared_correctly_separated": [
+      "substation and MV lineup",
+      "generators and bulk fuel",
+      "BESS",
+      "central chiller plant and cooling towers",
+      "carrier demarcs and internet boundary",
+      "core IT / DCS room",
+      "NOC and campus BMS",
+      "data diode"
+    ],
+    "resolved": {
+      "date": "2026-08-21",
+      "changes": [
+        "Added per-cell OT switch, OT firewall and protocol gateway (10 new assets, 16 new conduits).",
+        "Added per-cell BMS zone controller with setpoint autonomy.",
+        "Added per-cell Z4 fire panel with one-way reporting to the campus panel.",
+        "Re-scoped the chiller plant and cooling towers as shared central plant.",
+        "Rewired all 18 row telemetry conduits from the single campus OT segment onto their own cell segment.",
+        "Declared cell membership on every asset in both graphs.",
+        "Split the hall busway spine into two cell-bounded spines with their own RPP risers.",
+        "Assigned the four UPS blocks two per cell in 2N, and connected the two that previously had no downstream path."
+      ]
+    },
+    "verified": {
+      "date": "2026-08-21",
+      "method": "Threat-path walk from each cell OT switch; cascade propagation from each cell busway and from a single UPS.",
+      "results": [
+        "Cell A OT segment as entry point: 4 assets reachable, stopped at 2 boundaries (was campus-wide).",
+        "Cell A busway failure: 67 assets stopped, $720K/hour, no Cell B rack affected (was 127 across both cells).",
+        "Single UPS failure: 1 asset stopped — the 2N pair within the cell holds.",
+        "Engineering workstation: 167 assets reachable — unchanged, because that path enters through the campus IT estate, not a cell segment."
+      ]
+    }
+  },
+  "architecture_review": {
+    "date": "2026-08-21",
+    "sources": [
+      "WP07 Chapter 7 — OT Systems Inventory (Tables 7.2–7.16)",
+      "108 Datacenter Hyperscaler BOM and Attack Surface (Sections 1–17)"
+    ],
+    "method": "Every equipment category in both source inventories was checked against the model asset register. Gaps are recorded whether or not they were closed.",
+    "closed": [
+      {
+        "gap": "DDC field-controller tier absent",
+        "source": "WP07 Table 7.10",
+        "was": "Sensors reported straight to the Z2 supervisory zone controller, skipping Purdue L1 entirely.",
+        "fix": "Added a mechanical and an electrical DDC per cell (Saia-Burgess PCD QronoX, the only BMS DDC certified to SL-3). All 36 row sensor and leak connections rewired to terminate at the DDC tier.",
+        "significance": "high — a whole Purdue level was missing, which understated the attack surface and put a zone boundary in the wrong place."
+      },
+      {
+        "gap": "BMC estate had no asset",
+        "source": "BOM Section 9; hazard node N14",
+        "was": "N14 (BMC firmware) carried an ALE and controls in the hazard log but had no corresponding asset in the graph.",
+        "fix": "Added a BMC estate asset per row (128 BMCs each, Z5, Redfish/IPMI) with management edges to all 96 racks and to the OOB console server.",
+        "significance": "high — a costed hazard node with nothing in the model to attach it to."
+      },
+      {
+        "gap": "OT IDS had no field presence",
+        "source": "WP07 Section 8; BOM Section 8",
+        "was": "The Nozomi console existed but no sensors, so the model could not distinguish monitored segments from blind ones.",
+        "fix": "Added passive SPAN/TAP sensors per cell and at the IDMZ boundary, each one-way from its mirror port.",
+        "significance": "high — \"operators blinded\" is a recurring hazard theme; detection coverage has to be visible to be assessed."
+      },
+      {
+        "gap": "Switched rack PDUs absent",
+        "source": "WP07 Section 2.2 critical observation",
+        "was": "Rack power went busway -> rack with no intelligent PDU tier.",
+        "fix": "Added A-bus and B-bus switched rPDUs per row and re-parented all 96 rack power drops through them.",
+        "significance": "high — switched outlets are remote power control over production servers: a Z3 asset with Z0 consequence."
+      },
+      {
+        "gap": "No BMS integration gateway tier",
+        "source": "WP07 Table 7.10",
+        "was": "DDC-to-head-end normalisation was implicit.",
+        "fix": "Added a redundant Tridium JACE-8000 pair reaching into both cells’ field tiers.",
+        "significance": "medium — the JACE runs 200+ drivers and is the highest-value single Z2 host in a real BMS."
+      },
+      {
+        "gap": "No differential pressure instrumentation",
+        "source": "BOM Section 5",
+        "was": "Aisle containment had temperature and leak sensing but no pressure differential.",
+        "fix": "Added a containment differential pressure transmitter per row on 4-20 mA to the mechanical DDC.",
+        "significance": "medium — containment bypass and recirculation are only detectable by differential pressure."
+      },
+      {
+        "gap": "PTP grandmaster had no upstream reference",
+        "source": "BOM Section 8",
+        "was": "Timing originated inside the facility with no external source modelled.",
+        "fix": "Added a roof GNSS antenna/receiver feeding the grandmaster, with Galileo OSNMA noted.",
+        "significance": "medium — GNSS spoofing corrupts IEC 61850 protection coordination and every log timestamp."
+      }
+    ],
+    "outstanding": [
+      {
+        "gap": "Counter-UAS drone detection",
+        "source": "BOM Section 7",
+        "severity": "low",
+        "note": "Standard on new hyperscale campuses. Detection-only deployments are the norm; jamming is heavily regulated. No modelled consequence path, so omitted."
+      },
+      {
+        "gap": "Visitor management system and PSIM/SOC layer",
+        "source": "BOM Section 7",
+        "severity": "medium",
+        "note": "A guest sign-in kiosk exists but not the VMS-to-PACS badge issuance integration, nor the PSIM that correlates perimeter alarms with automatic camera call-up."
+      },
+      {
+        "gap": "ITSM (ServiceNow class) at Z0",
+        "source": "BOM Section 13",
+        "severity": "low",
+        "note": "CMDB is modelled; the ITSM platform it federates with is not. Its conduit to DCIM would be a Z0 -> Z1 crossing."
+      },
+      {
+        "gap": "RFID / BLE asset tracking",
+        "source": "BOM Section 6",
+        "severity": "low",
+        "note": "Out of scope for a zone/conduit assessment; no control authority."
+      },
+      {
+        "gap": "Thermal cameras at hot-aisle entrances",
+        "source": "BOM Section 7",
+        "severity": "low",
+        "note": "Dual-use security and thermal anomaly detection. Would add a second independent temperature observation, which is a genuine safeguard against the SPOOFED hazards."
+      },
+      {
+        "gap": "Secrets management / HSM / KMS",
+        "source": "BOM Section 13",
+        "severity": "medium",
+        "note": "PKI is modelled but not the key custody layer beneath it. Relevant to the OPC UA and BACnet/SC certificate trust the model already depends on."
+      },
+      {
+        "gap": "Chemical dosing skid and make-up water storage",
+        "source": "WP07 Table 7.8",
+        "severity": "low",
+        "note": "The water treatment PLC exists without the dosing equipment it commands, or the water quality instruments (conductivity, pH/ORP) it reads."
+      },
+      {
+        "gap": "DPU / SmartNIC as distinct assets",
+        "source": "BOM Section 9",
+        "severity": "low",
+        "note": "Named in the compute tray attack surface but not modelled separately. Supply-chain scope under IEC 62443-2-4."
+      }
+    ],
+    "systemic_note": "The two most consequential findings were both structural rather than missing boxes: a whole Purdue level absent from the control path, and a costed hazard node with no asset behind it. Neither would have surfaced from counting equipment."
+  }
+}

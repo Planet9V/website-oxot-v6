@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OXOT 3D Facility Twin — Interactive Campus & Sub-Scene Explorer</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css">
+  <style>
+    .explorer-viewport-wrap {
+      background: #04070a;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+      margin-bottom: 2rem;
+    }
+    .explorer-toolbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN EXPLORER CONTAINER -->
+  <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="eyebrow-orange">PHYSICS-BASED LEVEL 1 TWIN</span>
+        <h1 class="hero-title-serif" style="font-size: 2.75rem; margin-bottom: 0.25rem;">Hyperscale Campus 3D Explorer</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Real-time interactive Babylon.js 3D twin with 449 bound assets, 1,155 conduits, click-to-fly camera, and live graph traversal.
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button id="btn-fullscreen" class="btn btn-outline" onclick="toggleFullscreen()">
+          <span>⛶</span>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- COMPONENT 1: SHADCN ALERT / CALLOUT -->
+    <div class="shadcn-alert" style="margin: 0 0 1.5rem 0;">
+      <div class="shadcn-alert-icon">⚡</div>
+      <div class="shadcn-alert-body">
+        <div class="shadcn-alert-title">Level 1 Physics & Dijkstra Pathway Simulation Active</div>
+        <div class="shadcn-alert-description">
+          Click any component in the 3D canvas to fly the camera, inspect Purdue classification, and trigger breadth-first-search (BFS) upstream/downstream conduit failure propagation.
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEWPORT WRAPPER -->
+    <div class="explorer-viewport-wrap">
+      <!-- COMPONENT 2: SHADCN TABS LIST IN TOOLBAR -->
+      <div class="explorer-toolbar">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.08em;">SCENE SELECTOR:</span>
+          
+          <div class="tabs-list">
+            <button class="tabs-trigger active" onclick="switchScene('babylon/master-campus-explorer.html', this)">
+              Master Facility Twin (Babylon.js)
+            </button>
+          </div>
+        </div>
+
+        <!-- COMPONENT 3: SHADCN BADGES -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-primary">4,398 ASSETS</span>
+          <span class="badge badge-cyan">36,987 CONDUITS</span>
+        </div>
+      </div>
+
+      <!-- IFRAME STAGE -->
+      <div style="width: 100%; height: 740px; position: relative;">
+        <iframe id="main-scene-frame" src="babylon/master-campus-explorer.html" style="width: 100%; height: 100%; border: none;" allow="fullscreen"></iframe>
+      </div>
+    </div>
+
+    <!-- COMPONENT 4: SHADCN CARD COMPOSITION -->
+    <div class="grid-3">
+      <div class="shadcn-card">
+        <div class="shadcn-card-header">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🎮</div>
+          <h3 class="shadcn-card-title">3D Navigation Controls</h3>
+          <p class="shadcn-card-description">Viewport camera & selection gestures</p>
+        </div>
+        <div class="shadcn-card-content">
+          <ul style="color: var(--text-secondary); font-size: 0.85rem; padding-left: 1.25rem; line-height: 1.6;">
+            <li><strong>Left Click + Drag:</strong> Orbit camera around target</li>
+            <li><strong>Right Click + Drag:</strong> Pan camera translation</li>
+            <li><strong>Scroll Wheel:</strong> Zoom in / out</li>
+            <li><strong>Click Asset:</strong> Inspect risk & fly camera</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="shadcn-card">
+        <div class="shadcn-card-header">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">⚡</div>
+          <h3 class="shadcn-card-title">Physics & Topology Engine</h3>
+          <p class="shadcn-card-description">Physical routing & cascade models</p>
+        </div>
+        <div class="shadcn-card-content">
+          <p style="font-size: 0.88rem; line-height: 1.5; margin-bottom: 0.75rem;">
+            Conduits follow exact physical busways and cable trays. Graph BFS calculates worst-case blast radiuses and thermal escalation.
+          </p>
+        </div>
+        <div class="shadcn-card-footer">
+          <span class="badge badge-primary">DIJKSTRA PATH ROUTER</span>
+        </div>
+      </div>
+
+      <div class="shadcn-card">
+        <div class="shadcn-card-header">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">📋</div>
+          <h3 class="shadcn-card-title">Evidence Generation</h3>
+          <p class="shadcn-card-description">Automated regulatory compilation</p>
+        </div>
+        <div class="shadcn-card-content">
+          <p style="font-size: 0.88rem; line-height: 1.5; margin-bottom: 0.75rem;">
+            Every node interaction generates live EU CRA Annex VII technical files and IEC 62443 Zone & Conduit verification records.
+          </p>
+        </div>
+        <div class="shadcn-card-footer">
+          <a href="artifacts-evidence.html" class="btn btn-outline" style="width: 100%; font-size: 0.82rem;">
+            View Compliance Evidence →
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchScene(url, btn) {
+      document.getElementById('main-scene-frame').src = url;
+      document.querySelectorAll('.tabs-trigger').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleFullscreen() {
+      const frame = document.getElementById('main-scene-frame');
+      if (frame.requestFullscreen) {
+        frame.requestFullscreen();
+      } else if (frame.webkitRequestFullscreen) {
+        frame.webkitRequestFullscreen();
+      }
+    }
+  </script>
+
+  <script src="shared/oxot-nav.js"></script>
+</body>
+</html>

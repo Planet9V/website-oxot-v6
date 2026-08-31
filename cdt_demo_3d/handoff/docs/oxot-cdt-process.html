@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OXOT Cyber Digital Twin — process</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  body{font-family:Inter,system-ui,sans-serif;color:#1a1a1c}
+  .page{padding:0.5in 0.55in;display:flex;flex-direction:column;box-sizing:border-box}
+  .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+  h1{font:700 19px/1.15 Inter,sans-serif;letter-spacing:-.015em;margin:0;color:#0f0f10}
+  .brand{font:600 8.5px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#9a9a9d}
+  .brand b{color:#EE7623}
+  .sub{font:400 9.6px/1.5 Inter,sans-serif;color:#5a5a5d;margin:0 0 13px;max-width:74em}
+
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;flex:0 0 auto}
+  .col{display:flex;flex-direction:column;gap:5px}
+  .cap{display:flex;align-items:center;gap:6px;padding-bottom:5px;border-bottom:2px solid #0f0f10}
+  .col.ws .cap{border-bottom-color:#EE7623}
+  .badge{flex:0 0 auto;height:17px;min-width:17px;padding:0 5px;border-radius:4px;background:#0f0f10;color:#fff;
+         font:700 8.5px/17px Inter,sans-serif;text-align:center;letter-spacing:.03em}
+  .col.ws .badge{background:#EE7623;color:#0f0f10}
+  .cname{font:650 9.5px/1.2 Inter,sans-serif;letter-spacing:.01em;color:#0f0f10}
+  .band{border:.75px solid #ddd9d0;border-radius:4px;overflow:hidden}
+  .bh{font:650 6.9px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#8a8a8d;
+      padding:5px 7px 4px;background:#faf8f4;border-bottom:.75px solid #ddd9d0}
+  .bl{padding:5px 7px 6px}
+  .bl li{font:400 7.6px/1.42 Inter,sans-serif;color:#3a3a3d;list-style:none;padding-left:8px;position:relative;margin-bottom:2.5px}
+  .bl li:last-child{margin-bottom:0}
+  .bl li:before{content:'';position:absolute;left:0;top:5px;width:3px;height:3px;border-radius:50%;background:#c8c4bb}
+  .col.ws .bl li:before{background:#EE7623}
+  .bl li b{font-weight:650;color:#0f0f10}
+  .out{background:#0f0f10;border-color:#0f0f10}
+  .out .bh{background:#1c1c1e;color:#EE7623;border-bottom-color:#2c2c2e}
+  .out .bl li{color:#d8d8d6} .out .bl li b{color:#fff} .out .bl li:before{background:#EE7623}
+  .walk{margin:9px 0 0;display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+  .wk{font:600 7.2px/1.3 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#EE7623;
+      border-top:1.5px dashed #e3b48c;padding-top:5px}
+  .wk.none{color:transparent;border-top-color:transparent}
+
+  .rec{margin-top:13px;padding-top:11px;border-top:2px solid #0f0f10}
+  .rech{font:650 7.6px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#8a8a8d;margin-bottom:8px}
+  .recg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .rc{border:.75px solid #ddd9d0;border-radius:4px;padding:7px 9px}
+  .rc h4{font:650 8.6px/1.2 Inter,sans-serif;margin:0 0 3px;color:#0f0f10}
+  .rc p{font:400 7.5px/1.42 Inter,sans-serif;color:#5a5a5d;margin:0}
+  .foot{margin-top:auto;padding-top:10px;display:flex;justify-content:space-between;align-items:baseline;
+        font:500 7.4px/1.3 Inter,sans-serif;color:#9a9a9d;border-top:.5px solid #ddd9d0}
+  .foot b{color:#EE7623}
+  a{color:#c05a12}
+</style>
+</head>
+<body>
+<doc-page orientation="landscape">
+<section class="page">
+
+  <div class="top">
+    <h1>How we build a Cyber Digital Twin</h1>
+    <div class="brand"><b>OXOT</b> &nbsp;OT security engineering</div>
+  </div>
+  <p class="sub">Three phases, two client workshops, three floor walks. The model is built from the client's own documentation, corrected against the physical facility, then loaded with safety and reliability data before any control is recommended. One dataset produces every artifact, so a change in the field propagates everywhere at once.</p>
+
+  <div class="flow">
+
+    <div class="col">
+      <div class="cap"><span class="badge">1</span><span class="cname">BUILD THE MODEL</span></div>
+      <div class="band"><div class="bh">Inputs</div><ul class="bl">
+        <li>High-level design (HLD)</li>
+        <li>Detailed level design (DLD)</li>
+        <li>Interface control document (ICD)</li>
+        <li>OT equipment schedules</li>
+        <li>Descriptions and narratives</li>
+      </ul></div>
+      <div class="band"><div class="bh">What we do</div><ul class="bl">
+        <li>Derive the <b>asset list</b> from documentation</li>
+        <li>Establish every <b>connection</b> between assets</li>
+        <li>Classify <b>services</b> — what flows</li>
+        <li>Classify <b>protocols</b> — how it is carried</li>
+        <li>Separate routable from hardwired</li>
+      </ul></div>
+      <div class="band out"><div class="bh">Artifacts</div><ul class="bl">
+        <li><b>Asset register</b></li>
+        <li><b>Connection graph</b></li>
+        <li>Service and protocol inventory</li>
+        <li>3D model of the facility</li>
+      </ul></div>
+    </div>
+
+    <div class="col ws">
+      <div class="cap"><span class="badge">W1</span><span class="cname">WORKSHOP 1</span></div>
+      <div class="band"><div class="bh">Inputs</div><ul class="bl">
+        <li>The model from Phase 1</li>
+        <li>Client review and corrections</li>
+        <li>Sector threat intelligence</li>
+        <li>Client, equipment and facility profile</li>
+        <li>Geography</li>
+      </ul></div>
+      <div class="band"><div class="bh">What we do</div><ul class="bl">
+        <li>Review the model with the client</li>
+        <li><b>Walk the floor</b> — confirm against as-is</li>
+        <li>Adjust where documents and facility disagree</li>
+        <li>Frame the threat landscape. TS 50701 uses worst case; we apply comparative sector threats through <b>ATQ</b></li>
+        <li>Mark SIL-rated items</li>
+      </ul></div>
+      <div class="band out"><div class="bh">Artifacts</div><ul class="bl">
+        <li>As-is corrections</li>
+        <li><b>Initial SL-T zones and conduits</b></li>
+        <li>Asset registry, SIL items marked</li>
+      </ul></div>
+    </div>
+
+    <div class="col">
+      <div class="cap"><span class="badge">2</span><span class="cname">LOAD CONSEQUENCE</span></div>
+      <div class="band"><div class="bh">Inputs</div><ul class="bl">
+        <li>Safety team: FMEA, hazard log</li>
+        <li>Safety critical item list</li>
+        <li>Reliability critical item list</li>
+        <li>ConOps</li>
+        <li>Minimum operating requirements</li>
+      </ul></div>
+      <div class="band"><div class="bh">What we do</div><ul class="bl">
+        <li>Attach <b>failure modes</b> to assets</li>
+        <li>Build impacts and <b>consequences</b> into the model</li>
+        <li>Encode redundancy from the design, not from feed count</li>
+        <li>Encode MoR thresholds and operating modes</li>
+        <li>Make a pathway traceable to a physical outcome</li>
+      </ul></div>
+      <div class="band out"><div class="bh">Artifacts</div><ul class="bl">
+        <li>Failure modes on assets</li>
+        <li><b>Consequence model</b></li>
+        <li>MoR and operating modes</li>
+      </ul></div>
+    </div>
+
+    <div class="col ws">
+      <div class="cap"><span class="badge">W2</span><span class="cname">WORKSHOP 2</span></div>
+      <div class="band"><div class="bh">Inputs</div><ul class="bl">
+        <li>Consequence-loaded model</li>
+        <li><b>TACAM</b> — typical vulnerabilities by equipment class</li>
+        <li>Threat actor profiles from ATQ</li>
+        <li>SL-T from Workshop 1</li>
+      </ul></div>
+      <div class="band"><div class="bh">What we do</div><ul class="bl">
+        <li>Show <b>threat actors and pathways</b> on the model</li>
+        <li>Trace to fat-tail loss, critical loss and safety consequence — our own <b>ALE model</b></li>
+        <li>Review controls the SL-T ratings require, and why, grounded in pathway and consequence</li>
+        <li>Test architectural gaps against <b>ALARP / SFAIRP</b> for a reasonable SL-C</li>
+        <li>Draw the flat network view of the 3D model</li>
+      </ul></div>
+      <div class="band out"><div class="bh">Artifacts</div><ul class="bl">
+        <li>Threat pathways and consequence</li>
+        <li><b>SL-C rationale</b></li>
+        <li><b>ZCR diagram</b> — zones and conduits</li>
+      </ul></div>
+    </div>
+
+    <div class="col">
+      <div class="cap"><span class="badge">3</span><span class="cname">VERIFY &amp; REPORT</span></div>
+      <div class="band"><div class="bh">Inputs</div><ul class="bl">
+        <li>Samples and configurations</li>
+        <li>SBOMs and HBOMs</li>
+        <li>Switch and firewall configurations</li>
+        <li>SL-C and security requirements by zone</li>
+      </ul></div>
+      <div class="band"><div class="bh">What we do</div><ul class="bl">
+        <li>Enter SL-C and requirements per asset by zone</li>
+        <li>Raise model fidelity to the actual facility</li>
+        <li><b>Walk the floor again</b> with the improved model</li>
+        <li>Gap analysis SL-C against SL-A</li>
+        <li>Build the target reference architecture</li>
+      </ul></div>
+      <div class="band out"><div class="bh">Artifacts</div><ul class="bl">
+        <li><b>NOW / NEXT / NEVER report</b></li>
+        <li>Target reference architecture (IEC 62443)</li>
+        <li>SL-C to SL-A gap analysis</li>
+        <li>Roadmap, priority actions, quick wins</li>
+        <li>Executive readout + long-form report</li>
+      </ul></div>
+    </div>
+
+  </div>
+
+  <div class="walk">
+    <div class="wk none">·</div>
+    <div class="wk">Floor walk 1 — confirm as-is</div>
+    <div class="wk none">·</div>
+    <div class="wk none">·</div>
+    <div class="wk">Floor walk 2 — confirm high-fidelity model</div>
+  </div>
+
+  <div class="rec">
+    <div class="rech">Where the outputs go — one dataset, every team</div>
+    <div class="recg">
+      <div class="rc"><h4>Executives and risk</h4><p>Executive briefing and readout. Input to the organisational risk ledger where the sponsor is organisational. Consequence tied to numbers, top down.</p></div>
+      <div class="rc"><h4>Facility managers</h4><p>SecRAC for the facility. Zone and conduit responsibilities, and the controls that apply to facility they operate day to day.</p></div>
+      <div class="rc"><h4>Safety and reliability</h4><p>Reliability and safety critical items returned to the hazard log, so the safety team's own artifact stays current.</p></div>
+      <div class="rc"><h4>IT, OT, controls, network, operations, security</h4><p>The full detailed report aligned to IEC 62443 and CLC/TS 50701, and the model itself. Bottom-up engineering view that earns trust.</p></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Formal, defensible process and artifacts for an IEC 62443 determination of SL-C — including where it is negotiated down to SL-A</span>
+    <span><b>OXOT</b> &nbsp;Cyber Digital Twin</span>
+  </div>
+
+</section>
+</doc-page>
+<script src="./doc-page.js"></script>
+</body>
+</html>

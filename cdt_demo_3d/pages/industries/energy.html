@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy, Utilities & BESS OT Cyber Digital Twin — OXOT</title>
+  <link rel="stylesheet" href="../../shared/oxot-theme.css">
+  <script src="../../shared/nav.js" defer></script>
+</head>
+<body>
+
+  <div id="oxot-global-header"></div>
+
+  <!-- HERO SECTION -->
+  <section style="padding: 4.5rem 0 3rem; position: relative;">
+    <div class="container">
+      
+      <div class="oxot-breadcrumbs">
+        <a href="../../index.html">Platform</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="index.html">Industries</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Energy, Utilities & BESS</span>
+      </div>
+
+      <div class="grid-2" style="align-items: center; gap: 3.5rem;">
+        <div>
+          <span class="eyebrow-orange">POWER GENERATION, SUBSTATIONS & STORAGE</span>
+          <h1 class="hero-title-serif">
+            Make energy-security decisions without compromising grid reliability.
+          </h1>
+          <div class="lead-orange">
+            Connects physical generation assets, substation protection topology, BESS safety limits, and control-room dispatch dependencies.
+          </div>
+          <p class="body-prose">
+            Energy is not a single uniform market: transmission substations, utility-scale battery energy storage (BESS), gas turbines, and distributed solar portfolios operate under strict frequency stability constraints and zero-downtime tolerance.
+          </p>
+          <p class="body-prose" style="margin-bottom: 2.25rem;">
+            OXOT ingests your electrical single-line diagrams, IEC 61850 SCD configurations, and telemetry topologies to build an air-gapped cyber-physical twin. Test attacks, prioritize protection upgrades, and justify capital spend before touching energized switchyards.
+          </p>
+          
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="../../demo-hub.html" class="btn btn-dutch-orange">
+              Explore Energy Twin Scenarios
+            </a>
+            <a href="../../due-diligence.html" class="btn btn-outline-dark">
+              Bring a Substation Single-Line
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="background: radial-gradient(circle at 50% 50%, rgba(0, 166, 160, 0.15) 0%, rgba(11, 18, 24, 0.95) 80%); border: 1px solid rgba(0, 166, 160, 0.4); padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <span class="badge badge-cyan">ENERGY OT MODEL LAYERS</span>
+              <span class="pulse-indicator"></span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-cyan); display: flex; justify-content: space-between;">
+                <span>Layer 1: High Voltage Breakers & BESS Inverters</span>
+                <span style="color: var(--signal-cyan);">PHYSICAL</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--dutch-orange); display: flex; justify-content: space-between;">
+                <span>Layer 2: IEC 61850 IEDs, RTUs & Protection Relays</span>
+                <span style="color: var(--dutch-orange);">CONTROL</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-blue); display: flex; justify-content: space-between;">
+                <span>Layer 3: Substation DMZ & SCADA Telemetry (DNP3)</span>
+                <span style="color: var(--signal-blue);">NETWORK</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-amber); display: flex; justify-content: space-between;">
+                <span>Layer 4: Energy Management & Market Dispatch</span>
+                <span style="color: var(--signal-amber);">DISPATCH</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted);">
+              Deterministic simulation: IEC 61850 GOOSE/SV timing, breaker actuation, and frequency response curves.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OPERATIONAL CONCERNS -->
+  <section style="padding: 3rem 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">OPERATIONAL TECHNOLOGY CONSTRAINTS</span>
+        <h2 class="section-title-serif">Grid & Generation Risk Scenarios</h2>
+      </div>
+
+      <div class="grid-3" style="gap: 1.5rem;">
+        
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-cyan); margin-bottom: 0.5rem;">01 / SUBSTATION AUTOMATION</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Protection Relay Trip Injection</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            IEDs communicating via unauthenticated IEC 61850 GOOSE multicast frames are vulnerable to spoofed trip commands, forcing transmission lines offline and cascading load across adjacent substations.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--dutch-orange); margin-bottom: 0.5rem;">02 / BESS & RENEWABLE STORAGE</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Battery Thermal Runaway</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Tampering with Battery Management System (BMS) cell balancing, charging rate limits, or HVAC cooling setpoints can cause catastrophic lithium-ion thermal runaway while blinding the central NOC.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber); margin-bottom: 0.5rem;">03 / REMOTE DISPATCH & DMZ</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Transmission Telemetry Loss</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            DNP3/IP or IEC 60870-5-104 links crossing the operational DMZ allow attackers to corrupt AGC (Automatic Generation Control) setpoints, triggering emergency generation curtailment and grid imbalance penalties.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE FOUR DECISIONS IN ENERGY -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">DECISION FRAMEWORK</span>
+        <h2 class="section-title-serif">The Four Decisions in Power & Utilities</h2>
+        <p style="color: var(--text-secondary); max-width: 720px;">
+          Replace generic IT security checklists with defensible, engineering-backed answers that satisfy grid reliability standards and executive risk committees.
+        </p>
+      </div>
+
+      <div class="four-decisions-grid">
+        
+        <div class="decision-col">
+          <h4>What do we fix first?</h4>
+          <p>Findings prioritized by potential megawatt-hours lost, grid destabilization index, and breaker recovery time.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>What should we spend?</h4>
+          <p>Cap capital expenditures where hardware-enforced protocol diodes eliminate downstream relay risk without replacing legacy RTUs.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>Can we change safely?</h4>
+          <p>Test substation firmware updates, firewall rules, and IEC 61850 configurations in the digital twin replica first.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4 class="orange">What can we ignore?</h4>
+          <p>A documented, legally defensible basis to defer patching auxiliary generator sensors backed by hardwired mechanical overspeed trips.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORKED USE CASE: THREE-GATE LEDGER -->
+  <section style="padding: 3.5rem 0; background: var(--card); border-top: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 1.5rem;">
+        <span class="eyebrow-orange">WORKED USE CASE & EVIDENCE LEDGER</span>
+        <h2 class="section-title-serif">Scenario: 110kV Substation Protection Relay & RTU Compromise</h2>
+        <p style="color: var(--text-secondary); max-width: 800px;">
+          Engineering progression from baseline vulnerability to virtual control simulation and actionable grid maintenance output.
+        </p>
+      </div>
+
+      <div class="node-chip-chain">
+        <span class="node-chip">Remote Maintenance DMZ</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Substation RTU Gateway</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">IEC 61850 Station Bus</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip" style="border-color: var(--signal-red); color: var(--signal-red);">Feeder Breaker Tripping (120MW Loss)</span>
+      </div>
+
+      <!-- THREE GATE LEDGER -->
+      <div class="three-gate-ledger">
+        
+        <!-- COLUMN 1: BASELINE -->
+        <div class="ledger-col ledger-col-baseline">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-baseline">1. Baseline As-Documented</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-slate);">SL-1 / EXPOSED</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Entry Point:</strong> Third-party wind farm maintenance VPN bridge into Substation RTU.<br><br>
+            <strong>Lateral Path:</strong> RTU bridges into IEC 61850 station bus with unencrypted GOOSE messaging.<br><br>
+            <strong>Consequence:</strong> Malicious GOOSE command trips primary 110kV busbar, dropping 120MW regional generation ($1.8M outage penalty & grid frequency dip).
+          </p>
+        </div>
+
+        <!-- COLUMN 2: PROPOSED CONTROL -->
+        <div class="ledger-col ledger-col-proposed">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-proposed">2. Proposed Virtual Control</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber);">VIRTUAL TEST</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Simulated Remediation:</strong><br>
+            • Isolate wind farm RTU behind dedicated IEC 62443 Zone 3 boundary.<br>
+            • Enforce hardware protocol break; reject non-whitelisted GOOSE application IDs.<br>
+            • Lock out remote breaker trip override from external engineering VPN.
+          </p>
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--signal-amber); background: rgba(218, 125, 15, 0.1); padding: 0.5rem; border-radius: var(--radius-xs);">
+            Simulated Path Result: GOOSE spoofing blocked; zero feeder trip exposure.
+          </div>
+        </div>
+
+        <!-- COLUMN 3: DECISION OUTPUT -->
+        <div class="ledger-col ledger-col-decision">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-decision">3. Decision Output</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-green);">ACTIONABLE</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            <div style="margin-bottom: 0.5rem;"><strong>Action:</strong> Implement substation DMZ protocol break.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Implementation:</strong> No substation outage required.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Cost:</strong> $18,000 (appliance & config).</div>
+            <div><strong>Compliance:</strong> Meets NIS2 Article 21 & NERC CIP-005.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 3.5rem 0; background: var(--secondary); border-top: 1px solid var(--border);">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow-orange">GET STARTED</span>
+      <h2 style="font-family: var(--font-serif); font-size: 2.25rem; color: #fff; margin-bottom: 1rem;">
+        Validate your energy network in a 60-day decision sprint.
+      </h2>
+      <p style="color: var(--text-secondary); max-width: 680px; margin: 0 auto 2rem; font-size: 1rem;">
+        Provide one substation single-line diagram or BESS integration topology. We model the cyber-physical dependencies to deliver definitive risk and expenditure guidance.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="../../due-diligence.html" class="btn btn-dutch-orange">
+          Request Energy Decision Sprint
+        </a>
+        <a href="../../demo-hub.html" class="btn btn-secondary">
+          Launch 3D Demo Hub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="oxot-global-footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyperscale & Datacenter OT Cyber Digital Twin — OXOT</title>
+  <link rel="stylesheet" href="../../shared/oxot-theme.css">
+  <script src="../../shared/nav.js" defer></script>
+</head>
+<body>
+
+  <div id="oxot-global-header"></div>
+
+  <!-- HERO SECTION WITH EMBEDDED 3D PREVIEW -->
+  <section style="padding: 4.5rem 0 3rem; position: relative;">
+    <div class="container">
+      
+      <div class="oxot-breadcrumbs">
+        <a href="../../index.html">Platform</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="index.html">Industries</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Hyperscale & Datacenters</span>
+      </div>
+
+      <div class="grid-2" style="align-items: center; gap: 3.5rem;">
+        <div>
+          <span class="eyebrow-orange">TIER 3 / 4 CRITICAL FACILITIES</span>
+          <h1 class="hero-title-serif">
+            Test the failure path before it becomes a capacity event.
+          </h1>
+          <div class="lead-orange">
+            Connects critical-facilities controls, electrical and cooling infrastructure, operational networks, and tenant capacity boundaries.
+          </div>
+          <p class="body-prose">
+            A hyperscale campus is a tightly coupled thermodynamic and electrical system: 100MW+ grid feeds, on-site generation, EPMS switchgear, UPS battery rooms, chillers, and row-level CDUs.
+          </p>
+          <p class="body-prose" style="margin-bottom: 2.25rem;">
+            OXOT models these cyber-physical dependencies in high fidelity so data center engineering leadership can validate security controls without risking tenant availability or thermal runaway.
+          </p>
+          
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="../../master-explorer.html" class="btn btn-dutch-orange">
+              Launch 3D Campus Explorer
+            </a>
+            <a href="../../demo-hub.html" class="btn btn-outline-dark">
+              Discuss Campus Scenario
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div style="background: radial-gradient(circle at 50% 50%, rgba(238, 118, 35, 0.15) 0%, rgba(7, 10, 14, 0.95) 75%); border: 1px solid var(--dutch-orange-border); border-radius: var(--radius-lg); padding: 0.75rem; box-shadow: 0 0 40px var(--dutch-orange-glow); height: 420px; position: relative;">
+            <iframe src="../../master-explorer.html" style="width: 100%; height: 100%; border: none; border-radius: var(--radius-md);" allow="fullscreen"></iframe>
+            <div style="position: absolute; bottom: 1.25rem; right: 1.25rem; background: rgba(7, 10, 14, 0.85); backdrop-filter: blur(8px); padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--dutch-orange-border); font-family: var(--font-mono); font-size: 0.72rem; color: var(--dutch-orange);">
+              Hyperscale Reference Model
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OPERATIONAL CONCERNS & THERMAL/ELECTRICAL COUPLING -->
+  <section style="padding: 3rem 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">PHYSICAL OT CONSTRAINTS</span>
+        <h2 class="section-title-serif">Where Cyber Threats Cross Into Physical Megawatts</h2>
+      </div>
+
+      <div class="grid-3" style="gap: 1.5rem;">
+        
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--dutch-orange); margin-bottom: 0.5rem;">01 / THERMAL RUNAWAY</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Cooling Train & CDU Loops</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Modern AI dense racks (40kW–120kW/rack) require direct-to-chip liquid cooling. A hijacked BMS or Modbus gateway altering valve positioning causes heat dissipation failure within seconds, triggering emergency compute throttles.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-cyan); margin-bottom: 0.5rem;">02 / ELECTRICAL SWITCHGEAR</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">EPMS & Protection Relays</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Substation transformers, MV/LV switchgear, and static transfer switches (STS) communicate via IEC 61850 and BACnet. Cyber manipulation of breaker trip thresholds can desynchronize redundant power buses.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber); margin-bottom: 0.5rem;">03 / BOUNDARY EXPOSURE</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Vendor Remote Maintenance</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Chiller OEMs, generator vendors, and DCIM providers frequently maintain cellular or VPN bypasses into Level 2 facility networks, bypassing core zero-trust firewalls and introducing third-party supply-chain vectors.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE FOUR DECISIONS IN HYPERSCALE LANGUAGE -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">DECISION FRAMEWORK</span>
+        <h2 class="section-title-serif">The Four Decisions in Hyperscale Operations</h2>
+        <p style="color: var(--text-secondary); max-width: 720px;">
+          Replace generic CVSS vulnerability lists with concrete financial and operational answers calibrated to megawatts, tenant uptime, and SLA penalties.
+        </p>
+      </div>
+
+      <div class="four-decisions-grid">
+        
+        <div class="decision-col">
+          <h4>What do we fix first?</h4>
+          <p>Findings ranked by actual kilowatt capacity at risk and tenant SLA breach penalties, not raw CVSS scores.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>What should we spend?</h4>
+          <p>Quantify where spending diminishing returns start; cap investment at the exact cost of dual-conduit redundancy.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>Can we change safely?</h4>
+          <p>Test firmware patches on EPMS PLCs or chiller sequencing logic in the twin before deploying to live halls.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4 class="orange">What can we ignore?</h4>
+          <p>A written, legally defensible rationale to defer patching devices that cannot physically bridge into critical power or cooling trains.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORKED USE CASE: THREE-GATE LEDGER -->
+  <section style="padding: 3.5rem 0; background: var(--card); border-top: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 1.5rem;">
+        <span class="eyebrow-orange">WORKED USE CASE & EVIDENCE LEDGER</span>
+        <h2 class="section-title-serif">Scenario: AI Cluster CDU Loop & Chiller Facility Compromise</h2>
+        <p style="color: var(--text-secondary); max-width: 800px;">
+          Demonstrating the exact progression from baseline exposure, to virtual control simulation, to the approved engineering decision output.
+        </p>
+      </div>
+
+      <div class="node-chip-chain">
+        <span class="node-chip">Vendor Cellular VPN</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">BMS BACnet Gateway</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Row 01 CDU Controller</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip" style="border-color: var(--signal-red); color: var(--signal-red);">Cooling Starvation (40kW AI Racks)</span>
+      </div>
+
+      <!-- THREE GATE LEDGER -->
+      <div class="three-gate-ledger">
+        
+        <!-- COLUMN 1: BASELINE -->
+        <div class="ledger-col ledger-col-baseline">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-baseline">1. Baseline As-Documented</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-slate);">SL-1 / EXPOSED</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Entry Route:</strong> Remote vendor technician cellular maintenance gateway into BMS VLAN 40.<br><br>
+            <strong>Lateral Path:</strong> Unauthenticated BACnet/IP broadcast reaches Row 01–04 Liquid Cooling Distribution Units (CDUs).<br><br>
+            <strong>Consequence:</strong> Attacker overrides secondary supply temperature setpoint, starving 64 AI compute nodes within 90 seconds ($4.2M hourly revenue risk).
+          </p>
+        </div>
+
+        <!-- COLUMN 2: PROPOSED CONTROL -->
+        <div class="ledger-col ledger-col-proposed">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-proposed">2. Proposed Virtual Control</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber);">VIRTUAL TEST</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Simulated Remediation:</strong><br>
+            • Enforce IEC 62443 Zone 3.2 isolation on CDU communication loops.<br>
+            • Insert unidirectional Modbus proxy between BMS supervisor and secondary coolant pumps.<br>
+            • Hardware-lock minimum flow override at local PLC firmware register.
+          </p>
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--signal-amber); background: rgba(218, 125, 15, 0.1); padding: 0.5rem; border-radius: var(--radius-xs);">
+            Simulated Path Result: Attack route severed (0% thermal disruption probability).
+          </div>
+        </div>
+
+        <!-- COLUMN 3: DECISION OUTPUT -->
+        <div class="ledger-col ledger-col-decision">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-decision">3. Decision Output</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-green);">ACTIONABLE</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            <div style="margin-bottom: 0.5rem;"><strong>Action:</strong> Approved zone conduit filter change.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Window:</strong> Planned 2-hour maintenance window.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Capital Required:</strong> $14,500 (hardware proxy).</div>
+            <div><strong>Residual Risk:</strong> Acceptable under NIS2 Annex I.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- REGULATORY & COMPLIANCE MATRIX -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      
+      <div class="grid-2" style="gap: 3rem; align-items: center;">
+        <div>
+          <span class="eyebrow-orange">COMPLIANCE & GOVERNANCE</span>
+          <h2 class="section-title-serif">EU NIS2, CRA & Energy Efficiency Directive Ready</h2>
+          <p class="body-prose">
+            Under EU NIS2, data center operators are categorized as essential digital infrastructure entities with mandatory incident notification within 24 hours and strict supply-chain risk accountability.
+          </p>
+          <p class="body-prose">
+            OXOT exports audit-ready evidence packages linking physical single-lines to zone-and-conduit compliance maps under IEC 62443-3-3 and NIS2 Article 21.
+          </p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+            <span class="badge badge-outline">NIS2 Directive Annex I</span>
+            <span class="badge badge-outline">EU Cyber Resilience Act</span>
+            <span class="badge badge-outline">IEC 62443-3-3 Zones</span>
+            <span class="badge badge-outline">EED 500kW Reporting</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 2rem;">
+          <h4 style="color: #fff; margin-bottom: 1.25rem; font-size: 1.15rem;">Automated Compliance Deliverables</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.88rem; color: var(--text-secondary);">
+            <li style="display: flex; gap: 0.5rem;">
+              <span style="color: var(--dutch-orange);">✓</span>
+              <span><strong>Zone & Conduit Architectural Proof:</strong> Mathematical verification that BMS networks cannot route into tenant data planes.</span>
+            </li>
+            <li style="display: flex; gap: 0.5rem;">
+              <span style="color: var(--dutch-orange);">✓</span>
+              <span><strong>Supply Chain SBOM Impact Map:</strong> Identify every vendor controller, PLC, and gateway vulnerable to upstream CVEs.</span>
+            </li>
+            <li style="display: flex; gap: 0.5rem;">
+              <span style="color: var(--dutch-orange);">✓</span>
+              <span><strong>Continuous Evidence Trail:</strong> Cryptographic hashes of all ingested engineering single-lines and network configuration exports.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 3.5rem 0; background: var(--secondary); border-top: 1px solid var(--border);">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow-orange">NEXT STEP</span>
+      <h2 style="font-family: var(--font-serif); font-size: 2.25rem; color: #fff; margin-bottom: 1rem;">
+        Model your datacenter campus in a 60-day decision sprint.
+      </h2>
+      <p style="color: var(--text-secondary); max-width: 680px; margin: 0 auto 2rem; font-size: 1rem;">
+        Provide your EPMS one-line and BMS riser diagrams. We build the digital twin replica to deliver quantified risk ratings and safe change procedures.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="../../due-diligence.html" class="btn btn-dutch-orange">
+          Request Datacenter Decision Sprint
+        </a>
+        <a href="../../master-explorer.html" class="btn btn-secondary">
+          Open 3D Campus Explorer
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="oxot-global-footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OXOT Cyber Digital Twin — Executive Platform Brochure</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css">
+  <style>
+    .quote-box {
+      background: var(--card);
+      border-left: 4px solid var(--dutch-orange);
+      padding: 1.5rem 2rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 2rem 0;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section style="padding: 4.5rem 0 3rem; background: radial-gradient(circle at 50% 0%, #151e29 0%, #070a0e 70%);">
+    <div class="container">
+      <span class="eyebrow-orange">EXECUTIVE PLATFORM BRIEF · IEC 62443 · NIS2 · CRA</span>
+      <h1 class="hero-title-serif">
+        Model your facility.<br>
+        Simulate the failure.<br>
+        <span style="color: var(--dutch-orange);">Know where to spend.</span>
+      </h1>
+      <p class="body-prose" style="max-width: 850px; font-size: 1.15rem;">
+        OXOT's Cyber Digital Twin is a living engineering model of your facility — not a checklist, not an industry-average score. Change something in the model and see the real physical consequence: what breaks, what it costs, and who is affected.
+      </p>
+      
+      <!-- COMPONENT 1: SHADCN CARD GRID -->
+      <div class="grid-4" style="margin-top: 2.5rem;">
+        <div class="shadcn-card">
+          <div class="shadcn-card-header" style="margin-bottom: 0.5rem;">
+            <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.25rem;">DIMENSION 1</span>
+            <div style="color: #fff; font-size: 1.2rem; font-weight: 700;">Geometry</div>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">The facility as built, in true physical scale and clearance.</p>
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header" style="margin-bottom: 0.5rem;">
+            <span class="badge badge-cyan" style="width: fit-content; margin-bottom: 0.25rem;">DIMENSION 2</span>
+            <div style="color: #fff; font-size: 1.2rem; font-weight: 700;">Topology</div>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">Every routed cable, conduit, busbar, and pipe.</p>
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header" style="margin-bottom: 0.5rem;">
+            <span class="badge" style="background: rgba(66,150,246,0.12); color: var(--signal-blue); border-color: rgba(66,150,246,0.25); width: fit-content; margin-bottom: 0.25rem;">DIMENSION 3</span>
+            <div style="color: #fff; font-size: 1.2rem; font-weight: 700;">Attributes</div>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">Firmware version, safety interlocks, and 5 BOMs.</p>
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header" style="margin-bottom: 0.5rem;">
+            <span class="badge badge-emerald" style="width: fit-content; margin-bottom: 0.25rem;">DIMENSION 4</span>
+            <div style="color: #fff; font-size: 1.2rem; font-weight: 700;">Behaviour</div>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">What happens when something is attacked or fails.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-bottom: 5rem;">
+    
+    <!-- SECTION 1: THE CORE PROBLEM -->
+    <section style="padding: 3.5rem 0; border-bottom: 1px solid var(--border);">
+      <span class="eyebrow-orange">01 / THE GAP IN INDUSTRIAL SECURITY</span>
+      <h2 class="section-title-serif">Security tools that don't know what a valve does.</h2>
+
+      <p class="body-prose" style="font-size: 1.05rem; margin-top: 1rem;">
+        Operational Technology (OT) inherited its playbook from corporate IT — firewalls, patch cadence, network monitoring. None of it was built to understand that patching a system might disable a safety interlock, or that a "low-severity" vulnerability sits on the single pump controller that would shut down an entire data hall if it failed.
+      </p>
+
+      <!-- COMPONENT 2: SHADCN ALERTS -->
+      <div class="grid-2" style="margin-top: 2rem;">
+        <div class="shadcn-alert" style="border-left-color: var(--destructive); margin: 0;">
+          <div class="shadcn-alert-icon" style="color: var(--destructive);">❌</div>
+          <div class="shadcn-alert-body">
+            <div class="shadcn-alert-title">THE VULNERABILITY SCANNER VIEW</div>
+            <div class="shadcn-alert-description">
+              "Device runs firmware 3.1.2 with 4 open CVEs." It cannot tell you if that controller manages cooling for 48 critical server racks, or if an outage cascades into a $3.2M thermal event.
+            </div>
+          </div>
+        </div>
+
+        <div class="shadcn-alert" style="border-left-color: var(--dutch-orange); margin: 0;">
+          <div class="shadcn-alert-icon">⚡</div>
+          <div class="shadcn-alert-body">
+            <div class="shadcn-alert-title">THE CYBER DIGITAL TWIN VIEW</div>
+            <div class="shadcn-alert-description">
+              "Device is on Z3 Modbus loop with no trip barrier." Calculates exact Annualized Loss Expectancy ($3.2M ALE) and proves that an out-of-band hardware isolator ($45k) eliminates exposure immediately.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        "Without a model of physical consequence, every security decision is a negotiation nobody can win cleanly. OXOT turns the negotiation into a calculation."
+      </div>
+    </section>
+
+    <!-- COMPONENT 3: SHADCN SEPARATOR WITH LABEL -->
+    <div class="separator-with-label">
+      <span>THE SELDON ENGINE MATHEMATICAL PROOFS</span>
+    </div>
+
+    <!-- SECTION 2: THE SELDON ENGINE -->
+    <section style="padding-bottom: 3.5rem;">
+      <span class="eyebrow-orange">02 / THE SELDON ENGINE</span>
+      <h2 class="section-title-serif">Seven Mathematical Axioms of Consequence</h2>
+      <p class="body-prose" style="font-size: 1.05rem;">
+        Rooted in statistical physics, topological graph theory, and actuarial loss distributions.
+      </p>
+
+      <div class="grid-3" style="margin-top: 2rem;">
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--dutch-orange); font-size: 0.95rem;">1. Deterministic Topology</strong>
+          </div>
+          <div class="shadcn-card-content">
+            Every conduit is a physical path solved via Dijkstra across real cable trays and busways.
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--signal-cyan); font-size: 0.95rem;">2. Level 1 Physics Fidelity</strong>
+          </div>
+          <div class="shadcn-card-content">
+            Thermodynamics, fluid flow, and power dissipation determine cascading failure timing.
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--signal-blue); font-size: 0.95rem;">3. Reachable Attack Surfaces</strong>
+          </div>
+          <div class="shadcn-card-content">
+            Exploitability is scored only over authentic initiated routable protocol paths.
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--dutch-orange); font-size: 0.95rem;">4. TACAM 7D Threat Profiling</strong>
+          </div>
+          <div class="shadcn-card-content">
+            Adversary capabilities matched against 389 threat groups and 62,965 vendor CPEs.
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--signal-cyan); font-size: 0.95rem;">5. Monte Carlo Simulations</strong>
+          </div>
+          <div class="shadcn-card-content">
+            10,000 campaign iterations generate 95% confidence interval breach probabilities.
+          </div>
+        </div>
+
+        <div class="shadcn-card">
+          <div class="shadcn-card-header">
+            <strong style="color: var(--signal-green); font-size: 0.95rem;">6. Actuarial Loss (ALE)</strong>
+          </div>
+          <div class="shadcn-card-content">
+            Monetary consequence calibrated from SEC EDGAR 8-K disclosures and insurer data.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPONENT 4: SHADCN ACCORDION -->
+    <section style="padding: 3rem 0; border-top: 1px solid var(--border);">
+      <span class="eyebrow-orange">03 / DECISION GOVERNANCE</span>
+      <h2 class="section-title-serif" style="margin-bottom: 2rem;">The Four Operational Decisions</h2>
+
+      <div class="grid-2">
+        <div class="shadcn-card" style="border-left: 4px solid var(--dutch-orange);">
+          <div class="shadcn-card-header">
+            <h4 style="color:#fff; font-size: 1.15rem;">1. What Do We Fix First?</h4>
+          </div>
+          <div class="shadcn-card-content">
+            Ranks every finding by <code>Consequence × Exploitability</code>, isolating the top 3% of vulnerabilities that pose an existential operational threat.
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-cyan);">
+          <div class="shadcn-card-header">
+            <h4 style="color:#fff; font-size: 1.15rem;">2. What Should We Spend?</h4>
+          </div>
+          <div class="shadcn-card-content">
+            Calculates return on security spend (ALARP justification), proving where risk reduction saturates and capital is best deployed.
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-blue);">
+          <div class="shadcn-card-header">
+            <h4 style="color:#fff; font-size: 1.15rem;">3. Can We Change Safely?</h4>
+          </div>
+          <div class="shadcn-card-content">
+            Simulates firmware updates, firewall rule edits, or controller replacements in the digital twin before touching live facility equipment.
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-green);">
+          <div class="shadcn-card-header">
+            <h4 style="color:#fff; font-size: 1.15rem;">4. What Can We Leave Alone?</h4>
+          </div>
+          <div class="shadcn-card-content">
+            Gives security teams written authorization to accept non-reachable low-risk CVEs without endless patching fatigue.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 3.5rem; text-align: center;">
+        <a href="master-explorer.html" class="btn btn-dutch-orange" style="padding: 0.85rem 2.25rem;">
+          <span>Explore in Live 3D Twin</span>
+          <span>⚡</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="shared/oxot-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OXOT Decision Sprint &amp; Services — 21-Day OT Cyber Digital Twin Suite</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css?v=20260831_2">
+  <style>
+    /* ==========================================================================
+       STICKY SUB-NAV BAR (GLASSMORPHIC WITH SCROLL-SPY)
+       ========================================================================== */
+    .sticky-subnav-wrapper {
+      position: sticky;
+      top: 56px;
+      z-index: 850;
+      background: rgba(7, 10, 14, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0;
+      transition: all 0.25s ease;
+    }
+
+    .sticky-subnav-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 0.15rem 0;
+    }
+
+    .sticky-subnav-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .subnav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+    }
+
+    .subnav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .subnav-link.active {
+      color: var(--dutch-orange);
+      background: var(--dutch-orange-subtle);
+      border-color: var(--dutch-orange-border);
+      box-shadow: 0 0 12px rgba(238, 118, 35, 0.15);
+    }
+
+    .subnav-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      opacity: 0.7;
+    }
+
+    .subnav-link.active .subnav-num {
+      opacity: 1;
+      color: var(--dutch-orange);
+    }
+
+    /* ==========================================================================
+       SECTION WRAPPERS & ANCHOR OFFSETS
+       ========================================================================== */
+    .services-section {
+      padding: 4.5rem 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 110px;
+      position: relative;
+    }
+
+    .section-header-area {
+      margin-bottom: 2.25rem;
+    }
+
+    /* Briefing Stage Grid */
+    .stage-wrap {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .stage-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .stage-item {
+      padding: 0.8rem 0.95rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stage-item:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+
+    .stage-item.active {
+      background: var(--dutch-orange-subtle);
+      border-color: var(--dutch-orange-border);
+      color: #fff;
+    }
+
+    .stage-item.active .stage-num {
+      color: var(--dutch-orange);
+    }
+
+    .stage-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stage-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .stage-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2.25rem;
+      min-height: 480px;
+    }
+
+    /* 5-Stage Workshop Carousel Styles */
+    .phase-tabs-nav {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin: 1.5rem 0 1.25rem;
+    }
+
+    .phase-tab-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 0.65rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .phase-tab-btn:hover {
+      background: var(--secondary);
+    }
+
+    .phase-tab-btn.active {
+      background: rgba(238, 118, 35, 0.08);
+      border-color: var(--dutch-orange);
+      box-shadow: 0 0 15px rgba(238, 118, 35, 0.18);
+    }
+
+    .tab-progress-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .tab-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--dutch-orange);
+      transition: width 0.1s linear;
+    }
+
+    .tab-badge-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      letter-spacing: 0.05em;
+    }
+
+    .phase-tab-btn.active .tab-badge-num {
+      color: var(--dutch-orange);
+    }
+
+    .tab-title-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--foreground);
+    }
+
+    .phase-tab-pane {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2.25rem;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .phase-tab-pane.active {
+      display: block;
+    }
+
+    .detail-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .detail-card-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .title-label {
+      font-size: 0.85rem;
+      color: var(--dutch-orange);
+      margin-bottom: 0.6rem;
+      display: block;
+      letter-spacing: 0.02em;
+    }
+
+    .flow-bl {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .flow-bl li {
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .flow-bl li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--dutch-orange);
+    }
+
+    .floor-walk-banner {
+      background: rgba(238, 118, 35, 0.08);
+      border: 1px solid var(--dutch-orange-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Evidence Tabs */
+    .evidence-tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .evidence-tab-pane.active {
+      display: block;
+    }
+
+    .code-box {
+      background: #03060a;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #7ee787;
+      margin: 1.25rem 0;
+    }
+
+    /* 3-Tier Deployment Grid */
+    .deployment-options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+    }
+
+    .deployment-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .deployment-col:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .deployment-col.active-option {
+      border-color: var(--dutch-orange);
+      box-shadow: 0 0 25px rgba(238, 118, 35, 0.15);
+      background: linear-gradient(180deg, rgba(238, 118, 35, 0.04) 0%, var(--card) 100%);
+    }
+
+    .deployment-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 992px) {
+      .stage-wrap { grid-template-columns: 1fr; }
+      .phase-tabs-nav { grid-template-columns: 1fr 1fr; }
+      .detail-grid-3 { grid-template-columns: 1fr; }
+      .deployment-options-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MASTER HERO SECTION -->
+  <header style="padding: 4rem 0 3rem; background: radial-gradient(circle at 50% 0%, #151e29 0%, #070a0e 75%); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.75rem;">
+        <span class="eyebrow-orange" style="margin-bottom: 0;">OXOT CONSULTING &amp; DECISION SPRINTS</span>
+        <span class="nav-badge" style="font-family: monospace; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: rgba(238,118,35,0.16); color: #EE7623; border: 1px solid rgba(238,118,35,0.45); letter-spacing: 0.05em;">21-DAY</span>
+      </div>
+      
+      <h1 class="hero-title-serif" style="font-size: clamp(2.2rem, 4vw, 3.2rem); max-width: 920px;">
+        Rapid Operational Technology Due Diligence, Evidence Trails &amp; Living Digital Twins
+      </h1>
+      
+      <p class="body-prose" style="max-width: 820px; font-size: 1.12rem; margin-bottom: 2rem;">
+        Solve high-stakes industrial cybersecurity questions, price hidden OT acquisition liabilities, prove ALARP spend ROI, and generate complete EU CRA / IEC 62443 compliance dossiers in a focused 21-day sprint with zero facility downtime.
+      </p>
+
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <a href="master-explorer.html" class="btn btn-dutch-orange">
+          <span>Launch 3D Facility Twin ↗</span>
+        </a>
+        <a href="#sprint-lifecycle" class="btn btn-outline">
+          <span>Explore 21-Day Lifecycle ↓</span>
+        </a>
+        <div style="display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap;">
+          <span class="badge badge-primary">21-DAY SPRINT</span>
+          <span class="badge badge-cyan">0 PACKETS TO PLCS</span>
+          <span class="badge badge-emerald">CRA &amp; IEC 62443 READY</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY SUB-NAV BAR (BOOKMARK SHORTCUTS) -->
+  <nav class="sticky-subnav-wrapper" aria-label="Section shortcuts">
+    <div class="container">
+      <div class="sticky-subnav-container" id="subnav-container">
+        <a href="#briefing-suite" class="subnav-link active">
+          <span class="subnav-num">01.</span>
+          <span>Briefing Suite</span>
+        </a>
+        <a href="#sprint-lifecycle" class="subnav-link">
+          <span class="subnav-num">02.</span>
+          <span>21-Day Lifecycle</span>
+        </a>
+        <a href="#workshop-process" class="subnav-link">
+          <span class="subnav-num">03.</span>
+          <span>The 2-Workshop Process</span>
+        </a>
+        <a href="#due-diligence" class="subnav-link">
+          <span class="subnav-num">04.</span>
+          <span>M&amp;A Due Diligence</span>
+        </a>
+        <a href="#evidence-trail" class="subnav-link">
+          <span class="subnav-num">05.</span>
+          <span>Evidence Trail</span>
+        </a>
+        <a href="#engagement-models" class="subnav-link">
+          <span class="subnav-num">06.</span>
+          <span>Engagement Models &amp; Retainers</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- =========================================================================
+         SECTION 01: CUSTOMER BRIEFING SUITE (#briefing-suite)
+         ========================================================================= -->
+    <section class="services-section" id="briefing-suite">
+      <div class="container">
+        <div class="section-header-area">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="eyebrow-orange">01 &nbsp; EXECUTIVE BRIEFING</span>
+              <h2 class="section-title-serif" style="font-size: 2.1rem;">Customer Briefing Suite</h2>
+              <p class="body-prose" style="max-width: 800px; font-size: 1.05rem;">
+                Step through the 7-stage executive walkthrough showing how OXOT ingests schematics, walks lateral threat pathways, and delivers board-ready loss memos.
+              </p>
+            </div>
+            <span class="badge badge-emerald">EXECUTIVE PRESENTATION MODE</span>
+          </div>
+        </div>
+
+        <div class="stage-wrap">
+          <!-- Stage Selector Nav -->
+          <div class="stage-nav">
+            <div class="stage-item active" onclick="showStage(1, this)">
+              <span class="stage-num">STAGE 01</span>
+              <span class="stage-title">The Operational Challenge</span>
+            </div>
+            <div class="stage-item" onclick="showStage(2, this)">
+              <span class="stage-num">STAGE 02</span>
+              <span class="stage-title">Document Ingestion &amp; 3D Model</span>
+            </div>
+            <div class="stage-item" onclick="showStage(3, this)">
+              <span class="stage-num">STAGE 03</span>
+              <span class="stage-title">Workshop 1: Threat Calibration</span>
+            </div>
+            <div class="stage-item" onclick="showStage(4, this)">
+              <span class="stage-num">STAGE 04</span>
+              <span class="stage-title">5-BOM Transitive Dependencies</span>
+            </div>
+            <div class="stage-item" onclick="showStage(5, this)">
+              <span class="stage-num">STAGE 05</span>
+              <span class="stage-title">Simulating Virtual Controls</span>
+            </div>
+            <div class="stage-item" onclick="showStage(6, this)">
+              <span class="stage-num">STAGE 06</span>
+              <span class="stage-title">Workshop 2: Financial ALE Proof</span>
+            </div>
+            <div class="stage-item" onclick="showStage(7, this)">
+              <span class="stage-num">STAGE 07</span>
+              <span class="stage-title">Certified Regulatory Deliverables</span>
+            </div>
+          </div>
+
+          <!-- Stage Content Card -->
+          <div class="stage-content" id="stage-display">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 02: 21-DAY DECISION SPRINT LIFECYCLE (#sprint-lifecycle)
+         ========================================================================= -->
+    <section class="services-section" id="sprint-lifecycle" style="background: rgba(0,0,0,0.18);">
+      <div class="container">
+        <div class="section-header-area">
+          <span class="eyebrow-orange">02 &nbsp; RAPID TIMELINE &amp; PROVEN IMPACT</span>
+          <h2 class="section-title-serif" style="font-size: 2.1rem;">The 21-Day Decision Sprint Lifecycle</h2>
+          <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+            Zero disruption to operating facility. All modeling is executed passively from existing engineering drawings, single-line diagrams, and network switch configurations.
+          </p>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 3rem;">
+          <div class="shadcn-card" style="border-left: 4px solid var(--signal-cyan);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-cyan" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 1 – 7</span>
+              <h4 class="shadcn-card-title">Ingestion &amp; Temporary Twin</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; margin-bottom: 1rem; color: var(--text-secondary);">
+                Ingest P&amp;ID schematics, single-line diagrams, and switch tables into the Seldon Engine.
+              </p>
+              <ul class="flow-bl">
+                <li>449 assets bound to temporary model</li>
+                <li>Purdue logical topology mapped</li>
+                <li>Zero packets sent to facility</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="shadcn-card" style="border-left: 4px solid var(--dutch-orange);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 8 – 14</span>
+              <h4 class="shadcn-card-title">Calibration Workshop &amp; Attack Walk</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; margin-bottom: 1rem; color: var(--text-secondary);">
+                Collaborative 3-hour session walking lateral attack pathways and simulating kinetic failure propagation against the specific decision.
+              </p>
+              <ul class="flow-bl">
+                <li>Sector threat framing (ATQ)</li>
+                <li>Kinetic cascading failure simulation</li>
+                <li>Virtual countermeasure testing</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="shadcn-card" style="border-left: 4px solid var(--signal-green);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-emerald" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 15 – 21</span>
+              <h4 class="shadcn-card-title">Financial Loss Memo &amp; Readout</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; margin-bottom: 1rem; color: var(--text-secondary);">
+                Deliver exact Annualized Loss Expectancy (ALE), ALARP remediation proof, and executive decision ledger.
+              </p>
+              <ul class="flow-bl">
+                <li>Board-ready financial loss memo</li>
+                <li>NOW / NEXT / NEVER triage (A8)</li>
+                <li>Temporary model archived / delivered</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WORKED CASE STUDY CARD -->
+        <div class="shadcn-card" style="padding: 2.25rem; border: 1px solid var(--border); background: #080c12;">
+          <div class="shadcn-card-header" style="flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+            <span class="badge badge-emerald">WORKED CASE STUDY · 96-RACK HYPERSCALE CAMPUS</span>
+            <span style="font-family: var(--font-mono); color: var(--signal-green); font-size: 0.85rem;">21-DAY M&amp;A DECISION SPRINT</span>
+          </div>
+          <div class="shadcn-card-content">
+            <h3 class="section-title-serif" style="font-size: 1.65rem; margin-bottom: 0.85rem; color: #fff;">
+              $4.2M Unfunded Risk Identified Prior to Deal Close
+            </h3>
+            <p class="body-prose" style="font-size: 0.98rem; margin-bottom: 1.5rem; color: var(--text-secondary);">
+              During an M&amp;A Decision Sprint for a hyperscale facility acquisition, traditional IT scanning reported "green" compliance. The temporary OXOT digital twin ingested the facility's single-line diagrams and discovered an unsegmented BMS jumpbox reachable from the corporate tenant network that possessed trip authority over the primary MV switchgear.
+            </p>
+            
+            <div class="grid-3">
+              <div style="background: rgba(0,0,0,0.35); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <strong style="color: var(--muted-foreground); font-size: 0.72rem; text-transform: uppercase;">IDENTIFIED EXPOSURE</strong>
+                <div style="color: var(--destructive); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$8.88M Baseline ALE</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.35); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <strong style="color: var(--muted-foreground); font-size: 0.72rem; text-transform: uppercase;">REMEDIATION CAPEX</strong>
+                <div style="color: var(--dutch-orange); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$125,000 Spend</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.35); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <strong style="color: var(--muted-foreground); font-size: 0.72rem; text-transform: uppercase;">POST-FIX RESIDUAL RISK</strong>
+                <div style="color: var(--signal-green); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$680,000 ALE (92% Cut)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 03: THE 2-WORKSHOP METHODOLOGY (#workshop-process)
+         ========================================================================= -->
+    <section class="services-section" id="workshop-process">
+      <div class="container">
+        <div class="section-header-area">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="eyebrow-orange">03 &nbsp; STRUCTURED METHODOLOGY</span>
+              <h2 class="section-title-serif" style="font-size: 2.1rem;">The 2-Workshop Process &amp; Roadmap</h2>
+              <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+                Autonomous modeling combined with two focused 3-hour collaborative sessions with facility engineering and C-suite decision makers.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <button class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;" id="carousel-pause-btn" onclick="toggleCarouselPause()">⏸️ Pause</button>
+              <span class="badge badge-primary" id="carousel-status-badge">AUTO-PROGRESSING (4s)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Horizontal Tabs -->
+        <div class="phase-tabs-nav" id="carousel-tabs-container" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+          <button class="phase-tab-btn active" onclick="selectCarouselTab(0)">
+            <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+            <span class="tab-badge-num">PHASE 01</span>
+            <span class="tab-title-text">Build the Model</span>
+          </button>
+          <button class="phase-tab-btn" onclick="selectCarouselTab(1)">
+            <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+            <span class="tab-badge-num">WORKSHOP 01 · 3 HOURS</span>
+            <span class="tab-title-text">Threat Calibration</span>
+          </button>
+          <button class="phase-tab-btn" onclick="selectCarouselTab(2)">
+            <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+            <span class="tab-badge-num">PHASE 02</span>
+            <span class="tab-title-text">Load Consequence</span>
+          </button>
+          <button class="phase-tab-btn" onclick="selectCarouselTab(3)">
+            <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+            <span class="tab-badge-num">WORKSHOP 02 · 3 HOURS</span>
+            <span class="tab-title-text">ALARP Sign-Off</span>
+          </button>
+          <button class="phase-tab-btn" onclick="selectCarouselTab(4)">
+            <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+            <span class="tab-badge-num">PHASE 03</span>
+            <span class="tab-title-text">Verify &amp; Report</span>
+          </button>
+        </div>
+
+        <!-- Carousel Panes -->
+        <div id="carousel-panes-wrapper" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+          
+          <!-- Pane 0: Phase 1 -->
+          <div class="phase-tab-pane active" id="pane-phase-1">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <span class="badge badge-cyan" style="margin-bottom: 0.4rem; display: inline-block;">PHASE 01</span>
+                <h3 class="section-title-serif" style="font-size: 1.55rem; margin: 0;">Model Ingestion &amp; Baseline Twin Construction</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0;">
+                  Send us your engineering drawings. We build your facility's digital twin without touching your operational network.
+                </p>
+              </div>
+              <span class="badge badge-outline">AUTONOMOUS EXECUTION · ZERO DOWNTIME</span>
+            </div>
+
+            <div class="detail-grid-3">
+              <div class="detail-card-box">
+                <strong class="title-label">📁 Required Engineering Inputs</strong>
+                <ul class="flow-bl">
+                  <li><strong>High-Level Design (HLD):</strong> Campus power, cooling, compute topologies.</li>
+                  <li><strong>Detailed Design (DLD):</strong> Panel schedules, cable schedules, IP VLAN allocations.</li>
+                  <li><strong>Interface Control Docs (ICD):</strong> Vendor interfaces, Modbus/BACnet point lists.</li>
+                  <li><strong>Equipment Manifests:</strong> PLC models, firmware versions, generator specs.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">⚙️ Seldon Engine Automation</strong>
+                <ul class="flow-bl">
+                  <li><strong>Asset Extraction:</strong> Resolves 449 physical and logical assets into a canonical ontology.</li>
+                  <li><strong>Connection Synthesis:</strong> Maps 1,155 conduits and classifies services vs. carrier protocols.</li>
+                  <li><strong>Routable Boundary Isolation:</strong> Separates routable Ethernet from hardwired serial links.</li>
+                  <li><strong>3D Mesh Binding:</strong> Binds each asset node to interactive 3D coordinates.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">📋 Deliverables Produced</strong>
+                <ul class="flow-bl">
+                  <li><strong>Asset Register (A1):</strong> Complete 449-asset inventory with Purdue levels.</li>
+                  <li><strong>Connection Graph (A2):</strong> Solved 1,155-link conduit graph.</li>
+                  <li><strong>Service Inventory:</strong> Protocol and payload distribution catalogue.</li>
+                  <li><strong>Interactive 3D Twin:</strong> Navigable campus twin ready for Workshop 1.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 1: Workshop 1 -->
+          <div class="phase-tab-pane" id="pane-workshop-1">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <span class="badge badge-primary" style="margin-bottom: 0.4rem; display: inline-block;">WORKSHOP 01 · 3 HOURS</span>
+                <h3 class="section-title-serif" style="font-size: 1.55rem; margin: 0;">Threat &amp; Vulnerability Calibration (TVA)</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0;">
+                  Walk through the 3D twin together, visit the facility floor, and establish your realistic threat profile.
+                </p>
+              </div>
+              <span class="badge badge-primary">COLLABORATIVE SESSION · SME TIME: 3 HOURS</span>
+            </div>
+
+            <div class="detail-grid-3">
+              <div class="detail-card-box">
+                <strong class="title-label">👥 Participants &amp; Roles</strong>
+                <ul class="flow-bl">
+                  <li><strong>Facility Operations Director:</strong> Validates real-world operational procedures.</li>
+                  <li><strong>Lead OT/Control Engineer:</strong> Confirms PLC wiring, maintenance tunnels, and DCS loops.</li>
+                  <li><strong>CISO / Security Architect:</strong> Aligns enterprise threat intelligence with facility policies.</li>
+                  <li><strong>OXOT Lead Architect:</strong> Moderates session and executes real-time calibrations.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">🔍 Interactive Workshop Activities</strong>
+                <ul class="flow-bl">
+                  <li><strong>Digital Twin Redline:</strong> Walk through 3D campus to reconcile drawing-vs-facility drift.</li>
+                  <li><strong>ATQ Sector Threat Calibration:</strong> Frame realistic adversary profiles.</li>
+                  <li><strong>SIL Asset Identification:</strong> Mark safety-instrumented systems and emergency shutoffs.</li>
+                  <li><strong>Initial Zone &amp; Conduit Cut:</strong> Define boundary crossings under IEC 62443-3-2 §5.6.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">📋 Outputs &amp; Milestones</strong>
+                <ul class="flow-bl">
+                  <li><strong>As-Is Facility Corrections:</strong> Corrected asset registry reflecting real physical installation.</li>
+                  <li><strong>Initial SL-T Target Matrix (A3):</strong> Target security levels assigned per zone.</li>
+                  <li><strong>SIL Boundary Ledger:</strong> Isolated safety systems verified against network access.</li>
+                  <li><strong>Calibration Sign-off:</strong> Consensus baseline for consequence loading in Phase 2.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="floor-walk-banner">
+              <span style="font-size: 1.5rem;">🚶‍♂️</span>
+              <div>
+                <strong style="color: #ffffff; font-size: 0.88rem;">Integrated Floor Walk 1: Physical As-Is Facility Reconciliation</strong>
+                <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0.15rem 0 0;">
+                  Immediately following Workshop 1, OXOT engineers conduct an on-site physical floor walk alongside facility staff to verify cabinet locations, check unmanaged maintenance ports, and validate physical conduit separation.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Phase 2 -->
+          <div class="phase-tab-pane" id="pane-phase-2">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <span class="badge badge-cyan" style="margin-bottom: 0.4rem; display: inline-block;">PHASE 02</span>
+                <h3 class="section-title-serif" style="font-size: 1.55rem; margin: 0;">Consequence &amp; Operational Dependency Loading</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0;">
+                  We attach your safety FMEA to the model and calculate exact financial downtime costs per hour.
+                </p>
+              </div>
+              <span class="badge badge-outline">AUTONOMOUS EXECUTION · ZERO DOWNTIME</span>
+            </div>
+
+            <div class="detail-grid-3">
+              <div class="detail-card-box">
+                <strong class="title-label">📊 Actuarial Consequence Engines</strong>
+                <ul class="flow-bl">
+                  <li><strong>Kinetic Damage Physics:</strong> Maps thermal runaway, pressure surges, and breaker trips.</li>
+                  <li><strong>Financial Hourly Downtime:</strong> Embeds contract SLA penalties and revenue loss per minute.</li>
+                  <li><strong>Life-Safety Classifications:</strong> Flags toxic release and arc flash boundaries.</li>
+                  <li><strong>Monte Carlo Reachability:</strong> Runs 10,000 stochastic attack paths across all conduits.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">🛡️ Automated Controls Modeling</strong>
+                <ul class="flow-bl">
+                  <li><strong>Baseline ZCR Generation:</strong> Determines Achieved Security Levels (SL-A).</li>
+                  <li><strong>Gap Analysis:</strong> Calculates delta between Target SL and Achieved SL.</li>
+                  <li><strong>Virtual Mitigation Testing:</strong> Inserts diodes and firewalls in simulation.</li>
+                  <li><strong>ALARP Spend Curve:</strong> Plots risk reduction against CapEx cost.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">📋 Deliverables Produced</strong>
+                <ul class="flow-bl">
+                  <li><strong>Draft ZCR Matrix (A4):</strong> Zone &amp; conduit security analysis.</li>
+                  <li><strong>Remediation Option Cards (A5):</strong> Candidate controls with CapEx pricing.</li>
+                  <li><strong>ALARP Frontier Model:</strong> Quantitative proof of diminishing returns.</li>
+                  <li><strong>Workshop 2 Briefing Pack:</strong> Decision materials for leadership review.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 3: Workshop 2 -->
+          <div class="phase-tab-pane" id="pane-workshop-2">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <span class="badge badge-emerald" style="margin-bottom: 0.4rem; display: inline-block;">WORKSHOP 02 · 3 HOURS</span>
+                <h3 class="section-title-serif" style="font-size: 1.55rem; margin: 0;">ALARP Remediation &amp; Risk Sign-Off</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0;">
+                  Executive leadership agrees on the remediation plan with mathematical proof of optimal spend.
+                </p>
+              </div>
+              <span class="badge badge-emerald">DECISION FORUM · SME TIME: 3 HOURS</span>
+            </div>
+
+            <div class="detail-grid-3">
+              <div class="detail-card-box">
+                <strong class="title-label">👥 Executive Participants</strong>
+                <ul class="flow-bl">
+                  <li><strong>VP Infrastructure / COO:</strong> Signs off on operational risk and CapEx allocation.</li>
+                  <li><strong>Chief Information Security Officer:</strong> Confirms regulatory compliance and control coverage.</li>
+                  <li><strong>Facility General Manager:</strong> Approves physical maintenance windows.</li>
+                  <li><strong>OXOT Lead Risk Actuary:</strong> Presents ALE reduction metrics and mathematical proofs.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">🎯 Key Decisions Finalized</strong>
+                <ul class="flow-bl">
+                  <li><strong>NOW Remediations:</strong> Controls with disproportionate risk reduction.</li>
+                  <li><strong>NEXT Planned Upgrades:</strong> Items scheduled into planned outages.</li>
+                  <li><strong>NEVER Accepted Risks:</strong> Defensible risk acceptance under ALARP.</li>
+                  <li><strong>Regulatory Filing Approval:</strong> Sign-off on EU CRA / IEC 62443 compliance file.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">📋 Outputs &amp; Milestones</strong>
+                <ul class="flow-bl">
+                  <li><strong>Final Remediated ZCR (A6):</strong> Approved target architecture.</li>
+                  <li><strong>Triage Register (A8):</strong> NOW / NEXT / NEVER action plan.</li>
+                  <li><strong>Executive Risk Summary:</strong> Board-ready one-page memo.</li>
+                  <li><strong>Procurement SOW:</strong> Technical specifications for security hardware.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="floor-walk-banner">
+              <span style="font-size: 1.5rem;">🚶‍♂️</span>
+              <div>
+                <strong style="color: #ffffff; font-size: 0.88rem;">Integrated Floor Walk 2: Proposed Control Feasibility Verification</strong>
+                <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0.15rem 0 0;">
+                  Following Workshop 2, engineers walk proposed conduit modification routes to confirm DIN rail space, power supply capacity, and physical access before CapEx procurement is committed.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 4: Phase 3 -->
+          <div class="phase-tab-pane" id="pane-phase-3">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <span class="badge badge-cyan" style="margin-bottom: 0.4rem; display: inline-block;">PHASE 03</span>
+                <h3 class="section-title-serif" style="font-size: 1.55rem; margin: 0;">Verification &amp; Regulatory Handover</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0;">
+                  We generate your complete, certified compliance dossiers and deliver the digital twin to your team.
+                </p>
+              </div>
+              <span class="badge badge-outline">AUTONOMOUS EXECUTION · ZERO DOWNTIME</span>
+            </div>
+
+            <div class="detail-grid-3">
+              <div class="detail-card-box">
+                <strong class="title-label">🇪🇺 EU CRA Annex VII Technical File</strong>
+                <ul class="flow-bl">
+                  <li><strong>Essential Requirements Proof:</strong> §10 conformity assessment documentation.</li>
+                  <li><strong>CycloneDX 5-BOM Package:</strong> Full SBOM, HBOM, CBOM, SaaSBOM, Ops-BOM.</li>
+                  <li><strong>Vulnerability Management Plan:</strong> CVD policy alignment and Coordinated Disclosure.</li>
+                  <li><strong>CE Marking Ready:</strong> Complete technical file formatted for notified bodies.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">🛡️ IEC 62443 Compliance Binder</strong>
+                <ul class="flow-bl">
+                  <li><strong>Certified ZCR Report:</strong> Full methodology and calculation audit trail.</li>
+                  <li><strong>Zone Boundary Drawings:</strong> Purdue-mapped network architecture diagrams.</li>
+                  <li><strong>Conduit Inspection Register:</strong> Protocol-by-protocol inspection mandates.</li>
+                  <li><strong>SIL Alignment Certificate:</strong> Safety-instrumented function isolation evidence.</li>
+                </ul>
+              </div>
+              <div class="detail-card-box">
+                <strong class="title-label">💻 Digital Twin Handover</strong>
+                <ul class="flow-bl">
+                  <li><strong>Full 3D Campus Model:</strong> Interactive Babylon.js web application.</li>
+                  <li><strong>Living Twin Retainer:</strong> Continuous drift tracking and SBOM updates.</li>
+                  <li><strong>Engineering Team Training:</strong> 2-hour handover on running hypothetical simulations.</li>
+                  <li><strong>Change Management Integration:</strong> Model query API for work order pre-flight checks.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 04: M&A DUE DILIGENCE & USE CASES (#due-diligence)
+         ========================================================================= -->
+    <section class="services-section" id="due-diligence" style="background: rgba(0,0,0,0.18);">
+      <div class="container">
+        <div class="section-header-area">
+          <span class="eyebrow-orange">04 &nbsp; HIGH-STAKES USE CASES</span>
+          <h2 class="section-title-serif" style="font-size: 2.1rem;">Four High-Stakes Decision Categories</h2>
+          <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+            When you need conclusive financial, safety, or architectural evidence without deploying long-term software, an OXOT Decision Sprint delivers answers in 21 days.
+          </p>
+        </div>
+
+        <div class="grid-2" style="gap: 1.5rem;">
+          
+          <div class="shadcn-card" style="border-left: 4px solid var(--dutch-orange);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.4rem;">M&amp;A &amp; ASSET ACQUISITIONS</span>
+              <h4 class="shadcn-card-title">1. Facility Acquisition Due Diligence</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Know what liabilities you are inheriting before deal close. Passive ingestion of target facility SLDs and switch tables uncovers untracked maintenance jumpboxes, non-compliant CRA/NIS2 hardware, and unsegmented OT loops.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+                ✓ Output: CapEx deduction memo for deal consideration / escrow negotiation.
+              </div>
+            </div>
+          </div>
+
+          <div class="shadcn-card" style="border-left: 4px solid var(--signal-cyan);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-cyan" style="width: fit-content; margin-bottom: 0.4rem;">CAPEX OPTIMIZATION</span>
+              <h4 class="shadcn-card-title">2. Security Spend &amp; ALARP ROI Proof</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Prove whether a proposed $1M security upgrade actually reduces kinetic facility failure or reaches diminishing returns. We test virtual micro-segmentation against your exact FMEA to establish the ALARP disproportion point.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+                ✓ Output: CFO-ready CapEx curve ($125k spend eliminates 92% of risk).
+              </div>
+            </div>
+          </div>
+
+          <div class="shadcn-card" style="border-left: 4px solid var(--signal-green);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-emerald" style="width: fit-content; margin-bottom: 0.4rem;">SUPPLIER VERIFICATION</span>
+              <h4 class="shadcn-card-title">3. OEM &amp; Vendor Architecture Review</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Before signing a 10-year vendor contract for battery storage, chillers, or turbine controls, simulate the vendor's remote-access architecture in a temporary twin to verify that vendor compromise cannot cascade into safety shutoffs.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+                ✓ Output: Defensible vendor contract requirements &amp; data diode mandates.
+              </div>
+            </div>
+          </div>
+
+          <div class="shadcn-card" style="border-left: 4px solid var(--signal-purple);">
+            <div class="shadcn-card-header">
+              <span class="badge badge-purple" style="width: fit-content; margin-bottom: 0.4rem;">REGULATORY INSPECTION</span>
+              <h4 class="shadcn-card-title">4. EU CRA &amp; NIS2 Pre-Audit Defense</h4>
+            </div>
+            <div class="shadcn-card-content">
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Facing an upcoming regulatory audit or insurer renewal? Rapidly generate complete EU CRA Annex VII Technical Files, 5 CycloneDX BOMs, and certified IEC 62443 zone/conduit rationales in a 21-day burst.
+              </p>
+              <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+                ✓ Output: Audit-ready compliance binder &amp; legally defensible NEVER ledger.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 05: REGULATORY ARTIFACTS & EVIDENCE (#evidence-trail)
+         ========================================================================= -->
+    <section class="services-section" id="evidence-trail">
+      <div class="container">
+        <div class="section-header-area">
+          <span class="eyebrow-orange">05 &nbsp; REGULATORY DELIVERABLES</span>
+          <h2 class="section-title-serif" style="font-size: 2.1rem;">Artifacts &amp; Evidence Trail</h2>
+          <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+            Inspect live sample technical files generated automatically from digital twin simulations: CRA Annex VII, IEC 62443 ZCR, 5 CycloneDX BOMs, and FMECA hazard registries.
+          </p>
+
+          <!-- Evidence Navigation Pills -->
+          <div class="tabs-list" style="margin-top: 1.5rem; flex-wrap: wrap;">
+            <button class="tabs-trigger active" onclick="switchEvidenceTab('cra', this)">
+              🇪🇺 EU CRA Annex VII File
+            </button>
+            <button class="tabs-trigger" onclick="switchEvidenceTab('iec', this)">
+              🛡️ IEC 62443 ZCR Matrix
+            </button>
+            <button class="tabs-trigger" onclick="switchEvidenceTab('boms', this)">
+              📦 CycloneDX 5-BOM Suite
+            </button>
+            <button class="tabs-trigger" onclick="switchEvidenceTab('fmeca', this)">
+              ⚠️ FMECA Hazard Register
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: EU CRA ANNEX VII -->
+        <div class="evidence-tab-pane active" id="pane-cra">
+          <div class="shadcn-card" style="padding: 2.25rem;">
+            <div class="shadcn-card-header" style="flex-direction: row; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span class="badge badge-cyan" style="margin-bottom: 0.5rem;">REGULATION (EU) 2024/2847</span>
+                <h3 class="section-title-serif" style="font-size: 1.65rem;">CRA Annex VII Technical Documentation File</h3>
+                <p class="shadcn-card-description">Automated compilation of mandatory technical documentation proving conformity.</p>
+              </div>
+              <button class="btn btn-dutch-orange btn-sm" onclick="alert('Exporting CycloneDX JSON package...')">
+                <span>Download CRA JSON Package ⬇</span>
+              </button>
+            </div>
+
+            <div class="shadcn-card-content">
+              <div class="code-box">
+<pre>{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:7f3a8b21-49e0-43b8-80f4-oxot-cdt-2026",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-26T12:00:00Z",
+    "component": {
+      "name": "Hyperscale-Campus-OT-Infrastructure",
+      "type": "industrial-facility",
+      "properties": [
+        { "name": "oxot:cra:conformityAssessment", "value": "Annex VII Module H" },
+        { "name": "oxot:cra:essentialRequirements", "value": "Article 10 / Annex I Compliant" },
+        { "name": "oxot:purdue:verifiedLevels", "value": "Z0, Z1, Z2, Z3, Z4, Z5, Z6" }
+      ]
+    }
+  }
+}</pre>
+              </div>
+
+              <table class="shadcn-table">
+                <thead>
+                  <tr>
+                    <th>CRA Mandate Section</th>
+                    <th>Requirement Description</th>
+                    <th>Digital Twin Verification Mechanism</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Annex I, Part I (1)</strong></td>
+                    <td>Protection against unauthorized access</td>
+                    <td>Automated verification of 154 conduit inspection boundaries</td>
+                    <td><span class="badge badge-emerald">COMPLIANT</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Annex I, Part I (2)</strong></td>
+                    <td>Confidentiality &amp; Integrity of stored data</td>
+                    <td>Cryptographic Bill of Materials (CBOM) envelope validation</td>
+                    <td><span class="badge badge-emerald">COMPLIANT</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Annex I, Part II (1)</strong></td>
+                    <td>SBOM &amp; Component Transparency</td>
+                    <td>Continuous CycloneDX 5-BOM generation with CVE mapping</td>
+                    <td><span class="badge badge-emerald">COMPLIANT</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: IEC 62443 -->
+        <div class="evidence-tab-pane" id="pane-iec">
+          <div class="shadcn-card" style="padding: 2.25rem;">
+            <div class="shadcn-card-header">
+              <span class="badge badge-primary" style="margin-bottom: 0.5rem;">IEC 62443-3-2 / TS 50701</span>
+              <h3 class="section-title-serif" style="font-size: 1.65rem;">Zone &amp; Conduit Risk Assessment (ZCR)</h3>
+              <p class="shadcn-card-description">Purdue reference model topology mapping and conduit security level verification.</p>
+            </div>
+
+            <div class="shadcn-card-content">
+              <table class="shadcn-table">
+                <thead>
+                  <tr>
+                    <th>Conduit ID</th>
+                    <th>Source Zone</th>
+                    <th>Target Zone</th>
+                    <th>Protocol / Media</th>
+                    <th>Target SL</th>
+                    <th>Achieved SL</th>
+                    <th>Inspection Barrier</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CND-0012</code></td>
+                    <td>Zone 4 (Enterprise IT)</td>
+                    <td>Zone 3 (BMS Supervisor)</td>
+                    <td>HTTPS / TLS 1.3</td>
+                    <td>SL-3</td>
+                    <td><span class="badge badge-emerald">SL-3</span></td>
+                    <td>Dual Next-Gen Firewall with Deep Packet Inspection</td>
+                  </tr>
+                  <tr>
+                    <td><code>CND-0045</code></td>
+                    <td>Zone 3 (BMS Supervisor)</td>
+                    <td>Zone 2 (Cooling Loop PLC)</td>
+                    <td>Modbus TCP (502)</td>
+                    <td>SL-3</td>
+                    <td><span class="badge badge-destructive">SL-1 (FAIL)</span></td>
+                    <td>Direct routed without inspection (Identified Risk)</td>
+                  </tr>
+                  <tr>
+                    <td><code>CND-0045-V</code></td>
+                    <td>Zone 3 (BMS Supervisor)</td>
+                    <td>Zone 2 (Cooling Loop PLC)</td>
+                    <td>Modbus TCP (502)</td>
+                    <td>SL-3</td>
+                    <td><span class="badge badge-emerald">SL-3 (RESOLVED)</span></td>
+                    <td>Virtual Control: Hardware Data Diode ($45k)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 5-BOMS -->
+        <div class="evidence-tab-pane" id="pane-boms">
+          <div class="shadcn-card" style="padding: 2.25rem;">
+            <div class="shadcn-card-header">
+              <span class="badge badge-amber" style="margin-bottom: 0.5rem;">CYCLONEDX &amp; DEXPI 2.0</span>
+              <h3 class="section-title-serif" style="font-size: 1.65rem;">The 5 Machine-Readable BOMs</h3>
+              <p class="shadcn-card-description">Transitive dependency tracking across the complete industrial cyber-physical supply chain.</p>
+            </div>
+
+            <div class="shadcn-card-content">
+              <div class="grid-2" style="gap: 1.25rem;">
+                <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--signal-cyan);">
+                  <h4 style="color:#fff; margin-bottom: 0.35rem; font-size: 0.95rem;">1. SBOM (Software Bill of Materials)</h4>
+                  <p style="color: var(--text-secondary); font-size: 0.85rem;">Firmware binaries, real-time OS kernels (RTOS), and PLC logic dependencies.</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--dutch-orange);">
+                  <h4 style="color:#fff; margin-bottom: 0.35rem; font-size: 0.95rem;">2. HBOM (Hardware Bill of Materials)</h4>
+                  <p style="color: var(--text-secondary); font-size: 0.85rem;">ASIC chips, PCB silicon provenance, and physical controller revisions.</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--signal-blue);">
+                  <h4 style="color:#fff; margin-bottom: 0.35rem; font-size: 0.95rem;">3. CBOM (Cryptographic Bill of Materials)</h4>
+                  <p style="color: var(--text-secondary); font-size: 0.85rem;">Cipher suites, certificate authorities, key rotation periods, and post-quantum readiness.</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--signal-green);">
+                  <h4 style="color:#fff; margin-bottom: 0.35rem; font-size: 0.95rem;">4. Ops-BOM (Operations Bill of Materials)</h4>
+                  <p style="color: var(--text-secondary); font-size: 0.85rem;">Third-party maintenance SLAs, OEM remote cellular tunnels, and technician physical access.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: FMECA -->
+        <div class="evidence-tab-pane" id="pane-fmeca">
+          <div class="shadcn-card" style="padding: 2.25rem;">
+            <div class="shadcn-card-header">
+              <span class="badge badge-emerald" style="margin-bottom: 0.5rem;">PHYSICS &amp; HAZARD REGISTRY</span>
+              <h3 class="section-title-serif" style="font-size: 1.65rem;">FMECA Failure Mode &amp; Hazard Register</h3>
+              <p class="shadcn-card-description">Correlating cyber attack vectors with physical Level 1 kinetic consequences.</p>
+            </div>
+
+            <div class="shadcn-card-content">
+              <table class="shadcn-table">
+                <thead>
+                  <tr>
+                    <th>Hazard ID</th>
+                    <th>Physical Asset</th>
+                    <th>Failure Mode</th>
+                    <th>Kinetic Consequence</th>
+                    <th>Baseline ALE</th>
+                    <th>Remediation Triage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>HAZ-001</code></td>
+                    <td>Chilled Water Loop CH-01</td>
+                    <td>Setpoint Manipulation via Modbus</td>
+                    <td>Thermal runaway in AI Server Racks (&gt;45°C in 8 mins)</td>
+                    <td><span style="color: var(--destructive); font-weight:700;">$3,240,000</span></td>
+                    <td><span class="badge badge-primary">NOW (Immediate)</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>HAZ-002</code></td>
+                    <td>Medium Voltage Switchgear SW-02</td>
+                    <td>Trip Signal Injection via DNP3</td>
+                    <td>Campus-wide power outage, generator failover stress</td>
+                    <td><span style="color: var(--destructive); font-weight:700;">$4,800,000</span></td>
+                    <td><span class="badge badge-primary">NOW (Immediate)</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>HAZ-003</code></td>
+                    <td>Emergency Generator GEN-04</td>
+                    <td>Fuel Cutoff Solenoid Command</td>
+                    <td>Loss of N+1 backup redundancy during utility fault</td>
+                    <td><span style="color: var(--dutch-orange); font-weight:700;">$840,000</span></td>
+                    <td><span class="badge badge-cyan">NEXT (Phase 2 Outage)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 06: ENGAGEMENT MODELS & RETAINERS (#engagement-models)
+         ========================================================================= -->
+    <section class="services-section" id="engagement-models" style="background: rgba(0,0,0,0.18);">
+      <div class="container">
+        <div class="section-header-area">
+          <span class="eyebrow-orange">06 &nbsp; BUILT WITH YOU</span>
+          <h2 class="section-title-serif" style="font-size: 2.1rem;">Three Engagement Models Built for Your Operational Lifecycle</h2>
+          <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+            Whether you are testing a single high-risk change or scaling a continuous living digital twin across an estate, select the engagement model below.
+          </p>
+        </div>
+
+        <!-- 3 Deployment Options -->
+        <div class="deployment-options-grid">
+          
+          <!-- OPTION 1: DECISION SPRINT -->
+          <div class="deployment-col active-option">
+            <div>
+              <span class="deployment-tag" style="color: var(--dutch-orange);">TEMPORARY MODEL · 21 DAYS</span>
+              <h3 style="font-size: 1.45rem; margin-bottom: 0.5rem; color: #fff;">Decision Sprint</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.25rem;">
+                A defined change, risk, investment, or M&amp;A due diligence question answered against a temporary model instance.
+              </p>
+              <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+                <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+                Fast consulting + workshops to build a non-persistent twin. Solves M&A due diligence, CapEx justification, and ALARP acceptance.
+              </div>
+            </div>
+            <div style="margin-top: 1.5rem;">
+              <span class="badge badge-primary">ACTIVE SELECTION</span>
+            </div>
+          </div>
+
+          <!-- OPTION 2: TWIN BUILD -->
+          <div class="deployment-col">
+            <div>
+              <span class="deployment-tag" style="color: var(--signal-cyan);">DURABLE LIVING MODEL · 30 DAYS</span>
+              <h3 style="font-size: 1.45rem; margin-bottom: 0.5rem; color: #fff;">Twin Build</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.25rem;">
+                A durable model of a facility, system, product, or estate, built once and kept current as the facility evolves.
+              </p>
+              <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+                <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+                Full 3 phases, 2 workshops, 2 floor walks. Handed over as an active queryable model for ongoing facility engineering and change management.
+              </div>
+            </div>
+            <div style="margin-top: 1.5rem;">
+              <a href="#workshop-process" class="btn btn-outline btn-sm">Review 2-Workshop Process →</a>
+            </div>
+          </div>
+
+          <!-- OPTION 3: CONTINUOUS TWIN OPERATIONS -->
+          <div class="deployment-col">
+            <div>
+              <span class="deployment-tag" style="color: var(--signal-green);">MANAGED RETAINER / SAAS</span>
+              <h3 style="font-size: 1.45rem; margin-bottom: 0.5rem; color: #fff;">Continuous Twin Operations</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.25rem;">
+                Ongoing change, supplier, vulnerability, risk, and compliance evidence support run continuously alongside the model.
+              </p>
+              <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+                <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+                Live drift monitoring, automated SBOM/HBOM ingestion, continuous CRA Annex VII compliance evidence, and periodic physical floor walks.
+              </div>
+            </div>
+            <div style="margin-top: 1.5rem;">
+              <a href="master-explorer.html" class="btn btn-outline btn-sm">Talk to OXOT Engineers →</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FAQ ACCORDION -->
+        <div style="margin-top: 3.5rem;">
+          <h3 class="section-title-serif" style="font-size: 1.65rem; margin-bottom: 1.25rem;">Decision Sprint &amp; Services FAQ</h3>
+          <div class="shadcn-accordion">
+            <div class="shadcn-accordion-item">
+              <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+                <span>How does a Decision Sprint differ from a full permanent Twin Build?</span>
+                <span class="chevron">▼</span>
+              </button>
+              <div class="shadcn-accordion-content">
+                A <strong>Decision Sprint (21 Days)</strong> is a fast, consulting-driven engagement focused on a temporary digital twin instance built to answer a specific change, CapEx, M&amp;A, or supplier question. A <strong>Twin Build</strong> is a comprehensive program delivering a permanent, living digital twin designed for daily engineering operations and ongoing change management.
+              </div>
+            </div>
+            <div class="shadcn-accordion-item">
+              <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+                <span>What happens to the temporary model after the sprint concludes?</span>
+                <span class="chevron">▼</span>
+              </button>
+              <div class="shadcn-accordion-content">
+                You receive the complete compliance artifacts, executive loss memos, and mathematical proof ledger. The model data is packaged for your records and the active runtime instance is spun down, meaning you never incur unexpected software subscription overhead. Should you decide to upgrade to a persistent living twin later, the baseline model can be immediately reactivated.
+              </div>
+            </div>
+            <div class="shadcn-accordion-item">
+              <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+                <span>What engineering documents are needed to start a Decision Sprint?</span>
+                <span class="chevron">▼</span>
+              </button>
+              <div class="shadcn-accordion-content">
+                Piping and instrumentation diagrams (P&amp;IDs), single-line power schematics (SLDs), network switch configuration backups, controller asset inventories, and third-party vendor maintenance specifications.
+              </div>
+            </div>
+            <div class="shadcn-accordion-item">
+              <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+                <span>Are any active packets or probes sent to the facility?</span>
+                <span class="chevron">▼</span>
+              </button>
+              <div class="shadcn-accordion-content">
+                <strong>Zero active packets are sent to physical PLCs or field instruments.</strong> The digital twin operates 100% passively from engineering drawings and switch exports, eliminating any risk of production downtime or PLC trip faults during the sprint.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC & INTERSECTION OBSERVER SCROLL SPY -->
+  <script>
+    // =========================================================================
+    // 1. BRIEFING SUITE STAGES DATA & RENDERER
+    // =========================================================================
+    const STAGES = {
+      1: {
+        num: "STAGE 01 / PROBLEM STATEMENT",
+        title: "The Industrial Cybersecurity Blind Spot",
+        subtitle: "Why vulnerability scans without consequence models lead to wasted security spend.",
+        badge: "THE CHALLENGE",
+        badgeClass: "badge-primary",
+        content: `
+          <p class="body-prose">
+            Traditional IT security tools report thousands of open CVEs across facility assets. However, they lack physics understanding: they cannot determine whether a vulnerable PLC controls a harmless ventilation damper or the primary cooling system for a 96-rack AI datacenter.
+          </p>
+          <div class="grid-2" style="margin-top: 1.5rem; gap: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--destructive);">
+              <h5 style="color: var(--destructive); margin-bottom: 0.5rem; font-size: 0.95rem;">WITHOUT DIGITAL TWIN</h5>
+              <p style="color: var(--text-secondary); font-size: 0.85rem;">Security teams waste millions patching low-impact reachable devices while catastrophic single points of failure remain unaddressed.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-green);">
+              <h5 style="color: var(--signal-green); margin-bottom: 0.5rem; font-size: 0.95rem;">WITH OXOT TWIN</h5>
+              <p style="color: var(--text-secondary); font-size: 0.85rem;">Every finding is ranked by <code>Consequence × Reachability</code>, isolating the top 3% of risks that represent 95% of total loss exposure.</p>
+            </div>
+          </div>
+        `
+      },
+      2: {
+        num: "STAGE 02 / MODEL CREATION",
+        title: "Ingesting Engineering Schematics into 3D",
+        subtitle: "Converting P&ID, electrical single-lines, and network configurations into an interactive twin.",
+        badge: "PHASE 01 DELIVERY",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            Within 7 business days, OXOT's ingestion pipeline extracts asset tags, piping runs, and conduit paths from your existing engineering drawings to construct the 449-asset digital twin.
+          </p>
+          <div style="background: #04070a; border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-sm); margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.85rem; color: var(--signal-cyan); margin-bottom: 0.5rem;">
+              <span>INGESTION STATUS: COMPLETE</span>
+              <span>449 NODES / 1,155 EDGES</span>
+            </div>
+            <p style="color: var(--muted-foreground); font-size: 0.82rem;">7-Point Integrity Gate Passed: Zero dangling conduits, 100% Purdue topology classification, physical geometry bounds verified.</p>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <a href="master-explorer.html" class="btn btn-dutch-orange btn-sm">Launch Live 3D Twin View →</a>
+          </div>
+        `
+      },
+      3: {
+        num: "STAGE 03 / WORKSHOP 1",
+        title: "Threat Actor Calibration & ATQ Profiling",
+        subtitle: "A 3-hour collaborative session aligning facility engineering and security operations.",
+        badge: "WORKSHOP 1",
+        badgeClass: "badge-primary",
+        content: `
+          <p class="body-prose">
+            Using the interactive 3D twin, our specialists guide facility engineers and the CISO team through realistic attack scenarios matched against 389 adversary groups in the TACAM matrix.
+          </p>
+          <ul class="flow-bl" style="margin-top: 1rem;">
+            <li>Identification of untracked vendor cellular modems and maintenance jumpboxes.</li>
+            <li>Simulation of thermal runaway cascades caused by chiller setpoint manipulation.</li>
+            <li>Calculation of initial baseline Annualized Loss Expectancy ($8.88M ALE).</li>
+          </ul>
+        `
+      },
+      4: {
+        num: "STAGE 04 / SUPPLY CHAIN",
+        title: "The 5 Machine-Readable BOMs",
+        subtitle: "Automated transparency across software, hardware, cloud, and operational dependencies.",
+        badge: "EU CRA & HBOM",
+        badgeClass: "badge-amber",
+        content: `
+          <p class="body-prose">
+            OXOT automatically synthesizes CycloneDX and DEXPI 2.0 compliant machine-readable Bill of Materials across all operational layers:
+          </p>
+          <div class="grid-2" style="margin-top: 1rem; gap: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-cyan);">
+              <strong style="color: var(--signal-cyan); font-size: 0.9rem;">1. SBOM &amp; HBOM</strong>
+              <p style="color: var(--muted-foreground); font-size: 0.82rem; margin-top: 0.25rem;">Firmware binaries, hardware components, and silicon provenance.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--dutch-orange);">
+              <strong style="color: var(--dutch-orange); font-size: 0.9rem;">2. CBOM &amp; Ops-BOM</strong>
+              <p style="color: var(--muted-foreground); font-size: 0.82rem; margin-top: 0.25rem;">Cryptographic envelopes and maintenance contractor access logs.</p>
+            </div>
+          </div>
+        `
+      },
+      5: {
+        num: "STAGE 05 / VIRTUAL CONTROLS",
+        title: "Testing Changes Before Touching Production",
+        subtitle: "Simulating firewall rules, micro-segmentation, and hardware isolators in the twin.",
+        badge: "TEST BEFORE PRODUCTION",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            Before issuing a work order or changing a PLC configuration, the proposed fix is inserted into the digital twin to measure its exact impact on attack pathways and operational uptime.
+          </p>
+          <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--signal-cyan); margin-top: 1rem;">
+            <strong style="color:#fff; font-size: 0.95rem;">Simulation Result: Out-of-Band Hardware Diode ($45k)</strong>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem;">
+              Severed 14 transitive attack paths to the data hall cooling loop without interrupting telemetry to the central BMS.
+            </p>
+          </div>
+        `
+      },
+      6: {
+        num: "STAGE 06 / WORKSHOP 2",
+        title: "Financial ALE Validation &amp; CapEx Optimization",
+        subtitle: "Proving return on security investment using actuarial loss distributions.",
+        badge: "WORKSHOP 2",
+        badgeClass: "badge-emerald",
+        content: `
+          <p class="body-prose">
+            In Workshop 2, leadership reviews the NOW / NEXT / NEVER remediation roadmap with complete financial backing:
+          </p>
+          <div class="grid-3" style="margin-top: 1.25rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">INITIAL RISK</span>
+              <h4 style="color: var(--destructive); font-size: 1.3rem; margin-top: 0.25rem;">$8.88M ALE</h4>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">PROPOSED CAPEX</span>
+              <h4 style="color: var(--dutch-orange); font-size: 1.3rem; margin-top: 0.25rem;">$125k Spend</h4>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">RESIDUAL RISK</span>
+              <h4 style="color: var(--signal-green); font-size: 1.3rem; margin-top: 0.25rem;">$680k (92% Cut)</h4>
+            </div>
+          </div>
+        `
+      },
+      7: {
+        num: "STAGE 07 / COMPLIANCE",
+        title: "Certified Audit Evidence &amp; Deliverables",
+        subtitle: "Delivering the complete European Cyber Resilience Act and IEC 62443 technical file.",
+        badge: "CERTIFIED DELIVERABLES",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            The engagement concludes with a comprehensive, audit-ready package containing:
+          </p>
+          <ul class="flow-bl" style="margin-top: 1rem;">
+            <li><strong>EU CRA Annex VII Conformance Dossier:</strong> Technical documentation demonstrating conformity with CE marking requirements.</li>
+            <li><strong>IEC 62443-3-2 Zone &amp; Conduit Matrix:</strong> Formal risk assessment and security level verification (SL-Target vs SL-Achieved).</li>
+            <li><strong>Board-Ready Risk Memo:</strong> Executive justification for accepted risks under the ALARP principle.</li>
+          </ul>
+          <div style="margin-top: 1.5rem;">
+            <a href="#evidence-trail" class="btn btn-dutch-orange btn-sm">Inspect Complete Evidence Files ↓</a>
+          </div>
+        `
+      }
+    };
+
+    function showStage(stageNum, elem) {
+      const stage = STAGES[stageNum];
+      if (!stage) return;
+
+      document.querySelectorAll('.stage-item').forEach(el => el.classList.remove('active'));
+      if (elem) elem.classList.add('active');
+
+      const display = document.getElementById('stage-display');
+      display.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="badge ${stage.badgeClass}">${stage.badge}</span>
+          <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted-foreground);">${stage.num}</span>
+        </div>
+        <h3 class="section-title-serif" style="font-size: 1.65rem; margin-bottom: 0.35rem;">${stage.title}</h3>
+        <p class="lead-orange" style="margin-bottom: 1.25rem;">${stage.subtitle}</p>
+        <div>${stage.content}</div>
+      `;
+    }
+
+    // Initialize Stage 1
+    showStage(1);
+
+    // =========================================================================
+    // 2. 5-STAGE WORKSHOP CAROUSEL AUTO-PROGRESSION
+    // =========================================================================
+    let currentCarouselIndex = 0;
+    let carouselInterval = null;
+    let progressStartTime = 0;
+    const CAROUSEL_DURATION = 4000;
+    let isCarouselPaused = false;
+    let animationFrameId = null;
+
+    const tabButtons = document.querySelectorAll('.phase-tab-btn');
+    const tabPanes = document.querySelectorAll('.phase-tab-pane');
+
+    function selectCarouselTab(index) {
+      currentCarouselIndex = index;
+      tabButtons.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === index);
+        const fill = btn.querySelector('.tab-progress-fill');
+        if (fill) fill.style.width = idx === index ? '0%' : '0%';
+      });
+
+      tabPanes.forEach((pane, idx) => {
+        pane.classList.toggle('active', idx === index);
+      });
+
+      progressStartTime = performance.now();
+    }
+
+    function animateCarouselProgress(timestamp) {
+      if (!isCarouselPaused) {
+        if (!progressStartTime) progressStartTime = timestamp;
+        const elapsed = timestamp - progressStartTime;
+        const percent = Math.min((elapsed / CAROUSEL_DURATION) * 100, 100);
+
+        const activeBtn = tabButtons[currentCarouselIndex];
+        if (activeBtn) {
+          const fill = activeBtn.querySelector('.tab-progress-fill');
+          if (fill) fill.style.width = percent + '%';
+        }
+
+        if (elapsed >= CAROUSEL_DURATION) {
+          selectCarouselTab((currentCarouselIndex + 1) % tabButtons.length);
+        }
+      }
+      animationFrameId = requestAnimationFrame(animateCarouselProgress);
+    }
+
+    function pauseCarousel() {
+      isCarouselPaused = true;
+      const statusBadge = document.getElementById('carousel-status-badge');
+      if (statusBadge) statusBadge.textContent = 'PAUSED';
+    }
+
+    function resumeCarousel() {
+      isCarouselPaused = false;
+      progressStartTime = performance.now();
+      const statusBadge = document.getElementById('carousel-status-badge');
+      if (statusBadge) statusBadge.textContent = 'AUTO-PROGRESSING (4s)';
+    }
+
+    function toggleCarouselPause() {
+      const pauseBtn = document.getElementById('carousel-pause-btn');
+      if (isCarouselPaused) {
+        resumeCarousel();
+        if (pauseBtn) pauseBtn.textContent = '⏸️ Pause';
+      } else {
+        pauseCarousel();
+        if (pauseBtn) pauseBtn.textContent = '▶️ Resume';
+      }
+    }
+
+    animationFrameId = requestAnimationFrame(animateCarouselProgress);
+
+    // =========================================================================
+    // 3. EVIDENCE TAB SWITCHER
+    // =========================================================================
+    function switchEvidenceTab(tabId, elem) {
+      document.querySelectorAll('#evidence-trail .tabs-trigger').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#evidence-trail .evidence-tab-pane').forEach(p => p.classList.remove('active'));
+
+      if (elem) elem.classList.add('active');
+      const targetPane = document.getElementById('pane-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+    }
+
+    // =========================================================================
+    // 4. INTERSECTION OBSERVER SCROLL SPY FOR SUB-NAV
+    // =========================================================================
+    const sections = document.querySelectorAll('.services-section');
+    const subnavLinks = document.querySelectorAll('.subnav-link');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          subnavLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '#' + id) {
+              link.classList.add('active');
+              // Auto-scroll subnav container on mobile
+              link.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(sec => sectionObserver.observe(sec));
+  </script>
+
+  <script src="shared/oxot-nav.js?v=20260831_2"></script>
+</body>
+
+</html>

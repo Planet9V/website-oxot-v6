@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=services.html#briefing-suite">
+  <script>window.location.replace("services.html#briefing-suite");</script>
+  <title>OXOT Cyber Digital Twin — Guided Demo & Customer Walkthrough</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css?v=20260831_2">
+  <style>
+    .stage-wrap {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .stage-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .stage-item {
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .stage-item:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+
+    .stage-item.active {
+      background: var(--dutch-orange-subtle);
+      border-color: var(--dutch-orange-border);
+      color: #fff;
+    }
+
+    .stage-item.active .stage-num {
+      color: var(--dutch-orange);
+    }
+
+    .stage-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stage-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .stage-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2.5rem;
+      min-height: 520px;
+    }
+
+    @media (max-width: 900px) {
+      .stage-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <section style="padding: 3.5rem 0 2rem; background: radial-gradient(circle at 50% 0%, #151e29 0%, #070a0e 70%);">
+    <div class="container">
+      <span class="eyebrow-orange">CUSTOMER BRIEFING SUITE</span>
+      <h1 class="hero-title-serif">Interactive Customer Walkthrough</h1>
+      <p class="body-prose" style="max-width: 800px; font-size: 1.15rem;">
+        Follow the structured story of how OXOT transforms raw engineering documents into actionable financial risk
+        reductions and certified compliance evidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- COMPONENT 1: SHADCN ALERT -->
+  <div class="container">
+    <div class="shadcn-alert" style="margin-top: 1rem; margin-bottom: 0;">
+      <div class="shadcn-alert-icon">💡</div>
+      <div class="shadcn-alert-body">
+        <div class="shadcn-alert-title">Executive Presentation Mode Active</div>
+        <div class="shadcn-alert-description">
+          Select any stage in the left sidebar to navigate the onboarding narrative. Each section includes live
+          calculations, 3D shortcuts, and regulatory deliverables.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE CONTAINER -->
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 5rem;">
+    <div class="stage-wrap">
+
+      <!-- COMPONENT 2: STAGE NAVIGATION WITH SHADCN PILLS -->
+      <div class="stage-nav">
+        <div class="stage-item active" onclick="showStage(1, this)">
+          <span class="stage-num">STAGE 01</span>
+          <span class="stage-title">The Operational Challenge</span>
+        </div>
+        <div class="stage-item" onclick="showStage(2, this)">
+          <span class="stage-num">STAGE 02</span>
+          <span class="stage-title">Document Ingestion & 3D Model</span>
+        </div>
+        <div class="stage-item" onclick="showStage(3, this)">
+          <span class="stage-num">STAGE 03</span>
+          <span class="stage-title">Workshop 1: Threat Calibration</span>
+        </div>
+        <div class="stage-item" onclick="showStage(4, this)">
+          <span class="stage-num">STAGE 04</span>
+          <span class="stage-title">5-BOM Transitive Dependencies</span>
+        </div>
+        <div class="stage-item" onclick="showStage(5, this)">
+          <span class="stage-num">STAGE 05</span>
+          <span class="stage-title">Simulating Virtual Controls</span>
+        </div>
+        <div class="stage-item" onclick="showStage(6, this)">
+          <span class="stage-num">STAGE 06</span>
+          <span class="stage-title">Workshop 2: Financial ALE Proof</span>
+        </div>
+        <div class="stage-item" onclick="showStage(7, this)">
+          <span class="stage-num">STAGE 07</span>
+          <span class="stage-title">Certified Regulatory Deliverables</span>
+        </div>
+      </div>
+
+      <!-- COMPONENT 3: STAGE CONTENT DISPLAY (SHADCN CARD) -->
+      <div class="stage-content" id="stage-display">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const STAGES = {
+      1: {
+        num: "STAGE 01 / PROBLEM STATEMENT",
+        title: "The Industrial Cybersecurity Blind Spot",
+        subtitle: "Why vulnerability scans without consequence models lead to wasted security spend.",
+        badge: "THE CHALLENGE",
+        badgeClass: "badge-primary",
+        content: `
+          <p class="body-prose">
+            Traditional IT security tools report thousands of open CVEs across facility assets. However, they lack physics understanding: they cannot determine whether a vulnerable PLC controls a harmless ventilation damper or the primary cooling system for a 96-rack AI datacenter.
+          </p>
+          <div class="grid-2" style="margin-top: 1.5rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--destructive);">
+              <h5 style="color: var(--destructive); margin-bottom: 0.5rem; font-size: 0.95rem;">WITHOUT DIGITAL TWIN</h5>
+              <p style="color: var(--text-secondary); font-size: 0.85rem;">Security teams waste millions patching low-impact reachable devices while catastrophic single points of failure remain unaddressed.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-green);">
+              <h5 style="color: var(--signal-green); margin-bottom: 0.5rem; font-size: 0.95rem;">WITH OXOT TWIN</h5>
+              <p style="color: var(--text-secondary); font-size: 0.85rem;">Every finding is ranked by <code>Consequence × Reachability</code>, isolating the top 3% of risks that represent 95% of total loss exposure.</p>
+            </div>
+          </div>
+        `
+      },
+      2: {
+        num: "STAGE 02 / MODEL CREATION",
+        title: "Ingesting Engineering Schematics into 3D",
+        subtitle: "Converting P&ID, electrical single-lines, and network configurations into an interactive twin.",
+        badge: "PHASE 01 DELIVERY",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            Within 10 business days, OXOT's ingestion pipeline extracts asset tags, piping runs, and conduit paths from your existing engineering drawings to construct the 449-asset digital twin.
+          </p>
+          <div style="background: #04070a; border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-sm); margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.85rem; color: var(--signal-cyan); margin-bottom: 0.5rem;">
+              <span>INGESTION STATUS: COMPLETE</span>
+              <span>449 NODES / 1,155 EDGES</span>
+            </div>
+            <p style="color: var(--muted-foreground); font-size: 0.82rem;">7-Point Integrity Gate Passed: Zero dangling conduits, 100% Purdue topology classification, physical geometry bounds verified.</p>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <a href="master-explorer.html" class="btn btn-dutch-orange" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Launch Live 3D Twin View →</a>
+          </div>
+        `
+      },
+      3: {
+        num: "STAGE 03 / WORKSHOP 1",
+        title: "Threat Actor Calibration & ATQ Profiling",
+        subtitle: "A 3-hour collaborative session aligning facility engineering and security operations.",
+        badge: "WORKSHOP 1",
+        badgeClass: "badge-primary",
+        content: `
+          <p class="body-prose">
+            Using the interactive 3D twin, our specialists guide facility engineers and the CISO team through realistic attack scenarios matched against 389 adversary groups in the TACAM matrix.
+          </p>
+          <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.25rem; line-height: 1.7; margin-top: 1rem;">
+            <li>Identification of untracked vendor cellular modems and maintenance jumpboxes.</li>
+            <li>Simulation of thermal runaway cascades caused by chiller setpoint manipulation.</li>
+            <li>Calculation of initial baseline Annualized Loss Expectancy ($8.88M ALE).</li>
+          </ul>
+        `
+      },
+      4: {
+        num: "STAGE 04 / SUPPLY CHAIN",
+        title: "The 5 Machine-Readable BOMs",
+        subtitle: "Automated transparency across software, hardware, cloud, and operational dependencies.",
+        badge: "EU CRA & HBOM",
+        badgeClass: "badge-amber",
+        content: `
+          <p class="body-prose">
+            OXOT automatically synthesizes CycloneDX and DEXPI 2.0 compliant machine-readable Bill of Materials across all operational layers:
+          </p>
+          <div class="grid-2" style="margin-top: 1rem; gap: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-cyan);">
+              <strong style="color: var(--signal-cyan); font-size: 0.9rem;">1. SBOM & HBOM</strong>
+              <p style="color: var(--muted-foreground); font-size: 0.82rem; margin-top: 0.25rem;">Firmware binaries, hardware components, and silicon provenance.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--dutch-orange);">
+              <strong style="color: var(--dutch-orange); font-size: 0.9rem;">2. CBOM & Ops-BOM</strong>
+              <p style="color: var(--muted-foreground); font-size: 0.82rem; margin-top: 0.25rem;">Cryptographic envelopes and maintenance contractor access logs.</p>
+            </div>
+          </div>
+        `
+      },
+      5: {
+        num: "STAGE 05 / VIRTUAL CONTROLS",
+        title: "Testing Changes Before Touching Production",
+        subtitle: "Simulating firewall rules, micro-segmentation, and hardware isolators in the twin.",
+        badge: "TEST BEFORE PRODUCTION",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            Before issuing a work order or changing a PLC configuration, the proposed fix is inserted into the digital twin to measure its exact impact on attack pathways and operational uptime.
+          </p>
+          <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--signal-cyan); margin-top: 1rem;">
+            <strong style="color:#fff; font-size: 0.95rem;">Simulation Result: Out-of-Band Hardware Diode ($45k)</strong>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem;">
+              Severed 14 transitive attack paths to the data hall cooling loop without interrupting telemetry to the central BMS.
+            </p>
+          </div>
+        `
+      },
+      6: {
+        num: "STAGE 06 / WORKSHOP 2",
+        title: "Financial ALE Validation & CapEx Optimization",
+        subtitle: "Proving return on security investment using actuarial loss distributions.",
+        badge: "WORKSHOP 2",
+        badgeClass: "badge-emerald",
+        content: `
+          <p class="body-prose">
+            In Workshop 2, leadership reviews the NOW / NEXT / NEVER remediation roadmap with complete financial backing:
+          </p>
+          <div class="grid-3" style="margin-top: 1.25rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">INITIAL RISK</span>
+              <h4 style="color: var(--destructive); font-size: 1.3rem; margin-top: 0.25rem;">$8.88M ALE</h4>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">PROPOSED CAPEX</span>
+              <h4 style="color: var(--dutch-orange); font-size: 1.3rem; margin-top: 0.25rem;">$125k Spend</h4>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <span style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">RESIDUAL RISK</span>
+              <h4 style="color: var(--signal-green); font-size: 1.3rem; margin-top: 0.25rem;">$680k (92% Cut)</h4>
+            </div>
+          </div>
+        `
+      },
+      7: {
+        num: "STAGE 07 / COMPLIANCE",
+        title: "Certified Audit Evidence & Deliverables",
+        subtitle: "Delivering the complete European Cyber Resilience Act and IEC 62443 technical file.",
+        badge: "CERTIFIED DELIVERABLES",
+        badgeClass: "badge-cyan",
+        content: `
+          <p class="body-prose">
+            The engagement concludes with a comprehensive, audit-ready package containing:
+          </p>
+          <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.25rem; line-height: 1.7; margin-top: 1rem;">
+            <li><strong>EU CRA Annex VII Conformance Dossier:</strong> Technical documentation demonstrating conformity with CE marking requirements.</li>
+            <li><strong>IEC 62443-3-2 Zone & Conduit Matrix:</strong> Formal risk assessment and security level verification (SL-Target vs SL-Achieved).</li>
+            <li><strong>Board-Ready Risk Memo:</strong> Executive justification for accepted risks under the ALARP principle.</li>
+          </ul>
+          <div style="margin-top: 1.5rem;">
+            <a href="artifacts-evidence.html" class="btn btn-dutch-orange" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Inspect Complete Evidence Files →</a>
+          </div>
+        `
+      }
+    };
+
+    function showStage(stageNum, elem) {
+      const stage = STAGES[stageNum];
+      if (!stage) return;
+
+      document.querySelectorAll('.stage-item').forEach(el => el.classList.remove('active'));
+      if (elem) elem.classList.add('active');
+
+      const display = document.getElementById('stage-display');
+      display.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="badge ${stage.badgeClass}">${stage.badge}</span>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted-foreground);">${stage.num}</span>
+        </div>
+        <h2 class="section-title-serif">${stage.title}</h2>
+        <p class="lead-orange">${stage.subtitle}</p>
+        <div>${stage.content}</div>
+      `;
+    }
+
+    showStage(1);
+  </script>
+
+  <script src="shared/oxot-nav.js?v=20260831_2"></script>
+</body>
+
+</html>

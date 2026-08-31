@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=services.html#due-diligence">
+  <script>window.location.replace("services.html#due-diligence");</script>
+  <title>OXOT Cyber Digital Twin — Decision Sprint (Rapid Temporary Modeling)</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css">
+  <style>
+    .timeline-badge {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--dutch-orange);
+      background: var(--dutch-orange-subtle);
+      border: 1px solid var(--dutch-orange-border);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+
+    /* 09 ENGAGEMENT APPROACH INTERACTIVE COMPONENT (MATCHES EXACT SCREENSHOT) */
+    .engagement-approach-card {
+      background: rgba(10, 15, 22, 0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2.25rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      position: relative;
+      backdrop-filter: blur(12px);
+      margin-top: 1.75rem;
+    }
+    @media (min-width: 900px) {
+      .engagement-approach-card {
+        grid-template-columns: 330px 3px 1fr;
+        gap: 2.5rem;
+        align-items: center;
+      }
+    }
+    .engagement-tabs-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .engagement-tab-item {
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
+      cursor: pointer;
+      padding: 0.75rem 0.6rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .engagement-tab-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .engagement-tab-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--muted-foreground);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .engagement-tab-item.active .engagement-tab-circle {
+      border-color: var(--dutch-orange);
+      color: var(--dutch-orange);
+      box-shadow: 0 0 12px rgba(238, 118, 35, 0.4);
+      background: rgba(238, 118, 35, 0.08);
+    }
+    .engagement-tab-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      transition: all 0.25s ease;
+    }
+    .engagement-tab-item.active .engagement-tab-label {
+      color: #ffffff;
+    }
+    .engagement-divider-bar {
+      display: none;
+      width: 3px;
+      height: 80%;
+      background: var(--dutch-orange);
+      box-shadow: 0 0 10px rgba(238, 118, 35, 0.6);
+      border-radius: 2px;
+    }
+    @media (min-width: 900px) {
+      .engagement-divider-bar {
+        display: block;
+      }
+    }
+    .engagement-content-col {
+      padding: 0.5rem 0;
+    }
+    .engagement-step-indicator {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    .engagement-step-title {
+      font-family: var(--font-serif);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 1.5rem 0;
+    }
+    .engagement-detail-row {
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .eng-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dutch-orange);
+      margin-right: 0.5rem;
+    }
+    .eng-value {
+      color: var(--text-secondary);
+    }
+
+    /* BUILT WITH YOU 3-DEPLOYMENT CARDS */
+    .built-with-you-section {
+      padding: 3.5rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .deployment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: rgba(10, 15, 22, 0.65);
+      margin-top: 2rem;
+      overflow: hidden;
+    }
+    @media (min-width: 900px) {
+      .deployment-options-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+    .deployment-col {
+      padding: 2.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    @media (min-width: 900px) {
+      .deployment-col {
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+      }
+      .deployment-col:last-child {
+        border-right: none;
+      }
+    }
+    .deployment-col:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .deployment-col.active-option {
+      background: linear-gradient(180deg, rgba(238, 118, 35, 0.08) 0%, rgba(10, 15, 22, 0.9) 100%);
+    }
+    .deployment-col.active-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--dutch-orange);
+      box-shadow: 0 0 10px var(--dutch-orange);
+    }
+    .deployment-col h3 {
+      font-size: 1.25rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 0.85rem 0;
+    }
+    .deployment-col p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      margin: 0 0 1.5rem 0;
+    }
+    .deployment-tag {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+
+    .explore-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--dutch-orange);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(238, 118, 35, 0.3);
+      padding-bottom: 2px;
+      width: fit-content;
+    }
+    .explore-link:hover {
+      color: #ffffff;
+      border-color: var(--dutch-orange);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section style="padding: 4.5rem 0 3rem; background: radial-gradient(circle at 50% 0%, #151e29 0%, #070a0e 70%);">
+    <div class="container">
+      <span class="eyebrow-orange">1 OF 3 DEPLOYMENT TYPES · TEMPORARY MODELING &amp; CONSULTING</span>
+      <h1 class="hero-title-serif">
+        Decision Sprint: Answer the Critical Facility Question Before You Spend.
+      </h1>
+      <p class="body-prose" style="max-width: 860px; font-size: 1.15rem; color: var(--text-secondary);">
+        A fast set of collaborative workshops and expert consulting to build a <strong>temporary, high-fidelity digital twin</strong>—purpose-built to de-risk an M&A acquisition, validate a major CapEx investment, or audit supplier risk in days, without paying for permanent software licenses.
+      </p>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+        <a href="#engagement-approach" class="btn btn-dutch-orange">
+          <span>Explore Engagement Approach</span>
+          <span>↓</span>
+        </a>
+        <a href="master-explorer.html" class="btn btn-outline">
+          <span>Explore Target Facility 3D Model</span>
+          <span>⚡</span>
+        </a>
+        <a href="process-workshops.html" class="btn btn-outline">
+          <span>See 5-Step Methodology</span>
+          <span>📋</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENT 1: SHADCN ALERT -->
+  <div class="container">
+    <div class="shadcn-alert" style="margin-top: 1.5rem; margin-bottom: 0;">
+      <div class="shadcn-alert-icon">⚡</div>
+      <div class="shadcn-alert-body">
+        <div class="shadcn-alert-title">Temporary Model Architecture · Zero Ongoing Overhead</div>
+        <div class="shadcn-alert-description">
+          A Decision Sprint creates a temporary digital twin instance in the Seldon Engine to solve a single high-stakes question. Once the board-ready <strong>NOW / NEXT / NEVER Report (A8)</strong> and CapEx evidence memo are signed, the temporary instance is delivered and archived—no recurring SaaS fees or dedicated internal operators required.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" style="padding-top: 1rem; padding-bottom: 5rem;">
+
+    <!-- SECTION: 09 ENGAGEMENT APPROACH (MATCHES SCREENSHOT PIXEL-FOR-PIXEL) -->
+    <section style="padding: 3rem 0 3.5rem; border-bottom: 1px solid var(--border);" id="engagement-approach">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span class="eyebrow-orange" style="letter-spacing: 0.1em; font-weight: 800; font-size: 0.78rem;">09 &nbsp; ENGAGEMENT &nbsp; APPROACH</span>
+        <div style="width: 45px; height: 1px; background: rgba(255, 255, 255, 0.2); position: relative;">
+          <div style="position: absolute; right: 0; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--dutch-orange); box-shadow: 0 0 6px var(--dutch-orange);"></div>
+        </div>
+      </div>
+      
+      <h2 class="section-title-serif" style="font-size: 2.3rem; margin-bottom: 0.5rem;">
+        Start with one line, one facility, or one decision.
+      </h2>
+      <p class="body-prose" style="max-width: 820px; font-size: 1.02rem; margin-bottom: 1.5rem;">
+        Whether you are testing a single high-risk change or scaling a continuous living digital twin across an estate, select the engagement model below to inspect its real-world use case and deliverable outputs.
+      </p>
+
+      <!-- INTERACTIVE 2-COLUMN ENGAGEMENT APPROACH CONTAINER -->
+      <div class="engagement-approach-card">
+        
+        <!-- LEFT COLUMN: 3 SELECTABLE TABS -->
+        <div class="engagement-tabs-col">
+          
+          <!-- TAB 01 -->
+          <div class="engagement-tab-item active" onclick="switchEngagementTab(0)">
+            <span class="engagement-tab-circle">01</span>
+            <span class="engagement-tab-label">Decision Sprint</span>
+          </div>
+
+          <!-- TAB 02 -->
+          <div class="engagement-tab-item" onclick="switchEngagementTab(1)">
+            <span class="engagement-tab-circle">02</span>
+            <span class="engagement-tab-label">Site or system Twin Build</span>
+          </div>
+
+          <!-- TAB 03 -->
+          <div class="engagement-tab-item" onclick="switchEngagementTab(2)">
+            <span class="engagement-tab-circle">03</span>
+            <span class="engagement-tab-label">Continuous Twin Operations</span>
+          </div>
+
+        </div>
+
+        <!-- ORANGE VERTICAL ACCENT DIVIDER -->
+        <div class="engagement-divider-bar"></div>
+
+        <!-- RIGHT COLUMN: DYNAMIC CONTENT PANEL -->
+        <div class="engagement-content-col" id="engagement-content-panel">
+          
+          <div class="engagement-step-indicator" id="eng-step-counter">01 / 03</div>
+          <h3 class="engagement-step-title" id="eng-step-title">Decision Sprint</h3>
+
+          <div class="engagement-detail-block">
+            <div class="engagement-detail-row">
+              <strong class="eng-label" id="eng-usecase-label">MANUFACTURING USE CASE —</strong>
+              <span class="eng-value" id="eng-usecase">Vendor-access redesign, a segmentation or firewall change, a patch, replacement, or modernization question, or one high-risk line</span>
+            </div>
+
+            <div class="engagement-detail-row" style="margin-top: 1.25rem;">
+              <strong class="eng-label">OUTPUT —</strong>
+              <span class="eng-value" id="eng-output">Modelled scenario, candidate-control comparison, and a defensible, evidence-backed sequence</span>
+            </div>
+
+            <div class="engagement-detail-row" style="margin-top: 1.25rem;">
+              <strong class="eng-label">TIMELINE &amp; NATURE —</strong>
+              <span class="eng-value" id="eng-delivery">21-Day Fast Consulting &amp; Workshops · Temporary Non-Persistent Twin · Zero Operational Footprint</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem;">
+            <a href="demo-hub.html" class="btn btn-dutch-orange" id="eng-action-btn" style="padding: 0.45rem 1.15rem; font-size: 0.82rem;">
+              <span>Explore Decision Sprint</span>
+              <span>→</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: BUILT WITH YOU (3 DEPLOYMENT TYPES - FROM USER SCREENSHOT) -->
+    <section class="built-with-you-section" id="built-with-you">
+      <span class="eyebrow-orange">BUILT WITH YOU</span>
+      <h2 class="section-title-serif" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Built with you, not installed and abandoned.</h2>
+      <p class="body-prose" style="max-width: 820px; font-size: 1.05rem;">
+        Choose the engagement model that matches your operational lifecycle—from rapid 21-day tactical problem-solving to durable living twins and managed continuous operations.
+      </p>
+
+      <!-- 3-COLUMN DEPLOYMENT GRID -->
+      <div class="deployment-options-grid">
+        
+        <!-- OPTION 1: DECISION SPRINT (ACTIVE FOCUS) -->
+        <div class="deployment-col active-option">
+          <div>
+            <span class="deployment-tag" style="color: var(--dutch-orange);">TEMPORARY MODEL · 21 DAYS</span>
+            <h3>Decision Sprint</h3>
+            <p>
+              A defined change, risk, investment or supplier question, answered against the model — not a training engagement.
+            </p>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+              <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+              Fast consulting + workshops to build a non-persistent twin. Solves M&A due diligence, CapEx justification, and ALARP acceptance.
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <span class="badge badge-primary">ACTIVE SELECTION</span>
+          </div>
+        </div>
+
+        <!-- OPTION 2: TWIN BUILD -->
+        <div class="deployment-col">
+          <div>
+            <span class="deployment-tag" style="color: var(--signal-cyan);">DURABLE LIVING MODEL · 30 DAYS</span>
+            <h3>Twin Build</h3>
+            <p>
+              A durable model of a facility, system, product or estate, built once and kept current as the facility changes.
+            </p>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+              <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+              Full 3 phases, 2 workshops, 2 floor walks. Handed over as an active queryable model for ongoing facility engineering and change management.
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <a href="process-workshops.html" class="btn btn-outline" style="padding: 0.35rem 0.85rem; font-size: 0.78rem;">View Twin Build →</a>
+          </div>
+        </div>
+
+        <!-- OPTION 3: CONTINUOUS TWIN OPERATIONS -->
+        <div class="deployment-col">
+          <div>
+            <span class="deployment-tag" style="color: var(--signal-green);">MANAGED RETAINER / SAAS</span>
+            <h3>Continuous Twin Operations</h3>
+            <p>
+              Ongoing change, supplier, vulnerability, risk and evidence support, run alongside the model rather than as a separate programme.
+            </p>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 1rem;">
+              <strong style="color: #ffffff; display: block; margin-bottom: 0.35rem;">Scope &amp; Delivery:</strong>
+              Live drift monitoring, automated SBOM/HBOM ingestion, continuous CRA Annex VII compliance evidence, and periodic physical floor walks.
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <a href="master-explorer.html" class="btn btn-outline" style="padding: 0.35rem 0.85rem; font-size: 0.78rem;">Talk to OX →</a>
+          </div>
+        </div>
+
+      </div>
+
+      <a href="demo-hub.html" class="explore-link">
+        <span>EXPLORE CONSULTING SERVICES</span>
+        <span>→</span>
+      </a>
+    </section>
+
+    <!-- SECTION 2: WHY A TEMPORARY DECISION SPRINT -->
+    <section style="padding: 3rem 0; border-bottom: 1px solid var(--border);">
+      <span class="eyebrow-orange">TACTICAL CONSULTING POWER</span>
+      <h2 class="section-title-serif">Four High-Stakes Questions Answered by a Decision Sprint</h2>
+      <p class="body-prose" style="font-size: 1.05rem;">
+        When you need conclusive financial, safety, or architectural evidence without deploying long-term software, an OXOT Decision Sprint delivers answers in days.
+      </p>
+
+      <div class="grid-2" style="margin-top: 2rem; gap: 1.5rem;">
+        
+        <div class="shadcn-card" style="border-left: 4px solid var(--dutch-orange);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.4rem;">M&A &amp; ASSET ACQUISITIONS</span>
+            <h4 class="shadcn-card-title">1. Facility Acquisition Due Diligence</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              Know what liabilities you are inheriting before deal close. Passive ingestion of target facility SLDs and switch tables uncovers untracked maintenance jumpboxes, non-compliant CRA/NIS2 hardware, and unsegmented OT loops.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+              ✓ Output: CapEx deduction memo for deal consideration / escrow negotiation.
+            </div>
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-cyan);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-cyan" style="width: fit-content; margin-bottom: 0.4rem;">CAPEX OPTIMIZATION</span>
+            <h4 class="shadcn-card-title">2. Security Spend &amp; ALARP ROI Proof</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              Prove whether a proposed $1M security upgrade actually reduces kinetic facility failure or reaches diminishing returns. We test virtual micro-segmentation against your exact FMEA to establish the ALARP disproportion point.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+              ✓ Output: CFO-ready CapEx curve ($125k spend eliminates 92% of risk).
+            </div>
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-green);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-emerald" style="width: fit-content; margin-bottom: 0.4rem;">SUPPLIER VERIFICATION</span>
+            <h4 class="shadcn-card-title">3. OEM &amp; Vendor Architecture Review</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              Before signing a 10-year vendor contract for battery storage, chillers, or turbine controls, simulate the vendor's remote-access architecture in a temporary twin to verify that vendor compromise cannot cascade into safety shutoffs.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+              ✓ Output: Defensible vendor contract requirements &amp; data diode mandates.
+            </div>
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-purple);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-purple" style="width: fit-content; margin-bottom: 0.4rem;">REGULATORY INSPECTION</span>
+            <h4 class="shadcn-card-title">4. EU CRA &amp; NIS2 Pre-Audit Defense</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+              Facing an upcoming regulatory audit or insurer renewal? Rapidly generate complete EU CRA Annex VII Technical Files, 5 CycloneDX BOMs, and certified IEC 62443 zone/conduit rationales in a 21-day burst.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--signal-green); font-weight: 600;">
+              ✓ Output: Audit-ready compliance binder &amp; legally defensible NEVER ledger.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 21-DAY TIMELINE -->
+    <section style="padding: 3rem 0; border-bottom: 1px solid var(--border);">
+      <span class="eyebrow-orange">RAPID SPRINT TIMELINE</span>
+      <h2 class="section-title-serif">The 21-Day Decision Sprint Lifecycle</h2>
+      <p class="body-prose" style="font-size: 1.05rem;">
+        Zero disruption to operating facility. All modeling is executed passively from existing engineering drawings, single-line diagrams, and network configurations.
+      </p>
+
+      <div class="grid-3" style="margin-top: 2rem;">
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-cyan);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-cyan" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 1 – 7</span>
+            <h4 class="shadcn-card-title">Ingestion &amp; Temporary Twin</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; margin-bottom: 1rem;">
+              Ingest P&amp;ID schematics, single-line diagrams, and switch tables into the Seldon Engine.
+            </p>
+            <ul style="color: var(--muted-foreground); font-size: 0.82rem; padding-left: 1.25rem;">
+              <li>449 assets bound to temporary model</li>
+              <li>Purdue logical topology mapped</li>
+              <li>Zero packets sent to facility</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--dutch-orange);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 8 – 14</span>
+            <h4 class="shadcn-card-title">Calibration Workshop &amp; Attack Walk</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; margin-bottom: 1rem;">
+              Collaborative 3-hour session walking attack pathways and simulating failure propagation against the specific decision.
+            </p>
+            <ul style="color: var(--muted-foreground); font-size: 0.82rem; padding-left: 1.25rem;">
+              <li>Sector threat framing (ATQ)</li>
+              <li>Kinetic cascading failure simulation</li>
+              <li>Virtual countermeasure testing</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="shadcn-card" style="border-left: 4px solid var(--signal-green);">
+          <div class="shadcn-card-header">
+            <span class="badge badge-emerald" style="width: fit-content; margin-bottom: 0.5rem;">DAYS 15 – 21</span>
+            <h4 class="shadcn-card-title">Financial Loss Memo &amp; Readout</h4>
+          </div>
+          <div class="shadcn-card-content">
+            <p style="font-size: 0.88rem; margin-bottom: 1rem;">
+              Deliver exact Annualized Loss Expectancy (ALE), ALARP remediation proof, and executive decision ledger.
+            </p>
+            <ul style="color: var(--muted-foreground); font-size: 0.82rem; padding-left: 1.25rem;">
+              <li>Board-ready financial loss memo</li>
+              <li>NOW / NEXT / NEVER triage (A8)</li>
+              <li>Temporary model archived / delivered</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPONENT 4: SHADCN SEPARATOR WITH LABEL -->
+    <div class="separator-with-label">
+      <span>WORKED CASE STUDY &amp; OUTCOME</span>
+    </div>
+
+    <!-- WORKED CASE STUDY -->
+    <section class="shadcn-card" style="padding: 2.5rem; border: 1px solid var(--border);">
+      <div class="shadcn-card-header" style="flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span class="badge badge-emerald">CASE STUDY · 96-RACK HYPERSCALE CAMPUS</span>
+        <span style="font-family: var(--font-mono); color: var(--signal-green); font-size: 0.85rem;">M&amp;A DECISION SPRINT</span>
+      </div>
+      <div class="shadcn-card-content">
+        <h3 class="section-title-serif" style="font-size: 1.6rem; margin-bottom: 1rem;">$4.2M Unfunded Risk Identified Prior to Deal Close</h3>
+        <p class="body-prose" style="font-size: 1rem; margin-bottom: 1.5rem;">
+          During an M&amp;A Decision Sprint for a hyperscale facility acquisition, traditional IT scanning reported "green" compliance. The temporary OXOT digital twin ingested the facility's single-line diagrams and discovered an unsegmented BMS jumpbox reachable from the corporate tenant network that possessed trip authority over the primary MV switchgear.
+        </p>
+        
+        <div class="grid-3">
+          <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <strong style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">IDENTIFIED EXPOSURE</strong>
+            <div style="color: var(--destructive); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$8.88M Baseline ALE</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <strong style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">REMEDIATION CAPEX</strong>
+            <div style="color: var(--dutch-orange); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$125,000 Spend</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <strong style="color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase;">POST-FIX RESIDUAL RISK</strong>
+            <div style="color: var(--signal-green); font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); margin-top: 0.25rem;">$680,000 ALE (92% Cut)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPONENT 5: SHADCN ACCORDION -->
+    <section style="margin-top: 3rem;">
+      <h3 class="section-title-serif" style="font-size: 1.6rem; margin-bottom: 1.25rem;">Decision Sprint FAQ</h3>
+      <div class="shadcn-accordion">
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>How does a Decision Sprint differ from a full Twin Build?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            A <strong>Decision Sprint</strong> is a fast, consulting-driven engagement focused on a temporary digital twin instance built to answer a specific change, CapEx, M&amp;A, or supplier question. A <strong>Twin Build</strong> is a comprehensive 30-day program delivering a permanent, living digital twin designed for daily engineering operations and long-term facility change management.
+          </div>
+        </div>
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>What happens to the temporary model after the sprint concludes?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            You receive the complete compliance artifacts, executive loss memos, and mathematical proof ledger. The model data is packaged for your records and the active runtime instance is spun down, meaning you never incur unexpected software subscription overhead. Should you decide to upgrade to a persistent living twin later, the baseline model can be immediately reactivated.
+          </div>
+        </div>
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>What engineering documents are needed to start a Decision Sprint?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            Piping and instrumentation diagrams (P&amp;IDs), single-line power schematics (SLDs), network switch configuration backups, controller asset inventories, and third-party vendor maintenance specifications.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="shared/oxot-nav.js"></script>
+  <script>
+    // 09 Engagement Approach Interactive Tab Switcher
+    const engagementData = [
+      {
+        step: "01 / 03",
+        title: "Decision Sprint",
+        useCaseLabel: "MANUFACTURING USE CASE —",
+        useCase: "Vendor-access redesign, a segmentation or firewall change, a patch, replacement, or modernization question, or one high-risk line",
+        output: "Modelled scenario, candidate-control comparison, and a defensible, evidence-backed sequence",
+        delivery: "21-Day Fast Consulting & Workshops · Temporary Non-Persistent Twin · Zero Operational Footprint",
+        btnText: "Explore Decision Sprint",
+        btnHref: "due-diligence.html"
+      },
+      {
+        step: "02 / 03",
+        title: "Site or system Twin Build",
+        useCaseLabel: "FACILITY USE CASE —",
+        useCase: "Baseline facility digital twin construction across electrical, cooling, compute, and OT control systems for a complete facility or campus",
+        output: "Full 449-asset register, 1,155-link conduit graph, interactive 3D model, FMEA consequence mapping, and certified ZCR network blueprint",
+        delivery: "30-Day Delivery · 3 Phases, 2 Workshops, 2 Floor Walks · Handed over as a permanent living twin",
+        btnText: "View 5-Stage Twin Build",
+        btnHref: "process-workshops.html"
+      },
+      {
+        step: "03 / 03",
+        title: "Continuous Twin Operations",
+        useCaseLabel: "ENTERPRISE USE CASE —",
+        useCase: "Ongoing change impact analysis, supplier patch qualification, firmware vulnerability triage, and live compliance drift monitoring",
+        output: "Automated CycloneDX SBOM/HBOM delta tracking, periodic physical floor walk audits, continuous CRA Annex VII file, and live ALE financial risk ledger",
+        delivery: "Ongoing Managed Retainer · Embedded alongside engineering teams rather than as a separate programme",
+        btnText: "Talk to OX",
+        btnHref: "master-explorer.html"
+      }
+    ];
+
+    function switchEngagementTab(index) {
+      const tabs = document.querySelectorAll('.engagement-tab-item');
+      tabs.forEach((tab, idx) => {
+        if (idx === index) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+
+      const d = engagementData[index];
+      const stepEl = document.getElementById('eng-step-counter');
+      const titleEl = document.getElementById('eng-step-title');
+      const labelEl = document.getElementById('eng-usecase-label');
+      const usecaseEl = document.getElementById('eng-usecase');
+      const outputEl = document.getElementById('eng-output');
+      const deliveryEl = document.getElementById('eng-delivery');
+      const btnEl = document.getElementById('eng-action-btn');
+
+      if (stepEl) stepEl.textContent = d.step;
+      if (titleEl) titleEl.textContent = d.title;
+      if (labelEl) labelEl.textContent = d.useCaseLabel;
+      if (usecaseEl) usecaseEl.textContent = d.useCase;
+      if (outputEl) outputEl.textContent = d.output;
+      if (deliveryEl) deliveryEl.textContent = d.delivery;
+      if (btnEl) {
+        btnEl.setAttribute('href', d.btnHref);
+        btnEl.innerHTML = `<span>${d.btnText}</span> <span>→</span>`;
+      }
+    }
+  </script>
+</body>
+</html>

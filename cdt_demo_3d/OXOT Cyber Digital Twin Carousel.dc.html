@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E1524; }
+  a { color: #EE7623; text-decoration: none; }
+  a:hover { color: #16203B; }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1080" height="1080" hint-size="100%,100%">
+
+<section data-label="Cover" data-screen-label="01" data-speaker-notes="Hook: the twin is the evidence base, not a picture." style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden;position:relative">
+  <div style="position:absolute;left:0;top:0;width:14px;height:520px;background:#EE7623"></div>
+  <div style="padding:64px 64px 0 78px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <div style="color:#EE7623;font-size:19px;font-weight:700;letter-spacing:3.4px">OXOT · CYBER DIGITAL TWIN</div>
+      <div style="color:#8794AE;font-size:19px;font-weight:600;letter-spacing:3.4px">IEC 62443 · NIS2 · CRA</div>
+    </div>
+    <h1 style="margin:0;font-family:'Source Serif 4',serif;font-weight:700;font-size:82px;line-height:0.98;color:#FBFAF8;letter-spacing:-1.5px;text-wrap:pretty">You cannot defend<br>what you have<br>never <span style="color:#EE7623">modelled</span>.</h1>
+    <p style="margin:0;max-width:840px;font-size:27px;line-height:1.45;color:#C3CCDE">A living, queryable 3D model of the facility — every asset, every flow, every dependency — built as the evidence base your engineering, safety and compliance teams argue from.</p>
+  </div>
+  <div style="flex:1;margin-top:34px;position:relative;overflow:hidden">
+    <img src="shots/01-view.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 42%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#16203B 0%,rgba(22,32,59,0) 22%,rgba(22,32,59,0.15) 70%,rgba(22,32,59,0.92) 100%)"></div>
+    <div style="position:absolute;left:78px;bottom:34px;display:flex;gap:38px;align-items:baseline">
+      <div style="color:#FBFAF8;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700">Worked example</div>
+      <div style="color:#C3CCDE;font-size:22px">Hyperscale AI data centre · 96 racks · 7 engineered systems</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="The gap" data-screen-label="02" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">THE PROBLEM</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">01 / 15</div>
+  </div>
+  <h2 style="margin:36px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:58px;line-height:1.06;color:#16203B;letter-spacing:-0.8px">Your facility exists in six<br>incompatible descriptions.</h2>
+  <div style="width:84px;height:5px;background:#EE7623;margin:26px 0 34px"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+    <div style="background:#F2F0EA;border-radius:10px;padding:28px 30px">
+      <div style="color:#7A6A55;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:12px">WHAT YOU HAVE</div>
+      <div style="color:#3D4759;font-size:23px;line-height:1.5">P&amp;IDs in one drawer. Single-line diagrams in another. An asset register in Excel, a network diagram from 2019, a BMS point list, and a CMDB nobody trusts.</div>
+    </div>
+    <div style="background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 10px 10px 0;padding:28px 30px">
+      <div style="color:#16203B;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:12px">WHAT AN ASSESSOR ASKS</div>
+      <div style="color:#2B3550;font-size:23px;line-height:1.5">“Show me every path from that card reader to a chiller. Prove the CDU keeps running when this switch dies.” Six documents cannot answer one question.</div>
+    </div>
+  </div>
+  <div style="margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+    <div style="background:#16203B;border-radius:10px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:44px;font-family:'Source Serif 4',serif;font-weight:700">Static</div>
+      <div style="color:#C3CCDE;font-size:21px;line-height:1.45;margin-top:8px">Documents age the day they are signed. Facility changes weekly.</div>
+    </div>
+    <div style="background:#16203B;border-radius:10px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:44px;font-family:'Source Serif 4',serif;font-weight:700">Siloed</div>
+      <div style="color:#C3CCDE;font-size:21px;line-height:1.45;margin-top:8px">Power, cooling, network and security each modelled by a different discipline.</div>
+    </div>
+    <div style="background:#16203B;border-radius:10px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:44px;font-family:'Source Serif 4',serif;font-weight:700">Untestable</div>
+      <div style="color:#C3CCDE;font-size:21px;line-height:1.45;margin-top:8px">You cannot run a failure scenario against a PDF.</div>
+    </div>
+  </div>
+  <div style="margin-top:auto;padding-top:22px;border-top:2px solid #16203B;display:flex;justify-content:space-between">
+    <div style="color:#7A879E;font-size:17px;font-weight:600;letter-spacing:2.6px">OXOT CYBER DIGITAL TWIN</div>
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.6px">oxot.nl</div>
+  </div>
+</section>
+
+<section data-label="What it is" data-screen-label="03" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">THE APPROACH</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">02 / 15</div>
+  </div>
+  <h2 style="margin:36px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:58px;line-height:1.06;color:#16203B;letter-spacing:-0.8px">One model. Four layers.<br>Every question answerable.</h2>
+  <div style="width:84px;height:5px;background:#EE7623;margin:22px 0 24px"></div>
+  <div style="display:flex;flex-direction:column;gap:12px;flex:1;min-height:0">
+    <div style="display:flex;gap:24px;align-items:flex-start;background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:18px 24px">
+      <div style="flex:0 0 50px;height:50px;border-radius:25px;background:#16203B;color:#FBFAF8;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">1</div>
+      <div><div style="color:#16203B;font-size:25px;font-weight:700;letter-spacing:0.3px">GEOMETRY — the facility as built</div>
+      <div style="color:#3D4759;font-size:22px;line-height:1.45;margin-top:6px">Every rack, pump, breaker, valve and sensor is a named, selectable object with real dimensions and real position. Not a render — an addressable inventory.</div></div>
+    </div>
+    <div style="display:flex;gap:24px;align-items:flex-start;background:#FDEEDC;border:2px solid #F6D6B4;border-radius:12px;padding:18px 24px">
+      <div style="flex:0 0 50px;height:50px;border-radius:25px;background:#EE7623;color:#FFF;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">2</div>
+      <div><div style="color:#16203B;font-size:25px;font-weight:700;letter-spacing:0.3px">TOPOLOGY — P&amp;ID-grade connections</div>
+      <div style="color:#3D4759;font-size:22px;line-height:1.45;margin-top:6px">Water, power, data, air and signal are drawn as actual routed runs between actual endpoints — so dependency is a traversal, not an assumption.</div></div>
+    </div>
+    <div style="display:flex;gap:24px;align-items:flex-start;background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:18px 24px">
+      <div style="flex:0 0 50px;height:50px;border-radius:25px;background:#16203B;color:#FBFAF8;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">3</div>
+      <div><div style="color:#16203B;font-size:25px;font-weight:700;letter-spacing:0.3px">ATTRIBUTES — the cyber and safety record</div>
+      <div style="color:#3D4759;font-size:22px;line-height:1.45;margin-top:6px">Make, model, firmware, protocol, zone, conduit, security level, owner and failure mode ride on the object itself.</div></div>
+    </div>
+    <div style="display:flex;gap:24px;align-items:flex-start;background:#16203B;border-radius:12px;padding:18px 24px">
+      <div style="flex:0 0 50px;height:50px;border-radius:25px;background:#EE7623;color:#FFF;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">4</div>
+      <div><div style="color:#FBFAF8;font-size:25px;font-weight:700;letter-spacing:0.3px">BEHAVIOUR — what happens when it breaks</div>
+      <div style="color:#C3CCDE;font-size:22px;line-height:1.45;margin-top:6px">Cut a feed, fail a pump, compromise a controller — and walk the blast radius through the model, not a workshop.</div></div>
+    </div>
+  </div>
+  <div style="margin-top:24px;padding-top:22px;border-top:2px solid #16203B;display:flex;justify-content:space-between">
+    <div style="color:#7A879E;font-size:17px;font-weight:600;letter-spacing:2.6px">OXOT CYBER DIGITAL TWIN</div>
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.6px">oxot.nl</div>
+  </div>
+</section>
+
+<section data-label="Reference facility" data-screen-label="04" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden">
+  <div style="padding:64px 64px 30px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #EE7623">
+      <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">THE WORKED EXAMPLE</div>
+      <div style="color:#8794AE;font-size:18px;font-weight:600;letter-spacing:3.2px">03 / 15</div>
+    </div>
+    <h2 style="margin:32px 0 14px;font-family:'Source Serif 4',serif;font-weight:700;font-size:58px;line-height:1.06;color:#FBFAF8;letter-spacing:-0.8px">A hyperscale AI data centre,<br>modelled to the terminal.</h2>
+    <p style="margin:0;max-width:900px;color:#C3CCDE;font-size:24px;line-height:1.45">Liquid-cooled GPU halls are the hardest case we could pick: dense, safety-critical, and where IT and OT genuinely collide. If the method holds here, it holds on your facility.</p>
+  </div>
+  <div style="flex:1;position:relative;overflow:hidden">
+    <img src="shots/04-fix2.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 45%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(22,32,59,0.55) 0%,rgba(22,32,59,0.05) 35%,rgba(22,32,59,0.95) 100%)"></div>
+    <div style="position:absolute;left:64px;right:64px;bottom:52px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:56px;font-weight:700;line-height:1">96</div><div style="color:#DCE4F2;font-size:20px;line-height:1.35;margin-top:4px">GPU racks in 6 contained rows</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:56px;font-weight:700;line-height:1">7</div><div style="color:#DCE4F2;font-size:20px;line-height:1.35;margin-top:4px">engineered systems, cross-linked</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:56px;font-weight:700;line-height:1">4k+</div><div style="color:#DCE4F2;font-size:20px;line-height:1.35;margin-top:4px">individually named components</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:56px;font-weight:700;line-height:1">Grid→chip</div><div style="color:#DCE4F2;font-size:20px;line-height:1.35;margin-top:4px">unbroken power and thermal chains</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Asset fidelity" data-screen-label="05" style="width:100%;height:100%;background:#FBFAF8;display:flex;font-family:Inter,sans-serif;overflow:hidden">
+  <div style="flex:0 0 46%;background:#16203B;position:relative;overflow:hidden">
+    <img src="shots/01-rack.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:42% 50%">
+  </div>
+  <div style="flex:1;padding:64px 56px;box-sizing:border-box;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">LAYER 1 · GEOMETRY</div><div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">04 / 15</div></div>
+    <h2 style="margin:20px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:50px;line-height:1.05;color:#16203B;letter-spacing:-0.6px">Selectable to the<br>single tray.</h2>
+    <div style="width:84px;height:5px;background:#EE7623;margin:24px 0 26px"></div>
+    <p style="margin:0 0 26px;color:#3D4759;font-size:23px;line-height:1.5">Click any object and the twin returns its identity, not a highlight. One 48U liquid-cooled rack resolves to compute trays, NVLink switch trays, power shelves, storage, blind-mate coolant couplings and the DC busbar behind them.</p>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:22px;line-height:1.4"><strong>Compute tray</strong> — E1.S bays, OSFP ports, rear quick-disconnects</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:22px;line-height:1.4"><strong>Power shelf</strong> — six hot-swap PSUs onto a 48V busbar</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:22px;line-height:1.4"><strong>Row CDU</strong> — dual pumps, heat exchanger, its own PLC</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:22px;line-height:1.4"><strong>ToR &amp; end-of-row</strong> — port-level fabric attachment</span></div>
+    </div>
+    <div style="margin-top:auto;background:#EFF3FA;border-left:6px solid #EE7623;padding:22px 24px;border-radius:0 10px 10px 0">
+      <div style="color:#16203B;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:8px">WHY IT MATTERS</div>
+      <div style="color:#3D4759;font-size:21px;line-height:1.45">A zone-and-conduit assessment is only as good as its inventory. Here the inventory <em>is</em> the model.</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Connections" data-screen-label="06" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">LAYER 2 · TOPOLOGY</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">05 / 15</div>
+  </div>
+  <h2 style="margin:30px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.06;color:#16203B;letter-spacing:-0.8px">Every run is drawn, routed<br>and traversable.</h2>
+  <div style="width:84px;height:5px;background:#EE7623;margin:22px 0 24px"></div>
+  <div style="height:300px;border-radius:12px;overflow:hidden;position:relative;background:#16203B">
+    <img src="shots/04-view.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 55%">
+  </div>
+  <div style="margin-top:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 30px">
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#1F6FD0;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>Coolant supply</strong> — facility → CDU → rack manifold</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#C23A2E;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>Coolant return</strong> — closed secondary loop per row</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#2E8B57;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>Condenser loop</strong> — chiller ↔ cooling tower</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#D8B23A;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>Busway &amp; tap-offs</strong> — RPP → row → rack</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#35C2C9;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>IT fabric</strong> — carrier → core → spine → ToR</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="width:34px;height:10px;border-radius:5px;background:#8A4FD0;flex:0 0 auto"></span><span style="color:#2B3550;font-size:21px"><strong>OT signal</strong> — field controllers → OT switch → diode</span></div>
+  </div>
+  <div style="margin-top:auto;padding-top:22px;border-top:2px solid #16203B;display:flex;justify-content:space-between">
+    <div style="color:#7A879E;font-size:17px;font-weight:600;letter-spacing:2.6px">P&amp;ID DISCIPLINE, IN THREE DIMENSIONS</div>
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.6px">oxot.nl</div>
+  </div>
+</section>
+
+<section data-label="Power chain" data-screen-label="07" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden">
+  <div style="flex:0 0 400px;position:relative;overflow:hidden">
+    <img src="shots/03-fix2.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 55%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(22,32,59,0.1) 40%,rgba(22,32,59,0.98) 100%)"></div>
+  </div>
+  <div style="flex:1;padding:0 64px 64px;margin-top:-58px;position:relative;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">SYSTEM · ELECTRICAL</div><div style="color:#8794AE;font-size:18px;font-weight:600;letter-spacing:3.2px">06 / 15</div></div>
+    <h2 style="margin:16px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.05;color:#FBFAF8;letter-spacing:-0.8px">From the substation gantry<br>to the busbar in the rack.</h2>
+    <div style="width:84px;height:5px;background:#EE7623;margin:22px 0 26px"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:26px">
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">Substation / GIS</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">MV switchgear</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">Transformer</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">ATS</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">UPS + battery</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:20px;font-weight:600;padding:10px 16px;border-radius:6px">RPP</span><span style="color:#EE7623;font-size:22px">→</span>
+      <span style="background:#EE7623;color:#FFF;font-size:20px;font-weight:700;padding:10px 16px;border-radius:6px">Rack busbar</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="background:#1E2B4D;border-radius:10px;padding:24px 26px">
+        <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">MODELLED, NOT IMPLIED</div>
+        <div style="color:#C3CCDE;font-size:21px;line-height:1.45">Generators with day tanks and bulk fuel, BESS containers, protection relays, static transfer switches and the EPMS metering that watches all of it.</div>
+      </div>
+      <div style="background:#1E2B4D;border-radius:10px;padding:24px 26px">
+        <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">THE QUESTION IT ANSWERS</div>
+        <div style="color:#C3CCDE;font-size:21px;line-height:1.45">“Which racks lose redundancy if this one breaker is opened for maintenance?” — traced, in seconds, in front of the people who need to agree.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Thermal chain" data-screen-label="08" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden">
+  <div style="padding:64px 64px 26px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+      <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">SYSTEM · THERMAL</div>
+      <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">07 / 15</div>
+    </div>
+    <h2 style="margin:30px 0 14px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.05;color:#16203B;letter-spacing:-0.8px">The loop that cannot stop.</h2>
+    <p style="margin:0;max-width:900px;color:#3D4759;font-size:23px;line-height:1.45">Direct-to-chip cooling removes the tolerance for a slow response. Tower, chiller, primary pumps, facility water, row CDU, rack manifold and every quick-disconnect are one continuous, walkable chain — with the leak detection and control layer attached to it.</p>
+  </div>
+  <div style="flex:1;position:relative;overflow:hidden">
+    <img src="shots/04-fix.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 52%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(251,250,248,0.5) 0%,rgba(251,250,248,0) 30%,rgba(22,32,59,0.9) 100%)"></div>
+    <div style="position:absolute;left:64px;right:64px;bottom:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div style="background:rgba(22,32,59,0.86);border-top:4px solid #EE7623;border-radius:4px 4px 10px 10px;padding:20px 22px">
+        <div style="color:#FBFAF8;font-size:22px;font-weight:700;margin-bottom:6px">Rejection</div>
+        <div style="color:#C3CCDE;font-size:19px;line-height:1.4">Cooling towers and dry-cooler economisers on a green condenser loop.</div>
+      </div>
+      <div style="background:rgba(22,32,59,0.86);border-top:4px solid #EE7623;border-radius:4px 4px 10px 10px;padding:20px 22px">
+        <div style="color:#FBFAF8;font-size:22px;font-weight:700;margin-bottom:6px">Generation</div>
+        <div style="color:#C3CCDE;font-size:19px;line-height:1.4">Chiller facility, primary pumps, VFDs and water-treatment control.</div>
+      </div>
+      <div style="background:rgba(22,32,59,0.86);border-top:4px solid #EE7623;border-radius:4px 4px 10px 10px;padding:20px 22px">
+        <div style="color:#FBFAF8;font-size:22px;font-weight:700;margin-bottom:6px">Delivery</div>
+        <div style="color:#C3CCDE;font-size:19px;line-height:1.4">Facility-water spines, row CDUs, rack manifolds, leak rings under every row.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Cyber layer" data-screen-label="09" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #EE7623">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">LAYER 3 · THE CYBER RECORD</div>
+    <div style="color:#8794AE;font-size:18px;font-weight:600;letter-spacing:3.2px">08 / 15</div>
+  </div>
+  <h2 style="margin:30px 0 14px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.05;color:#FBFAF8;letter-spacing:-0.8px">Where IT stops and OT begins —<br>drawn, not asserted.</h2>
+  <p style="margin:0 0 26px;max-width:920px;color:#C3CCDE;font-size:23px;line-height:1.45">The twin carries the segmentation as geometry. Aqua is the IT fabric; purple is the OT signal path. You can see the boundary, and you can see every place something crosses it.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1">
+    <div style="background:#1E2B4D;border-radius:12px;padding:26px 28px;display:flex;flex-direction:column;gap:14px">
+      <div style="color:#35C2C9;font-size:17px;font-weight:700;letter-spacing:2.4px">IT PATH · AQUA</div>
+      <div style="color:#DCE4F2;font-size:21px;line-height:1.5">Diverse carrier entries → ISP routers → DDoS appliances → perimeter firewall pair → core spine → leaf → end-of-row distribution → ToR.</div>
+      <div style="color:#8794AE;font-size:20px;line-height:1.45">Plus the management plane most diagrams forget: bastion hosts, out-of-band console servers, KVM and the WLAN controller behind every ceiling access point.</div>
+    </div>
+    <div style="background:#1E2B4D;border-radius:12px;padding:26px 28px;display:flex;flex-direction:column;gap:14px">
+      <div style="color:#B98BEA;font-size:17px;font-weight:700;letter-spacing:2.4px">OT PATH · PURPLE</div>
+      <div style="color:#DCE4F2;font-size:21px;line-height:1.5">CDU and chiller PLCs, EPMS metering, generator controllers, battery-room gas sensing and BMS field devices → hardened OT switch → OT firewall.</div>
+      <div style="color:#8794AE;font-size:20px;line-height:1.45">Everything upstream reaches the DCIM and OT-IDS through a one-way data diode. The crossing point is a physical object in the model, with an owner.</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;background:#EE7623;border-radius:12px;padding:24px 28px;display:flex;gap:26px;align-items:center">
+    <div style="color:#FFF;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700;line-height:1.1;flex:0 0 300px">Segmentation you can audit.</div>
+    <div style="color:#3A1C05;font-size:21px;line-height:1.45">Zones and conduits stop being a spreadsheet exercise. Select a conduit, see exactly what traverses it, and evidence the boundary as it is actually built.</div>
+  </div>
+</section>
+
+<section data-label="Safety & security" data-screen-label="10" style="width:100%;height:100%;background:#FBFAF8;display:flex;font-family:Inter,sans-serif;overflow:hidden">
+  <div style="flex:1;padding:64px 52px 64px 64px;box-sizing:border-box;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">SYSTEM · SAFETY &amp; SECURITY</div><div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">09 / 15</div></div>
+    <h2 style="margin:20px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:48px;line-height:1.05;color:#16203B;letter-spacing:-0.6px">The systems that turn<br>a cyber event into a<br>physical one.</h2>
+    <div style="width:84px;height:5px;background:#EE7623;margin:24px 0 24px"></div>
+    <p style="margin:0 0 22px;color:#3D4759;font-size:22px;line-height:1.5">Convergence is not theoretical. Access control, fire suppression and detection sit on the same network estate as the facility — so they belong in the same model.</p>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:21px;line-height:1.4"><strong>Access control</strong> — card readers, mantrap, biometric reader, ACS head end</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:21px;line-height:1.4"><strong>Fire &amp; life safety</strong> — FACP, agent bottle banks, per-row VESDA, EPO</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:21px;line-height:1.4"><strong>Perimeter</strong> — PIDS fence, CCTV poles, HVM bollards, gatehouse</span></div>
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="color:#EE7623;font-weight:700;font-size:22px">›</span><span style="color:#2B3550;font-size:21px;line-height:1.4"><strong>Environmental</strong> — aisle temperature and humidity, leak rings, H₂ sensing</span></div>
+    </div>
+    <div style="margin-top:auto;background:#FDEEDC;border-radius:10px;padding:22px 24px">
+      <div style="color:#16203B;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:8px">THE SCENARIO NOBODY WANTS</div>
+      <div style="color:#3D4759;font-size:21px;line-height:1.45">A compromised building controller holds a door, trips a suppression zone, or stalls a pump. In the twin that path is visible — and testable — before it is real.</div>
+    </div>
+  </div>
+  <div style="flex:0 0 40%;position:relative;overflow:hidden;background:#16203B">
+    <img src="shots/01-fix2.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:55% 40%">
+  </div>
+</section>
+
+<section data-label="Method" data-screen-label="11" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #EE7623">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">THE METHOD</div>
+    <div style="color:#8794AE;font-size:18px;font-weight:600;letter-spacing:3.2px">10 / 15</div>
+  </div>
+  <h2 style="margin:30px 0 12px;font-family:'Source Serif 4',serif;font-weight:700;font-size:56px;line-height:1.04;color:#FBFAF8;letter-spacing:-0.9px">We build the model.<br>Then we break it — ten thousand times.</h2>
+  <p style="margin:0 0 26px;max-width:920px;color:#C3CCDE;font-size:23px;line-height:1.45">An engineering twin tells you what exists. A <em>cyber</em> digital twin tells you what it costs you when it fails, how likely that is this year, and which three things to fix first.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0">
+    <div style="background:#1E2B4D;border-radius:12px;padding:22px 26px;border-top:4px solid #EE7623">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700">01</span><span style="color:#FBFAF8;font-size:24px;font-weight:700">BUILD the as-is</span></div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.45">Geometry, topology and control layer, reconciled against drawings, config and a site walk. The twin is the agreed statement of what is actually installed.</div>
+    </div>
+    <div style="background:#1E2B4D;border-radius:12px;padding:22px 26px;border-top:4px solid #EE7623">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700">02</span><span style="color:#FBFAF8;font-size:24px;font-weight:700">ENRICH with the BOM</span></div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.45">Every object inherits its hardware, software, firmware, cryptographic and service bill of materials — then that BOM is cross-referenced against live vulnerability and threat intelligence.</div>
+    </div>
+    <div style="background:#1E2B4D;border-radius:12px;padding:22px 26px;border-top:4px solid #EE7623">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700">03</span><span style="color:#FBFAF8;font-size:24px;font-weight:700">SIMULATE the consequence</span></div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.45">Threat-model each pathway, breach the minimum operating requirements, and run the outcome distribution — not a single worst case, and not a heat-map colour.</div>
+    </div>
+    <div style="background:#EE7623;border-radius:12px;padding:22px 26px;border-top:4px solid #FBFAF8">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px"><span style="color:#FFF;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700">04</span><span style="color:#FFF;font-size:24px;font-weight:700">PRIORITISE the spend</span></div>
+      <div style="color:#3A1C05;font-size:20px;line-height:1.45">Rank every finding by loss avoided per euro spent, and defend the ranking in front of a board, an insurer or a regulator.</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="BOM layer" data-screen-label="12" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">STEP 02 · THE BILL OF MATERIALS</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">11 / 15</div>
+  </div>
+  <h2 style="margin:28px 0 10px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.04;color:#16203B;letter-spacing:-0.8px">Every object carries<br>its own attack surface.</h2>
+  <div style="width:84px;height:5px;background:#EE7623;margin:20px 0 22px"></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:10px;padding:18px 22px">
+      <div style="color:#16203B;font-size:22px;font-weight:700;margin-bottom:5px">HBOM · hardware</div>
+      <div style="color:#3D4759;font-size:20px;line-height:1.4">Make, model, revision, firmware level, end-of-support date, supply-chain provenance.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:10px;padding:18px 22px">
+      <div style="color:#16203B;font-size:22px;font-weight:700;margin-bottom:5px">SBOM · software</div>
+      <div style="color:#3D4759;font-size:20px;line-height:1.4">Components and transitive dependencies in every controller, gateway and appliance image.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:10px;padding:18px 22px">
+      <div style="color:#16203B;font-size:22px;font-weight:700;margin-bottom:5px">CBOM · cryptography</div>
+      <div style="color:#3D4759;font-size:20px;line-height:1.4">Algorithms, key lengths, certificate expiry, trust anchors and post-quantum exposure.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:10px;padding:18px 22px">
+      <div style="color:#16203B;font-size:22px;font-weight:700;margin-bottom:5px">SaaS &amp; service BOM</div>
+      <div style="color:#3D4759;font-size:20px;line-height:1.4">Vendor remote access, cloud control planes, telemetry egress and licence dependencies.</div>
+    </div>
+  </div>
+  <div style="margin-top:22px;background:#16203B;border-radius:12px;padding:24px 28px">
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:12px">CONTINUOUSLY CROSS-REFERENCED AGAINST</div>
+    <div style="display:flex;flex-wrap:wrap;gap:9px">
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">CVE / NVD</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">CISA KEV</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">EPSS exploit probability</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">ICS-CERT advisories</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">Vendor PSIRT</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">Exploit availability</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">Threat-actor TTPs</span>
+      <span style="background:#22304F;color:#DCE4F2;font-size:19px;font-weight:600;padding:8px 14px;border-radius:6px">End-of-life status</span>
+    </div>
+    <div style="color:#C3CCDE;font-size:20px;line-height:1.45;margin-top:14px">A CVE alone is noise. A CVE on <em>this</em> controller, reachable through <em>this</em> conduit, holding up <em>this</em> cooling loop, is a decision.</div>
+  </div>
+  <div style="margin-top:auto;padding-top:20px;border-top:2px solid #16203B;display:flex;justify-content:space-between">
+    <div style="color:#7A879E;font-size:17px;font-weight:600;letter-spacing:2.6px">FROM VULNERABILITY LIST TO EXPLOITABLE PATHWAY</div>
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.6px">oxot.nl</div>
+  </div>
+</section>
+
+<section data-label="What-if scenarios" data-screen-label="13" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">STEP 03 · WHAT-IF ANALYSIS</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">12 / 15</div>
+  </div>
+  <h2 style="margin:28px 0 10px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.04;color:#16203B;letter-spacing:-0.8px">Consequence first.<br>Then likelihood.</h2>
+  <p style="margin:0 0 18px;max-width:920px;color:#3D4759;font-size:22px;line-height:1.45">We define the minimum operating requirements with your engineers before we model a single threat. A scenario only matters if it breaches one of them.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+    <div style="background:#16203B;border-radius:10px;padding:18px 22px">
+      <div style="color:#EE7623;font-size:16px;font-weight:700;letter-spacing:2.2px;margin-bottom:6px">SAFETY</div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.4">No condition that endangers people or defeats a protective function.</div>
+    </div>
+    <div style="background:#16203B;border-radius:10px;padding:18px 22px">
+      <div style="color:#EE7623;font-size:16px;font-weight:700;letter-spacing:2.2px;margin-bottom:6px">RELIABILITY</div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.4">Concurrent maintainability and N+1 held on both power and cooling.</div>
+    </div>
+    <div style="background:#16203B;border-radius:10px;padding:18px 22px">
+      <div style="color:#EE7623;font-size:16px;font-weight:700;letter-spacing:2.2px;margin-bottom:6px">MINIMUM OPERATION</div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.4">The floor below which the service is contractually and legally in breach.</div>
+    </div>
+  </div>
+  <div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:9px">
+    <div style="display:flex;gap:14px;align-items:center;background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 8px 8px 0;padding:14px 20px">
+      <div style="flex:1;color:#16203B;font-size:21px;font-weight:600">Ransomware reaches the DCIM and the BMS head end</div>
+      <div style="flex:0 0 320px;color:#3D4759;font-size:20px">Loss of visibility, manual cooling control</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 8px 8px 0;padding:14px 20px">
+      <div style="flex:1;color:#16203B;font-size:21px;font-weight:600">Compromised row-CDU controller stalls both pumps</div>
+      <div style="flex:0 0 320px;color:#3D4759;font-size:20px">Thermal runaway in ~90 seconds at full load</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 8px 8px 0;padding:14px 20px">
+      <div style="flex:1;color:#16203B;font-size:21px;font-weight:600">Malicious firmware in a power-shelf PSU family</div>
+      <div style="flex:0 0 320px;color:#3D4759;font-size:20px">Correlated failure across every row at once</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 8px 8px 0;padding:14px 20px">
+      <div style="flex:1;color:#16203B;font-size:21px;font-weight:600">Expired certificate on the OT protocol gateway</div>
+      <div style="flex:0 0 320px;color:#3D4759;font-size:20px">Silent loss of telemetry, degraded response</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;background:#EFF3FA;border-left:6px solid #EE7623;border-radius:0 8px 8px 0;padding:14px 20px">
+      <div style="flex:1;color:#16203B;font-size:21px;font-weight:600">Vendor SaaS control plane unavailable for 72 hours</div>
+      <div style="flex:0 0 320px;color:#3D4759;font-size:20px">No orchestration, no remote diagnostics</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Monte Carlo" data-screen-label="14" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #EE7623">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">STEP 03 · PROBABILISTIC OUTCOMES</div>
+    <div style="color:#8794AE;font-size:18px;font-weight:600;letter-spacing:3.2px">13 / 15</div>
+  </div>
+  <h2 style="margin:28px 0 10px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.04;color:#FBFAF8;letter-spacing:-0.8px">A range of outcomes,<br>not a red square.</h2>
+  <p style="margin:0 0 22px;max-width:940px;color:#C3CCDE;font-size:22px;line-height:1.45">Each pathway gets a frequency and an impact distribution — downtime, equipment loss, SLA credits, response cost, regulatory exposure. Ten thousand Monte Carlo iterations turn those into an annualised loss the business can actually budget against.</p>
+  <div style="background:#1E2B4D;border-radius:12px;padding:24px 28px 18px;flex:1;min-height:0;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+      <div style="color:#DCE4F2;font-size:20px;font-weight:600">Annual loss distribution — thermal-loss pathway</div>
+      <div style="color:#7C8AA6;font-size:17px;letter-spacing:1.6px">ILLUSTRATIVE MODEL OUTPUT</div>
+    </div>
+    <div style="flex:1;min-height:0;display:flex;align-items:flex-end;gap:5px;position:relative;padding-bottom:2px">
+      <div style="flex:1;height:5%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:11%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:22%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:38%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:57%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:76%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:90%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:97%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:100%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:94%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:84%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:71%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:58%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:46%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:36%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:27%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:20%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:14%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:10%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:7%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:5%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:3%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:2%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      <div style="flex:1;height:1%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;border-top:2px solid #3B4C6E;padding-top:8px;margin-top:4px">
+      <div style="color:#7C8AA6;font-size:17px">€0</div>
+      <div style="color:#EE7623;font-size:17px;font-weight:700">P50</div>
+      <div style="color:#EE7623;font-size:17px;font-weight:700">P90</div>
+      <div style="color:#C8332A;font-size:17px;font-weight:700">tail</div>
+      <div style="color:#7C8AA6;font-size:17px">worst credible</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+    <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:42px;font-weight:700;line-height:1">10,000</div><div style="color:#C3CCDE;font-size:19px;line-height:1.35;margin-top:2px">iterations per scenario</div></div>
+    <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:42px;font-weight:700;line-height:1">ALE</div><div style="color:#C3CCDE;font-size:19px;line-height:1.35;margin-top:2px">annualised loss expectancy per pathway</div></div>
+    <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:42px;font-weight:700;line-height:1">P90</div><div style="color:#C3CCDE;font-size:19px;line-height:1.35;margin-top:2px">the number the board should hold reserve against</div></div>
+    <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:42px;font-weight:700;line-height:1">Δ ALE</div><div style="color:#C3CCDE;font-size:19px;line-height:1.35;margin-top:2px">loss avoided by each candidate control</div></div>
+  </div>
+</section>
+
+<section data-label="Now Next Never" data-screen-label="15" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">STEP 04 · THE OUTPUT</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">14 / 15</div>
+  </div>
+  <h2 style="margin:28px 0 10px;font-family:'Source Serif 4',serif;font-weight:700;font-size:54px;line-height:1.04;color:#16203B;letter-spacing:-0.8px">NOW · NEXT · NEVER</h2>
+  <p style="margin:0 0 22px;max-width:920px;color:#3D4759;font-size:22px;line-height:1.45">Not a severity score. A defensible spending order, derived from reachability in the twin, exploitability in the wild, and loss avoided per euro.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;min-height:0">
+    <div style="background:#16203B;border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;border-top:6px solid #C8332A">
+      <div style="color:#FF6B5E;font-size:17px;font-weight:700;letter-spacing:2.6px;margin-bottom:10px">NOW</div>
+      <div style="color:#FBFAF8;font-family:'Source Serif 4',serif;font-size:30px;font-weight:700;line-height:1.15;margin-bottom:12px">Reachable, exploited, and it breaks a minimum requirement.</div>
+      <div style="color:#C3CCDE;font-size:20px;line-height:1.45">Known-exploited vulnerability on an asset with a live pathway to a safety or cooling function. Highest loss avoided per euro. Fix inside the change window.</div>
+    </div>
+    <div style="background:#FDEEDC;border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;border-top:6px solid #EE7623">
+      <div style="color:#B4530F;font-size:17px;font-weight:700;letter-spacing:2.6px;margin-bottom:10px">NEXT</div>
+      <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:30px;font-weight:700;line-height:1.15;margin-bottom:12px">Real, but the consequence is bounded or the path is long.</div>
+      <div style="color:#5A4630;font-size:20px;line-height:1.45">Meaningful ALE reduction that does not justify an emergency outage. Scheduled into the next maintenance window, with a compensating control until then.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;border-top:6px solid #7A879E">
+      <div style="color:#5A6478;font-size:17px;font-weight:700;letter-spacing:2.6px;margin-bottom:10px">NEVER</div>
+      <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:30px;font-weight:700;line-height:1.15;margin-bottom:12px">Unreachable, or the fix costs more than the loss.</div>
+      <div style="color:#3D4759;font-size:20px;line-height:1.45">Accepted with reasoning recorded against the object in the twin. The most valuable column — it is what lets your team defensibly stop working on the other 400 findings.</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;background:#16203B;border-radius:12px;padding:22px 28px;display:flex;gap:26px;align-items:center">
+    <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:28px;font-weight:700;line-height:1.15;flex:0 0 330px">Re-run it when anything changes.</div>
+    <div style="color:#C3CCDE;font-size:21px;line-height:1.45">New CVE, new firmware, new tenant load, a decommissioned UPS — the pathway analysis and the ALE move with the facility, because they were never separate from it.</div>
+  </div>
+</section>
+
+<section data-label="What it unlocks" data-screen-label="16" style="width:100%;height:100%;background:#FBFAF8;display:flex;flex-direction:column;padding:64px;box-sizing:border-box;font-family:Inter,sans-serif">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:3px solid #16203B">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">LAYER 4 · WHAT YOU DO WITH IT</div>
+    <div style="color:#7A879E;font-size:18px;font-weight:600;letter-spacing:3.2px">15 / 15</div>
+  </div>
+  <h2 style="margin:32px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:56px;line-height:1.05;color:#16203B;letter-spacing:-0.8px">A model is only worth<br>the decisions it changes.</h2>
+  <div style="width:84px;height:5px;background:#EE7623;margin:24px 0 30px"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1">
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">RISK ASSESSMENT</div>
+      <div style="color:#16203B;font-size:26px;font-weight:700;margin-bottom:8px">Zones, conduits and SL-T that survive review</div>
+      <div style="color:#3D4759;font-size:21px;line-height:1.45">Draw the 62443 boundary on the facility as built, not on an idealised diagram — and show the assessor the same picture you used to design it.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">FMECA &amp; HAZOP</div>
+      <div style="color:#16203B;font-size:26px;font-weight:700;margin-bottom:8px">Failure modes with a visible blast radius</div>
+      <div style="color:#3D4759;font-size:21px;line-height:1.45">Every component carries its failure modes and criticality. Walk the consequence through the connected systems instead of estimating it.</div>
+    </div>
+    <div style="background:#EFF3FA;border:2px solid #DCE4F2;border-radius:12px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">TABLETOP &amp; TRAINING</div>
+      <div style="color:#16203B;font-size:26px;font-weight:700;margin-bottom:8px">Exercises everyone can actually see</div>
+      <div style="color:#3D4759;font-size:21px;line-height:1.45">Engineering, security and executives argue from one shared object. New operators learn the facility before they ever badge in.</div>
+    </div>
+    <div style="background:#16203B;border-radius:12px;padding:26px 28px">
+      <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.4px;margin-bottom:10px">CHANGE &amp; CONFORMITY</div>
+      <div style="color:#FBFAF8;font-size:26px;font-weight:700;margin-bottom:8px">Evidence that stays current</div>
+      <div style="color:#C3CCDE;font-size:21px;line-height:1.45">The twin is versioned with the facility, so the technical file, the asset register and the network diagram stop drifting apart between audits.</div>
+    </div>
+  </div>
+  <div style="margin-top:24px;padding-top:22px;border-top:2px solid #16203B;display:flex;justify-content:space-between">
+    <div style="color:#7A879E;font-size:17px;font-weight:600;letter-spacing:2.6px">OXOT — OPERATIONAL EXCELLENCE IN OPERATIONAL TECHNOLOGY</div>
+    <div style="color:#EE7623;font-size:17px;font-weight:700;letter-spacing:2.6px">oxot.nl</div>
+  </div>
+</section>
+
+<section data-label="Close" data-screen-label="17" style="width:100%;height:100%;background:#16203B;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden;position:relative">
+  <div style="position:absolute;left:0;top:0;width:14px;height:100%;background:#EE7623"></div>
+  <div style="flex:0 0 330px;position:relative;overflow:hidden">
+    <img src="shots/02-rack.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(22,32,59,0.35) 0%,rgba(22,32,59,0.75) 55%,#16203B 100%)"></div>
+  </div>
+  <div style="flex:1;min-height:0;padding:0 64px 60px 78px;display:flex;flex-direction:column">
+    <div style="color:#EE7623;font-size:18px;font-weight:700;letter-spacing:3.2px">START WHERE THE RISK IS</div>
+    <h2 style="margin:18px 0 18px;font-family:'Source Serif 4',serif;font-weight:700;font-size:62px;line-height:1.03;color:#FBFAF8;letter-spacing:-1px">Begin with one cell,<br>not the whole campus.</h2>
+    <p style="margin:0 0 30px;max-width:880px;color:#C3CCDE;font-size:24px;line-height:1.5">We model a single critical cell — its power train, its cooling loop, its network and its control layer — and prove the method against your own drawings. Then we scale it across the estate.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:auto">
+      <div style="background:#1E2B4D;border-radius:10px;padding:22px 24px">
+        <div style="color:#EE7623;font-size:30px;font-family:'Source Serif 4',serif;font-weight:700;margin-bottom:6px">Scope</div>
+        <div style="color:#C3CCDE;font-size:20px;line-height:1.4">One cell, one power train, one cooling loop.</div>
+      </div>
+      <div style="background:#1E2B4D;border-radius:10px;padding:22px 24px">
+        <div style="color:#EE7623;font-size:30px;font-family:'Source Serif 4',serif;font-weight:700;margin-bottom:6px">Output</div>
+        <div style="color:#C3CCDE;font-size:20px;line-height:1.4">A navigable twin, an asset register and a zone/conduit view.</div>
+      </div>
+      <div style="background:#1E2B4D;border-radius:10px;padding:22px 24px">
+        <div style="color:#EE7623;font-size:30px;font-family:'Source Serif 4',serif;font-weight:700;margin-bottom:6px">Then</div>
+        <div style="color:#C3CCDE;font-size:20px;line-height:1.4">Risk assessment and FMECA run against something real.</div>
+      </div>
+    </div>
+    <div style="margin-top:30px;background:#FDEEDC;border-radius:12px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center;gap:30px">
+      <div>
+        <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:34px;font-weight:700;line-height:1.15">Talk to us about your facility.</div>
+        <div style="color:#5A4630;font-size:21px;line-height:1.4;margin-top:6px">OXOT — Operational Excellence in Operational Technology.</div>
+      </div>
+      <div style="text-align:right;flex:0 0 auto">
+        <div style="color:#EE7623;font-size:26px;font-weight:700">Talk to OXOT →</div>
+        <div style="color:#8A6A45;font-size:21px;margin-top:4px">info@oxot.nl · oxot.nl</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</x-import>
+</x-dc>
+</body>
+</html>

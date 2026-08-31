@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water & Wastewater OT Cyber Digital Twin — OXOT</title>
+  <link rel="stylesheet" href="../../shared/oxot-theme.css">
+  <script src="../../shared/nav.js" defer></script>
+</head>
+<body>
+
+  <div id="oxot-global-header"></div>
+
+  <!-- HERO SECTION -->
+  <section style="padding: 4.5rem 0 3rem; position: relative;">
+    <div class="container">
+      
+      <div class="oxot-breadcrumbs">
+        <a href="../../index.html">Platform</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="index.html">Industries</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Water & Wastewater</span>
+      </div>
+
+      <div class="grid-2" style="align-items: center; gap: 3.5rem;">
+        <div>
+          <span class="eyebrow-orange">DRINKING WATER & WASTEWATER UTILITIES</span>
+          <h1 class="hero-title-serif">
+            Protect safe water and sanitation before an incident becomes a public-health event.
+          </h1>
+          <div class="lead-orange">
+            Connects physical treatment processes, distributed lift stations, chemical dosing automation, and remote telemetry links.
+          </div>
+          <p class="body-prose">
+            Water and wastewater networks are geographically dispersed, rely on aging telemetry, and operate with lean engineering teams. ENISA's NIS360 benchmark identifies water utilities as facing the highest operational exposure with the least cyber maturity.
+          </p>
+          <p class="body-prose" style="margin-bottom: 2.25rem;">
+            OXOT builds a non-intrusive cyber-physical twin from your P&IDs, telemetry schedules, and SCADA asset lists. Test security modifications against the replica to guarantee safe chemical dosing, prevent sewer overflows, and meet NIS2 mandates without touching live pumps.
+          </p>
+          
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="../../demo-hub.html" class="btn btn-dutch-orange">
+              Explore Water Scenarios
+            </a>
+            <a href="../../due-diligence.html" class="btn btn-outline-dark">
+              Bring a Treatment Facility P&ID
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="background: radial-gradient(circle at 50% 50%, rgba(66, 150, 246, 0.15) 0%, rgba(11, 18, 24, 0.95) 80%); border: 1px solid rgba(66, 150, 246, 0.4); padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <span class="badge badge-blue">SOURCE-TO-TAP PROCESS FLOW</span>
+              <span class="pulse-indicator" style="background-color: var(--signal-blue); box-shadow: 0 0 8px var(--signal-blue);"></span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-blue); display: flex; justify-content: space-between;">
+                <span>Source / Raw Water Intake & Screening</span>
+                <span style="color: var(--signal-blue);">INTAKE</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-amber); display: flex; justify-content: space-between;">
+                <span>Chemical Dosing Skids (Cl₂, Alum, NaOH)</span>
+                <span style="color: var(--signal-amber);">DOSING CRITICAL</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-cyan); display: flex; justify-content: space-between;">
+                <span>Filtration, Clearwell & Storage Tanks</span>
+                <span style="color: var(--signal-cyan);">TREATMENT</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--dutch-orange); display: flex; justify-content: space-between;">
+                <span>Booster Pumping & District Metered Areas</span>
+                <span style="color: var(--dutch-orange);">DISTRIBUTION</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted);">
+              Safety envelope: Models chemical concentration thresholds, tank overflow limits, and pump cavitation curves.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OPERATIONAL TECHNOLOGY CONCERNS -->
+  <section style="padding: 3rem 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">WATER OT VULNERABILITIES</span>
+        <h2 class="section-title-serif">Sector-Specific Failure Modes</h2>
+      </div>
+
+      <div class="grid-3" style="gap: 1.5rem;">
+        
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber); margin-bottom: 0.5rem;">01 / CHEMICAL OVERDOSING</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Disinfection & pH Dosing Skids</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Unauthorized tampering with PLC recipe setpoints (e.g. sodium hypochlorite or caustic soda) can inject unsafe chemical concentrations directly into finished water reservoirs before online analyzers alert operators.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-blue); margin-bottom: 0.5rem;">02 / DISTRIBUTED LIFT STATIONS</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Remote Cellular & Radio RTUs</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Wastewater lift stations and remote water towers depend on unencrypted cellular modems or legacy radio links. Compromising an RTU enables attackers to disable lead/lag pumps, creating raw sewage backflows.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-cyan); margin-bottom: 0.5rem;">03 / INTEGRATOR ACCESS</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Shared Third-Party Portals</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Small municipal utilities often outsource SCADA maintenance to external system integrators who use persistent remote desktop or VPN connections, creating supply-chain lateral movement paths into critical PLC networks.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE FOUR DECISIONS IN WATER -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">DECISION FRAMEWORK</span>
+        <h2 class="section-title-serif">The Four Decisions in Water Utility Operations</h2>
+        <p style="color: var(--text-secondary); max-width: 720px;">
+          Enable municipal directors and facility superintendents to justify prioritized budget requests with defensible public-health and regulatory evidence.
+        </p>
+      </div>
+
+      <div class="four-decisions-grid">
+        
+        <div class="decision-col">
+          <h4>What do we fix first?</h4>
+          <p>Prioritize pathways that directly reach chemical dosing controllers and master lift station telemetry ahead of peripheral office IT.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>What should we spend?</h4>
+          <p>Target capital into physical interlocks and protocol isolation appliances rather than massive SCADA overhaul contracts.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>Can we change safely?</h4>
+          <p>Simulate PLC logic changes, cellular gateway updates, and firewall rules in the twin to prevent accidental water supply interruptions.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4 class="orange">What can we ignore?</h4>
+          <p>A written, defensible rationale to leave isolated flow transmitters alone where mechanical check valves prevent contamination.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORKED USE CASE: THREE-GATE LEDGER -->
+  <section style="padding: 3.5rem 0; background: var(--card); border-top: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 1.5rem;">
+        <span class="eyebrow-orange">WORKED USE CASE & EVIDENCE LEDGER</span>
+        <h2 class="section-title-serif">Scenario: Water Treatment Facility Sodium Hypochlorite Dosing Loop</h2>
+        <p style="color: var(--text-secondary); max-width: 800px;">
+          Progression from baseline vulnerability to virtual control simulation and certified facility maintenance output.
+        </p>
+      </div>
+
+      <div class="node-chip-chain">
+        <span class="node-chip">Integrator Remote Access VPN</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Facility SCADA HMI</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Chemical Dosing PLC (Modbus TCP)</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip" style="border-color: var(--signal-red); color: var(--signal-red);">Overdose Event (45,000 Consumers Affected)</span>
+      </div>
+
+      <!-- THREE GATE LEDGER -->
+      <div class="three-gate-ledger">
+        
+        <!-- COLUMN 1: BASELINE -->
+        <div class="ledger-col ledger-col-baseline">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-baseline">1. Baseline As-Documented</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-slate);">SL-1 / EXPOSED</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Entry Point:</strong> Third-party contractor remote desktop bridge into facility SCADA network.<br><br>
+            <strong>Lateral Path:</strong> Flat Ethernet routing allows write access to Sodium Hypochlorite Dosing PLC without secondary authentication.<br><br>
+            <strong>Consequence:</strong> Attacker ramps dosing rate 10x normal threshold, causing distribution water quality violation and emergency boil-water notice.
+          </p>
+        </div>
+
+        <!-- COLUMN 2: PROPOSED CONTROL -->
+        <div class="ledger-col ledger-col-proposed">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-proposed">2. Proposed Virtual Control</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber);">VIRTUAL TEST</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Simulated Remediation:</strong><br>
+            • Establish IEC 62443 Zone 2 boundary isolating chemical dosing PLCs.<br>
+            • Install hardware maximum-flow limit switch on chemical metering pump stroke.<br>
+            • Enforce unidirectional syslog reporting to central municipal IT.
+          </p>
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--signal-amber); background: rgba(218, 125, 15, 0.1); padding: 0.5rem; border-radius: var(--radius-xs);">
+            Simulated Path Result: Software injection bounded by physical mechanical limit switch (0% overdose risk).
+          </div>
+        </div>
+
+        <!-- COLUMN 3: DECISION OUTPUT -->
+        <div class="ledger-col ledger-col-decision">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-decision">3. Decision Output</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-green);">ACTIONABLE</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            <div style="margin-bottom: 0.5rem;"><strong>Action:</strong> Install hardware limit switch & zone boundary.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Implementation:</strong> 1-day installation during off-peak hours.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Cost:</strong> $4,200 (hardware switch & wiring).</div>
+            <div><strong>Compliance:</strong> Satisfies ENISA NIS360 & EPA requirements.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 3.5rem 0; background: var(--secondary); border-top: 1px solid var(--border);">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow-orange">GET STARTED</span>
+      <h2 style="font-family: var(--font-serif); font-size: 2.25rem; color: #fff; margin-bottom: 1rem;">
+        Model your treatment facility in a 60-day decision sprint.
+      </h2>
+      <p style="color: var(--text-secondary); max-width: 680px; margin: 0 auto 2rem; font-size: 1rem;">
+        Provide one treatment facility P&ID or lift station telemetry list. We build the cyber digital twin to give you clear risk rankings and budget justification.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="../../due-diligence.html" class="btn btn-dutch-orange">
+          Request Water Decision Sprint
+        </a>
+        <a href="../../demo-hub.html" class="btn btn-secondary">
+          Launch 3D Demo Hub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="oxot-global-footer"></div>
+
+</body>
+</html>

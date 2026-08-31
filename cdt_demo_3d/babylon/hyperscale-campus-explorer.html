@@ -1,0 +1,2942 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale Campus — Connection Explorer (Babylon.js)</title>
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;background:#0a0a0b}
+  #canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;outline:none}
+  #loading {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 50;
+    background: #070a0e;
+    background-image: 
+      linear-gradient(rgba(238, 118, 35, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(238, 118, 35, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+  }
+  #loading.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  
+  .loader-box {
+    background: rgba(11, 18, 24, 0.95);
+    border: 1px solid rgba(238, 118, 35, 0.4);
+    box-shadow: 0 0 35px rgba(238, 118, 35, 0.25);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .loader-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 200%; height: 2px;
+    background: linear-gradient(90deg, transparent, #ee7623, transparent);
+    animation: scanline 2.2s linear infinite;
+  }
+  
+  @keyframes scanline {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
+
+  .loader-brand {
+    font-family: Inter, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .loader-brand span { color: #ee7623; }
+  
+  .loader-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f0f6f3;
+    margin-bottom: 0.25rem;
+  }
+  
+  .loader-subtitle {
+    font-size: 0.78rem;
+    color: #6e827b;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 1.5rem;
+  }
+
+  .loader-progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+    position: relative;
+  }
+
+  .loader-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ee7623, #ff8736);
+    border-radius: 999px;
+    box-shadow: 0 0 12px #ee7623;
+    transition: width 0.15s ease;
+  }
+
+  .loader-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #b7c8c1;
+  }
+  
+  .hud{position:absolute;z-index:10;background:rgba(10,10,11,.95);color:#E8E8E6;border-radius:10px;
+       border:1px solid #2c2c2e;box-shadow:0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(8px)}
+  #right, #threat, #cascade, #risk, #assume{right:14px;top:14px;width:320px;
+        max-height:calc(100% - 28px);display:flex;flex-direction:column}
+  #right[hidden], #threat[hidden], #cascade[hidden], #risk[hidden], #assume[hidden]{display:none}
+  #right.collapsed .bd, #threat.collapsed .bd, #cascade.collapsed .bd,
+  #risk.collapsed .bd, #assume.collapsed .bd{display:none}
+  .sub{font-size:10.5px;color:#8a8a88;line-height:1.5;margin-bottom:7px}
+  .hd{padding:12px 62px 10px 14px;border-bottom:1px solid #2c2c2e;flex:0 0 auto;position:relative}
+  .hudbtns{position:absolute;right:9px;top:9px;display:flex;gap:4px}
+  .iconbtn{width:22px;height:22px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:5px;
+           cursor:pointer;font:700 12px Inter,sans-serif;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+  .iconbtn:hover{background:#2c2c2e;color:#fff}
+  .selname{font-size:15px;font-weight:700;color:#FBFAF8;line-height:1.25}
+  .selkind{font-size:10.5px;color:#EE7623;font-weight:600;margin-top:3px}
+  .zonetag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:12px;margin-top:6px}
+  .bd{padding:11px 14px 13px;overflow-y:auto;flex:1 1 auto}
+  .bd::-webkit-scrollbar{width:8px}.bd::-webkit-scrollbar-thumb{background:#3a3a3d;border-radius:4px}
+  .sec{font-size:9.5px;font-weight:700;letter-spacing:1.6px;color:#EE7623;margin:0 0 7px}
+  .sec.mt{margin-top:15px}
+  .kv{display:flex;gap:8px;font-size:10.5px;padding:3px 0;border-bottom:1px solid #262628}
+  .kv b{flex:0 0 84px;color:#8a8a88;font-weight:600}
+  .kv span{color:#E8E8E6}
+  .empty{font-size:10.5px;color:#8a8a88;line-height:1.5}
+  .tstat{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px}
+  .tstat div{background:#151516;border:1px solid #2c2c2e;border-radius:6px;padding:7px 9px}
+  .tstat .tv{font-size:17px;font-weight:700;color:#EE7623;line-height:1.1}
+  .tstat .tk{font-size:8.5px;color:#8a8a88;letter-spacing:1px;margin-top:2px}
+  .blockrow{padding:5px 7px;border-bottom:1px solid #1e1e20;font-size:9.5px;line-height:1.45}
+  .blockrow b{color:#E8E8E6;font-weight:600}
+  .blockrow span{color:#2bd96a;font-weight:700}
+  .hop, .wv{display:grid;grid-template-columns:22px minmax(0,1fr) 40px;gap:5px;align-items:center;
+            padding:4px 7px;border-bottom:1px solid #1e1e20;cursor:pointer}
+  .hop:hover, .wv:hover{background:#242426}
+  .hop .hn, .wv .wn{font-size:8.5px;font-weight:700;color:#EE7623;text-align:center}
+  .wv .wn{color:#c8332a}
+  .hop .hl, .wv .wl{font-size:10.5px;color:#E8E8E6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hop .hz, .wv .wz{font-size:9px;font-weight:700;text-align:center;padding:1px 3px;border-radius:8px}
+  .heldrow{padding:4px 7px;border-bottom:1px solid #1e1e20;font-size:9.5px;color:#C8C8C6}
+  .heldrow b{color:#2bd96a;font-weight:700}
+  .alerow{display:grid;grid-template-columns:34px minmax(0,1fr) 62px;gap:6px;align-items:center;
+          padding:5px 7px;border-bottom:1px solid #1e1e20}
+  .alerow .an2{font-size:9px;font-weight:700;color:#EE7623}
+  .alerow .al{font-size:10px;color:#C8C8C6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .alerow .av{font-size:10.5px;font-weight:700;color:#E8E8E6;text-align:right}
+  .ctrlrow{display:grid;grid-template-columns:16px minmax(0,1fr) 54px;gap:6px;align-items:start;
+           padding:6px 7px;border-bottom:1px solid #1e1e20;cursor:pointer}
+  .ctrlrow:hover{background:#242426}
+  .ctrlrow input{margin:2px 0 0;accent-color:#EE7623}
+  .ctrlrow .cl{font-size:10px;color:#E8E8E6;line-height:1.35}
+  .ctrlrow .cm{font-size:9px;color:#8a8a88;margin-top:2px}
+  .ctrlrow .cr{font-size:10px;font-weight:700;color:#2bd96a;text-align:right}
+  .bigfig{background:#151516;border:1px solid #2c2c2e;border-radius:6px;padding:9px 11px;margin-bottom:7px}
+  .bigfig .bv{font-size:19px;font-weight:700;color:#EE7623;line-height:1.1}
+  .bigfig .bk{font-size:8.5px;color:#8a8a88;letter-spacing:1px;margin-top:2px}
+  #stats{display:none !important}
+  #note{position:absolute;left:14px;top:14px;z-index:10;max-width:420px;
+        background:rgba(10,10,11,.95);border:1px solid #2c2c2e;border-radius:8px;padding:8px 12px;
+        font:400 10.5px/1.5 Inter,sans-serif;color:#8a8a88}
+
+  #tourCaption{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:20;
+        display:none;align-items:center;gap:14px;background:rgba(10,10,11,.9);
+        border:1px solid rgba(238,118,35,.5);border-radius:10px;padding:10px 18px;
+        backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,0,0,.4)}
+  #tourCaption .label{font:600 13px/1.3 Inter,sans-serif;color:#fff;letter-spacing:.02em}
+  #tourCaption .sub{font:400 10px/1.3 Inter,sans-serif;color:#9a9a98}
+  #tourExitBtn{padding:6px 12px;border:1px solid #ee7623;background:rgba(238,118,35,.15);
+        color:#ee7623;border-radius:6px;font:600 11px Inter,sans-serif;cursor:pointer}
+  #tourExitBtn:hover{background:rgba(238,118,35,.3)}
+
+  #left{left:14px;top:72px;width:280px;max-height:calc(100% - 100px);display:none;flex-direction:column;
+        overflow-y:auto;padding:11px 12px}
+  /* #left's sections are moved (not cloned) into whichever phase panel is open, so #left
+     itself becomes an empty, hidden staging host once the phase stack exists (Step 5). */
+  #phases{position:absolute;left:14px;top:72px;bottom:14px;width:280px;z-index:10;
+          display:flex;flex-direction:column;gap:7px;pointer-events:none}
+  #phases > *{pointer-events:auto}
+  .ph{background:rgba(10,10,11,.95);color:#E8E8E6;border-radius:10px;border:1px solid #2c2c2e;
+      box-shadow:0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(8px);
+      display:flex;flex-direction:column;flex:0 0 auto;overflow:hidden}
+  .ph.open{flex:1 1 auto;min-height:0}
+  .ph > .phhd{padding:9px 12px 9px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;
+              border-bottom:1px solid transparent;user-select:none}
+  .ph.open > .phhd{border-bottom-color:#2c2c2e}
+  .ph > .phhd:hover{background:#17171a}
+  .phnum{flex:0 0 auto;width:19px;height:19px;border-radius:5px;background:#2c2c2e;color:#B4B4B2;
+         font:700 10.5px Inter,sans-serif;display:flex;align-items:center;justify-content:center}
+  .ph.open .phnum{background:#EE7623;color:#0a0a0b}
+  .phttl{flex:1 1 auto;font:600 12px Inter,sans-serif;letter-spacing:.02em}
+  .ph.open .phttl{color:#fff}
+  .phcar{flex:0 0 auto;font-size:8px;color:#8a8a88;transition:transform .12s}
+  .ph:not(.open) .phcar{transform:rotate(-90deg)}
+  .phsub{padding:0 12px 9px;font:400 10.5px/1.45 Inter,sans-serif;color:#8a8a88}
+  .phbd{padding:0 12px 12px;overflow-y:auto;flex:1 1 auto;min-height:0}
+  .phbd::-webkit-scrollbar{width:7px}
+  .phbd::-webkit-scrollbar-thumb{background:#2c2c2e;border-radius:4px}
+  #left::-webkit-scrollbar{width:8px}#left::-webkit-scrollbar-thumb{background:#3a3a3d;border-radius:4px}
+  .sec.fold{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;
+            padding:3px 0;border-bottom:1px solid #262628;margin-bottom:8px}
+  .sec.fold:hover{color:#F49A55}
+  .sec.fold .caret{font-size:8px;color:#8a8a88;transition:transform .12s;width:8px;display:inline-block}
+  .sec.fold.shut .caret{transform:rotate(-90deg)}
+  .fold-body.shut{display:none}
+  .fold-body{margin-bottom:4px}
+  .btnrow{display:flex;gap:4px;flex-wrap:wrap}
+  .toggle{flex:1;padding:6px 4px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:5px;
+          cursor:pointer;font:600 10px Inter,sans-serif;text-align:center}
+  .toggle:hover{background:#2c2c2e;color:#fff}
+  .toggle.active{background:#EE7623;border-color:#EE7623;color:#16130f}
+  .vpbtn{padding:5px 8px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:5px;
+         cursor:pointer;font:500 9.5px Inter,sans-serif}
+  .vpbtn:hover{background:#2c2c2e;color:#fff}
+  .vpbtn.active{background:#EE7623;border-color:#EE7623;color:#16130f}
+  #searchInput{width:100%;box-sizing:border-box;padding:6px 8px;background:#1c1c1e;border:1px solid #3a3a3d;
+               border-radius:5px;color:#E8E8E6;font:400 11px Inter,sans-serif;outline:none}
+  #searchInput:focus{border-color:#EE7623}
+  #searchResults{margin-top:6px;max-height:180px;overflow-y:auto}
+  .hit{padding:5px 6px;border-radius:4px;cursor:pointer;font-size:10.5px;color:#E8E8E6}
+  .hit:hover{background:#2c2c2e}
+  .hit .hn{color:#8a8a88;font-size:9px}
+  .chip{padding:3px 8px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:11px;
+        cursor:pointer;font:600 9px Inter,sans-serif;white-space:nowrap}
+  .chip.on{color:#16130f}
+  .chip.off{opacity:.45}
+  .chiprow{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+  .critrow{display:flex;align-items:center;gap:6px;font:500 10.5px Inter,sans-serif;color:#B4B4B2;margin-top:2px}
+  .grouptabs{display:flex;gap:4px;margin-bottom:6px}
+  .asset-row{padding:4px 6px;border-radius:4px;cursor:pointer;font-size:10px;color:#E8E8E6;
+             display:flex;justify-content:space-between;gap:6px}
+  .asset-row:hover{background:#2c2c2e}
+  .asset-row .an{color:#8a8a88;font-size:9px;flex:0 0 auto}
+  .grouplist{max-height:220px;overflow-y:auto}
+  .tracerow{display:flex;gap:4px;margin-top:8px}
+  #tooltip{position:absolute;z-index:20;pointer-events:none;background:rgba(10,10,11,.95);
+           border:1px solid #2c2c2e;border-radius:6px;padding:5px 9px;font:500 10.5px Inter,sans-serif;
+           color:#E8E8E6;display:none;max-width:280px}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div id="loading">
+  <div class="loader-box">
+    <div class="loader-brand">O<span>X</span>OT</div>
+    <div class="loader-title">Cyber Digital Twin · Hyperscale Campus</div>
+    <div class="loader-subtitle" id="loader-status-text">Ingesting 449 assets (13.9 MB GLB)...</div>
+    
+    <div class="loader-progress-track">
+      <div class="loader-progress-bar" id="loader-bar"></div>
+    </div>
+    
+    <div class="loader-footer">
+      <span id="loader-pct-text">0%</span>
+      <span>CYBER DIGITAL TWIN</span>
+    </div>
+  </div>
+</div>
+<div id="note">Phase 1 — Babylon.js port. Click a component to select and fly the camera to it.</div>
+<div id="stats"></div>
+<div id="tourCaption">
+  <div><div class="label" id="tourCaptionLabel"></div><div class="sub" id="tourCaptionSub"></div></div>
+  <button id="tourExitBtn">■ Exit tour</button>
+</div>
+
+<div id="phases"></div>
+<div id="left" class="hud">
+  <div class="sec fold" data-fold="fView"><span class="caret">▼</span>VIEWPOINT</div>
+  <div class="fold-body" id="fView">
+    <div class="btnrow" id="viewpointBtns">
+      <button class="vpbtn" data-vp="campus">Full campus</button>
+      <button class="vpbtn" data-vp="hall">Data hall</button>
+      <button class="vpbtn" data-vp="rack">GPU rack close-up</button>
+      <button class="vpbtn" data-vp="coreit">Core IT room</button>
+      <button class="vpbtn" data-vp="electrical">Electrical yard</button>
+      <button class="vpbtn" data-vp="power">Power room</button>
+      <button class="vpbtn" data-vp="cooling">Central facility</button>
+      <button class="vpbtn" data-vp="mmr">MMR / NOC</button>
+      <button class="vpbtn" data-vp="reception">Reception &amp; security</button>
+      <button class="vpbtn" data-vp="dock">Loading dock</button>
+    </div>
+    <div class="btnrow mt">
+      <button class="vpbtn" id="tourBtn">▶ Start tour</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fMode"><span class="caret">▼</span>VIEW</div>
+  <div class="fold-body" id="fMode">
+    <div class="btnrow" id="viewModeBtns">
+      <button class="toggle active" data-mode="physical">Physical</button>
+      <button class="toggle" data-mode="graph">Graph</button>
+      <button class="toggle" data-mode="both">Both</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fSearch"><span class="caret">▼</span>SEARCH</div>
+  <div class="fold-body" id="fSearch">
+    <input id="searchInput" placeholder="Asset or mesh name…" autocomplete="off">
+    <div id="searchResults"></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fMarker"><span class="caret">▼</span>MARKER COLOUR</div>
+  <div class="fold-body" id="fMarker">
+    <div class="btnrow" id="colmode">
+      <button class="toggle active" data-c="system">System</button>
+      <button class="toggle" data-c="zone">IEC 62443 zone</button>
+      <button class="toggle" data-c="cell">Cell</button>
+    </div>
+    <div class="sub mt">Node markers — hidden by default (clutter). Threat path and cascading failure results always glow the real equipment meshes and conduit tubes, never the diamond markers, regardless of this toggle.</div>
+    <div class="btnrow" id="nodeMarkerMode">
+      <button class="toggle active" data-k="hide">Hide</button>
+      <button class="toggle" data-k="show">Show</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fSvc"><span class="caret">▼</span>SERVICE</div>
+  <div class="fold-body" id="fSvc">
+    <div class="chiprow" id="serviceChips"></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fList"><span class="caret">▼</span>ASSET LIST</div>
+  <div class="fold-body" id="fList">
+    <div class="grouptabs" id="groupTabs">
+      <button class="vpbtn" data-group="zone">By zone</button>
+      <button class="vpbtn" data-group="system">By system</button>
+      <button class="vpbtn" data-group="cell">By cell</button>
+    </div>
+    <div class="grouplist" id="assetGroupList"></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fProto"><span class="caret">▼</span>PROTOCOL</div>
+  <div class="fold-body" id="fProto">
+    <div class="chiprow" id="protocolChips"></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fZone"><span class="caret">▼</span>IEC 62443 ZONE</div>
+  <div class="fold-body" id="fZone">
+    <div class="chiprow" id="zoneChips"></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fCond"><span class="caret">▼</span>CONDUITS</div>
+  <div class="fold-body" id="fCond">
+    <div class="btnrow" id="critmode">
+      <button class="toggle active" data-k="all">All</button>
+      <button class="toggle" data-k="crit">Critical only (§5.6)</button>
+    </div>
+    <div class="sub mt">Rack-internal detail (~3,929 components, ~12,600 conduits) — hidden by
+      default; a threat walk shows it regardless of this toggle.</div>
+    <div class="btnrow" id="rackDetailMode">
+      <button class="toggle active" data-k="hide">Hide</button>
+      <button class="toggle" data-k="show">Show</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fThreat"><span class="caret">▼</span>THREAT PATH</div>
+  <div class="fold-body" id="fThreat">
+    <div class="sub">Pick an entry point. Walks forward over routable protocols only — hardwired, analogue, serial and one-way links stop the path.</div>
+    <div class="btnrow" id="entryPoints"></div>
+    <div class="btnrow" style="margin-top:5px">
+      <button class="vpbtn" id="threatPlay">▶ Replay</button>
+      <button class="vpbtn" id="threatClear">Clear</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fCascade"><span class="caret">▼</span>CASCADING FAILURE</div>
+  <div class="fold-body" id="fCascade">
+    <div class="sub">Fail an asset and propagate the loss. Redundancy is inferred from feed count — two or more feeds of a service hold, one does not.</div>
+    <div class="btnrow" id="cascadeSeeds"></div>
+    <div class="sec mt" style="margin-top:9px">FROM HAZARD LOG</div>
+    <div class="btnrow" id="hazardSeeds"></div>
+    <div class="btnrow" style="margin-top:5px">
+      <button class="vpbtn" id="cascadeSel">Fail selected asset</button>
+      <button class="vpbtn" id="cascadePlay">▶ Replay</button>
+      <button class="vpbtn" id="cascadeClear">Clear</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fRisk"><span class="caret">▼</span>RISK PORTFOLIO</div>
+  <div class="fold-body" id="fRisk">
+    <div class="sub">Authored ALE by node, and the controls that reduce it. Tick controls to see residual exposure and cumulative ROSI.</div>
+    <div class="btnrow"><button class="vpbtn" id="riskOpen">Open portfolio</button></div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fAssume"><span class="caret">▼</span>ASSUMPTIONS &amp; PROVENANCE</div>
+  <div class="fold-body" id="fAssume">
+    <div class="sub">What in this model is sourced, what is inferred, and what is still unconfirmed.</div>
+    <div class="btnrow"><button class="vpbtn" id="assumeOpen">Open</button></div>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<div id="right" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="rightCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="rightClose" title="Close (Esc)">×</button>
+    </div>
+    <div class="selname" id="selName">Nothing selected</div>
+    <div class="selkind" id="selKind">Click a component in the model</div>
+    <div class="zonetag" id="zoneTag" style="display:none"></div>
+  </div>
+  <div class="bd" id="selBody">
+    <div class="empty">Click any component in the campus model to see its identity, zone and mesh binding.</div>
+  </div>
+</div>
+
+<div id="threat" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="threatCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="threatClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="threatTitle">Threat path</div>
+    <div class="selkind" id="threatSummary"></div>
+  </div>
+  <div class="bd" id="threatBody"></div>
+</div>
+
+<div id="cascade" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="cascadeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="cascadeClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="cascadeTitle">Cascading failure</div>
+    <div class="selkind" id="cascadeSummary"></div>
+  </div>
+  <div class="bd" id="cascadeBody"></div>
+</div>
+
+<div id="risk" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="riskCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="riskClose" title="Close">×</button>
+    </div>
+    <div class="selname">Risk portfolio</div>
+    <div class="selkind" id="riskSummary"></div>
+  </div>
+  <div class="bd" id="riskBody"></div>
+</div>
+
+<div id="assume" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="assumeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="assumeClose" title="Close">×</button>
+    </div>
+    <div class="selname">Assumptions &amp; provenance</div>
+    <div class="selkind" id="assumeSummary"></div>
+  </div>
+  <div class="bd" id="assumeBody"></div>
+</div>
+
+<script type="module">
+// ===== design tokens (canonical source: campus-model.js SERVICES/PROTOCOLS/ZONES) =========
+const SERVICES = {
+  water:       { label: 'Water / coolant',   color: 0x1f6fd0 },
+  condenser:   { label: 'Condenser water',   color: 0x2e8b57 },
+  air:         { label: 'Air / HVAC',        color: 0x9aa4ac },
+  electricity: { label: 'Electricity',       color: 0xd8b23a },
+  fuel:        { label: 'Fuel',              color: 0xd8c23a },
+  data:        { label: 'Data (IT)',         color: 0x35c2c9 },
+  control:     { label: 'Control (OT)',      color: 0x8a4fd0 },
+  fire:        { label: 'Fire & life safety', color: 0xc8332a },
+  security:    { label: 'Physical security', color: 0xe07a26 },
+};
+const PROTOCOLS = {
+  'Ethernet/TCP-IP':  { color: 0x35c2c9, layer: 'IT' },
+  'BGP':              { color: 0x2aa9b5, layer: 'IT' },
+  'SNMP':             { color: 0x59b8c9, layer: 'IT' },
+  'CAPWAP':           { color: 0x46a8d0, layer: 'IT' },
+  'RS-232 console':   { color: 0x7f8f9a, layer: 'IT' },
+  'OPC UA':           { color: 0x9b6ee0, layer: 'OT' },
+  'Modbus TCP':       { color: 0x8a4fd0, layer: 'OT' },
+  'Modbus RTU':       { color: 0x6f3ab0, layer: 'OT' },
+  'PROFINET':         { color: 0xb04fd0, layer: 'OT' },
+  'BACnet/IP':        { color: 0x5f6fd0, layer: 'OT' },
+  'BACnet MS/TP':     { color: 0x4a58ad, layer: 'OT' },
+  'IEC 61850 MMS':    { color: 0xd05fb0, layer: 'OT' },
+  'DNP3':             { color: 0xa04f8a, layer: 'OT' },
+  'CAN bus':          { color: 0x8a6ad0, layer: 'OT' },
+  'OSDP RS-485':      { color: 0xe07a26, layer: 'OT' },
+  'Dry contact':      { color: 0x9aa4ac, layer: 'OT' },
+  '4-20 mA analog':   { color: 0xb0a48a, layer: 'OT' },
+  'Physical flow':    { color: 0x7f8f9a, layer: 'Process' },
+  // rack-graph.json protocol identities (added when the rack-scale template
+  // was wired into this viewer — see "rack-graph.json: per-rack template
+  // expansion" below). Colors chosen to sit near their nearest existing
+  // relative (xGMI/UALoE near Ethernet/TCP-IP's cyan family; IPMI/Redfish
+  // near Modbus/BACnet's OT purple family since it's the same mgmt-plane role).
+  'AMD Infinity Fabric xGMI':        { color: 0x2ad0c9, layer: 'IT' },
+  'UALink over Ethernet (UALoE) / UEC 1.0': { color: 0x1fa8a0, layer: 'IT' },
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS': { color: 0x9b6ee0, layer: 'OT' },
+  'NVMe-oF (RDMA/TCP)':              { color: 0x46c2b0, layer: 'IT' },
+  'Ethernet/TCP-IP (RoCEv2-capable)': { color: 0x35c2c9, layer: 'IT' },
+};
+const ZONES = {
+  Z0: { label: 'Z0 / Zone 4 — Enterprise IT',        purdue: 'L4-L5',        slt: 'SL-T 2',   color: 0x9ba1a8 },
+  Z1: { label: 'Z1 / Zone 3 — DCIM / IDMZ',          purdue: 'L3-L3.5',      slt: 'SL-T 2-3', color: 0x35c2c9 },
+  Z2: { label: 'Z2 / Zone 2 — Supervisory control',  purdue: 'L2',           slt: 'SL-T 2-3', color: 0x8a4fd0 },
+  Z3: { label: 'Z3 / Zone 1 — Field device',         purdue: 'L0-L1',        slt: 'SL-T 1-2', color: 0xd8b23a },
+  Z4: { label: 'Z4 — Safety instrumented (SIS)',     purdue: 'isolated SIS', slt: 'SL-T 2-3', color: 0xc8332a },
+  Z5: { label: 'Z5 — Out-of-band / jump',            purdue: 'DMZ segment',  slt: 'SL-T 3',   color: 0xe07a26 },
+};
+const hex = n => '#' + n.toString(16).padStart(6, '0');
+// Asset-level system taxonomy (distinct from SERVICES, which colors edges) —
+// ported verbatim from the three.js reference's SYSCOL map.
+const SYSCOL = { PWR:0xd8b23a, CHW:0x1f6fd0, AIR:0x9aa4ac, DATA:0x35c2c9, OT:0x8a4fd0,
+                 BMS:0xe8e8e2, FA:0xc8332a, SEC:0xe07a26, IT:0x9ba1a8 };
+const colorOf = n => BABYLON.Color3.FromHexString(hex(n));
+
+// ===== engine + scene =======================================================
+const canvas = document.getElementById('canvas');
+const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+const scene = new BABYLON.Scene(engine);
+
+// ===== procedural gradient sky + fog (replaces the old flat #E8E6E0 background) ==========
+// Self-contained -- no external HDR/image asset to source, so no network dependency and no
+// image-based-lighting side effects on this scene's plain StandardMaterials (which weren't
+// authored expecting IBL reflections). A large inverted sphere painted with a vertical
+// color-gradient DynamicTexture, rendered as pure emissive so it reads as sky regardless of
+// scene lighting. Fog color matches the horizon band so distant campus geometry fades into
+// the sky at range instead of hard-clipping against camera.maxZ.
+const SKY_ZENITH = new BABYLON.Color3(0x3e / 255, 0x5c / 255, 0x8a / 255);
+const SKY_HORIZON = new BABYLON.Color3(0xd9 / 255, 0xe4 / 255, 0xee / 255);
+scene.clearColor = new BABYLON.Color4(SKY_HORIZON.r, SKY_HORIZON.g, SKY_HORIZON.b, 1);
+
+const skyTex = new BABYLON.DynamicTexture('skyGradient', { width: 4, height: 512 }, scene, false);
+{
+  const ctx = skyTex.getContext();
+  const rgb = c => `rgb(${(c.r * 255) | 0},${(c.g * 255) | 0},${(c.b * 255) | 0})`;
+  const grad = ctx.createLinearGradient(0, 0, 0, 512);
+  grad.addColorStop(0, rgb(SKY_ZENITH));
+  grad.addColorStop(0.55, rgb(SKY_HORIZON));
+  grad.addColorStop(1, rgb(SKY_HORIZON));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 4, 512);
+  skyTex.update();
+}
+const skyMat = new BABYLON.StandardMaterial('skyMat', scene);
+skyMat.emissiveTexture = skyTex;
+skyMat.diffuseColor = BABYLON.Color3.Black();
+skyMat.specularColor = BABYLON.Color3.Black();
+skyMat.disableLighting = true;
+skyMat.backFaceCulling = false;
+const proceduralSky = BABYLON.MeshBuilder.CreateSphere('proceduralSky',
+  { diameter: 1000, segments: 16, sideOrientation: BABYLON.Mesh.BACKSIDE }, scene);
+proceduralSky.material = skyMat;
+proceduralSky.infiniteDistance = true; // recenters on the camera every frame -- no parallax, no need to scale with campus size
+proceduralSky.isPickable = false;
+proceduralSky.applyFog = false;
+
+scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+scene.fogColor = SKY_HORIZON;
+// Tuned against the ACTUAL default full-campus framing, not guessed: that view sits the
+// camera ~114 units from target (confirmed live), so fog needs to stay out of the way well
+// past that or it washes out the whole primary view instead of just adding depth at the
+// horizon. 140/450 keeps every normal viewpoint crisp and only feathers in for the widest
+// establishing shots.
+scene.fogStart = 140;
+scene.fogEnd = 450;
+
+const camera = new BABYLON.ArcRotateCamera('cam', -Math.PI / 2.4, Math.PI / 2.6, 30,
+  BABYLON.Vector3.Zero(), scene);
+camera.attachControl(canvas, true);
+camera.lowerRadiusLimit = 0.3;
+camera.wheelDeltaPercentage = 0.01;
+camera.panningSensibility = 1200;
+camera.minZ = 0.01;
+camera.maxZ = 2000;
+
+scene.createDefaultLight = false;
+new BABYLON.HemisphericLight('hemi', new BABYLON.Vector3(0, 1, 0), scene).intensity = 0.9;
+const key = new BABYLON.DirectionalLight('key', new BABYLON.Vector3(-0.5, -1, -0.6), scene);
+key.intensity = 1.6;
+const fill = new BABYLON.DirectionalLight('fill', new BABYLON.Vector3(0.7, -0.3, 0.5), scene);
+fill.intensity = 0.4;
+
+engine.runRenderLoop(() => scene.render());
+window.addEventListener('resize', () => engine.resize());
+
+// ===== load geometry + graph =================================================
+const statsEl = document.getElementById('stats');
+const loadingEl = document.getElementById('loading');
+const loaderBar = document.getElementById('loader-bar');
+const loaderStatusText = document.getElementById('loader-status-text');
+const loaderPctText = document.getElementById('loader-pct-text');
+
+function updateLoadProgress(pct, status) {
+  if (loaderBar) loaderBar.style.width = pct + '%';
+  if (loaderPctText) loaderPctText.textContent = Math.round(pct) + '%';
+  if (status && loaderStatusText) loaderStatusText.textContent = status;
+}
+
+let simulatedPct = 10;
+const simTimer = setInterval(() => {
+  if (simulatedPct < 85) {
+    simulatedPct += Math.random() * 8;
+    updateLoadProgress(simulatedPct, simulatedPct > 50 ? 'Binding Facility Graph Topology...' : 'Streaming 13.9 MB GLB Mesh...');
+  }
+}, 120);
+
+const [importResult, facility, hall, routesData, positionsData, HZ, rack, rackPositionsData, rackRoutesData] = await Promise.all([
+  BABYLON.SceneLoader.ImportMeshAsync(null, '../', 'hyperscale_campus.glb', scene, (evt) => {
+    if (evt.lengthComputable && evt.total > 0) {
+      const realPct = (evt.loaded / evt.total) * 90;
+      updateLoadProgress(realPct, 'Ingesting Geometry (' + (evt.loaded / (1024*1024)).toFixed(1) + ' / ' + (evt.total / (1024*1024)).toFixed(1) + ' MB)...');
+    }
+  }),
+  fetch('../graph/facility-graph.json').then(r => r.json()),
+  fetch('../graph/hall-graph.json').then(r => r.json()),
+  fetch('../graph/routes.json').then(r => r.json()),
+  fetch('../graph/positions.json').then(r => r.json()),
+  fetch('../graph/hazard-log.json').then(r => r.json()),
+  fetch('../graph/rack-graph.json').then(r => r.json()),
+  // WS2.4 (2026-08-30): overlay marker positions + route polylines for the
+  // ~3,929 rack-internal assets / ~12,672 edges the block below mints from
+  // rack-graph.json -- generated offline by graph/generate-rack-overlay.js,
+  // not authored by hand, following the same schema/meta convention as
+  // positions.json/routes.json (see that script's own header comment).
+  fetch('../graph/rack-positions.json').then(r => r.json()),
+  fetch('../graph/rack-routes.json').then(r => r.json()),
+]);
+
+clearInterval(simTimer);
+updateLoadProgress(100, 'Compiling 1,155 Conduits & BFS Graph...');
+
+setTimeout(() => {
+  loadingEl.classList.add('hidden');
+}, 300);
+
+// Babylon's glTF loader wraps every import in a synthetic root transform that
+// corrects the right-handed source data to Babylon's left-handed default scene
+// (confirmed empirically: root.name === '__root__', and raw positions.json/
+// routes.json coordinates only land correctly when transformed through it).
+// All graph overlay geometry (Step 4+) must be parented here and fed raw JSON
+// (x,y,z) as local coordinates rather than placed at scene-root level.
+const root = importResult.meshes.find(m => !m.parent) || importResult.meshes[0];
+
+// ===== loading dock placeholder (Reference Architecture Zone G -- loading dock, receiving,
+// staging/kitting, burn-in -- was specified but never built; see graph/facility-graph.json's
+// "loading_dock" asset) =========================================================
+// South service yard, opposite the north-face public reception/mantrap entrance, in the open
+// yard strip before the perimeter fence. Simple runtime-constructed blockout (box body +
+// canopy + door insets), matching the low-poly box-primitive style already used throughout
+// this GLB (racks/walls/equipment are all built the same way). Built and parented under root
+// BEFORE the byName indexing loop below runs, so it's picked up automatically -- no special
+// binding path needed, it behaves exactly like real imported geometry from here on.
+{
+  const invRoot = BABYLON.Matrix.Invert(root.getWorldMatrix());
+  const worldToLocal = (x, y, z) => BABYLON.Vector3.TransformCoordinates(new BABYLON.Vector3(x, y, z), invRoot);
+
+  const dockBodyMat = new BABYLON.StandardMaterial('dock_body', scene);
+  dockBodyMat.diffuseColor = new BABYLON.Color3(0.62, 0.60, 0.56);
+  const dockDoorMat = new BABYLON.StandardMaterial('dock_door', scene);
+  dockDoorMat.diffuseColor = new BABYLON.Color3(0.18, 0.19, 0.21);
+  const dockCanopyMat = new BABYLON.StandardMaterial('dock_canopy', scene);
+  dockCanopyMat.diffuseColor = new BABYLON.Color3(0.42, 0.44, 0.48);
+
+  const dockRoot = new BABYLON.TransformNode('PLACEHOLDER_loading_dock', scene);
+  dockRoot.parent = root;
+  dockRoot.position = worldToLocal(-2, 0, -14);
+
+  const dockBody = BABYLON.MeshBuilder.CreateBox('dock_body_mesh', { width: 8, height: 4, depth: 5 }, scene);
+  dockBody.material = dockBodyMat;
+  dockBody.position.y = 2;
+  dockBody.parent = dockRoot;
+
+  const dockCanopy = BABYLON.MeshBuilder.CreateBox('dock_canopy_mesh', { width: 8.6, height: 0.25, depth: 2.2 }, scene);
+  dockCanopy.material = dockCanopyMat;
+  dockCanopy.position.set(0, 3.6, 3.1);
+  dockCanopy.parent = dockRoot;
+
+  for (let i = 0; i < 3; i++) {
+    const dockDoor = BABYLON.MeshBuilder.CreateBox(`dock_door_mesh_${i}`, { width: 2, height: 2.6, depth: 0.15 }, scene);
+    dockDoor.material = dockDoorMat;
+    dockDoor.position.set(-2.5 + i * 2.5, 1.5, 2.52);
+    dockDoor.parent = dockRoot;
+  }
+}
+
+// ===== 3D PROCEDURAL CLOUD FOR INTERNET / CLOUD BOUNDARY =====
+{
+  // Hide any existing rectangular box imported from GLB for DATA_internet_cloud
+  for (const m of scene.meshes) {
+    if (m.name && (m.name.includes('DATA_internet_cloud') || m.name.includes('DATA_internet_cloud_label'))) {
+      m.setEnabled(false);
+      m.visibility = 0;
+    }
+  }
+
+  const cloudRoot = new BABYLON.TransformNode('DATA_internet_cloud_root', scene);
+  cloudRoot.position = new BABYLON.Vector3(0, 9.6, -26);
+
+  const cloudMat = new BABYLON.StandardMaterial('cloud_glass_mat', scene);
+  cloudMat.diffuseColor = new BABYLON.Color3(0.92, 0.96, 1.0);
+  cloudMat.emissiveColor = new BABYLON.Color3(0.18, 0.38, 0.62);
+  cloudMat.specularColor = new BABYLON.Color3(0.6, 0.8, 1.0);
+  cloudMat.alpha = 0.86;
+  cloudMat.backFaceCulling = false;
+
+  const puffs = [
+    { r: 2.0, x: 0, y: 0, z: 0, sx: 1.35, sy: 0.85, sz: 1.1 },
+    { r: 1.5, x: -2.0, y: -0.2, z: 0.1, sx: 1.15, sy: 0.8, sz: 0.95 },
+    { r: 1.6, x: 2.0, y: -0.15, z: -0.1, sx: 1.15, sy: 0.8, sz: 0.95 },
+    { r: 1.1, x: -3.2, y: -0.45, z: 0.2, sx: 1.0, sy: 0.65, sz: 0.85 },
+    { r: 1.15, x: 3.2, y: -0.4, z: 0.1, sx: 1.0, sy: 0.7, sz: 0.85 },
+    { r: 1.4, x: 0.5, y: 1.0, z: -0.1, sx: 1.15, sy: 0.85, sz: 0.9 },
+    { r: 1.1, x: -1.2, y: 0.8, z: 0.15, sx: 1.05, sy: 0.8, sz: 0.85 },
+    { r: 1.05, x: 1.4, y: 0.7, z: 0.2, sx: 1.0, sy: 0.75, sz: 0.85 },
+    { r: 1.3, x: 0, y: -0.6, z: 0, sx: 2.2, sy: 0.45, sz: 1.2 }
+  ];
+
+  const puffMeshes = [];
+  puffs.forEach((p, idx) => {
+    const puff = BABYLON.MeshBuilder.CreateSphere(`cloud_puff_${idx}`, { diameter: p.r * 2, segments: 16 }, scene);
+    puff.scaling.set(p.sx, p.sy, p.sz);
+    puff.position.set(p.x, p.y, p.z);
+    puffMeshes.push(puff);
+  });
+
+  const mergedCloud = BABYLON.Mesh.MergeMeshes(puffMeshes, true, true, undefined, false, true);
+  if (mergedCloud) {
+    mergedCloud.name = 'DATA_internet_cloud';
+    mergedCloud.parent = cloudRoot;
+    mergedCloud.material = cloudMat;
+    mergedCloud.metadata = { assetId: 'internet', graphNode: 'internet' };
+
+    // Floating 3D Badge Label
+    const labelPlane = BABYLON.MeshBuilder.CreatePlane('cloud_label_plane', { width: 3.4, height: 0.85 }, scene);
+    labelPlane.parent = cloudRoot;
+    labelPlane.position.set(0, -1.3, 1.4);
+    
+    const labelDT = new BABYLON.DynamicTexture('cloud_label_dt', { width: 512, height: 128 }, scene, true);
+    labelDT.hasAlpha = true;
+    const ctx = labelDT.getContext();
+    ctx.clearRect(0, 0, 512, 128);
+    // Draw pill background
+    ctx.fillStyle = 'rgba(7, 10, 14, 0.88)';
+    ctx.strokeStyle = '#ee7623';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.roundRect(12, 12, 488, 104, 26);
+    ctx.fill();
+    ctx.stroke();
+    // Text
+    ctx.fillStyle = '#f0f6f3';
+    ctx.font = 'bold 34px "Instrument Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('☁ INTERNET / CLOUD', 256, 64);
+    labelDT.update();
+
+    const labelMat = new BABYLON.StandardMaterial('cloud_label_mat', scene);
+    labelMat.diffuseTexture = labelDT;
+    labelMat.emissiveTexture = labelDT;
+    labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    labelMat.backFaceCulling = false;
+    labelPlane.material = labelMat;
+
+    // Subtle ambient breathing float animation
+    let cloudTime = 0;
+    scene.onBeforeRenderObservable.add(() => {
+      cloudTime += engine.getDeltaTime() * 0.0012;
+      cloudRoot.position.y = 9.6 + Math.sin(cloudTime) * 0.25;
+    });
+  }
+}
+
+// The reference GLB was exported while the source page's "Graph" view mode
+// was active, which dims every material to ~7% opacity (a ghost-shell
+// effect for that mode). Phase 1 renders the physical view, so restore
+// full opacity on load rather than inheriting that transient export state.
+for (const m of scene.materials) {
+  m.alpha = 1;
+  if (m.transparencyMode !== undefined) m.transparencyMode = BABYLON.Material.MATERIAL_OPAQUE;
+}
+
+// Snapshot each material's real post-normalization state as the Graph-mode restore
+// target — never hardcode alpha:1, since a future Blender-enhanced GLB will carry
+// legitimate non-opaque materials (e.g. glass at alpha 0.22) that this must restore
+// to, not flatten back to opaque.
+const matBase = new Map();
+for (const m of scene.materials) matBase.set(m, { alpha: m.alpha, transparencyMode: m.transparencyMode });
+
+// index every node by name (meshes + transform nodes), then bind assets to nodes
+// — the pattern documented in handoff/README.md "Building the Babylon viewer"
+const byName = new Map();
+for (const n of scene.transformNodes.concat(scene.meshes)) if (n.name) byName.set(n.name, n);
+
+const assets = new Map();
+let bound = 0, unbound = 0;
+for (const a of [...facility.assets, ...hall.assets]) {
+  if (assets.has(a.id)) continue; // hall/facility can name the same asset twice
+  assets.set(a.id, a);
+  const node = byName.get(a.mesh);
+  if (node) {
+    node.metadata = { ...(node.metadata || {}), assetId: a.id };
+    a._node = node;
+    bound++;
+  } else {
+    unbound++;
+    console.warn('[explorer] no mesh for asset', a.id, a.mesh);
+  }
+}
+// statsEl is finalized after rack-graph.json expansion below, since that step
+// adds further assets and mutates `bound`/`unbound`.
+
+// resolve a picked mesh up its parent chain to the asset that owns it
+function assetOf(mesh) {
+  let n = mesh;
+  while (n) {
+    if (n.metadata?.assetId) return assets.get(n.metadata.assetId);
+    // Graph overlay markers/tubes are tagged with `graphNode` (see the marker-creation
+    // loops), not `assetId` -- the hover-tooltip code already checked this separately, but
+    // the actual click handler (canvas pointerup -> assetOf -> selectAndFly) went through
+    // this function alone and never did, so clicking any graph marker silently resolved to
+    // null and did nothing. Real bug, not evidence the markers lack purpose.
+    if (n.metadata?.graphNode) return assets.get(n.metadata.graphNode);
+    n = n.parent;
+  }
+  return null;
+}
+
+// ===== connection graph (edges + adjacency) ==================================
+// facility/hall connections use `critical_conduit`/`one_way`/`zone_crossing`/`description`,
+// not `critical`/`oneway`/`cross`/`label` — remapped here once so every downstream consumer
+// (filters, trace, threat path) can read the short names. Missing this for `oneway` would
+// make every real one-way link silently read as bidirectionally traversable (undefined is
+// falsy) with no error anywhere — safety-relevant for the threat-path feature, not cosmetic.
+const edges = [];
+for (const c of [...facility.connections, ...hall.connections]) {
+  if (!assets.has(c.from) || !assets.has(c.to)) continue; // skip unresolved endpoints
+  edges.push({ ...c, critical: c.critical_conduit, oneway: c.one_way, cross: c.zone_crossing, label: c.description });
+}
+
+// ===== rack-graph.json: per-rack template expansion ===========================
+// rack-graph.json describes ONE rack as a component/connection TEMPLATE (10
+// component types with per-rack quantities and mesh_suffix patterns like
+// "_compute_tray_{0..17}"), not concrete per-instance assets like facility/hall
+// — so it cannot just be spread into `assets`/`edges` like the other graphs.
+// Every rack instance (hall assets with template === "rack_gpu_48u") gets the
+// template applied here: one real asset per component instance (mesh = the
+// rack's own mesh name + the resolved suffix — confirmed against
+// row01_rack01.attributes.busbar/manifold_supply/manifold_return in
+// hall-graph.json, which already record this exact convention), and real
+// connections for every rack-graph edge.
+//
+// External-interface tokens (_external_power_in, _external_chw_supply, etc.)
+// are resolved to whichever real hall-graph asset already carries that
+// service into/out of THIS specific rack — found by scanning this rack's own
+// edges in the `edges` array built just above, not by guessing a naming
+// formula (row01_rack01's rPDU is row01_rpdu_1; row01_rack02's is
+// row01_rpdu_0 — the index alternates per rack and isn't derivable).
+// _external_scaleout_uplink now resolves to a real facility-level asset,
+// `scaleout_spine_sw` (facility-graph.json, added 2026-08-30) — every rack's
+// r22 edge converges on this single node, closing the confirmed dead end
+// documented in research/10-amd-icd-connections-vs-graph.md and
+// research/11-rack-graph-scene-linkage-audit.md. `scaleout_spine_sw` has no
+// physical mesh yet (honestly `mesh: null`), so it renders correctly in the
+// asset panel/threat-walk text report but has no 3D marker until Workstream
+// 2's position/route generation covers it too.
+// _external_leak_detection still has no matching hall-graph asset (the leak
+// rope is a row asset, not per-rack) — left unresolved, same as any other
+// unresolved-endpoint edge, rather than invented.
+//
+// Fan-out policy: r0/r2-r6/r8-r11/r17/r18/r20/r21 are genuine private
+// point-to-point attachments (every tray really does have its own busbar
+// clip, coolant QD, and BMC poll) and are expanded to one concrete edge per
+// instance. r13/r14/r15/r16/r19/r22/r23 involve a shared fabric or an
+// external uplink where the real per-instance topology (which of 18 compute
+// trays link to which of 9 switch trays, etc.) isn't specified anywhere in
+// rack-graph.json or the AMD BOM — rather than fabricate a specific crossbar
+// topology, these are rendered as ONE representative edge per rack from the
+// first instance of the "from" side, clearly labeled as representative in
+// its description. This is a deliberate simplification, not a bug — revisit
+// if real per-port fabric topology data becomes available.
+const REPRESENTATIVE_ONLY = new Set(['r13', 'r14', 'r15', 'r16', 'r19', 'r22', 'r23']);
+let rackExpandedEdges = 0, rackExpandSkipped = 0, rackExpandedAssets = 0;
+if (rack && Array.isArray(rack.components) && Array.isArray(rack.connections)) {
+  const rackInstances = hall.assets.filter(a => a.template === 'rack_gpu_48u');
+  for (const inst of rackInstances) {
+    const ownEdges = edges.filter(e => e.from === inst.id || e.to === inst.id);
+    const findExternal = matchFn => {
+      const hit = ownEdges.find(matchFn);
+      return hit ? (hit.from === inst.id ? hit.to : hit.from) : null;
+    };
+    const externalMap = {
+      _external_power_in:       findExternal(e => e.service === 'electricity'),
+      _external_chw_supply:     findExternal(e => e.service === 'water' && e.to === inst.id),
+      _external_chw_return:     findExternal(e => e.service === 'water' && e.from === inst.id),
+      _external_fabric_uplink:  findExternal(e => e.service === 'data' && (/_eor_sw/.test(e.from) || /_eor_sw/.test(e.to))),
+      _external_oob_uplink:     findExternal(e => e.service === 'data' && e.protocol === 'RS-232 console'),
+      _external_scaleout_uplink: assets.has('scaleout_spine_sw') ? 'scaleout_spine_sw' : null,
+      _external_leak_detection: null,  // leak rope is a row asset, not per-rack in hall-graph.json
+    };
+
+    const instanceIdByCompId = new Map();
+    for (const comp of rack.components) {
+      const range = comp.mesh_suffix.match(/\{(\d+)\.\.(\d+)\}/);
+      const suffixes = range
+        ? Array.from({ length: +range[2] - +range[1] + 1 }, (_, i) => comp.mesh_suffix.replace(/\{\d+\.\.\d+\}/, String(+range[1] + i)))
+        : [comp.mesh_suffix];
+      const ids = [];
+      suffixes.forEach((suffix, idx) => {
+        const meshName = `${inst.mesh}${suffix}`;
+        const node = byName.get(meshName);
+        // A handful of row01_rack01 components (rack1_psu, rack1_busbar,
+        // rack1_compute, rack1_storage, rack1_mgmt, row1_tor, row1_tor_b) were
+        // already hand-authored into facility-graph.json before this template
+        // existed, and hazard-log.json's N14 node already references them by
+        // those exact ids. If this mesh is already claimed by a real
+        // facility/hall asset, defer to it instead of minting a synthetic
+        // duplicate that would silently steal the mesh binding out from under
+        // an existing, referenced asset (caught by the checkGraphInvariant()
+        // dupMeshes check below — this branch is what keeps that check clean).
+        if (node?.metadata?.assetId && assets.has(node.metadata.assetId)) {
+          ids.push(node.metadata.assetId);
+          return;
+        }
+        const localId = `${inst.id}_${comp.id}${suffixes.length > 1 ? '_' + idx : ''}`;
+        const rackAsset = {
+          id: localId, label: `${comp.label} (${inst.id}${suffixes.length > 1 ? ' #' + idx : ''})`,
+          kind: comp.kind, system: comp.system, location: inst.location, mesh: meshName,
+          zone: comp.zone, purdue: comp.purdue, sl_target: comp.sl_target, standards: comp.standards,
+          template: `rack_component:${comp.id}`, attributes: comp.attributes, attack_surface: comp.attack_surface,
+          cell: inst.cell,
+        };
+        assets.set(localId, rackAsset);
+        // Bind _node here too (not just the reverse node.metadata.assetId link below) --
+        // paintNode()/frameObject() key off asset._node directly with no mesh-name fallback,
+        // so without this every rack-internal component silently failed to glow during a
+        // threat walk / cascade even when its real mesh was reached and its conduits lit up
+        // fine (found live: row01_rack01_nvswitch_tray_0 was in a threat walk's reached set
+        // with its mesh still on the default "nvsw_face" material, not a state_* paint).
+        if (node) { node.metadata = { ...(node.metadata || {}), assetId: localId }; rackAsset._node = node; bound++; } else { unbound++; }
+        rackExpandedAssets++;
+        ids.push(localId);
+      });
+      instanceIdByCompId.set(comp.id, ids);
+    }
+
+    const resolveSingle = ref => ref.startsWith('_external_') ? externalMap[ref] : (instanceIdByCompId.get(ref) || [])[0];
+
+    for (const c of rack.connections) {
+      const fromMulti = !c.from.startsWith('_external_') && instanceIdByCompId.get(c.from)?.length > 1;
+      const toMulti = !c.to.startsWith('_external_') && instanceIdByCompId.get(c.to)?.length > 1;
+      const representative = REPRESENTATIVE_ONLY.has(c.id);
+      const fromIds = fromMulti && !representative ? instanceIdByCompId.get(c.from) : [resolveSingle(c.from)];
+      const toIds = toMulti && !representative ? instanceIdByCompId.get(c.to) : [resolveSingle(c.to)];
+      // fan-out combos (r2-r6/r8-r11/r17/r18) previously all shared one id per
+      // rack per template edge (e.g. 18 busbar->compute_tray edges all named
+      // "<rack>_r2") -- edgesById/edgeTubes/routesById all key by plain .id,
+      // so 17 of every 18 were silently unreachable via those Maps (only the
+      // last-created tube/route/lookup entry survived), even though all 18
+      // were rendered. Found during WS2.4 wiring, root-caused here instead of
+      // patched at each lookup site: real fan-out gets a distinguishing
+      // index; true 1:1 edges (fromIds.length*toIds.length === 1) keep the
+      // original clean id.
+      const totalCombos = fromIds.length * toIds.length;
+      let comboIdx = 0;
+      for (const f of fromIds) for (const t of toIds) {
+        if (!f || !t || !assets.has(f) || !assets.has(t)) { rackExpandSkipped++; continue; }
+        edges.push({
+          id: totalCombos > 1 ? `${inst.id}_${c.id}_${comboIdx}` : `${inst.id}_${c.id}`,
+          from: f, to: t, service: c.service, protocol: c.protocol,
+          description: representative ? `${c.description} (representative edge — see rack-graph.json ${c.id} for the full component-class relationship)` : c.description,
+          critical: c.critical_conduit, oneway: c.one_way, cross: false, label: c.description, note: c.note, count: c.count,
+          _rackInternal: true,
+        });
+        comboIdx++;
+        rackExpandedEdges++;
+      }
+    }
+
+    // Bridge the hall-level rack node to its own internal detail. Without
+    // this, the rack-internal subgraph above is only reachable from external
+    // row-level assets (rPDU, TCS, EoR switch) via the externalMap edges, and
+    // is completely disconnected from `inst.id` itself (the "Compromised GPU
+    // rack" entry point threatWalk() already starts from) -- confirmed by an
+    // empty reached-set for nvswitch_tray/scale-out on a live threatWalk
+    // before this edge was added. h713 (row0N_bmc -> rack) is this project's
+    // one modeled critical conduit into the rack; mgmt_tray is the rack's own
+    // internal counterpart to that same BMC identity (r17 fans it out to
+    // every compute_tray). Bridging rack -> mgmt_tray with the same protocol
+    // makes that already-critical path actually traversable end-to-end
+    // instead of stopping at the rack's outer boundary.
+    const mgmtIds = instanceIdByCompId.get('mgmt_tray');
+    if (mgmtIds && mgmtIds.length === 1 && assets.has(mgmtIds[0])) {
+      edges.push({
+        id: `${inst.id}_bridge_mgmt`, from: inst.id, to: mgmtIds[0], service: 'data',
+        protocol: 'IPMI 2.0 (RMCP+) / Redfish HTTPS',
+        description: `${inst.id}'s hall-level BMC identity (h713-equivalent) is backed by its own mgmt_tray internally`,
+        critical: true, oneway: false, cross: false,
+        label: 'rack BMC identity -> internal mgmt_tray', note: 'Added so the rack-internal subgraph is reachable from the hall-level rack node a threat walk actually starts from.', count: null,
+        _rackInternal: true,
+      });
+      rackExpandedEdges++;
+    }
+  }
+  console.info(`[explorer] rack-graph.json expanded across ${rackInstances.length} rack instances: ${rackExpandedAssets} component assets, ${rackExpandedEdges} connections (${rackExpandSkipped} skipped — unresolved external endpoint, expected for _external_leak_detection only now that _external_scaleout_uplink resolves to scaleout_spine_sw)`);
+} else {
+  console.warn('[explorer] rack-graph.json missing or malformed — rack-internal components will not appear');
+}
+// Visible build tag -- bump this literal string on every rendering-related edit so it's
+// possible to confirm at a glance (no devtools needed) whether a loaded page is running
+// current code, instead of guessing about browser cache. Change the tag itself, not just
+// this comment, whenever the marker/tube look changes again.
+const BUILD_TAG = 'views-v5-8s-rotate-delay';
+statsEl.textContent = `${assets.size} assets · ${bound} bound to geometry · ${unbound} unbound · ${scene.meshes.length} meshes · build ${BUILD_TAG}`;
+
+const adj = new Map();
+for (const id of assets.keys()) adj.set(id, { in: [], out: [] });
+for (const e of edges) {
+  adj.get(e.from).out.push(e);
+  adj.get(e.to).in.push(e);
+}
+
+// ===== graph overlay: node markers ===========================================
+// A view aid, not part of the physical model — parented under `root` (the GLB's
+// synthetic __root__ node) so raw positions.json (x,y,z) can be used directly as
+// local coordinates (Step 0 confirmed this is required and correct).
+const overlay = new BABYLON.TransformNode('_graph_overlay', scene);
+overlay.parent = root;
+
+// Cell scope: two independent 48-rack cells plus the shared campus facility.
+const CELLCOL = { 'Cell A': 0x2b8fd9, 'Cell B': 0xe0a326, 'Campus (shared)': 0x7a7a78 };
+
+// (mode,key)-keyed material cache — reassign marker.material from this cache,
+// never mutate a cached material's color. Markers share one material per key
+// (unlike the three.js reference, where every marker has its own material
+// instance), so mutating .diffuseColor in place would recolor every marker
+// sharing that material at once with no way back (Ground Truth #2 in the plan).
+const nodeMatCache = new Map();
+function nodeMaterialFor(mode, key) {
+  const cacheKey = mode + ':' + key;
+  if (nodeMatCache.has(cacheKey)) return nodeMatCache.get(cacheKey);
+  const hexColor = mode === 'zone' ? (ZONES[key]?.color ?? 0x777777)
+                  : mode === 'cell' ? (CELLCOL[key] ?? 0x6a6a68)
+                  : (SYSCOL[key] ?? 0xcccccc);
+  const c = colorOf(hexColor);
+  const mat = new BABYLON.StandardMaterial('gn_' + cacheKey, scene);
+  mat.diffuseColor = c;
+  mat.emissiveColor = c.scale(0.35);
+  mat.specularColor = new BABYLON.Color3(0.15, 0.15, 0.15);
+  mat.metadata = { baseColor: c }; // true hue, never overwritten -- conduitLook() desaturates FROM this
+  nodeMatCache.set(cacheKey, mat);
+  return mat;
+}
+function nodeColorKey(mode, assetId) {
+  const a = assets.get(assetId);
+  if (!a) return undefined;
+  return mode === 'zone' ? a.zone : mode === 'cell' ? a.cell : a.system;
+}
+
+// WS2.4/2.6 (2026-08-30): markers cover every NON-rack-internal asset at load
+// time, same as before this session's work (~449, matching original
+// performance exactly). Rack-internal markers (~3,929) are built LAZILY by
+// ensureRackInternalOverlay() below, not here -- measured live: eagerly
+// creating all ~18,132 extra mesh objects (13,754 tubes + 4,378 markers)
+// drops frame rate to 0.7 fps EVEN WHEN DISABLED via setEnabled(false), in
+// every view mode, not just when shown. Babylon's per-frame scene-graph
+// bookkeeping cost scales with mesh *existence*, not just draw calls, so a
+// visibility toggle alone cannot fix this -- construction itself has to be
+// deferred. This is the real-world confirmation of the risk flagged at
+// design time (research/11-rack-graph-scene-linkage-audit.md fix #3).
+const combinedPositions = { ...rackPositionsData.positions, ...positionsData.positions };
+const nodeMarks = new Map();
+let markersCreated = 0, markersUnresolved = 0;
+for (const id of assets.keys()) {
+  const a = assets.get(id);
+  if (a?.template?.startsWith('rack_component:')) continue; // built lazily
+  const p = combinedPositions[id];
+  if (!p) { markersUnresolved++; continue; }
+  const marker = BABYLON.MeshBuilder.CreatePolyhedron('gnode_' + id, { type: 1, size: 0.24 }, scene);
+  marker.parent = overlay;
+  marker.position.set(p.x, p.y, p.z);
+  marker.material = nodeMaterialFor('system', nodeColorKey('system', id)); // initial default mode
+  marker.metadata = { ...(marker.metadata || {}), graphNode: id };
+  marker.freezeWorldMatrix();
+  marker.doNotSyncBoundingInfo = true;
+  nodeMarks.set(id, marker);
+  markersCreated++;
+}
+console.info(`[explorer] overlay markers: ${markersCreated} created at load, ${markersUnresolved} non-rack assets with no resolvable position (expected 19: scaleout_spine_sw, mesh:null by design, plus 18 pre-existing sensor assets that have never had a mesh binding or a positions.json entry -- confirmed pre-existing, not caused by this session's work). ~3,929 rack-internal markers deferred to first use.`);
+
+// ===== graph overlay: route tubes ============================================
+// One CreateTube per route (not merged) — per-edge visibility for filters/trace
+// and per-protocol coloring within a service both depend on individually
+// addressable tube meshes.
+// WS2.4 (2026-08-30): merges in rack-routes.json's 12,576 rack-internal routes.
+// Both files' ids are independently unique (confirmed: routes.json's facility/
+// hall ids like "h52"/"e0" vs. rack-routes.json's "row01_rack01_r2_0"-style ids
+// share no naming pattern), and rack-routes.json's ids are themselves unique
+// as of the 2026-08-30 fan-out fix (see the edges.push _rackInternal comment
+// above) -- before that fix this merge would have silently collapsed 12,576
+// routes down to ~2,208.
+const routesById = new Map([...routesData.routes, ...rackRoutesData.routes].map(r => [r.id, r]));
+
+const edgeMatCache = new Map();
+function edgeMaterialFor(service, protocol) {
+  const key = protocol || service;
+  if (edgeMatCache.has(key)) return edgeMatCache.get(key);
+  const hexColor = PROTOCOLS[protocol]?.color ?? SERVICES[service]?.color ?? 0x888888;
+  const c = colorOf(hexColor);
+  const mat = new BABYLON.StandardMaterial('ge_' + key, scene);
+  mat.diffuseColor = c;
+  mat.emissiveColor = c.scale(0.3);
+  mat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+  mat.metadata = { baseColor: c }; // true hue, never overwritten -- conduitLook() desaturates FROM this
+  edgeMatCache.set(key, mat);
+  return mat;
+}
+
+// Per-mode overlay look. Never applied at material-creation time inside
+// nodeMaterialFor/edgeMaterialFor -- those run before `S` exists (S is declared further
+// down, after the eager marker/tube build). Instead this retroactively recolors every
+// cached material whenever the mode changes (called from setMode()), and again from
+// ensureRackInternalOverlay() to catch materials the lazy build creates for color-key
+// combinations not seen yet. STATE_MATS (threat/cascade painting) intentionally stays
+// untouched -- those need to read at full, unmuted brightness regardless of mode so an
+// active analysis result still stands out against a greyed-out default.
+//
+// Graph mode (2026-08-31, revised after live feedback): the first pass only dimmed
+// brightness/opacity but kept full hue saturation -- still read as a rainbow, not a
+// schematic. Real fix: desaturate diffuseColor toward grey (mostly grey, a slight tint of
+// the true service/system color -- "slightly glow with their colors"), computed FROM each
+// material's stored `metadata.baseColor`, never mutating that stored original so switching
+// back to 'both'/'physical' restores full saturation exactly. Equipment (node markers) and
+// conduits (edge tubes) are tuned differently on purpose: markers stay near-opaque so
+// individual assets stay identifiable at a glance; tubes recede further (lower alpha) as
+// thin schematic lines -- flattening both to the same opacity was the other real defect in
+// the first pass ("equipment... too DIM, not balanced").
+// 2026-08-31, second revision: the first pass computed each material's grey target from
+// its OWN color's luma (brightness) -- meaning a bright hue (e.g. PWR's golden yellow)
+// desaturated to a LIGHT grey, nearly invisible against the pale (~0.9 brightness) ghosted
+// building. Different assets ended up at wildly inconsistent grey brightness levels instead
+// of one uniform, legible grey. Real fix: target a single FIXED neutral grey for all
+// materials of a given kind (not derived from each base color), so contrast against the
+// pale background is consistent regardless of the asset's original hue.
+// 2026-08-31, THIRD revision, found by actually re-examining the rendered screenshot pixel
+// content, not just the diffuseColor number: emissive was computed from the ORIGINAL
+// full-saturation `base` color, not the already-desaturated `diffuse` this function just
+// computed. Emissive adds directly to the final pixel independent of lighting/angle, so a
+// meaningful chunk of the original saturation was leaking straight back in through the
+// "slight glow" channel, undoing most of the diffuse desaturation -- diffuseColor alone
+// read correctly as dark grey in code, but the RENDERED pixel still looked clearly colored.
+// Fix: emissive now scales off `diffuse` (the already-desaturated color), so the glow is a
+// small lift off an already-mostly-grey point, not a reinjection of the full original hue.
+function greyTint(base, greyAmount, emissiveScale, targetGrey) {
+  const grey = new BABYLON.Color3(targetGrey, targetGrey, targetGrey);
+  const diffuse = BABYLON.Color3.Lerp(base, grey, greyAmount);
+  return { diffuse, emissive: diffuse.scale(emissiveScale) };
+}
+// 2026-08-31, FOURTH revision: user explicitly rejected any node/edge distinction --
+// "ALL things showing up on the GRAPH visibility should have the SAME transparency, the
+// SAME see thru -- THERE SHOULD BE NO DIFFERENCE, NO COLORS." Collapsed to one single
+// uniform look applied identically to every node AND edge material: 100% desaturated
+// (grey: 1.0 -- diffuse becomes pure grey, no hue survives at all, so emissive --
+// computed from that already-pure-grey diffuse -- carries no color either), one opacity,
+// one target grey, no per-type variation whatsoever.
+// 2026-08-31, FIFTH revision: nodes/markers stay matched to the building's 0.45 (still locked
+// in, unchanged); conduits/edges deliberately set 10 percentage points MORE transparent (0.35)
+// per explicit request -- "too overwhelming" at the same opacity as everything else. grey/
+// emissive/targetGrey stay shared between nodes and edges; only opacity now differs.
+const GRAPH_LOOK = { grey: 1.0, opacity: 0.45, edgeOpacity: 0.35, emissive: 0.18, targetGrey: 0.35 };
+const FULL_LOOK = { opacity: 0.97, emissive: 0.30 };    // physical -- moot, overlay hidden entirely in this mode
+const BOTH_LOOK = { opacity: 0.88, emissive: 0.24 };    // both -- full saturation, layered engineering view
+function conduitLook(mode) {
+  if (mode === 'graph') {
+    for (const mat of nodeMatCache.values()) {
+      const { diffuse, emissive } = greyTint(mat.metadata.baseColor, GRAPH_LOOK.grey, GRAPH_LOOK.emissive, GRAPH_LOOK.targetGrey);
+      mat.diffuseColor = diffuse; mat.emissiveColor = emissive; mat.alpha = GRAPH_LOOK.opacity;
+    }
+    for (const mat of edgeMatCache.values()) {
+      const { diffuse, emissive } = greyTint(mat.metadata.baseColor, GRAPH_LOOK.grey, GRAPH_LOOK.emissive, GRAPH_LOOK.targetGrey);
+      mat.diffuseColor = diffuse; mat.emissiveColor = emissive; mat.alpha = GRAPH_LOOK.edgeOpacity;
+    }
+  } else {
+    const k = mode === 'both' ? BOTH_LOOK : FULL_LOOK;
+    for (const mat of nodeMatCache.values()) { mat.diffuseColor = mat.metadata.baseColor; mat.emissiveColor = mat.metadata.baseColor.scale(k.emissive); mat.alpha = k.opacity; }
+    for (const mat of edgeMatCache.values()) { mat.diffuseColor = mat.metadata.baseColor; mat.emissiveColor = mat.metadata.baseColor.scale(k.emissive); mat.alpha = k.opacity; }
+  }
+}
+
+const edgeTubes = new Map();
+let edgesMissingRoute = 0, edgesDeferred = 0;
+for (const e of edges) {
+  if (e._rackInternal) { edgesDeferred++; continue; } // built lazily
+  const r = routesById.get(e.id);
+  if (!r || !r.points || r.points.length < 2) { edgesMissingRoute++; continue; }
+  // 100% alignment to routing.js's own corridor-following waypoints -- draw the tube
+  // straight through r.points with no Catmull-Rom smoothing. The smoothing spline used to
+  // sit here was cosmetic (rounder corners) but isn't constrained to stay inside the
+  // waypoints it interpolates -- at a sharp 90 degree corridor turn it can overshoot past
+  // the actual routed corner, reading as a conduit that's drifted off its own routing. Since
+  // every route was already verified corridor-clean (0 diagonal-fraction violations, see
+  // routingjs-lane-offset-runaway-bug notes), any remaining visible misalignment was this
+  // spline overshoot, not the underlying data -- direct waypoints removes that possibility
+  // entirely rather than tuning the spline's smoothing factor and hoping it's tight enough.
+  const path = r.points.map(p => new BABYLON.Vector3(p[0], p[1], p[2]));
+  const radius = (e.service === 'water' || e.service === 'condenser' || e.service === 'air') ? 0.055 : 0.038;
+  const tube = BABYLON.MeshBuilder.CreateTube('gedge_' + e.id, { path, radius, tessellation: 6, cap: BABYLON.Mesh.NO_CAP }, scene);
+  tube.parent = overlay;
+  tube.material = edgeMaterialFor(e.service, e.protocol);
+  tube.metadata = { ...(tube.metadata || {}), graphEdge: e.id };
+  tube.freezeWorldMatrix();
+  tube.doNotSyncBoundingInfo = true;
+  edgeTubes.set(e.id, tube);
+}
+console.info(`[explorer] overlay tubes: ${edgeTubes.size} created at load, ${edgesDeferred} rack-internal tubes deferred to first use, ${edgesMissingRoute} non-rack edges with no resolvable route.`);
+
+const edgesById = new Map(edges.map(e => [e.id, e]));
+
+// WS2.6 (2026-08-30): lazily builds the ~3,929 rack-internal markers and
+// ~12,576 rack-internal tubes skipped above, on first real need (the Show
+// toggle, or a threat walk that reaches a rack-internal node/edge). Idempotent
+// via the `built` guard -- safe to call from multiple entry points.
+let rackInternalOverlayBuilt = false;
+function ensureRackInternalOverlay() {
+  if (rackInternalOverlayBuilt) return;
+  rackInternalOverlayBuilt = true;
+  let lazyMarkers = 0, lazyMarkersUnresolved = 0;
+  for (const id of assets.keys()) {
+    const a = assets.get(id);
+    if (!a?.template?.startsWith('rack_component:')) continue;
+    if (nodeMarks.has(id)) continue;
+    const p = combinedPositions[id];
+    if (!p) { lazyMarkersUnresolved++; continue; }
+    const marker = BABYLON.MeshBuilder.CreatePolyhedron('gnode_' + id, { type: 1, size: 0.24 }, scene);
+    marker.parent = overlay;
+    marker.position.set(p.x, p.y, p.z);
+    marker.material = nodeMaterialFor(S.markerColor, nodeColorKey(S.markerColor, id));
+    marker.metadata = { ...(marker.metadata || {}), graphNode: id };
+    marker.freezeWorldMatrix();
+    marker.doNotSyncBoundingInfo = true;
+    nodeMarks.set(id, marker);
+    lazyMarkers++;
+  }
+  let lazyTubes = 0, lazyTubesMissingRoute = 0;
+  for (const e of edges) {
+    if (!e._rackInternal) continue;
+    if (edgeTubes.has(e.id)) continue;
+    const r = routesById.get(e.id);
+    if (!r || !r.points || r.points.length < 2) { lazyTubesMissingRoute++; continue; }
+    // Same fix as the eager loop above: exact routed waypoints, no Catmull-Rom smoothing --
+    // guarantees this tube can never visually overshoot the corridor it was actually routed
+    // through.
+    const path = r.points.map(p => new BABYLON.Vector3(p[0], p[1], p[2]));
+    const radius = (e.service === 'water' || e.service === 'condenser' || e.service === 'air') ? 0.055 : 0.038;
+    const tube = BABYLON.MeshBuilder.CreateTube('gedge_' + e.id, { path, radius, tessellation: 6, cap: BABYLON.Mesh.NO_CAP }, scene);
+    tube.parent = overlay;
+    tube.material = edgeMaterialFor(e.service, e.protocol);
+    tube.metadata = { ...(tube.metadata || {}), graphEdge: e.id };
+    tube.freezeWorldMatrix();
+    tube.doNotSyncBoundingInfo = true;
+    edgeTubes.set(e.id, tube);
+    lazyTubes++;
+  }
+  conduitLook(S.mode); // catch any color-key combos the lazy build created a fresh, unscaled material for
+  console.info(`[explorer] rack-internal overlay built lazily: ${lazyMarkers} markers (${lazyMarkersUnresolved} unresolved), ${lazyTubes} tubes (${lazyTubesMissingRoute} missing route).`);
+}
+
+// ===== hazard-log derived lookups ============================================
+// hazard-log.json is a hard dependency, same as the other five fetches — a load
+// failure here should fail loudly (Promise.all above), not leave four panels
+// silently empty.
+const HAZ_BY_ASSET = new Map();
+for (const h of HZ.hazards) for (const id of h.assets || []) {
+  if (!HAZ_BY_ASSET.has(id)) HAZ_BY_ASSET.set(id, []);
+  HAZ_BY_ASSET.get(id).push(h);
+}
+const CRIT_BY_ASSET = new Map();
+for (const c of HZ.critical_items) for (const id of c.assets || []) {
+  if (!CRIT_BY_ASSET.has(id)) CRIT_BY_ASSET.set(id, []);
+  CRIT_BY_ASSET.get(id).push(c);
+}
+
+const NODE_OF_ASSET = new Map();
+for (const [nodeId, rec] of Object.entries(HZ.node_crosswalk)) {
+  if (nodeId.startsWith('_')) continue;
+  for (const a of rec.assets || []) NODE_OF_ASSET.set(a, nodeId);
+}
+const ALE_BY_NODE = new Map(HZ.ale.map(a => [a.node, a]));
+
+// Authored from WP06 Table 6.5 / WP09 critical items — overrides the cascade's
+// feed-count redundancy inference where the design says otherwise.
+const REDUNDANCY_OVERRIDE = {};
+for (const [id, rec] of Object.entries(HZ.redundancy)) {
+  if (id.startsWith('_')) continue;
+  if (rec.service_override) REDUNDANCY_OVERRIDE[id] = rec.service_override;
+}
+const TIMING = HZ.timing || { dlc_throttle_seconds: 45, dlc_shutdown_seconds: 90 };
+
+// ===== supply model (cascading-failure dependency rules) =====================
+// Services an asset physically depends on. Losing all supply of one of these
+// stops the asset. Data and control loss degrades it but does not stop it.
+const HARD = new Set(['electricity', 'water', 'condenser', 'air', 'fuel']);
+const SOFT = new Set(['data', 'control']);
+
+// Ground Truth #1 (approved plan): the reference builds a merged facility+hall
+// graph (CG) aliased by mesh name because its own base graph is facility-only.
+// This port's `edges`/`adj` are already that merged graph (verified: 0 asset-id
+// and 0 mesh-name overlap between facility-graph.json and hall-graph.json). This
+// invariant check warns if that ever stops being true instead of silently
+// producing wrong supply/reachability answers.
+(function checkGraphInvariant() {
+  const meshByAsset = new Map();
+  let dupIds = 0, dupMeshes = 0;
+  for (const a of assets.values()) {
+    if (a.mesh) {
+      if (meshByAsset.has(a.mesh)) dupMeshes++;
+      else meshByAsset.set(a.mesh, a.id);
+    }
+  }
+  if (assets.size !== new Set(assets.keys()).size) dupIds++;
+  if (dupMeshes || dupIds) {
+    console.warn('[explorer] graph invariant broken — mesh-name aliasing may be needed:',
+      { dupMeshes, dupIds });
+  }
+})();
+
+function supplyMap() {
+  const sup = {};
+  for (const id of assets.keys()) sup[id] = {};
+  for (const e of edges) {
+    if (!HARD.has(e.service) && !SOFT.has(e.service)) continue;
+    (sup[e.to][e.service] = sup[e.to][e.service] || []).push(e.from);
+  }
+  return sup;
+}
+const SUPPLY = supplyMap();
+
+function rule(id, service) {
+  const o = REDUNDANCY_OVERRIDE[id];
+  if (o && o[service]) return o[service];
+  return (SUPPLY[id][service] || []).length >= 2 ? 'any-of' : 'all-of';
+}
+
+/**
+ * Propagate a failure. Returns waves of failed assets, degraded assets, and
+ * the surviving redundant feeds that held. Ported from
+ * hyperscale-campus-explorer.html's cascade() -- supplyMap()/rule() above
+ * were already ported in Step 3, this function itself was not.
+ */
+function cascade(seedIds) {
+  const failed = new Map();          // id -> wave
+  const degraded = new Map();        // id -> reason
+  const blinded = new Map();         // id -> protective function lost
+  const held = [];                   // redundancy that absorbed the loss
+  for (const s of seedIds) failed.set(s, 0);
+
+  let wave = 0, frontier = [...seedIds];
+  while (frontier.length && wave < 20) {
+    wave++;
+    const next = [];
+    for (const id of assets.keys()) {
+      if (failed.has(id)) continue;
+      const nd = assets.get(id);
+      if (nd && nd.protective) {
+        for (const feeds of Object.values(SUPPLY[id] || {}))
+          if (feeds.some(f => failed.has(f)) && !blinded.has(id))
+            blinded.set(id, nd.protective);
+        continue;
+      }
+      for (const [service, feeds] of Object.entries(SUPPLY[id] || {})) {
+        const lost = feeds.filter(f => failed.has(f));
+        if (!lost.length) continue;
+        const r = rule(id, service);
+        const allGone = lost.length === feeds.length;
+        if (HARD.has(service)) {
+          if (r === 'all-of' || allGone) {
+            if (!failed.has(id)) { failed.set(id, wave); next.push(id); }
+          } else {
+            held.push({ id, service, lost: lost.length, of: feeds.length });
+          }
+        } else if (allGone && !degraded.has(id)) {
+          degraded.set(id, 'lost all ' + service + ' supply');
+        }
+      }
+    }
+    frontier = next;
+  }
+  // a protective asset failed directly as a seed loses its own function
+  for (const id of failed.keys()) {
+    const nd = assets.get(id);
+    if (nd && nd.protective && !blinded.has(id)) blinded.set(id, nd.protective);
+  }
+  // downstream protective functions of anything that stopped
+  for (const id of assets.keys()) {
+    const nd = assets.get(id);
+    if (!nd.protective || blinded.has(id)) continue;
+    const host = nd.attrs && nd.attrs.host_equipment;
+    if (host && failed.has(host)) blinded.set(id, nd.protective);
+  }
+  return { failed, degraded, blinded, held, waves: wave };
+}
+
+// ===== filter/trace state + visibility =======================================
+const S = {
+  mode: 'graph', // 'physical' | 'graph' | 'both'
+  touring: false, // true while the auto-Tour is cycling viewpoints -- blocks idle-rotate resume
+  services: new Set(Object.keys(SERVICES)),
+  protocols: new Set(Object.keys(PROTOCOLS)),
+  zones: new Set(Object.keys(ZONES)),
+  criticalOnly: false,
+  trace: null, // {nodes:Set<id>, edges:Set<id>} — overrides filter visibility when set
+  markerColor: 'system', // 'system' | 'zone' | 'cell'
+  // WS2.5 (2026-08-30): default the ~3,929 rack-internal markers / ~12,672
+  // rack-internal tubes to hidden. Going from 449->~4,400 markers and
+  // 1,310->~12,600 tubes is untested at this codebase's one-mesh-object-per-
+  // item pattern; render-scale was flagged as a real, separate risk from
+  // correctness at design time (research/11-rack-graph-scene-linkage-audit.md)
+  // and WS2.6 measures it live before deciding whether this needs to become
+  // lazy construction instead of just default-hidden. A trace (threat walk)
+  // still overrides this below, same as it already overrides every other
+  // filter -- an analyst tracing a path through a rack should see it whether
+  // or not the declutter toggle is on.
+  showRackInternal: false,
+  // 2026-08-31: user feedback -- once markers rendered opaque enough to actually see (the
+  // opacity fix above), they read as visually distracting clutter competing with the tube
+  // network for attention, with no functional payoff most of the time (clicking any real
+  // physical equipment mesh, or a tube, already works independently of markers). Default
+  // hidden in every mode; a toggle brings them back for when someone genuinely wants to
+  // click an asset that has no physical mesh binding (2,387 of 4,397 assets are unbound --
+  // for those, a marker is the ONLY way to click-select in 3D; search and the asset-list
+  // panel remain unaffected either way). Same S.trace override as showRackInternal: an
+  // active threat-walk/cascade trace still shows its own nodes regardless of this toggle.
+  showNodeMarkers: false,
+};
+
+function edgeVisible(e) {
+  if (S.trace) return S.trace.edges.has(e.id);
+  if (!S.showRackInternal && e._rackInternal) return false;
+  if (S.criticalOnly && !e.critical) return false;
+  if (!S.services.has(e.service)) return false;
+  // Only filter on protocol when it's one of the known, chip-toggleable protocols —
+  // an edge using a protocol outside PROTOCOLS (e.g. IEEE 1588 PTP) has no chip to
+  // control it and must not become permanently unfilterable-in.
+  if (e.protocol && PROTOCOLS[e.protocol] && !S.protocols.has(e.protocol)) return false;
+  return true;
+}
+function nodeVisible(id) {
+  // 2026-08-31: diamond markers no longer participate in analysis painting at all (see
+  // paintNode below) -- there is nothing left for S.trace to force-show here, so a marker's
+  // visibility now depends ONLY on the explicit Show/Hide toggle, trace active or not. This
+  // is a deliberate reversal of the marker's old "S.trace always shows its own nodes"
+  // behavior, per explicit request: the real equipment mesh glows during threat walk /
+  // cascade / selection now, never the diamond, in any state.
+  if (!S.showNodeMarkers) return false;
+  const a = assets.get(id);
+  if (!S.showRackInternal && a?.template?.startsWith('rack_component:')) return false;
+  if (a && a.zone && !S.zones.has(a.zone)) return false;
+  const entry = adj.get(id);
+  const edgeIds = entry ? [...entry.in, ...entry.out] : [];
+  if (!edgeIds.length) return true; // isolated node — nothing to filter it against
+  return edgeIds.some(edgeVisible);
+}
+function apply() {
+  for (const [id, e] of edgesById) {
+    const tube = edgeTubes.get(id);
+    if (tube) tube.setEnabled(edgeVisible(e));
+  }
+  for (const [id, m] of nodeMarks) m.setEnabled(nodeVisible(id));
+}
+apply();
+
+// ===== marker-colour mode + shared analysis paint layer =======================
+// Recolor every marker to its computed default under the current mode. Threat
+// Path / Cascading Failure (Steps 9-10) paint over this via paintNode/paintEdge;
+// their arbiter (Step 8) is responsible for not letting this stomp an active
+// analysis mid-animation.
+function applyMarkerColorMode() {
+  for (const [id, m] of nodeMarks) m.material = nodeMaterialFor(S.markerColor, nodeColorKey(S.markerColor, id));
+}
+
+// Analysis state materials — entry/reached/blocked (threat path), seed/failed/
+// degraded/held (cascade). Exact colors/emissive intensities from the reference.
+function stateMaterial(name, hex, emissiveHex, emissiveIntensity, roughness) {
+  const mat = new BABYLON.StandardMaterial('state_' + name, scene);
+  mat.diffuseColor = colorOf(hex);
+  mat.emissiveColor = colorOf(emissiveHex).scale(emissiveIntensity);
+  mat.specularColor = new BABYLON.Color3(roughness, roughness, roughness);
+  return mat;
+}
+const STATE_MATS = {
+  entry: stateMaterial('entry', 0xff8a3d, 0xff8a3d, 0.70, 0.30),
+  reached: stateMaterial('reached', 0xc8332a, 0xc8332a, 0.55, 0.35),
+  blocked: stateMaterial('blocked', 0x2bd96a, 0x2bd96a, 0.50, 0.35),
+  seed: stateMaterial('seed', 0xffffff, 0xff4a3d, 1.10, 0.30),
+  failed: stateMaterial('failed', 0xc8332a, 0xc8332a, 0.60, 0.35),
+  degraded: stateMaterial('degraded', 0xf2b736, 0xf2b736, 0.45, 0.40),
+  held: stateMaterial('held', 0x2bd96a, 0x2bd96a, 0.40, 0.40),
+  blind: stateMaterial('blind', 0xf5e6c8, 0xd8a63a, 0.80, 0.30),
+};
+
+// paintNode/paintEdge(id, state|null) — state is one of STATE_MATS' keys, or
+// null to restore.
+//
+// 2026-08-31: paintNode was rewritten to target the REAL equipment mesh (asset._node, the
+// actual bound GLB geometry) instead of the diamond graph marker -- explicit request: threat
+// walk / cascade / selection should make the actual conduit and equipment glow, never the
+// diamond, ever. Stash-once/restore-once via mesh.metadata._paintOrigMaterial mirrors the
+// existing dimPhysical()/matBase pattern: save the mesh's real material only on the FIRST
+// paint of a clear/paint cycle (repeated re-paints during a hop-by-hop animation must not
+// stash the state material itself as if it were "original"), restore exactly that reference
+// on null. STATE_MATS materials carry no alpha override, so a painted mesh reads fully
+// opaque/bright regardless of the current view mode's dimming -- same "stands out regardless
+// of mode" property the marker-based version always had, now on real geometry.
+// Assets with no physical mesh binding (2,387 of 4,397 -- never had real geometry to select
+// in 3D even before this change) simply do not glow; they still appear in the analysis's text
+// report (asset list / hop list / STOPPED-BY-WAVE, etc.), just not in the 3D view. This is a
+// known, accepted limitation of "never the diamond," not an oversight.
+function paintNode(id, state) {
+  const mesh = assets.get(id)?._node;
+  if (!mesh) return;
+  if (state) {
+    if (!mesh.metadata) mesh.metadata = {};
+    if (mesh.metadata._paintOrigMaterial === undefined) mesh.metadata._paintOrigMaterial = mesh.material;
+    mesh.material = STATE_MATS[state];
+  } else if (mesh.metadata && mesh.metadata._paintOrigMaterial !== undefined) {
+    mesh.material = mesh.metadata._paintOrigMaterial;
+    delete mesh.metadata._paintOrigMaterial;
+  }
+}
+function paintEdge(id, state) {
+  const e = edgesById.get(id);
+  const t = edgeTubes.get(id);
+  if (!e || !t) return;
+  t.material = state ? STATE_MATS[state] : edgeMaterialFor(e.service, e.protocol);
+}
+
+for (const b of document.querySelectorAll('#colmode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#colmode button')) x.classList.toggle('active', x === b);
+    S.markerColor = b.dataset.c;
+    applyMarkerColorMode();
+  };
+}
+
+function dimPhysical(on) {
+  for (const [m, base] of matBase) {
+    if (on) { m.alpha = 0.45; if (m.transparencyMode !== undefined) m.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND; }
+    else { m.alpha = base.alpha; if (m.transparencyMode !== undefined) m.transparencyMode = base.transparencyMode; }
+  }
+}
+function setOverlayVisible(on) {
+  overlay.setEnabled(on);
+  if (on) apply();
+}
+function setMode(mode) {
+  S.mode = mode;
+  for (const b of document.querySelectorAll('#viewModeBtns .toggle')) b.classList.toggle('active', b.dataset.mode === mode);
+  if (mode === 'physical') { dimPhysical(false); setOverlayVisible(false); }
+  else if (mode === 'graph') { dimPhysical(true); setOverlayVisible(true); }
+  else { dimPhysical(false); setOverlayVisible(true); } // both
+  conduitLook(mode);
+}
+for (const b of document.querySelectorAll('#viewModeBtns .toggle')) b.onclick = () => setMode(b.dataset.mode);
+setMode('graph');
+
+// ===== filter chips ============================================================
+function renderChips(container, dict, activeSet) {
+  container.innerHTML = '';
+  for (const [key, def] of Object.entries(dict)) {
+    const btn = document.createElement('button');
+    btn.className = 'chip ' + (activeSet.has(key) ? 'on' : 'off');
+    btn.style.borderColor = hex(def.color);
+    btn.style.background = activeSet.has(key) ? hex(def.color) : '#1c1c1e';
+    btn.textContent = def.label || key;
+    btn.onclick = () => {
+      if (activeSet.has(key)) activeSet.delete(key); else activeSet.add(key);
+      btn.classList.toggle('on', activeSet.has(key));
+      btn.classList.toggle('off', !activeSet.has(key));
+      btn.style.background = activeSet.has(key) ? hex(def.color) : '#1c1c1e';
+      apply();
+    };
+    container.appendChild(btn);
+  }
+}
+renderChips(document.getElementById('serviceChips'), SERVICES, S.services);
+renderChips(document.getElementById('protocolChips'), PROTOCOLS, S.protocols);
+renderChips(document.getElementById('zoneChips'), Object.fromEntries(Object.entries(ZONES).map(([k, v]) => [k, { label: k, color: v.color }])), S.zones);
+for (const b of document.querySelectorAll('#critmode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#critmode button')) x.classList.toggle('active', x === b);
+    S.criticalOnly = b.dataset.k === 'crit';
+    apply();
+  };
+}
+for (const b of document.querySelectorAll('#rackDetailMode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#rackDetailMode button')) x.classList.toggle('active', x === b);
+    S.showRackInternal = b.dataset.k === 'show';
+    if (S.showRackInternal) ensureRackInternalOverlay();
+    apply();
+  };
+}
+for (const b of document.querySelectorAll('#nodeMarkerMode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#nodeMarkerMode button')) x.classList.toggle('active', x === b);
+    S.showNodeMarkers = b.dataset.k === 'show';
+    apply();
+  };
+}
+
+// ===== analysis arbiter ==========================================================
+// Single owner of "what's currently painted as an analysis" — upstream/downstream
+// trace today, Threat Path / Cascading Failure in Steps 9-10. This fixes a real
+// bug present in the three.js reference: switching from one analysis to another
+// mid-animation there leaves the first analysis's setInterval running, silently
+// fighting the new one for S.trace every 550ms tick. Every analysis must start
+// with beginAnalysis(kind) and clean up via endAnalysis() — never touch S.trace,
+// paintNode/paintEdge, or a setInterval directly; register painted ids into
+// analysis.paintedNodes/paintedEdges so endAnalysis can restore them precisely.
+const analysis = { kind: null, paintedNodes: new Set(), paintedEdges: new Set(), timer: null };
+
+function beginAnalysis(kind) {
+  endAnalysis(); // stop any running interval, restore any prior paint, clear S.trace
+  analysis.kind = kind;
+  clearHighlight(); // don't let a stale click-selection highlight visually clash
+  rightEl.hidden = true; // this port skips the reference's panel-lane system (see plan's
+                          // "explicitly out of scope") — the selection panel and an analysis
+                          // panel share the same screen position, so only one shows at a time
+  if (S.mode === 'physical') setMode('graph'); else apply();
+  return analysis;
+}
+function endAnalysis() {
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+  analysis.kind = null;
+  S.trace = null;
+  apply();
+}
+
+// ===== upstream/downstream/both trace (verbatim BFS from campus-model.js) ====
+function traceFrom(startId, dir = 'both', maxDepth = 12) {
+  const seenN = new Set([startId]), seenE = new Set();
+  let frontier = [startId];
+  for (let d = 0; d < maxDepth && frontier.length; d++) {
+    const next = [];
+    for (const id of frontier) {
+      const entry = adj.get(id);
+      if (!entry) continue;
+      const list = dir === 'up' ? entry.in : dir === 'down' ? entry.out : [...entry.in, ...entry.out];
+      for (const e of list) {
+        seenE.add(e.id);
+        const other = e.from === id ? e.to : e.from;
+        if (!seenN.has(other)) { seenN.add(other); next.push(other); }
+      }
+    }
+    frontier = next;
+  }
+  return { nodes: seenN, edges: seenE };
+}
+function setTrace(startId, dir) {
+  beginAnalysis('trace');
+  S.trace = traceFrom(startId, dir);
+  apply();
+}
+function clearTrace() { endAnalysis(); }
+
+// ===== threat path explorer (verbatim model from hyperscale-campus-explorer.html) ====
+// Protocols an attacker can traverse from a compromised host. Everything else
+// is hardwired, analogue or serial: no routable path, so a walk stops there.
+const ROUTABLE = new Set(['Ethernet/TCP-IP', 'BGP', 'SNMP', 'CAPWAP', 'Modbus TCP',
+  'BACnet/IP', 'OPC UA', 'DNP3', 'PROFINET', 'EtherNet/IP',
+  // rack-graph.json protocol identities (see PROTOCOLS above) — all five are
+  // genuinely network/IP-based (RMCP+/Redfish HTTPS, RDMA/TCP, Ethernet-carried
+  // fabrics), so they belong here on the same basis as plain Ethernet/TCP-IP.
+  // Renaming r13/r14/r17's protocol away from the bare 'Ethernet/TCP-IP' string
+  // would otherwise have silently dropped them out of ROUTABLE with no error.
+  'AMD Infinity Fabric xGMI', 'UALink over Ethernet (UALoE) / UEC 1.0',
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS', 'NVMe-oF (RDMA/TCP)', 'Ethernet/TCP-IP (RoCEv2-capable)']);
+// Forward along initiated sessions, plus reverse along a host's own uplink /
+// management plane: a compromised host can talk back up the link that manages
+// it. Everything else stays one-directional.
+const REVERSIBLE = new Set(['Ethernet/TCP-IP', 'RS-232 console', 'SNMP',
+  // IPMI/Redfish IS a management plane in exactly the sense this set already
+  // covers (r17/r18/r19, previously bare 'Ethernet/TCP-IP' and reversible by
+  // that match); the RoCEv2-annotated frontend link (r14) replaces another
+  // previously-bare 'Ethernet/TCP-IP' match for the same reason.
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS', 'Ethernet/TCP-IP (RoCEv2-capable)',
+  // UALoE (r22, nvswitch_tray -> scaleout_spine_sw) is shared SWITCHING
+  // fabric, not a one-way client uplink -- once an attacker controls traffic
+  // transiting a switch, they can reach any other port on it, in either
+  // direction. Without this, threatWalk can reach the spine from one rack
+  // but never propagate back out to a second rack through it, which defeats
+  // the entire point of modeling a shared scale-out fabric (confirmed empty
+  // via a live threatWalk before this line was added: spine had 96 incoming
+  // edges and 0 outgoing).
+  'UALink over Ethernet (UALoE) / UEC 1.0']);
+const BLOCKED_REASON = e => {
+  if (e.oneway) return 'one-way (hardware enforced)';
+  if (!ROUTABLE.has(e.protocol)) return e.protocol + ' — not routable';
+  return null;
+};
+// Entry points: where an attacker realistically starts.
+const ENTRY = [
+  ['internet', 'Internet / vendor cloud'],
+  ['guest_wap', 'Guest Wi-Fi'],
+  ['greeter_ws', 'Reception workstation'],
+  ['guest_kiosk', 'Visitor kiosk'],
+  ['carrier_a', 'Carrier entry A'],
+  ['dmz_ra', 'Vendor remote access'],
+  ['eng_ws', 'Engineering workstation'],
+  ['cellA_ot_sw', 'Cell A OT segment'],
+  ['cellB_ot_sw', 'Cell B OT segment'],
+  ['secoff_ws', 'Security officer workstation'],
+  ['row01_rack01', 'Compromised GPU rack'],
+].filter(([id, label]) => {
+  if (assets.has(id)) return true;
+  console.warn('[explorer] threat entry dropped — unknown asset id:', id, '(' + label + ')');
+  return false;
+});
+
+/**
+ * Breadth-first reachability over routable protocols only, over this port's
+ * existing `adj` (already the merged facility+hall graph — see the plan's
+ * Ground Truth #1; no second graph needed).
+ * Returns reached nodes with hop depth, the traversed edges, and the
+ * boundary: edges that touch the frontier but cannot be crossed.
+ */
+function threatWalk(startId, maxHops = 12) {
+  const reached = new Map([[startId, 0]]);
+  const used = new Set();
+  const boundary = [];
+  let frontier = [startId];
+  for (let hop = 1; hop <= maxHops && frontier.length; hop++) {
+    const next = [];
+    for (const id of frontier) {
+      const entry = adj.get(id);
+      if (!entry) continue;
+      const edgesHere = entry.out.map(e => ({ e, to: e.to }))
+        .concat(entry.in.filter(e => !e.oneway && REVERSIBLE.has(e.protocol))
+                        .map(e => ({ e, to: e.from })));
+      for (const { e, to } of edgesHere) {
+        const why = BLOCKED_REASON(e);
+        if (why) { boundary.push({ edge: e, from: id, to, reason: why }); continue; }
+        used.add(e.id);
+        if (!reached.has(to)) { reached.set(to, hop); next.push(to); }
+      }
+    }
+    frontier = next;
+  }
+  return { reached, used, boundary };
+}
+
+const threatTitle = document.getElementById('threatTitle');
+const threatSummary = document.getElementById('threatSummary');
+const threatBody = document.getElementById('threatBody');
+const threatEl = document.getElementById('threat');
+let threatState = null;
+
+function paintThreat(uptoHop) {
+  if (!threatState) return;
+  const { startId, walk: w } = threatState;
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+
+  paintNode(startId, 'entry');
+  analysis.paintedNodes.add(startId);
+  const live = new Set([startId]);
+  for (const [id, hop] of w.reached) {
+    if (hop > uptoHop) continue;
+    live.add(id);
+    if (id === startId) continue;
+    paintNode(id, 'reached');
+    analysis.paintedNodes.add(id);
+  }
+  const liveEdges = new Set();
+  for (const eid of w.used) {
+    const e = edgesById.get(eid);
+    if (!e || !live.has(e.from) || !live.has(e.to)) continue;
+    liveEdges.add(eid);
+    paintEdge(eid, 'reached');
+    analysis.paintedEdges.add(eid);
+  }
+  const seen = new Set();
+  for (const b of w.boundary) {
+    if (seen.has(b.edge.id) || !live.has(b.from)) continue;
+    seen.add(b.edge.id);
+    paintEdge(b.edge.id, 'blocked');
+    analysis.paintedEdges.add(b.edge.id);
+  }
+  S.trace = { nodes: live, edges: liveEdges };
+  apply();
+  return { reached: live.size - 1, blocked: seen.size };
+}
+
+function playThreat() {
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  if (!threatState) return;
+  const max = Math.max(0, ...[...threatState.walk.reached.values()]);
+  let h = 0;
+  paintThreat(0);
+  analysis.timer = setInterval(() => {
+    h++;
+    const r = paintThreat(h);
+    const el = document.getElementById('threatHop');
+    if (el && r) el.textContent = 'hop ' + Math.min(h, max) + ' / ' + max + ' · ' + r.reached + ' reached';
+    if (h >= max) { clearInterval(analysis.timer); analysis.timer = null; }
+  }, 550);
+}
+
+function runThreat(startId, label) {
+  beginAnalysis('threat');
+  const w = threatWalk(startId);
+  // A threat walk can reach rack-internal nodes/edges regardless of the
+  // showRackInternal toggle (S.trace overrides it in nodeVisible/edgeVisible)
+  // -- paintNode/paintEdge below need real meshes in nodeMarks/edgeTubes to
+  // paint, so build them now rather than risk a walk that silently paints
+  // nothing past the rack boundary.
+  ensureRackInternalOverlay();
+  threatState = { startId, walk: w };
+  playThreat();
+  const seenBlock = new Set(w.boundary.map(b => b.edge.id));
+
+  const hops = [...w.reached].filter(([id]) => id !== startId)
+    .sort((a, b) => a[1] - b[1] || (assets.get(a[0])?.label || '').localeCompare(assets.get(b[0])?.label || ''));
+  const critHit = hops.filter(([id]) => {
+    const a = assets.get(id);
+    return a && (a.zone === 'Z2' || a.zone === 'Z4');
+  }).length;
+
+  threatTitle.textContent = 'From: ' + (label || assets.get(startId)?.label || startId);
+  const maxHop = Math.max(0, ...[...w.reached.values()]);
+  threatSummary.innerHTML = '<span id="threatHop">hop 0 / ' + maxHop + ' · 0 reached</span> · '
+    + hops.length + ' reachable · stopped at ' + seenBlock.size + ' boundaries';
+
+  const uniqueBlocks = [];
+  const bseen = new Set();
+  for (const b of w.boundary) {
+    if (bseen.has(b.edge.id)) continue;
+    bseen.add(b.edge.id);
+    uniqueBlocks.push(b);
+  }
+
+  let html = '<div class="tstat">'
+    + '<div><div class="tv">' + hops.length + '</div><div class="tk">ASSETS REACHED</div></div>'
+    + '<div><div class="tv">' + critHit + '</div><div class="tk">IN Z2 / Z4</div></div>'
+    + '<div><div class="tv">' + uniqueBlocks.length + '</div><div class="tk">BLOCKED PATHWAYS</div></div>'
+    + '<div><div class="tv">' + (hops.length ? Math.max(...hops.map(h => h[1])) : 0)
+    + '</div><div class="tk">MAX HOPS</div></div></div>';
+
+  const z4 = hops.filter(([id]) => assets.get(id)?.zone === 'Z4').length;
+  html += '<div class="blockrow" style="border-color:' + (z4 ? '#c8332a' : '#2bd96a') + '">'
+       + '<b>Safety instrumented systems (Z4): ' + (z4 ? z4 + ' REACHED' : 'not reachable') + '.</b> '
+       + (z4 ? 'A routable path exists into the SIS — this is a finding.'
+             : 'Every path into Z4 terminates at a supervised dry-contact or one-way interface.')
+       + '</div>';
+  if (critHit === 0 && hops.length) {
+    html += '<div class="blockrow" style="border-color:#2bd96a"><b>No supervisory zone reached.</b> '
+         + 'Every path into Z2 from here terminates at a boundary below.</div>';
+  }
+  html += '<div class="blockrow"><b>Assumption:</b> <span>forward traversal only</span>. '
+       + 'Where a path runs out through <b>Internet / cloud</b> and back in, that models an '
+       + 'attacker pivoting via a public-facing service — not a direct route from the entry point.</div>';
+
+  html += '<div class="sec mt">REACHABLE ASSETS</div>';
+  for (const [id, hop] of hops) {
+    const a = assets.get(id);
+    const zc = a && ZONES[a.zone] ? hex(ZONES[a.zone].color) : '#555';
+    const dark = a && (a.zone === 'Z3' || a.zone === 'Z0');
+    html += '<div class="hop" data-id="' + id + '" title="' + (a?.label || id) + '">'
+      + '<div class="hn">' + hop + '</div>'
+      + '<div class="hl">' + (a?.label || id) + '</div>'
+      + '<div class="hz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (a?.zone || '—') + '</div></div>';
+  }
+  if (!hops.length) html += '<div class="empty">Nothing reachable over a routable protocol.</div>';
+
+  html += '<div class="sec mt">WHERE THE PATH STOPS</div>';
+  for (const b of uniqueBlocks.slice(0, 60)) {
+    const a2 = assets.get(b.from), b2 = assets.get(b.to);
+    html += '<div class="blockrow"><b>' + (a2 ? a2.label : b.from) + '</b> → '
+      + '<b>' + (b2 ? b2.label : b.to) + '</b><br><span>' + b.reason + '</span>'
+      + (b.edge.note ? ' · ' + b.edge.note : '') + '</div>';
+  }
+  if (uniqueBlocks.length > 60)
+    html += '<div class="empty">… and ' + (uniqueBlocks.length - 60) + ' more.</div>';
+
+  threatBody.innerHTML = html;
+  threatBody.querySelectorAll('.hop').forEach(r => r.onclick = () => {
+    const a = assets.get(r.dataset.id);
+    if (a) selectAndFly(a, a._node);
+  });
+  threatEl.hidden = false;
+  threatEl.classList.remove('collapsed');
+  document.getElementById('threatCollapse').textContent = '–';
+}
+
+{
+  const box = document.getElementById('entryPoints');
+  for (const [id, label] of ENTRY) {
+    const b = document.createElement('button');
+    b.className = 'vpbtn';
+    b.textContent = label;
+    b.onclick = () => runThreat(id, label);
+    box.appendChild(b);
+  }
+}
+document.getElementById('threatPlay').onclick = () => { if (threatState) playThreat(); };
+document.getElementById('threatClear').onclick = () => { threatState = null; endAnalysis(); threatEl.hidden = true; };
+document.getElementById('threatClose').onclick = () => { threatState = null; endAnalysis(); threatEl.hidden = true; };
+document.getElementById('threatCollapse').onclick = e => {
+  const on = threatEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// ===== cascading failure (Step 10, ported from hyperscale-campus-explorer.html
+// cascade()/paintCascade()/animateCascade()/runCascade()) =====================
+// cascade()/supplyMap()/rule() already exist above (Step 3). Unlike the
+// reference -- which only ever modeled 96 atomic rack nodes -- this port's
+// `edges`/`assets` are the full rack-expanded graph, so a failure seeded above
+// a rack (e.g. a busway or a rack's own busbar) now genuinely propagates down
+// into that rack's ~41 real components, not just to one opaque "rack" node.
+// That is a real capability upgrade over the reference, not a compatibility
+// shim -- flagged here since it changes what "STOPPED, BY WAVE" can show.
+const money = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1e3) + 'K';
+
+const cascadeEl = document.getElementById('cascade');
+const cascadeTitle = document.getElementById('cascadeTitle');
+const cascadeSummary = document.getElementById('cascadeSummary');
+const cascadeBody = document.getElementById('cascadeBody');
+let cascadeState = null;
+
+function paintCascade(uptoWave) {
+  if (!cascadeState) return;
+  const { seeds, res } = cascadeState;
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+
+  for (const [id, w] of res.failed) {
+    if (w > uptoWave) continue;
+    paintNode(id, seeds.includes(id) ? 'seed' : 'failed');
+    analysis.paintedNodes.add(id);
+  }
+  if (uptoWave >= res.waves) {
+    for (const [id] of res.degraded) {
+      if (res.failed.has(id)) continue;
+      paintNode(id, 'degraded');
+      analysis.paintedNodes.add(id);
+    }
+    for (const [id] of res.blinded) {
+      if (res.failed.has(id)) continue;
+      paintNode(id, 'blind');
+      analysis.paintedNodes.add(id);
+    }
+    for (const h of res.held) {
+      if (res.failed.has(h.id)) continue;
+      paintNode(h.id, 'held');
+      analysis.paintedNodes.add(h.id);
+    }
+  }
+  // show only the runs between failed assets, same trace-override mechanism
+  // paintThreat uses (S.trace beats every other visibility filter)
+  const liveIds = new Set([...res.failed].filter(([, w]) => w <= uptoWave).map(([id]) => id));
+  const liveEdges = new Set(edges.filter(e => liveIds.has(e.from) && liveIds.has(e.to)).map(e => e.id));
+  for (const eid of liveEdges) { paintEdge(eid, 'failed'); analysis.paintedEdges.add(eid); }
+  S.trace = { nodes: liveIds, edges: liveEdges };
+  apply();
+}
+
+function animateCascade() {
+  if (!cascadeState) return;
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  let w = 0;
+  paintCascade(0);
+  analysis.timer = setInterval(() => {
+    w++;
+    paintCascade(w);
+    const el = document.getElementById('cascadeWave');
+    if (el) el.textContent = 'wave ' + Math.min(w, cascadeState.res.waves) + ' / ' + cascadeState.res.waves;
+    if (w >= cascadeState.res.waves) { clearInterval(analysis.timer); analysis.timer = null; }
+  }, 550);
+}
+
+function runCascade(seedIds, label, hazard) {
+  beginAnalysis('cascade');
+  // A cascade seeded above a rack can reach rack-internal components, which
+  // (like runThreat) need real meshes in nodeMarks/edgeTubes to paint --
+  // same lazy-construction integration point as runThreat().
+  ensureRackInternalOverlay();
+
+  const seeds = seedIds.filter(id => assets.has(id));
+  if (!seeds.length) return;
+  const res = cascade(seeds);
+  cascadeState = { seeds, res };
+
+  const failedList = [...res.failed].filter(([id]) => !seeds.includes(id))
+    .sort((a, b) => a[1] - b[1] || (assets.get(a[0])?.label || '').localeCompare(assets.get(b[0])?.label || ''));
+
+  const bySystem = {};
+  for (const [id] of res.failed) { const sy = assets.get(id)?.system; if (sy) bySystem[sy] = (bySystem[sy] || 0) + 1; }
+  const racksLost = [...res.failed].filter(([id]) => /rack\d\d$/.test(id)).length;
+  const z4 = [...res.failed].filter(([id]) => assets.get(id)?.zone === 'Z4').length;
+  const z2 = [...res.failed].filter(([id]) => assets.get(id)?.zone === 'Z2').length;
+
+  cascadeTitle.textContent = 'Failure: ' + (label || assets.get(seeds[0])?.label || seeds[0]);
+  cascadeSummary.innerHTML = '<span id="cascadeWave">wave 0 / ' + res.waves + '</span> · '
+    + res.failed.size + ' assets stopped · ' + res.degraded.size + ' degraded'
+    + (res.blinded.size ? ' · ' + res.blinded.size + ' protection lost' : '');
+
+  // minimum operating requirements
+  const mor = [];
+  if (z4) mor.push(['SAFETY', 'BREACH', z4 + ' safety instrumented asset(s) stopped']);
+  else mor.push(['SAFETY', 'HELD', 'no Z4 asset lost']);
+  if (racksLost) mor.push(['MINIMUM OPERATION', 'BREACH', racksLost + ' of 96 GPU racks stopped']);
+  else mor.push(['MINIMUM OPERATION', 'HELD', 'no compute rack lost']);
+  if (res.held.length) mor.push(['RELIABILITY', 'DEGRADED', res.held.length + ' redundant feed(s) now single-path']);
+  else mor.push(['RELIABILITY', z2 ? 'DEGRADED' : 'HELD', z2 + ' supervisory asset(s) stopped']);
+  if (res.blinded.size) {
+    const trips = [...res.blinded].filter(([id]) =>
+      /interlock|TRIP/i.test(res.blinded.get(id) || '')).length;
+    mor.push(['PROTECTION', trips ? 'BREACH' : 'DEGRADED',
+      res.blinded.size + ' protective function(s) lost'
+      + (trips ? ', ' + trips + ' of them a hardwired trip or interlock' : '')]);
+  } else mor.push(['PROTECTION', 'HELD', 'no protective function lost']);
+
+  // costed consequence: racks lost x revenue rate x time to protective shutdown
+  const rb = HZ && HZ.meta.revenue_basis;
+  const cell = rb && rb.cell_structure && rb.cell_structure.modelled_cell;
+  const perRackHour = cell ? cell.per_rack_hour_usd : 0;
+  const cellsPerCampus = rb && rb.cell_structure ? rb.cell_structure.cells_per_campus : 1;
+  let cons = '';
+  if (perRackHour && racksLost) {
+    const mw = (racksLost * 120 / 1000).toFixed(2);
+    cons = '<div class="sec">CONSEQUENCE — ONE CELL (' + racksLost + ' racks, ' + mw + ' MW at '
+         + money(perRackHour) + '/rack-hour)</div>'
+         + '<div class="blockrow">' + [1, 2, 4, 8].map(h =>
+             '<b>' + h + ' h</b> ' + money(perRackHour * racksLost * h)).join(' · ') + '</div>'
+         + '<div class="blockrow"><b>If the same event hit every cell</b> (no isolation, shared '
+         + 'management plane): ×' + cellsPerCampus + ' → '
+         + [1, 4, 8].map(h => h + ' h ' + money(perRackHour * racksLost * h * cellsPerCampus)).join(' · ')
+         + '<br><span style="color:#8a8a88">Cell isolation is the control that keeps a single-cell '
+         + 'event single-cell. WP10 node ALEs are the campus-wide figure.</span></div>';
+  }
+  const seedNodes = [...new Set(seeds.map(id => NODE_OF_ASSET.get(id)).filter(Boolean))];
+  if (seedNodes.length) {
+    cons += '<div class="blockrow">' + seedNodes.map(n => {
+      const a = ALE_BY_NODE.get(n);
+      return a ? '<b>' + n + '</b> authored ALE ' + money(a.ale_usd) + '/yr · SLE '
+                 + money(a.sle_usd) + ' · ARO ' + a.aro : '<b>' + n + '</b>';
+    }).join('<br>') + '</div>';
+  }
+  if (hazard) {
+    cons += '<div class="blockrow" style="border-left:3px solid #c8332a;padding-left:8px">'
+         + '<b>' + hazard.id + '</b> · RPN ' + hazard.rpn + ' · ' + hazard.mitre
+         + ' · target ' + hazard.sl_t + '<br>' + hazard.cyber_cause + '</div>';
+  }
+  if (TIMING && racksLost) {
+    cons += '<div class="blockrow"><b>Time to consequence</b> — throttle at '
+         + TIMING.dlc_throttle_seconds + ' s, protective shutdown at '
+         + TIMING.dlc_shutdown_seconds + ' s at direct-to-chip densities.</div>';
+  }
+  // controls that would have reduced this
+  let ctrls = '';
+  if (HZ && HZ.controls && seedNodes.length) {
+    const rel = HZ.controls.filter(c => c.nodes.includes('all') || c.nodes.some(n => seedNodes.includes(n)));
+    if (rel.length) {
+      ctrls = '<div class="sec mt">CONTROLS THAT REDUCE THIS</div>';
+      for (const c of rel.sort((a, b) => b.rosi - a.rosi))
+        ctrls += '<div class="blockrow"><b>' + c.control + '</b><br>'
+              + money(c.annual_cost_usd) + '/yr · mitigates ' + Math.round(c.mitigation_rate * 100)
+              + '% · <span>ROSI ' + Math.round(c.rosi * 100) + '%</span><br>'
+              + '<span style="color:#8a8a88">' + c.clause + '</span></div>';
+    }
+  }
+
+  let html = cons + ctrls + '<div class="tstat">'
+    + '<div><div class="tv">' + res.failed.size + '</div><div class="tk">STOPPED</div></div>'
+    + '<div><div class="tv">' + res.degraded.size + '</div><div class="tk">DEGRADED</div></div>'
+    + '<div><div class="tv">' + res.blinded.size + '</div><div class="tk">PROTECTION LOST</div></div>'
+    + '<div><div class="tv">' + res.held.length + '</div><div class="tk">HELD BY N+1</div></div>'
+    + '<div><div class="tv">' + res.waves + '</div><div class="tk">WAVES</div></div></div>';
+
+  html += '<div class="sec">MINIMUM OPERATING REQUIREMENTS</div>';
+  for (const [k, v, note] of mor) {
+    const col = v === 'BREACH' ? '#c8332a' : v === 'DEGRADED' ? '#EE7623' : '#2bd96a';
+    html += '<div class="blockrow" style="border-left:3px solid ' + col + ';padding-left:8px">'
+      + '<b>' + k + '</b> — <span style="color:' + col + '">' + v + '</span><br>' + note + '</div>';
+  }
+
+  html += '<div class="sec mt">PROPAGATION BY SYSTEM</div><div class="blockrow">'
+    + Object.entries(bySystem).sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => '<b>' + k + '</b> ' + v).join(' · ') + '</div>';
+
+  html += '<div class="sec mt">STOPPED, BY WAVE</div>';
+  const failedShown = failedList.slice(0, 60);
+  for (const [id, w] of failedShown) {
+    const n = assets.get(id);
+    const zc = n && ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+    const dark = n && (n.zone === 'Z3' || n.zone === 'Z0');
+    html += '<div class="wv" data-id="' + id + '" title="' + (n?.label || id) + '">'
+      + '<div class="wn">' + w + '</div><div class="wl">' + (n?.label || id) + '</div>'
+      + '<div class="wz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (n?.zone || '—') + '</div></div>';
+  }
+  if (!failedList.length) html += '<div class="empty">Nothing downstream depends on this asset.</div>';
+  if (failedList.length > 60) html += '<div class="empty">… and ' + (failedList.length - 60) + ' more.</div>';
+
+  if (res.held.length) {
+    html += '<div class="sec mt">HELD BY REDUNDANCY</div>';
+    const seen = new Set();
+    for (const h of res.held) {
+      const k = h.id + h.service;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      html += '<div class="heldrow"><b>held</b> ' + (assets.get(h.id)?.label || h.id)
+        + ' — lost ' + h.lost + ' of ' + h.of + ' ' + h.service + ' feeds</div>';
+    }
+  }
+  if (res.degraded.size) {
+    html += '<div class="sec mt">DEGRADED (LOST VISIBILITY OR CONTROL)</div>';
+    for (const [id, why] of res.degraded) {
+      if (res.failed.has(id)) continue;
+      html += '<div class="heldrow">' + (assets.get(id)?.label || id) + ' — ' + why + '</div>';
+    }
+  }
+  if (res.blinded.size) {
+    html += '<div class="sec mt">PROTECTION LOST (SENSING, NOT LOAD)</div>';
+    for (const [id, role] of res.blinded) {
+      const n = assets.get(id);
+      const trip = /interlock|TRIP/i.test(role || '');
+      html += '<div class="hop wv" data-id="' + id + '">'
+        + '<div class="hn" style="color:' + (trip ? '#e0483a' : '#d8b23a') + '">'
+        + (trip ? '⚠' : '○') + '</div>'
+        + '<div><div class="an">' + (n?.label || id) + '</div>'
+        + '<div class="ak">' + (n?.attrs && n.attrs.pid_tag ? n.attrs.pid_tag + ' · ' : '')
+        + (n?.attrs && n.attrs.signal ? n.attrs.signal : (n?.kind || '')) + '</div></div>'
+        + '<div class="ab" style="color:' + (trip ? '#e0483a' : '#d8b23a') + '">'
+        + (trip ? 'TRIP' : 'BLIND') + '</div></div>';
+    }
+    html += '<div class="blockrow"><b>Reading this:</b> these assets did not stop load — they '
+         + 'sense it. Each entry is a trip, interlock or metering signal that is no longer '
+         + 'available, so the facility may keep running with a protective function absent.</div>';
+  }
+  html += '<div class="blockrow" style="margin-top:9px"><b>Model:</b> redundancy inferred from feed '
+       + 'count, not authored. Two or more feeds of a service hold; one does not. Override in '
+       + 'REDUNDANCY_OVERRIDE where the design differs.</div>';
+
+  cascadeBody.innerHTML = html;
+  cascadeBody.querySelectorAll('.wv').forEach(r => r.onclick = () => {
+    const a = assets.get(r.dataset.id);
+    if (a) selectAndFly(a, a._node);
+  });
+  cascadeEl.hidden = false;
+  cascadeEl.classList.remove('collapsed');
+  document.getElementById('cascadeCollapse').textContent = '–';
+  animateCascade();
+}
+
+{
+  const box = document.getElementById('hazardSeeds');
+  if (HZ) for (const h of HZ.hazards) {
+    const seeds = (h.assets || []).filter(a => assets.has(a));
+    if (!seeds.length) continue;
+    const b = document.createElement('button');
+    b.className = 'vpbtn';
+    b.textContent = h.id + ' · RPN ' + h.rpn;
+    b.title = h.deviation + ' — ' + h.cyber_cause + ' (' + h.mitre + ')';
+    b.onclick = () => runCascade(seeds, h.id + ' — ' + h.deviation, h);
+    box.appendChild(b);
+  }
+}
+
+const CASCADE_SEEDS = [
+  ['ups', 'UPS 1'], ['chiller', 'Chiller 1'], ['row01_cdu', 'Row 1 CDU'],
+  ['busway', 'Cell A busway'], ['busway_b', 'Cell B busway'],
+  ['dali_gw', 'Lighting gateway'], ['pava_vacu', 'Voice alarm unit'],
+  ['chw_buffer', 'Thermal buffer'], ['fw_pump', 'Fire pump'], ['dcs_a', 'DCS controller A'], ['tower', 'Cooling tower 1'],
+  ['gen', 'Generator 1'], ['mv_swg', 'MV switchgear'], ['fws_spine', 'Facility water spine'],
+].filter(([id, label]) => {
+  if (assets.has(id)) return true;
+  console.warn('[explorer] cascade seed dropped — unknown asset id:', id, '(' + label + ')');
+  return false;
+});
+{
+  const box = document.getElementById('cascadeSeeds');
+  for (const [id, label] of CASCADE_SEEDS) {
+    const b = document.createElement('button');
+    b.className = 'vpbtn'; b.textContent = label;
+    b.onclick = () => runCascade([id], label);
+    box.appendChild(b);
+  }
+}
+document.getElementById('cascadeSel').onclick = () => {
+  if (S.sel && assets.has(S.sel)) runCascade([S.sel], assets.get(S.sel)?.label);
+};
+document.getElementById('cascadePlay').onclick = animateCascade;
+const closeCascade = () => { cascadeState = null; endAnalysis(); cascadeEl.hidden = true; };
+document.getElementById('cascadeClear').onclick = closeCascade;
+document.getElementById('cascadeClose').onclick = closeCascade;
+document.getElementById('cascadeCollapse').onclick = e => {
+  const on = cascadeEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// ===== risk portfolio (Step 11, ported from hyperscale-campus-explorer.html
+// renderRisk()/openRisk()) ====================================================
+const riskEl = document.getElementById('risk');
+const riskBody = document.getElementById('riskBody');
+const riskSummary = document.getElementById('riskSummary');
+const chosen = new Set();
+
+function renderRisk() {
+  if (!HZ) { riskBody.innerHTML = '<div class="empty">hazard-log.json not loaded.</div>'; return; }
+  const baseline = HZ.ale.reduce((a, x) => a + x.ale_usd, 0);
+
+  // Residual: for each node, apply the best mitigation rate among chosen
+  // controls that cover it. Rates are not compounded — WP10 states them as
+  // independent effectiveness against that node's scenario, so taking the
+  // maximum avoids double-counting overlapping controls.
+  const perNode = {};
+  for (const a of HZ.ale) {
+    const rates = HZ.controls
+      .filter(c => chosen.has(c.control) && (c.nodes.includes('all') || c.nodes.includes(a.node)))
+      .map(c => c.mitigation_rate);
+    const best = rates.length ? Math.max(...rates) : 0;
+    perNode[a.node] = { ale: a.ale_usd, residual: a.ale_usd * (1 - best), rate: best };
+  }
+  const residual = Object.values(perNode).reduce((a, x) => a + x.residual, 0);
+  const spend = HZ.controls.filter(c => chosen.has(c.control))
+    .reduce((a, c) => a + c.annual_cost_usd, 0);
+  const avoided = baseline - residual;
+  const rosi = spend ? (avoided - spend) / spend : 0;
+
+  riskSummary.textContent = money(baseline) + ' baseline · ' + money(residual) + ' residual · '
+    + chosen.size + ' control' + (chosen.size === 1 ? '' : 's') + ' selected';
+
+  let html = '<div class="tstat">'
+    + '<div class="bigfig"><div class="bv">' + money(baseline) + '</div><div class="bk">BASELINE ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(residual) + '</div><div class="bk">RESIDUAL ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(spend) + '</div><div class="bk">ANNUAL SPEND</div></div>'
+    + '<div class="bigfig"><div class="bv">' + (spend ? Math.round(rosi * 100) + '%' : '—')
+    + '</div><div class="bk">PORTFOLIO ROSI</div></div></div>';
+
+  html += '<div class="sec">EXPOSURE BY NODE</div>';
+  for (const a of HZ.ale.slice().sort((x, y) => y.ale_usd - x.ale_usd)) {
+    const p = perNode[a.node];
+    const cut = p.rate ? ' → ' + money(p.residual) : '';
+    const col = p.rate ? '#2bd96a' : '#E8E8E6';
+    html += '<div class="alerow" title="' + a.scenario + '">'
+      + '<div class="an2">' + a.node + '</div>'
+      + '<div class="al">' + a.scenario + '</div>'
+      + '<div class="av" style="color:' + col + '">' + money(a.ale_usd) + cut + '</div></div>';
+  }
+
+  html += '<div class="sec mt">CONTROLS · SELECT TO APPLY</div>';
+  for (const c of HZ.controls.slice().sort((a, b) => b.rosi - a.rosi)) {
+    const on = chosen.has(c.control);
+    html += '<div class="ctrlrow" data-ctrl="' + c.control.replace(/"/g, '&quot;') + '">'
+      + '<input type="checkbox"' + (on ? ' checked' : '') + '>'
+      + '<div><div class="cl">' + c.control + '</div>'
+      + '<div class="cm">' + money(c.annual_cost_usd) + '/yr · mitigates '
+      + Math.round(c.mitigation_rate * 100) + '% · nodes ' + c.nodes.join(', ')
+      + '<br>' + c.clause + '</div></div>'
+      + '<div class="cr">' + Math.round(c.rosi * 100) + '%</div></div>';
+  }
+  html += '<div class="blockrow" style="margin-top:9px"><b>Method:</b> baseline ALE and control '
+       + 'effectiveness are authored in hazard-log.json from WP10. Where several selected controls '
+       + 'cover the same node the highest single mitigation rate is used, not the product, to avoid '
+       + 'claiming compounded benefit the source does not support.</div>';
+
+  riskBody.innerHTML = html;
+  riskBody.querySelectorAll('.ctrlrow').forEach(r => r.onclick = () => {
+    const k = r.dataset.ctrl;
+    chosen.has(k) ? chosen.delete(k) : chosen.add(k);
+    renderRisk();
+  });
+}
+function openRisk() {
+  riskEl.hidden = false;
+  riskEl.classList.remove('collapsed');
+  document.getElementById('riskCollapse').textContent = '–';
+  renderRisk();
+}
+document.getElementById('riskOpen').onclick = openRisk;
+const closeRisk = () => { riskEl.hidden = true; };
+document.getElementById('riskClose').onclick = closeRisk;
+document.getElementById('riskCollapse').onclick = e => {
+  const on = riskEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// ===== assumptions & provenance (Step 12, ported from
+// hyperscale-campus-explorer.html renderAssume()/openAssume()) ================
+// Renders the model's own epistemics: what is sourced, what is inferred, what is
+// unconfirmed, and how the topology measures against the cell architecture.
+const assumeEl = document.getElementById('assume');
+const SEV = { high: '#ff5252', medium: '#ffa726', low: '#8a8a88' };
+const STAT = { met: '#2bd96a', partial: '#ffa726', gap: '#ff5252',
+               resolved: '#2bd96a', 'partially resolved': '#ffa726', ambiguous: '#ffa726',
+               unresolved: '#ff5252', unconfirmed: '#ff5252', inconsistent: '#ffa726',
+               'source limitation': '#8a8a88', 'method choice': '#8a8a88' };
+function renderAssume() {
+  const body = document.getElementById('assumeBody');
+  if (!HZ || !HZ.assumptions) { body.innerHTML = '<div class="blockrow">No assumption record loaded.</div>'; return; }
+  const cc = HZ.cell_conformance;
+  const hi = HZ.assumptions.filter(a => a.severity === 'high').length;
+  document.getElementById('assumeSummary').textContent =
+    HZ.assumptions.length + ' recorded · ' + hi + ' high severity · '
+    + (cc ? cc.requirements.filter(r => r.status === 'gap').length + ' cell gaps' : '')
+    + (HZ.architecture_review ? ' · ' + HZ.architecture_review.closed.length + ' gaps closed, '
+       + HZ.architecture_review.outstanding.length + ' open' : '');
+  let h = '';
+  if (cc) {
+    h += '<div class="sec">CELL CONFORMANCE — ' + cc.source + '</div>';
+    for (const r of cc.requirements) {
+      h += '<div class="blockrow"><b style="color:' + (STAT[r.status] || '#e8e8e6') + '">'
+         + r.status.toUpperCase() + '</b> · ' + r.requirement
+         + '<br><span style="color:#8a8a88">' + r.evidence + '</span></div>';
+    }
+    h += '<div class="blockrow" style="border-left:2px solid #ff5252;padding-left:8px">'
+       + '<b>Significance</b><br>' + cc.significance + '</div>';
+    h += '<div class="blockrow"><span style="color:#8a8a88">Correctly held campus-shared: '
+       + cc.campus_shared_correctly_separated.join(', ') + '</span></div>';
+  }
+  h += '<div class="sec mt">ASSUMPTIONS</div>';
+  const order = { high: 0, medium: 1, low: 2 };
+  for (const a of [...HZ.assumptions].sort((x, y) => order[x.severity] - order[y.severity])) {
+    h += '<div class="blockrow"><b>' + a.id + ' · ' + a.topic + '</b> '
+       + '<span style="color:' + SEV[a.severity] + '">' + a.severity + '</span> · '
+       + '<span style="color:' + (STAT[a.status] || '#8a8a88') + '">' + a.status + '</span>'
+       + '<br>' + a.statement
+       + '<br><span style="color:#8a8a88">Consequence: ' + a.consequence + '</span>'
+       + '<br><span style="color:#2bd96a">→ ' + a.resolution + '</span></div>';
+  }
+  const rb = HZ.meta.revenue_basis;
+  if (rb && rb.correction) {
+    h += '<div class="sec mt">CORRECTIONS MADE</div>'
+       + '<div class="blockrow">' + rb.correction + '</div>'
+       + '<div class="blockrow"><span style="color:#8a8a88">' + rb.scope_note + '</span></div>';
+  }
+  if (HZ.meta.coverage && HZ.meta.coverage.reconciliation) {
+    h += '<div class="sec mt">WP10 RECONCILIATION</div>';
+    for (const r of HZ.meta.coverage.reconciliation) {
+      h += '<div class="blockrow"><b>' + r.node + '</b> ' + r.scenario + ' · ratio '
+         + r.ratio + '×<br><span style="color:#8a8a88">' + r.reading + '</span></div>';
+    }
+  }
+  const ar = HZ.architecture_review;
+  if (ar) {
+    h += '<div class="sec mt">ARCHITECTURE REVIEW — ' + ar.date + '</div>'
+       + '<div class="blockrow"><span style="color:#8a8a88">' + ar.method + '<br>Sources: '
+       + ar.sources.join(' · ') + '</span></div>';
+    for (const g of ar.closed) {
+      h += '<div class="blockrow"><b style="color:#2bd96a">CLOSED</b> · ' + g.gap
+         + ' <span style="color:#8a8a88">(' + g.source + ')</span>'
+         + '<br><span style="color:#8a8a88">Was: ' + g.was + '</span>'
+         + '<br>' + g.fix
+         + '<br><span style="color:#8a8a88">Significance: ' + g.significance + '</span></div>';
+    }
+    for (const g of ar.outstanding) {
+      h += '<div class="blockrow"><b style="color:' + (SEV[g.severity] || '#8a8a88') + '">OPEN</b> · '
+         + g.gap + ' <span style="color:#8a8a88">(' + g.source + ')</span>'
+         + '<br><span style="color:#8a8a88">' + g.note + '</span></div>';
+    }
+    h += '<div class="blockrow" style="border-left:2px solid #ff8c42;padding-left:8px">'
+       + '<b>Systemic note</b><br>' + ar.systemic_note + '</div>';
+  }
+  if (HZ.meta.safeguard_summary) {
+    h += '<div class="sec mt">METHOD NOTES</div>'
+       + '<div class="blockrow">' + HZ.meta.safeguard_summary.note + '</div>';
+  }
+  body.innerHTML = h;
+}
+function openAssume() {
+  assumeEl.hidden = false;
+  assumeEl.classList.remove('collapsed');
+  document.getElementById('assumeCollapse').textContent = '–';
+  renderAssume();
+}
+document.getElementById('assumeOpen').onclick = openAssume;
+const closeAssume = () => { assumeEl.hidden = true; };
+document.getElementById('assumeClose').onclick = closeAssume;
+document.getElementById('assumeCollapse').onclick = e => {
+  const on = assumeEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// Step 13 (final regression) decision: kept, not removed. Across Phase 3's whole build and
+// verification pass this was used dozens of times as the only way to check real state (mesh
+// counts, trace contents, console-clean re-runs) rather than trust code-reading alone -- a
+// deliberate, permanent analyst/debug surface, not leftover scaffolding.
+window.__dbg = { scene, assets, edges, adj, edgesById, HZ, S, analysis, ENTRY, threatWalk, runThreat,
+  cascade, runCascade, SUPPLY, threatState: () => threatState, cascadeState: () => cascadeState };
+
+// ===== framing (ported from hyperscale-campus-explorer.html flyTo/frameObject) ==
+let flyAnim = null;
+// opts: { durationMs=620, alpha, beta } -- alpha/beta are optional camera-orbit targets;
+// omitted means "keep whatever angle the camera currently has" (the original behavior, still
+// what every plain object/marker click wants). Returns the actual animation duration in ms so
+// callers (the Tour) can schedule the next hop without guessing at timing.
+function flyTo(center, radius, opts = {}) {
+  pauseIdleRotate(); // any programmatic camera move (viewpoint click, search, tour hop) counts as interaction
+  const { durationMs = 620, alpha, beta } = opts;
+  const dist = Math.max(1.6, radius * 2.7);
+  if (flyAnim) { scene.stopAnimation(camera); flyAnim = null; }
+
+  const frameRate = 60;
+  const totalFrames = Math.round((durationMs / 1000) * frameRate);
+  const ease = new BABYLON.QuadraticEase();
+  ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+  const anims = [];
+  const targetAnim = new BABYLON.Animation('flyTarget', 'target', frameRate,
+    BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+  targetAnim.setKeys([{ frame: 0, value: camera.target.clone() }, { frame: totalFrames, value: center }]);
+  targetAnim.setEasingFunction(ease);
+  anims.push(targetAnim);
+
+  const radiusAnim = new BABYLON.Animation('flyRadius', 'radius', frameRate,
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+  radiusAnim.setKeys([{ frame: 0, value: camera.radius }, { frame: totalFrames, value: dist }]);
+  radiusAnim.setEasingFunction(ease);
+  anims.push(radiusAnim);
+
+  if (alpha !== undefined) {
+    // shortest-path wrap: without this, crossing the +-PI boundary between two viewpoints'
+    // alpha values spins the long way around instead of the short way.
+    const twoPi = Math.PI * 2;
+    const diff = ((alpha - camera.alpha) % twoPi + twoPi + Math.PI) % twoPi - Math.PI;
+    const alphaAnim = new BABYLON.Animation('flyAlpha', 'alpha', frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    alphaAnim.setKeys([{ frame: 0, value: camera.alpha }, { frame: totalFrames, value: camera.alpha + diff }]);
+    alphaAnim.setEasingFunction(ease);
+    anims.push(alphaAnim);
+  }
+  if (beta !== undefined) {
+    const betaAnim = new BABYLON.Animation('flyBeta', 'beta', frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    betaAnim.setKeys([{ frame: 0, value: camera.beta }, { frame: totalFrames, value: beta }]);
+    betaAnim.setEasingFunction(ease);
+    anims.push(betaAnim);
+  }
+
+  camera.animations = anims;
+  flyAnim = scene.beginAnimation(camera, 0, totalFrames, false);
+  return (totalFrames / frameRate) * 1000;
+}
+function frameBounds(min, max, opts = {}) {
+  const { padding = 1.15 } = opts;
+  const center = min.add(max).scale(0.5);
+  const radius = (BABYLON.Vector3.Distance(min, max) / 2) * padding;
+  return flyTo(center, radius, opts);
+}
+function boundsOfMeshes(meshes) {
+  let min = null, max = null;
+  for (const m of meshes) {
+    if (!m.getBoundingInfo) continue;
+    const b = m.getBoundingInfo().boundingBox;
+    min = min ? BABYLON.Vector3.Minimize(min, b.minimumWorld) : b.minimumWorld.clone();
+    max = max ? BABYLON.Vector3.Maximize(max, b.maximumWorld) : b.maximumWorld.clone();
+  }
+  return min ? { min, max } : null;
+}
+function frameObject(node, opts = {}) {
+  if (!node) return; // same undefined-node guard as highlight() -- nothing to frame
+  const meshes = node.getChildMeshes ? node.getChildMeshes(false) : [];
+  if (node.getBoundingInfo) meshes.push(node);
+  const b = boundsOfMeshes(meshes);
+  if (!b) return;
+  return frameBounds(b.min, b.max, opts);
+}
+// Establishing-shot framing for a named building space -- unions the real bounding boxes of
+// every bound asset whose .location matches (accepts one location or an array), rather than a
+// hand-picked flyTo constant. Self-correcting if the underlying geometry changes; falls back
+// to the full-campus view (with a console warning, not a silent blank frame) if nothing
+// resolves for the given location(s) -- e.g. before the rack-internal overlay has built, or if
+// a location string is mistyped.
+function frameByLocation(locations, opts = {}) {
+  const locSet = new Set(Array.isArray(locations) ? locations : [locations]);
+  const meshes = [];
+  for (const a of assets.values()) {
+    if (!locSet.has(a.location)) continue;
+    const n = a._node || (a.mesh ? scene.meshes.find(m => m.name === a.mesh) : null);
+    if (!n) continue;
+    if (n.getChildMeshes) meshes.push(...n.getChildMeshes(false));
+    if (n.getBoundingInfo) meshes.push(n);
+  }
+  const b = boundsOfMeshes(meshes);
+  if (!b) { console.warn('[explorer] frameByLocation: nothing resolved for', locations); return frameObject(root, opts); }
+  return frameBounds(b.min, b.max, { padding: 1.3, ...opts });
+}
+// Same idea keyed off raw mesh-name prefix instead of the asset graph -- used for the GPU
+// rack close-up, where "frame everything at this location" would mean the whole data hall,
+// not one rack.
+function frameByMeshPrefix(prefix, opts = {}) {
+  const meshes = scene.meshes.filter(m => m.name && m.name.startsWith(prefix));
+  const b = boundsOfMeshes(meshes);
+  if (!b) { console.warn('[explorer] frameByMeshPrefix: nothing resolved for', prefix); return frameObject(root, opts); }
+  return frameBounds(b.min, b.max, { padding: 1.3, ...opts });
+}
+
+// ===== idle auto-rotate establishing shot =======================================
+// Default-on-load slow orbit around the full campus. Deliberately does NOT force Physical
+// view mode -- Graph is this viewer's hard-locked default from earlier user feedback this
+// session, and a passive idle state shouldn't fight that (unlike the Tour below, which is an
+// explicit user action and does force Physical). Pauses on any interaction -- a real drag/
+// wheel/click, or any programmatic flyTo (viewpoint button, search result, tour hop all
+// route through flyTo, which calls pauseIdleRotate itself) -- and quietly resumes after a
+// quiet period so it reads as a kiosk/showcase idle state, not something fighting the user
+// for control.
+const IDLE_ROTATE_SPEED = 0.025; // rad/sec -- one full 360° loop in ~4.2 minutes
+const IDLE_RESUME_AFTER_MS = 25000;
+let idleRotating = false;
+let idleResumeTimer = null;
+function pauseIdleRotate() {
+  idleRotating = false;
+  if (idleResumeTimer) clearTimeout(idleResumeTimer);
+  idleResumeTimer = setTimeout(() => { if (!S.touring) idleRotating = true; }, IDLE_RESUME_AFTER_MS);
+}
+scene.onBeforeRenderObservable.add(() => {
+  if (!idleRotating) return;
+  camera.alpha += IDLE_ROTATE_SPEED * (engine.getDeltaTime() / 1000);
+});
+canvas.addEventListener('pointerdown', pauseIdleRotate);
+canvas.addEventListener('wheel', pauseIdleRotate, { passive: true });
+
+// initial fit — top-down, tight to the facility's real edges (per explicit request: "very
+// little extra space around the edges of the model itself"). beta is a hair off true-zero
+// (0.001, not 0) because Babylon's ArcRotateCamera has a degenerate/undefined up-vector at
+// exactly beta=0 (forward direction aligning exactly with the up axis) -- this reads as a
+// perfect top-down view with none of that instability. padding:1.0 (vs. 1.05+ used
+// elsewhere) is deliberately the tightest fit this codebase uses anywhere.
+// NOTE: idle-rotate below only orbits alpha, which is visually a no-op at beta≈0 (looking
+// straight down, alpha-rotation has nothing to reveal) -- kept running rather than silently
+// removed, since "slow pan by default" was also an explicit earlier request and the two are
+// in real tension for the INITIAL frame specifically. It still takes effect the moment the
+// camera's beta changes (drag, or any other viewpoint), so nothing is actually lost.
+const TOP_VIEW = { alpha: -Math.PI / 2, beta: 0.001 };
+const TOP_VIEW_PADDING = 0.32; // pushed closer again per follow-up request
+const INITIAL_ROTATE_DELAY_MS = 8000; // let the top-down default settle before it starts panning
+if (root) {
+  const initialFlightMs = frameObject(root, { padding: TOP_VIEW_PADDING, ...TOP_VIEW }) || 620;
+  setTimeout(() => { if (!S.touring) idleRotating = true; }, initialFlightMs + INITIAL_ROTATE_DELAY_MS);
+}
+
+// ===== selection panel =======================================================
+const rightEl = document.getElementById('right');
+const selName = document.getElementById('selName');
+const selKind = document.getElementById('selKind');
+const selBody = document.getElementById('selBody');
+const zoneTag = document.getElementById('zoneTag');
+
+let highlighted = null;
+const highlightLayer = new BABYLON.HighlightLayer('hl', scene);
+
+function clearHighlight() {
+  highlightLayer.removeAllMeshes();
+  highlighted = null;
+}
+function highlight(node) {
+  clearHighlight();
+  // 2026-08-31: guard added. Markers became clickable this session (assetOf's graphNode
+  // fix); an unbound asset (no real mesh -- 2,387 of 4,397) selected via its marker reaches
+  // this function with node===undefined, which previously threw immediately on
+  // node.getChildMeshes. Nothing to highlight for those -- the info panel still opens.
+  if (!node) return;
+  const meshes = node.getChildMeshes ? node.getChildMeshes(false) : [];
+  if (node.getBoundingInfo) meshes.push(node);
+  for (const m of meshes) highlightLayer.addMesh(m, BABYLON.Color3.FromHexString('#EE7623'));
+  highlighted = node;
+}
+
+function select(asset, pickedMesh) {
+  highlight(asset._node);
+  rightEl.hidden = false;
+  rightEl.classList.remove('collapsed');
+  document.getElementById('rightCollapse').textContent = '–';
+  selName.textContent = asset.label;
+  selKind.textContent = `${asset.kind}${asset.location ? ' · ' + asset.location : ''}${asset.cell ? ' · ' + asset.cell : ''}`;
+
+  if (asset.zone && ZONES[asset.zone]) {
+    zoneTag.style.display = 'inline-flex';
+    zoneTag.style.background = hex(ZONES[asset.zone].color);
+    zoneTag.style.color = asset.zone === 'Z3' ? '#16203B' : '#fff';
+    zoneTag.textContent = `${ZONES[asset.zone].label} · Purdue ${asset.purdue || ZONES[asset.zone].purdue} · ${asset.sl_target || ZONES[asset.zone].slt}`;
+  } else {
+    zoneTag.style.display = 'none';
+  }
+
+  const ident = (asset.vendor ? `<div class="kv"><b>vendor</b><span>${asset.vendor}</span></div>` : '')
+              + (asset.standards ? `<div class="kv"><b>standards</b><span>${asset.standards}</span></div>` : '');
+  const attrs = Object.entries(asset.attributes || {})
+    .map(([k, v]) => `<div class="kv"><b>${k.replace(/_/g, ' ')}</b><span>${v}</span></div>`).join('');
+  const surf = (asset.attack_surface || []).length
+    ? `<div class="sec mt">ATTACK SURFACE &amp; ASSURANCE NOTES</div>` +
+      asset.attack_surface.map(t => `<div class="kv" style="border:none"><span>${t}</span></div>`).join('')
+    : '';
+
+  selBody.innerHTML =
+    (ident ? `<div class="sec">IDENTIFICATION</div>${ident}` : '') +
+    (attrs ? `<div class="sec mt">ATTRIBUTES</div>${attrs}` : '') +
+    surf +
+    `<div class="sec mt">MESH</div><div class="kv"><b>name</b><span>${pickedMesh?.name || asset.mesh}</span></div>` +
+    `<div class="sec mt">TRACE CONNECTIONS</div>` +
+    `<div class="tracerow">` +
+      `<button class="vpbtn" data-trace="up">Upstream</button>` +
+      `<button class="vpbtn" data-trace="down">Downstream</button>` +
+      `<button class="vpbtn" data-trace="both">Both</button>` +
+      `<button class="vpbtn" data-trace="clear">Clear</button>` +
+    `</div>`;
+  selBody.dataset.assetId = asset.id;
+}
+
+function selectAndFly(asset, pickedMesh) {
+  select(asset, pickedMesh);
+  // Fall back to the picked mesh (e.g. the marker, now clickable) for camera framing only --
+  // this does not make the marker visible, it just gives the camera somewhere real to fly to
+  // for an unbound asset that has no asset._node of its own.
+  frameObject(asset._node || pickedMesh);
+}
+
+selBody.addEventListener('click', e => {
+  const btn = e.target.closest('[data-trace]');
+  if (!btn) return;
+  const id = selBody.dataset.assetId;
+  if (!id) return;
+  if (btn.dataset.trace === 'clear') clearTrace();
+  else setTrace(id, btn.dataset.trace);
+});
+
+// ===== picking =================================================================
+let down = null;
+canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
+canvas.addEventListener('pointerup', e => {
+  if (!down) return;
+  const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  down = null;
+  if (moved > 5) return; // drag, not a click
+
+  const pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (!pick?.hit || !pick.pickedMesh) return;
+  const asset = assetOf(pick.pickedMesh);
+  if (asset) selectAndFly(asset, pick.pickedMesh);
+});
+
+document.getElementById('rightClose').onclick = () => { rightEl.hidden = true; clearHighlight(); };
+document.getElementById('rightCollapse').onclick = () => {
+  rightEl.classList.toggle('collapsed');
+  document.getElementById('rightCollapse').textContent = rightEl.classList.contains('collapsed') ? '+' : '–';
+};
+
+// ===== search (asset fields top 8 + raw mesh-name top 5, deduped) ============
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+function runSearch(qRaw) {
+  const q = qRaw.trim().toLowerCase();
+  searchResults.innerHTML = '';
+  if (q.length < 2) return;
+
+  const assetHits = [];
+  for (const a of assets.values()) {
+    const hay = [a.label, a.mesh, a.kind, a.location, a.cell].filter(Boolean).join(' ').toLowerCase();
+    if (hay.includes(q)) assetHits.push(a);
+    if (assetHits.length >= 8) break;
+  }
+  const hitAssetIds = new Set(assetHits.map(a => a.id));
+
+  const meshHits = [];
+  for (const m of scene.meshes) {
+    if (!m.name || m.name.startsWith('gnode_') || m.name.startsWith('gedge_')) continue;
+    if (!m.name.toLowerCase().includes(q)) continue;
+    const owner = assetOf(m);
+    if (owner && hitAssetIds.has(owner.id)) continue; // already surfaced via asset fields
+    meshHits.push(m);
+    if (meshHits.length >= 5) break;
+  }
+
+  for (const a of assetHits) {
+    const row = document.createElement('div');
+    row.className = 'hit';
+    row.innerHTML = `${a.label}<div class="hn">${a.mesh}</div>`;
+    row.onclick = () => { searchInput.value = ''; searchResults.innerHTML = ''; selectAndFly(a, a._node); };
+    searchResults.appendChild(row);
+  }
+  for (const m of meshHits) {
+    const row = document.createElement('div');
+    row.className = 'hit';
+    row.innerHTML = `${m.name}<div class="hn">mesh</div>`;
+    row.onclick = () => { searchInput.value = ''; searchResults.innerHTML = ''; frameObject(m); };
+    searchResults.appendChild(row);
+  }
+}
+searchInput.addEventListener('input', () => runSearch(searchInput.value));
+
+// ===== asset-list panel (single-select-group) =================================
+const assetGroupList = document.getElementById('assetGroupList');
+function groupKeyFor(a, mode) {
+  if (mode === 'zone') return a.zone || '—';
+  if (mode === 'system') return a.system || '—';
+  return a.cell || '—';
+}
+function renderAssetGroup(mode) {
+  const buckets = new Map();
+  for (const a of assets.values()) {
+    const k = groupKeyFor(a, mode);
+    if (!buckets.has(k)) buckets.set(k, []);
+    buckets.get(k).push(a);
+  }
+  assetGroupList.innerHTML = '';
+  for (const [k, list] of [...buckets.entries()].sort((x, y) => x[0].localeCompare(y[0]))) {
+    const header = document.createElement('div');
+    header.className = 'sec mt';
+    header.textContent = `${k} (${list.length})`;
+    assetGroupList.appendChild(header);
+    for (const a of list) {
+      const row = document.createElement('div');
+      row.className = 'asset-row';
+      row.innerHTML = `<span>${a.label}</span><span class="an">${a.system || ''}</span>`;
+      row.onclick = () => selectAndFly(a, a._node);
+      assetGroupList.appendChild(row);
+    }
+  }
+}
+for (const b of document.querySelectorAll('#groupTabs .vpbtn')) {
+  b.onclick = () => {
+    for (const o of document.querySelectorAll('#groupTabs .vpbtn')) o.classList.remove('active');
+    b.classList.add('active');
+    renderAssetGroup(b.dataset.group);
+  };
+}
+
+// ===== fixed viewpoints (ported from hyperscale-campus-explorer.html `views`) ==
+// Constants are in the same local/GLB-authoring frame as positions.json — transform
+// through root's world matrix (Step 0's confirmed fix) rather than treating them as
+// already-Babylon-world-space.
+function toWorld(x, y, z) {
+  return BABYLON.Vector3.TransformCoordinates(new BABYLON.Vector3(x, y, z), root.getWorldMatrix());
+}
+// 10-stop redesign (was 5) -- every stop backed by a real, substantial space (asset counts
+// confirmed live before picking this list: Data hall 307, Core IT room 51, MMR+NOC 30,
+// West yard 14, LV/UPS+Battery 15, Central facility+East yard 16, Reception cluster 14).
+// Framed by real geometry (frameByLocation/frameByMeshPrefix) rather than hand-picked
+// coordinates, except "hall" and "rack" which also set a specific camera angle for a better
+// establishing shot than a generic bounding-box union would give.
+// Every stop below sets an explicit alpha/beta -- found live (not guessed) that omitting it
+// makes the camera inherit whatever angle the PREVIOUS viewpoint left behind, which can point
+// straight through an adjacent wall at close range and fill the frame with wall instead of
+// the actual subject. DEFAULT_ANGLE is the same 3/4-overhead angle the initial campus fit
+// uses, which reads well as a general-purpose establishing angle for any of these spaces;
+// hall/rack override it with something more specific to their own geometry.
+const DEFAULT_ANGLE = { alpha: -Math.PI / 2.4, beta: Math.PI / 2.6 };
+const VIEWPOINTS = {
+  campus:     () => frameObject(root, { padding: TOP_VIEW_PADDING, ...TOP_VIEW }), // matches the on-load default framing
+  hall:       () => frameByLocation('Data hall', { padding: 1.15, alpha: -Math.PI / 2.35, beta: Math.PI / 2.3 }),
+  rack:       () => frameByMeshPrefix('row01_rack01', { padding: 1.25, alpha: -Math.PI / 3, beta: Math.PI / 2.4 }),
+  coreit:     () => frameByLocation('Core IT room', { padding: 1.3, ...DEFAULT_ANGLE }),
+  electrical: () => frameByLocation('West yard', { padding: 1.25, ...DEFAULT_ANGLE }),
+  power:      () => frameByLocation(['LV/UPS room', 'Battery room'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  cooling:    () => frameByLocation(['Central facility (shared)', 'East yard'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  mmr:        () => frameByLocation(['MMR', 'NOC'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  reception:  () => frameByLocation(['Reception', 'Entry way', "Security officer's office", 'Mantrap'], { padding: 1.35, ...DEFAULT_ANGLE }),
+  dock:       () => frameByLocation('IT Staging', { padding: 1.7, ...DEFAULT_ANGLE }),
+};
+const VIEWPOINT_ORDER = Object.keys(VIEWPOINTS);
+const VIEWPOINT_LABELS = {
+  campus: 'Full campus', hall: 'Data hall', rack: 'GPU rack close-up', coreit: 'Core IT room',
+  electrical: 'Electrical yard', power: 'Power room', cooling: 'Central facility',
+  mmr: 'MMR / NOC', reception: 'Reception & security', dock: 'Loading dock',
+};
+for (const b of document.querySelectorAll('#viewpointBtns .vpbtn')) {
+  b.onclick = () => (VIEWPOINTS[b.dataset.vp] || VIEWPOINTS.campus)();
+}
+
+// ===== Tour: auto-cycle every viewpoint =========================================
+// Explicit user action (unlike idle-rotate above) -- forces Physical mode for the showcase
+// (restores whatever mode was active on exit), hides the analyst panels (#phases holds the
+// real visible left-side controls -- #left is just the original template container, emptied
+// out by openPhase()'s section-relocation into whichever phase tab is open), shows a caption
+// naming the current stop, and loops VIEWPOINT_ORDER forever until Exit Tour / Escape.
+// Self-rescheduling (not setInterval) because each stop's actual flight time varies with how
+// far the camera has to orbit -- flyTo() returns its real animation duration for exactly this.
+const TOUR_HOLD_MS = 4000;
+let tourTimer = null, tourIndex = 0, tourPrevMode = null;
+const tourCaptionEl = document.getElementById('tourCaption');
+const tourCaptionLabelEl = document.getElementById('tourCaptionLabel');
+const tourCaptionSubEl = document.getElementById('tourCaptionSub');
+const tourBtnEl = document.getElementById('tourBtn');
+const phasesEl = document.getElementById('phases');
+
+function tourStep() {
+  if (!S.touring) return;
+  const key = VIEWPOINT_ORDER[tourIndex % VIEWPOINT_ORDER.length];
+  tourIndex++;
+  tourCaptionLabelEl.textContent = VIEWPOINT_LABELS[key] || key;
+  tourCaptionSubEl.textContent = `Stop ${((tourIndex - 1) % VIEWPOINT_ORDER.length) + 1} of ${VIEWPOINT_ORDER.length}`;
+  const flightMs = (VIEWPOINTS[key] ? VIEWPOINTS[key]() : VIEWPOINTS.campus()) || 620;
+  tourTimer = setTimeout(tourStep, flightMs + TOUR_HOLD_MS);
+}
+function startTour() {
+  if (S.touring) return;
+  S.touring = true;
+  tourIndex = 0;
+  tourPrevMode = S.mode;
+  setMode('physical');
+  phasesEl.style.display = 'none';
+  rightEl.hidden = true;
+  clearHighlight();
+  tourCaptionEl.style.display = 'flex';
+  tourBtnEl.textContent = '■ Exit tour';
+  tourStep();
+}
+function stopTour() {
+  if (!S.touring) return;
+  S.touring = false;
+  if (tourTimer) clearTimeout(tourTimer);
+  tourTimer = null;
+  tourCaptionEl.style.display = 'none';
+  tourBtnEl.textContent = '▶ Start tour';
+  phasesEl.style.display = '';
+  if (tourPrevMode) setMode(tourPrevMode);
+  pauseIdleRotate(); // hand back to idle-rotate's normal quiet-period resume timer
+}
+tourBtnEl.onclick = () => (S.touring ? stopTour() : startTour());
+document.getElementById('tourExitBtn').onclick = stopTour;
+window.addEventListener('keydown', e => { if (e.key === 'Escape' && S.touring) stopTour(); });
+
+// ===== hover tooltip (60ms-throttled pick -> label) ============================
+const tooltipEl = document.getElementById('tooltip');
+let lastTooltipAt = 0;
+canvas.addEventListener('pointermove', e => {
+  const now = performance.now();
+  if (now - lastTooltipAt < 60) return;
+  lastTooltipAt = now;
+  const pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (!pick?.hit || !pick.pickedMesh) { tooltipEl.style.display = 'none'; return; }
+  let text = null;
+  if (pick.pickedMesh.metadata?.graphNode) {
+    const a = assets.get(pick.pickedMesh.metadata.graphNode);
+    text = a ? a.label : null;
+  } else if (pick.pickedMesh.metadata?.graphEdge) {
+    const edge = edges.find(x => x.id === pick.pickedMesh.metadata.graphEdge);
+    if (edge) text = `${edge.from} → ${edge.to} · ${edge.protocol || edge.service}`;
+  } else {
+    const a = assetOf(pick.pickedMesh);
+    if (a) text = a.label;
+  }
+  if (!text) { tooltipEl.style.display = 'none'; return; }
+  tooltipEl.textContent = text;
+  tooltipEl.style.display = 'block';
+  tooltipEl.style.left = (e.clientX + 14) + 'px';
+  tooltipEl.style.top = (e.clientY + 14) + 'px';
+});
+canvas.addEventListener('pointerleave', () => { tooltipEl.style.display = 'none'; });
+
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return; // don't steal shortcuts while typing (e.g. in search)
+  if (e.key === 'Escape') { rightEl.hidden = true; clearHighlight(); clearTrace(); }
+  else if (e.key === 'f' || e.key === 'F') VIEWPOINTS.campus();
+  else if (e.key === 'g' || e.key === 'G') setMode('graph');
+  else if (e.key === 'p' || e.key === 'P') setMode('physical');
+  else if (e.key === 'b' || e.key === 'B') setMode('both');
+});
+
+// foldable filter sections — every section starts collapsed so the panel opens compact
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.onclick = () => {
+    const body = document.getElementById(h.dataset.fold);
+    if (!body) return;
+    h.classList.toggle('shut');
+    body.classList.toggle('shut');
+  };
+});
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.classList.add('shut');
+  const b = document.getElementById(h.dataset.fold);
+  if (b) b.classList.add('shut');
+});
+
+// initial asset-group tab so the panel isn't empty on load
+document.querySelector('#groupTabs [data-group="zone"]').click();
+
+// ===== phase stack ==============================================================
+// Each phase shows a subset of the same controls. Sections are moved (appendChild),
+// never cloned, so ids stay unique and every handler bound above keeps working.
+// Must be constructed here, after every other handler in this file is bound —
+// building it earlier would let the "initial asset-group tab" click above (and any
+// other trailing init call) fire into a still-hidden subtree.
+const PHASES = [
+  { n: '1', t: 'Build Model', sub: 'Phase 1 — build the model from HLD, DLD and ICD. Asset register, connections, services and protocols.',
+    secs: ['fView', 'fMode', 'fSearch', 'fSvc', 'fList', 'fProto'] },
+  { n: '2', t: 'WS-1 Initial Risk Assessment', sub: 'Workshop 1–2 — threat and vulnerability assessment. Threat pathways, consequence, and the first zone and conduit cut.',
+    secs: ['fView', 'fMode', 'fSearch', 'fSvc', 'fList', 'fProto', 'fThreat', 'fCascade', 'fZone', 'fCond'] },
+  { n: '3', t: 'Detail Risk Assessment', sub: 'Zone and conduit requirements. SL-T against SL-C, ALARP/SFAIRP rationale, risk portfolio and provenance.',
+    secs: ['fView', 'fMode', 'fSearch', 'fMarker', 'fSvc', 'fList', 'fProto', 'fZone', 'fCond', 'fThreat', 'fCascade', 'fAssume', 'fRisk'] },
+  { n: '4', t: 'WS-2 Risk Alignment', sub: 'Gap analysis to SL-A, target reference architecture, and the reporting pack. Everything in one view.',
+    secs: ['fView', 'fMode', 'fSearch', 'fMarker', 'fSvc', 'fList', 'fProto', 'fZone', 'fCond', 'fThreat', 'fCascade', 'fRisk', 'fAssume'] },
+];
+const phWrap = document.getElementById('phases');
+const phEls = PHASES.map((p, i) => {
+  const el = document.createElement('div');
+  el.className = 'ph'; el.id = 'ph' + (i + 1);
+  el.innerHTML = '<div class="phhd"><span class="phnum">' + p.n + '</span>'
+    + '<span class="phttl">' + p.t + '</span><span class="phcar">▼</span></div>'
+    + '<div class="phsub" hidden>' + p.sub + '</div><div class="phbd" hidden></div>';
+  phWrap.appendChild(el);
+  return el;
+});
+
+function openPhase(i) {
+  PHASES.forEach((p, j) => {
+    const el = phEls[j], on = j === i;
+    el.classList.toggle('open', on);
+    el.querySelector('.phsub').hidden = !on;
+    el.querySelector('.phbd').hidden = !on;
+  });
+  if (i < 0) return;
+  const bd = phEls[i].querySelector('.phbd');
+  for (const id of PHASES[i].secs) {
+    const hdr = document.querySelector('[data-fold="' + id + '"]'), body = document.getElementById(id);
+    if (!hdr || !body) { console.warn('[explorer] phase section missing:', id); continue; }
+    hdr.classList.add('shut'); body.classList.add('shut');
+    bd.appendChild(hdr); bd.appendChild(body);
+  }
+}
+phEls.forEach((el, i) => el.querySelector('.phhd').onclick = () =>
+  openPhase(el.classList.contains('open') ? -1 : i));
+// Default to Phase 4 (WS-2 Risk Alignment, the most complete workflow stage) open with
+// all its sections expanded, rather than the reference's fully-collapsed initial state --
+// a fresh load should show every control (search/filters/mode/ANALYSE) immediately, not
+// require two nested accordion clicks (phase, then each section) before anything is usable.
+openPhase(3);
+for (const id of PHASES[3].secs) {
+  const hdr = document.querySelector('[data-fold="' + id + '"]'), body = document.getElementById(id);
+  if (hdr && body) { hdr.classList.remove('shut'); body.classList.remove('shut'); }
+}
+</script>
+</body>
+</html>

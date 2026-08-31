@@ -1,0 +1,3413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OXOT Cyber Digital Twin — Master Campus Explorer (Babylon.js)</title>
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #070a0e;
+    --card: rgba(11, 18, 24, 0.95);
+    --border: rgba(255, 255, 255, 0.12);
+    --dutch-orange: #ee7623;
+    --dutch-orange-glow: rgba(238, 118, 35, 0.4);
+    --text-primary: #f0f6f3;
+    --text-secondary: rgba(242, 244, 247, 0.72);
+    --text-muted: #839992;
+    --font-serif: 'Newsreader', Georgia, serif;
+    --font-sans: 'Instrument Sans', 'Inter', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { margin: 0; height: 100%; overflow: hidden; font-family: var(--font-sans); background: var(--background); color: var(--text-primary); }
+  #canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; outline: none; }
+
+  /* Loading Splash Screen */
+  #loading {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 100;
+    background: #070a0e;
+    background-image: 
+      linear-gradient(rgba(238, 118, 35, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(238, 118, 35, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+  }
+  #loading.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  
+  .loader-box {
+    background: var(--card);
+    border: 1px solid rgba(238, 118, 35, 0.45);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 25px var(--dutch-orange-glow);
+    border-radius: 12px;
+    padding: 2.2rem 2.8rem;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(16px);
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-box::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 200%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--dutch-orange), transparent);
+    animation: scanline 2.2s linear infinite;
+  }
+  @keyframes scanline { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+
+  .loader-brand {
+    font-family: var(--font-sans); font-size: 1.25rem; font-weight: 800;
+    letter-spacing: 0.28em; color: #fff; margin-bottom: 0.75rem;
+  }
+  .loader-brand span { color: var(--dutch-orange); }
+  .loader-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400; color: #fff; margin-bottom: 0.35rem; }
+  .loader-subtitle { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 1.5rem; }
+
+  .loader-progress-track {
+    width: 100%; height: 6px; background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px; overflow: hidden; margin-bottom: 0.85rem;
+  }
+  .loader-progress-bar {
+    height: 100%; width: 0%; background: linear-gradient(90deg, #ee7623, #ff8736);
+    border-radius: 999px; box-shadow: 0 0 12px #ee7623; transition: width 0.15s ease;
+  }
+  .loader-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+  }
+
+  /* HUD Styling */
+  .hud {
+    position: absolute; z-index: 10; background: var(--card); color: var(--text-primary);
+    border-radius: 10px; border: 1px solid var(--border);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65); backdrop-filter: blur(16px);
+  }
+  #right, #threat, #cascade, #risk, #assume {
+    right: 14px; top: 14px; width: 330px; max-height: calc(100% - 28px);
+    display: flex; flex-direction: column;
+  }
+  #right[hidden], #threat[hidden], #cascade[hidden], #risk[hidden], #assume[hidden] { display: none; }
+  #right.collapsed .bd, #threat.collapsed .bd, #cascade.collapsed .bd,
+  #risk.collapsed .bd, #assume.collapsed .bd { display: none; }
+
+  .sub { font-size: 10.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 7px; }
+  .hd { padding: 12px 62px 10px 14px; border-bottom: 1px solid var(--border); flex: 0 0 auto; position: relative; }
+  .hudbtns { position: absolute; right: 9px; top: 9px; display: flex; gap: 4px; }
+  .iconbtn {
+    width: 22px; height: 22px; border: 1px solid var(--border); background: #1c1c1e; color: #B4B4B2;
+    border-radius: 5px; cursor: pointer; font: 700 12px Inter,sans-serif; line-height: 1;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .iconbtn:hover { background: #2c2c2e; color: #fff; }
+  .selname { font-size: 15px; font-weight: 700; color: #FBFAF8; line-height: 1.25; font-family: var(--font-sans); }
+  .selkind { font-size: 10.5px; color: var(--dutch-orange); font-weight: 600; margin-top: 3px; font-family: var(--font-mono); }
+  .zonetag { display: inline-flex; align-items: center; gap: 5px; font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 12px; margin-top: 6px; font-family: var(--font-mono); }
+  .bd { padding: 11px 14px 13px; overflow-y: auto; flex: 1 1 auto; }
+  .bd::-webkit-scrollbar { width: 6px; }
+  .bd::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+  .sec { font-size: 9.5px; font-weight: 700; letter-spacing: 1.6px; color: var(--dutch-orange); margin: 0 0 7px; font-family: var(--font-mono); }
+  .sec.mt { margin-top: 14px; }
+  .kv { display: flex; gap: 8px; font-size: 10.5px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .kv b { flex: 0 0 84px; color: var(--text-muted); font-weight: 600; }
+  .kv span { color: var(--text-primary); font-family: var(--font-mono); font-size: 10px; }
+  .empty { font-size: 10.5px; color: var(--text-muted); line-height: 1.5; }
+  .tstat { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 9px; }
+  .tstat div { background: #151516; border: 1px solid var(--border); border-radius: 6px; padding: 7px 9px; }
+  .tstat .tv { font-size: 17px; font-weight: 700; color: var(--dutch-orange); line-height: 1.1; font-family: var(--font-mono); }
+  .tstat .tk { font-size: 8.5px; color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+  .blockrow { padding: 5px 7px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 9.5px; line-height: 1.45; }
+  .blockrow b { color: #E8E8E6; font-weight: 600; }
+  .blockrow span { color: #2bd96a; font-weight: 700; }
+  .hop, .wv {
+    display: grid; grid-template-columns: 22px minmax(0,1fr) 40px; gap: 5px; align-items: center;
+    padding: 4px 7px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+  }
+  .hop:hover, .wv:hover { background: rgba(255,255,255,0.05); }
+  .hop .hn, .wv .wn { font-size: 8.5px; font-weight: 700; color: var(--dutch-orange); text-align: center; font-family: var(--font-mono); }
+  .wv .wn { color: #c8332a; }
+  .hop .hl, .wv .wl { font-size: 10.5px; color: #E8E8E6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hop .hz, .wv .wz { font-size: 9px; font-weight: 700; text-align: center; padding: 1px 3px; border-radius: 8px; font-family: var(--font-mono); }
+  .heldrow { padding: 4px 7px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 9.5px; color: #C8C8C6; }
+  .heldrow b { color: #2bd96a; font-weight: 700; }
+  .alerow {
+    display: grid; grid-template-columns: 34px minmax(0,1fr) 62px; gap: 6px; align-items: center;
+    padding: 5px 7px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .alerow .an2 { font-size: 9px; font-weight: 700; color: var(--dutch-orange); font-family: var(--font-mono); }
+  .alerow .al { font-size: 10px; color: #C8C8C6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .alerow .av { font-size: 10.5px; font-weight: 700; color: #E8E8E6; text-align: right; font-family: var(--font-mono); }
+  .ctrlrow {
+    display: grid; grid-template-columns: 16px minmax(0,1fr) 54px; gap: 6px; align-items: start;
+    padding: 6px 7px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+  }
+  .ctrlrow:hover { background: rgba(255,255,255,0.05); }
+  .ctrlrow input { margin: 2px 0 0; accent-color: var(--dutch-orange); }
+  .ctrlrow .cl { font-size: 10px; color: #E8E8E6; line-height: 1.35; }
+  .ctrlrow .cm { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+  .ctrlrow .cr { font-size: 10px; font-weight: 700; color: #2bd96a; text-align: right; font-family: var(--font-mono); }
+  .bigfig { background: #151516; border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; margin-bottom: 7px; }
+  .bigfig .bv { font-size: 19px; font-weight: 700; color: var(--dutch-orange); line-height: 1.1; font-family: var(--font-mono); }
+  .bigfig .bk { font-size: 8.5px; color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+  .ttl { font-size: 15px; font-weight: 700; color: #FBFAF8; line-height: 1.25; }
+
+  #stats { display: none !important; }
+
+  #tourCaption {
+    position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 20;
+    display: none; align-items: center; gap: 14px; background: var(--card);
+    border: 1px solid var(--dutch-orange); border-radius: 10px; padding: 10px 18px;
+    backdrop-filter: blur(8px); box-shadow: 0 0 30px rgba(0,0,0,.6);
+  }
+  #tourCaption .label { font: 600 13px/1.3 Inter,sans-serif; color: #fff; letter-spacing: .02em; }
+  #tourCaption .sub { font: 400 10px/1.3 Inter,sans-serif; color: var(--text-muted); }
+  #tourExitBtn {
+    padding: 6px 12px; border: 1px solid var(--dutch-orange); background: rgba(238,118,35,.15);
+    color: var(--dutch-orange); border-radius: 6px; font: 600 11px Inter,sans-serif; cursor: pointer;
+  }
+  #tourExitBtn:hover { background: rgba(238,118,35,.3); }
+
+  #left {
+    left: 14px; top: 14px; width: 310px; max-height: calc(100% - 28px); display: flex; flex-direction: column;
+    overflow-y: auto; padding: 11px 12px; z-index: 10;
+  }
+  .phaserow { display: flex; gap: 4px; flex-wrap: wrap; padding: 0 0 8px; margin: 0 0 9px; border-bottom: 1px solid var(--border); }
+  .phbtn { font: 600 9.5px Inter,sans-serif; letter-spacing: .02em; padding: 4px 7px; border-radius: 4px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: #B4B4B2; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
+  .phbtn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .phbtn.on { background: var(--dutch-orange); border-color: var(--dutch-orange); color: #070a0e; font-weight: 700; }
+  .phnote { font: 400 10px/1.45 Inter,sans-serif; color: var(--text-muted); margin: -3px 0 11px; }
+  .grp { font: 700 8.5px Inter,sans-serif; letter-spacing: .15em; color: var(--text-muted); padding: 0 0 5px; margin: 13px 0 4px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .grp:first-of-type { margin-top: 2px; }
+  .sec.off, .fold-body.off, .grp.off { display: none !important; }
+
+  #left::-webkit-scrollbar { width: 6px; }
+  #left::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+  .sec.fold {
+    display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+    padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 8px;
+  }
+  .sec.fold:hover { color: #F49A55; }
+  .sec.fold .caret { font-size: 8px; color: var(--text-muted); transition: transform .12s; width: 8px; display: inline-block; }
+  .sec.fold.shut .caret { transform: rotate(-90deg); }
+  .fold-body.shut { display: none; }
+  .fold-body { margin-bottom: 6px; }
+  .btnrow { display: flex; gap: 4px; flex-wrap: wrap; }
+  .toggle {
+    flex: 1; padding: 6px 4px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: #B4B4B2; border-radius: 5px;
+    cursor: pointer; font: 600 10px Inter,sans-serif; text-align: center; transition: all 0.15s ease;
+  }
+  .toggle:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .toggle.active { background: var(--dutch-orange); border-color: var(--dutch-orange); color: #070a0e; font-weight: 700; }
+  .vpbtn {
+    padding: 5px 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: #B4B4B2; border-radius: 5px;
+    cursor: pointer; font: 500 9.5px Inter,sans-serif; transition: all 0.15s ease;
+  }
+  .vpbtn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .vpbtn.active { background: var(--dutch-orange); border-color: var(--dutch-orange); color: #070a0e; font-weight: 700; }
+
+  .btn.cls {
+    border: 1px solid var(--border);
+    border-left: 3.5px solid var(--c, var(--border));
+    border-radius: 5px;
+    padding: 5px 8px;
+    background: rgba(255,255,255,0.04);
+    color: #B4B4B2;
+    cursor: pointer;
+    font: 600 10px Inter, sans-serif;
+    transition: all 0.15s ease;
+  }
+  .btn.cls:hover { background: rgba(255,255,255,0.09); color: #fff; }
+  .btn.cls.on { background: var(--c, var(--dutch-orange)); border-color: var(--c, var(--dutch-orange)); color: var(--fg, #070a0e); font-weight: 700; }
+  .btn.cls.on:hover { background: var(--c2, var(--dutch-orange)); border-color: var(--c2, var(--dutch-orange)); color: var(--fg, #070a0e); }
+
+  #searchInput {
+    width: 100%; box-sizing: border-box; padding: 6px 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 5px; color: #E8E8E6; font: 400 11px Inter,sans-serif; outline: none;
+  }
+  #searchInput:focus { border-color: var(--dutch-orange); }
+  #searchResults { margin-top: 6px; max-height: 180px; overflow-y: auto; }
+  .hit { padding: 5px 6px; border-radius: 4px; cursor: pointer; font-size: 10.5px; color: #E8E8E6; }
+  .hit:hover { background: rgba(238,118,35,0.15); color: #fff; }
+  .hit .hn { color: var(--text-muted); font-size: 9px; font-family: var(--font-mono); }
+
+  .chip {
+    padding: 3px 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: #B4B4B2; border-radius: 11px;
+    cursor: pointer; font: 600 9px Inter,sans-serif; white-space: nowrap; transition: all 0.15s ease;
+  }
+  .chip.on { color: #070a0e; }
+  .chip.off { opacity: .45; background: rgba(255,255,255,0.02) !important; color: var(--text-muted) !important; }
+  .chiprow { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+
+  .grouptabs { display: flex; gap: 4px; margin-bottom: 6px; }
+  .asset-row {
+    padding: 4px 6px; border-radius: 4px; cursor: pointer; font-size: 10px; color: #E8E8E6;
+    display: flex; justify-content: space-between; gap: 6px;
+  }
+  .asset-row:hover { background: rgba(255,255,255,0.06); }
+  .asset-row .an { color: var(--text-muted); font-size: 9px; flex: 0 0 auto; font-family: var(--font-mono); }
+  .grouplist { max-height: 220px; overflow-y: auto; }
+  .tracerow { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .tracerow .vpbtn { flex: 1 1 auto; min-width: 55px; text-align: center; }
+  .tracerow .vpbtn.active { background: var(--dutch-orange) !important; border-color: var(--dutch-orange) !important; color: #070a0e !important; font-weight: 700; }
+  #traceStats { margin-top: 6px; padding: 6px 8px; border-radius: 4px; background: rgba(238,118,35,0.08); border: 1px solid rgba(238,118,35,0.25); font-size: 10px; line-height: 1.4; color: #E8E8E6; }
+  #traceStats b { color: var(--dutch-orange); }
+
+  #tooltip {
+    position: absolute; z-index: 20; pointer-events: none; background: var(--card);
+    border: 1px solid var(--dutch-orange); border-radius: 6px; padding: 5px 9px; font: 500 10.5px var(--font-mono);
+    color: #fff; display: none; max-width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  }
+
+  #stratumBadge {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    background: rgba(14, 18, 26, 0.88); backdrop-filter: blur(10px);
+    border: 1px solid var(--dutch-orange); border-radius: 20px;
+    padding: 6px 16px; font: 600 11px Inter, sans-serif; color: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 40; display: none;
+    pointer-events: auto; cursor: pointer; transition: all 0.2s ease;
+  }
+  #stratumBadge:hover { background: rgba(238, 118, 35, 0.2); }
+
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<!-- Loading Splash Screen -->
+<div id="loading">
+  <div class="loader-box">
+    <div class="loader-brand">O<span>X</span>OT</div>
+    <div class="loader-title">Cyber Digital Twin · Master Campus Scene</div>
+    <div class="loader-subtitle" id="loader-status-text">Ingesting 4,398 assets & 1,155 conduits...</div>
+    <div class="loader-progress-track">
+      <div class="loader-progress-bar" id="loader-bar"></div>
+    </div>
+    <div class="loader-footer">
+      <span id="loader-pct-text">0%</span>
+      <span>PHYSICS MODEL LEVEL 1</span>
+    </div>
+  </div>
+</div>
+
+<!-- Tour Caption -->
+<div id="tourCaption">
+  <div><div class="label" id="tourCaptionLabel"></div><div class="sub" id="tourCaptionSub"></div></div>
+  <button id="tourExitBtn">■ Exit tour</button>
+</div>
+
+<!-- Menu Toggle Button (for Embed / Hero / Clean views) -->
+<button id="menuToggleBtn" style="position:absolute; top:14px; left:14px; z-index:25; background:rgba(7,10,14,0.85); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:4px; color:#B4B4B2; padding:5px 10px; font:600 11px Inter,sans-serif; cursor:pointer; display:none; transition:all 0.15s ease;">☰ Controls</button>
+
+<!-- 4-Phase Switchboard Container -->
+<!-- Left Controls Subsystem Template Host -->
+<div id="left" class="hud">
+  <button class="iconbtn" id="leftHideBtn" title="Hide menu" style="position:absolute; top:8px; right:8px; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; z-index:2;">✕</button>
+  <div class="phaserow" id="phases" style="padding-right:20px;">
+    <button class="phbtn on" data-k="all">All</button>
+    <button class="phbtn" data-k="1">1 Build</button>
+    <button class="phbtn" data-k="2">2 WS-1</button>
+    <button class="phbtn" data-k="3">3 Detail</button>
+    <button class="phbtn" data-k="4">4 WS-2</button>
+  </div>
+  <div class="phnote" id="phnote">Every control. Filter to a phase to see only what that stage uses.</div>
+
+  <div class="grp" data-grp="nav">NAVIGATE</div>
+  <div class="sec fold shut" data-fold="fView"><span class="caret">▼</span>VIEWPOINT</div>
+  <div class="fold-body shut" id="fView">
+    <div class="btnrow" id="viewpointBtns">
+      <button class="vpbtn" data-vp="campus">Full campus</button>
+      <button class="vpbtn" data-vp="hall">Data hall</button>
+      <button class="vpbtn" data-vp="subrack" style="color:var(--dutch-orange);font-weight:700;">⚡ Sub-rack telemetry</button>
+      <button class="vpbtn" data-vp="rack">GPU rack close-up</button>
+      <button class="vpbtn" data-vp="coreit">Core IT room</button>
+      <button class="vpbtn" data-vp="electrical">Electrical yard</button>
+      <button class="vpbtn" data-vp="power">Power room</button>
+      <button class="vpbtn" data-vp="cooling">Central facility</button>
+      <button class="vpbtn" data-vp="mmr">MMR / NOC</button>
+      <button class="vpbtn" data-vp="reception">Reception &amp; security</button>
+      <button class="vpbtn" data-vp="dock">Loading dock</button>
+    </div>
+    <div class="btnrow mt">
+      <button class="vpbtn" id="tourBtn">▶ Start tour</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fMode"><span class="caret">▼</span>VIEW</div>
+  <div class="fold-body" id="fMode">
+    <div class="btnrow" id="viewModeBtns">
+      <button class="toggle active" data-mode="graph">Graph</button>
+      <button class="toggle" data-mode="physical">Physical</button>
+      <button class="toggle" data-mode="both">Both</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt" data-fold="fSearch"><span class="caret">▼</span>SEARCH</div>
+  <div class="fold-body" id="fSearch">
+    <input id="searchInput" placeholder="Asset or mesh name…" autocomplete="off">
+    <div id="searchResults"></div>
+  </div>
+
+  <div class="grp" data-grp="filter">FILTER &amp; INVENTORY</div>
+  <div class="sec fold mt shut" data-fold="fMarker"><span class="caret">▼</span>MARKER COLOUR</div>
+  <div class="fold-body shut" id="fMarker">
+    <div class="btnrow" id="colmode">
+      <button class="toggle active" data-c="system">System</button>
+      <button class="toggle" data-c="zone">IEC 62443 zone</button>
+      <button class="toggle" data-c="cell">Cell</button>
+    </div>
+    <div class="sub mt">Node markers — hidden by default to eliminate visual clutter. Threat walk, cascade failure, and selection always illuminate the real physical equipment meshes and conduits directly.</div>
+    <div class="btnrow" id="nodeMarkerMode">
+      <button class="toggle active" data-k="hide">Hide</button>
+      <button class="toggle" data-k="show">Show</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fSvc"><span class="caret">▼</span>SERVICE</div>
+  <div class="fold-body shut" id="fSvc">
+    <div class="chiprow" id="serviceChips"></div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fList"><span class="caret">▼</span>ASSET LIST</div>
+  <div class="fold-body shut" id="fList">
+    <div class="grouptabs" id="assetTabs">
+      <button class="vpbtn active" data-tab="system">By System</button>
+      <button class="vpbtn" data-tab="row">By Row / Rack</button>
+      <button class="vpbtn" data-tab="cell">By Cell &amp; Location</button>
+    </div>
+    <div id="assetGroupPanels" style="margin-top:6px;">
+      <div class="btnrow group-panel" id="panelSystems" style="gap:4px;"></div>
+      <div class="btnrow group-panel" id="panelRows" style="gap:4px; display:none;"></div>
+      <div class="btnrow group-panel" id="panelCells" style="gap:4px; display:none;"></div>
+    </div>
+    <div class="btnrow" id="listAll" style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.06); padding-top:6px;">
+      <button class="btn cls" id="listAllBtn" title="Highlight every asset in the model">All assets (4,405)</button>
+      <button class="btn cls" id="listClearBtn" title="Clear every active group highlight">Clear</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fProto"><span class="caret">▼</span>PROTOCOL</div>
+  <div class="fold-body shut" id="fProto">
+    <div class="chiprow" id="protocolChips"></div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fZone"><span class="caret">▼</span>IEC 62443 ZONE</div>
+  <div class="fold-body shut" id="fZone">
+    <div class="sub">Filter assets and conduits by cybersecurity trust zone (§5.4):</div>
+    <div class="btnrow" id="listZones" style="gap:4px; margin-top:4px;"></div>
+    <div class="btnrow" style="margin-top:6px; gap:4px;">
+      <button class="btn cls" id="zoneAllBtn">All zones</button>
+      <button class="btn cls" id="zoneClearBtn">Clear</button>
+      <button class="btn cls" id="zcrOpen" style="margin-left:auto;">ZCR diagram</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fCond"><span class="caret">▼</span>CONDUITS &amp; FLOWS</div>
+  <div class="fold-body shut" id="fCond">
+    <div class="sub">Dynamic animated flow pulses traveling along all 13,737 conduits in real time.</div>
+    <div class="btnrow" id="flowModeBtns">
+      <button class="toggle active" data-flow="on">▶ Active flows</button>
+      <button class="toggle" data-flow="off">■ Pause flows</button>
+    </div>
+    <div class="btnrow mt" id="flowSpeedBtns">
+      <button class="vpbtn active" data-spd="1.0">1.0x</button>
+      <button class="vpbtn" data-spd="2.0">2.0x fast</button>
+      <button class="vpbtn" data-spd="0.5">0.5x slow</button>
+    </div>
+    <div class="sub mt">Conduit criticality filter (§5.6):</div>
+    <div class="btnrow" id="critmode">
+      <button class="toggle active" data-k="all">All</button>
+      <button class="toggle" data-k="crit">Critical only</button>
+    </div>
+    <div class="sub mt">Rack-internal detail (~3,929 components, ~12,600 conduits):</div>
+    <div class="btnrow" id="rackDetailMode">
+      <button class="toggle active" data-k="hide">Hide</button>
+      <button class="toggle" data-k="show">Show</button>
+    </div>
+    <div class="sub mt">Overhead cable ladder trays &amp; pipe hangers (BIM Containment):</div>
+    <div class="btnrow" id="containmentModeBtns">
+      <button class="toggle active" data-cont="show">Show BIM trays</button>
+      <button class="toggle" data-cont="hide">Hide</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fStrata"><span class="caret">▼</span>CONDUIT STRATA (ALTITUDE LAYERS)</div>
+  <div class="fold-body shut" id="fStrata">
+    <div class="sub">Isolate vertical infrastructure strata across campus height bands:</div>
+    <div class="btnrow" id="strataBtns">
+      <button class="vpbtn active" data-stratum="all">🌐 All Strata</button>
+      <button class="vpbtn" data-stratum="power">⚡ Power (3.99m)</button>
+      <button class="vpbtn" data-stratum="cooling">❄️ Liquid Cooling (3.45m)</button>
+      <button class="vpbtn" data-stratum="data">🌐 Data Fabric (3.89m)</button>
+      <button class="vpbtn" data-stratum="control">🎛️ OT Controls (3.80m)</button>
+      <button class="vpbtn" data-stratum="fire">🔥 Safety &amp; Fire (4.24m)</button>
+      <button class="vpbtn" data-stratum="subfloor">⛽ Sub-Floor / Grade (0.40m)</button>
+    </div>
+  </div>
+
+  <div class="grp" data-grp="analyse">ANALYSE</div>
+  <div class="sec fold mt shut" data-fold="fThreat"><span class="caret">▼</span>THREAT PATH</div>
+  <div class="fold-body shut" id="fThreat">
+    <div class="sub">Pick an entry point. Walks forward over routable protocols only — hardwired, analogue, serial and one-way links stop the path.</div>
+    <div class="btnrow" id="entryPoints"></div>
+    <div class="btnrow" style="margin-top:5px">
+      <button class="vpbtn" id="threatTourBtn" style="color:var(--dutch-orange);font-weight:700;">⚡ Threat Path Tour</button>
+      <button class="vpbtn" id="threatPlay">▶ Replay</button>
+      <button class="vpbtn" id="threatClear">Clear</button>
+    </div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fCascade"><span class="caret">▼</span>CASCADING FAILURE</div>
+  <div class="fold-body shut" id="fCascade">
+    <div class="sub">Fail an asset and propagate the loss. Redundancy is inferred from feed count — two or more feeds of a service hold, one does not.</div>
+    <div class="btnrow" id="cascadeSeeds"></div>
+    <div class="sec mt" style="margin-top:9px">FROM HAZARD LOG</div>
+    <div class="btnrow" id="hazardSeeds"></div>
+    <div class="btnrow" style="margin-top:5px">
+      <button class="vpbtn" id="cascadeSel">Fail selected asset</button>
+      <button class="vpbtn" id="cascadePlay">▶ Replay</button>
+      <button class="vpbtn" id="cascadeClear">Clear</button>
+    </div>
+  </div>
+
+  <div class="grp" data-grp="gov">GOVERNANCE &amp; AUDIT</div>
+  <div class="sec fold mt shut" data-fold="fRisk"><span class="caret">▼</span>RISK PORTFOLIO</div>
+  <div class="fold-body shut" id="fRisk">
+    <div class="sub">Authored ALE by node, and the controls that reduce it. Tick controls to see residual exposure and cumulative ROSI.</div>
+    <div class="btnrow"><button class="vpbtn" id="riskOpen">Open portfolio</button></div>
+  </div>
+
+  <div class="sec fold mt shut" data-fold="fAssume"><span class="caret">▼</span>ASSUMPTIONS &amp; PROVENANCE</div>
+  <div class="fold-body shut" id="fAssume">
+    <div class="sub">What in this model is sourced, what is inferred, and what is still unconfirmed.</div>
+    <div class="btnrow"><button class="vpbtn" id="assumeOpen">Open</button></div>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+<div id="stratumBadge" onclick="setStratumFilter('all')"></div>
+
+<!-- Right Slide-Over Drawers -->
+<div id="right" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="rightCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="rightClose" title="Close (Esc)">×</button>
+    </div>
+    <div class="selname" id="selName">Nothing selected</div>
+    <div class="selkind" id="selKind">Click a component in the model</div>
+    <div class="zonetag" id="zoneTag" style="display:none"></div>
+  </div>
+  <div class="bd" id="selBody">
+    <div class="empty">Click any component in the campus model to see its identity, zone and mesh binding.</div>
+  </div>
+</div>
+
+<div id="threat" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="threatCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="threatClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="threatTitle">Threat path</div>
+    <div class="selkind" id="threatSummary"></div>
+  </div>
+  <div class="bd" id="threatBody"></div>
+</div>
+
+<div id="cascade" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="cascadeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="cascadeClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="cascadeTitle">Cascading failure</div>
+    <div class="selkind" id="cascadeSummary"></div>
+  </div>
+  <div class="bd" id="cascadeBody"></div>
+</div>
+
+<div id="risk" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="riskCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="riskClose" title="Close">×</button>
+    </div>
+    <div class="selname">Risk portfolio</div>
+    <div class="selkind" id="riskSummary"></div>
+  </div>
+  <div class="bd" id="riskBody"></div>
+</div>
+
+<div id="assume" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="assumeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="assumeClose" title="Close">×</button>
+    </div>
+    <div class="selname">Assumptions &amp; provenance</div>
+    <div class="selkind" id="assumeSummary"></div>
+  </div>
+  <div class="bd" id="assumeBody"></div>
+</div>
+
+<script type="module">
+// ==============================================================================
+// 1. DESIGN TOKENS & CANONICAL TAXONOMY
+// ==============================================================================
+const SERVICES = {
+  water:       { label: 'Water / coolant',   color: 0x1f6fd0 },
+  condenser:   { label: 'Condenser water',   color: 0x2e8b57 },
+  air:         { label: 'Air / HVAC',        color: 0x9aa4ac },
+  electricity: { label: 'Electricity',       color: 0xd8b23a },
+  fuel:        { label: 'Fuel',              color: 0xd8c23a },
+  data:        { label: 'Data (IT)',         color: 0x35c2c9 },
+  control:     { label: 'Control (OT)',      color: 0x8a4fd0 },
+  fire:        { label: 'Fire & life safety', color: 0xc8332a },
+  security:    { label: 'Physical security', color: 0xe07a26 },
+};
+
+const PROTOCOLS = {
+  'Ethernet/TCP-IP':  { color: 0x35c2c9, layer: 'IT' },
+  'BGP':              { color: 0x2aa9b5, layer: 'IT' },
+  'SNMP':             { color: 0x59b8c9, layer: 'IT' },
+  'CAPWAP':           { color: 0x46a8d0, layer: 'IT' },
+  'RS-232 console':   { color: 0x7f8f9a, layer: 'IT' },
+  'OPC UA':           { color: 0x9b6ee0, layer: 'OT' },
+  'Modbus TCP':       { color: 0x8a4fd0, layer: 'OT' },
+  'Modbus RTU':       { color: 0x6f3ab0, layer: 'OT' },
+  'PROFINET':         { color: 0xb04fd0, layer: 'OT' },
+  'BACnet/IP':        { color: 0x5f6fd0, layer: 'OT' },
+  'BACnet MS/TP':     { color: 0x4a58ad, layer: 'OT' },
+  'IEC 61850 MMS':    { color: 0xd05fb0, layer: 'OT' },
+  'DNP3':             { color: 0xa04f8a, layer: 'OT' },
+  'CAN bus':          { color: 0x8a6ad0, layer: 'OT' },
+  'OSDP RS-485':      { color: 0xe07a26, layer: 'OT' },
+  'Dry contact':      { color: 0x9aa4ac, layer: 'OT' },
+  '4-20 mA analog':   { color: 0xb0a48a, layer: 'OT' },
+  'Physical flow':    { color: 0x7f8f9a, layer: 'Process' },
+  'AMD Infinity Fabric xGMI':        { color: 0x2ad0c9, layer: 'IT' },
+  'UALink over Ethernet (UALoE) / UEC 1.0': { color: 0x1fa8a0, layer: 'IT' },
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS': { color: 0x9b6ee0, layer: 'OT' },
+  'NVMe-oF (RDMA/TCP)':              { color: 0x46c2b0, layer: 'IT' },
+  'Ethernet/TCP-IP (RoCEv2-capable)': { color: 0x35c2c9, layer: 'IT' },
+};
+
+const ZONES = {
+  Z0: { label: 'Z0 / Zone 4 — Enterprise IT',        purdue: 'L4-L5',        slt: 'SL-T 2',   color: 0x9ba1a8 },
+  Z1: { label: 'Z1 / Zone 3 — DCIM / IDMZ',          purdue: 'L3-L3.5',      slt: 'SL-T 2-3', color: 0x35c2c9 },
+  Z2: { label: 'Z2 / Zone 2 — Supervisory control',  purdue: 'L2',           slt: 'SL-T 2-3', color: 0x8a4fd0 },
+  Z3: { label: 'Z3 / Zone 1 — Field device',         purdue: 'L0-L1',        slt: 'SL-T 1-2', color: 0xd8b23a },
+  Z4: { label: 'Z4 — Safety instrumented (SIS)',     purdue: 'isolated SIS', slt: 'SL-T 2-3', color: 0xc8332a },
+  Z5: { label: 'Z5 — Out-of-band / jump',            purdue: 'DMZ segment',  slt: 'SL-T 3',   color: 0xe07a26 },
+};
+
+const hex = n => '#' + n.toString(16).padStart(6, '0');
+const SYSCOL = { PWR:0xd8b23a, CHW:0x1f6fd0, AIR:0x9aa4ac, DATA:0x35c2c9, OT:0x8a4fd0,
+                 BMS:0xe8e8e2, FA:0xc8332a, SEC:0xe07a26, IT:0x9ba1a8 };
+const colorOf = n => BABYLON.Color3.FromHexString(hex(n));
+
+// ==============================================================================
+// 2. ENGINE & SCENE SETUP
+// ==============================================================================
+const canvas = document.getElementById('canvas');
+const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+const scene = new BABYLON.Scene(engine);
+
+const SKY_ZENITH = new BABYLON.Color3(0x18 / 255, 0x24 / 255, 0x38 / 255);
+const SKY_HORIZON = new BABYLON.Color3(0x07 / 255, 0x0a / 255, 0x0e / 255);
+scene.clearColor = new BABYLON.Color4(SKY_HORIZON.r, SKY_HORIZON.g, SKY_HORIZON.b, 1);
+
+const skyTex = new BABYLON.DynamicTexture('skyGradient', { width: 4, height: 512 }, scene, false);
+{
+  const ctx = skyTex.getContext();
+  const rgb = c => `rgb(${(c.r * 255) | 0},${(c.g * 255) | 0},${(c.b * 255) | 0})`;
+  const grad = ctx.createLinearGradient(0, 0, 0, 512);
+  grad.addColorStop(0, rgb(SKY_ZENITH));
+  grad.addColorStop(0.6, rgb(SKY_HORIZON));
+  grad.addColorStop(1, rgb(SKY_HORIZON));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 4, 512);
+  skyTex.update();
+}
+const skyMat = new BABYLON.StandardMaterial('skyMat', scene);
+skyMat.emissiveTexture = skyTex;
+skyMat.diffuseColor = BABYLON.Color3.Black();
+skyMat.specularColor = BABYLON.Color3.Black();
+skyMat.disableLighting = true;
+skyMat.backFaceCulling = false;
+
+const proceduralSky = BABYLON.MeshBuilder.CreateSphere('proceduralSky',
+  { diameter: 1200, segments: 16, sideOrientation: BABYLON.Mesh.BACKSIDE }, scene);
+proceduralSky.material = skyMat;
+proceduralSky.infiniteDistance = true;
+proceduralSky.isPickable = false;
+proceduralSky.applyFog = false;
+
+scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+scene.fogColor = SKY_HORIZON;
+scene.fogStart = 160;
+scene.fogEnd = 500;
+
+const camera = new BABYLON.ArcRotateCamera('cam', -Math.PI / 2.4, Math.PI / 2.6, 30,
+  BABYLON.Vector3.Zero(), scene);
+camera.attachControl(canvas, true);
+camera.lowerRadiusLimit = 0.3;
+camera.wheelDeltaPercentage = 0.01;
+camera.panningSensibility = 1200;
+camera.minZ = 0.01;
+camera.maxZ = 2000;
+
+scene.createDefaultLight = false;
+new BABYLON.HemisphericLight('hemi', new BABYLON.Vector3(0, 1, 0), scene).intensity = 0.95;
+const key = new BABYLON.DirectionalLight('key', new BABYLON.Vector3(-0.5, -1, -0.6), scene);
+key.intensity = 1.6;
+const fill = new BABYLON.DirectionalLight('fill', new BABYLON.Vector3(0.7, -0.3, 0.5), scene);
+fill.intensity = 0.4;
+
+engine.runRenderLoop(() => scene.render());
+window.addEventListener('resize', () => engine.resize());
+window.scene = scene;
+window.camera = camera;
+window.engine = engine;
+
+// ==============================================================================
+// 3. LOAD DATA & ASSETS
+// ==============================================================================
+const statsEl = document.getElementById('stats');
+const loadingEl = document.getElementById('loading');
+const loaderBar = document.getElementById('loader-bar');
+const loaderStatusText = document.getElementById('loader-status-text');
+const loaderPctText = document.getElementById('loader-pct-text');
+
+function updateLoadProgress(pct, status) {
+  if (loaderBar) loaderBar.style.width = pct + '%';
+  if (loaderPctText) loaderPctText.textContent = Math.round(pct) + '%';
+  if (status && loaderStatusText) loaderStatusText.textContent = status;
+}
+
+let simulatedPct = 10;
+const simTimer = setInterval(() => {
+  if (simulatedPct < 85) {
+    simulatedPct += Math.random() * 8;
+    updateLoadProgress(simulatedPct, simulatedPct > 50 ? 'Binding Topology & Graph Adjacencies...' : 'Streaming 13.9 MB GLB Mesh...');
+  }
+}, 120);
+
+const [importResult, facility, hall, routesData, positionsData, HZ, rack, rackPositionsData, rackRoutesData] = await Promise.all([
+  BABYLON.SceneLoader.ImportMeshAsync(null, '../', 'hyperscale_campus.glb', scene, (evt) => {
+    if (evt.lengthComputable && evt.total > 0) {
+      const realPct = (evt.loaded / evt.total) * 90;
+      updateLoadProgress(realPct, 'Ingesting Geometry (' + (evt.loaded / (1024*1024)).toFixed(1) + ' / ' + (evt.total / (1024*1024)).toFixed(1) + ' MB)...');
+    }
+  }),
+  fetch('../graph/facility-graph.json').then(r => r.json()),
+  fetch('../graph/hall-graph.json').then(r => r.json()),
+  fetch('../graph/routes.json').then(r => r.json()),
+  fetch('../graph/positions.json').then(r => r.json()),
+  fetch('../graph/hazard-log.json').then(r => r.json()),
+  fetch('../graph/rack-graph.json').then(r => r.json()),
+  fetch('../graph/rack-positions.json').then(r => r.json()),
+  fetch('../graph/rack-routes.json').then(r => r.json()),
+]);
+
+clearInterval(simTimer);
+updateLoadProgress(100, 'Compiling 1,155 Conduits & Analysis Engines...');
+setTimeout(() => { loadingEl.classList.add('hidden'); }, 300);
+
+const root = importResult.meshes.find(m => !m.parent) || importResult.meshes[0];
+
+// Loading Dock Geometry (Procedural South Yard Addition)
+{
+  const invRoot = BABYLON.Matrix.Invert(root.getWorldMatrix());
+  const worldToLocal = (x, y, z) => BABYLON.Vector3.TransformCoordinates(new BABYLON.Vector3(x, y, z), invRoot);
+
+  const dockBodyMat = new BABYLON.StandardMaterial('dock_body', scene);
+  dockBodyMat.diffuseColor = new BABYLON.Color3(0.62, 0.60, 0.56);
+  const dockDoorMat = new BABYLON.StandardMaterial('dock_door', scene);
+  dockDoorMat.diffuseColor = new BABYLON.Color3(0.18, 0.19, 0.21);
+  const dockCanopyMat = new BABYLON.StandardMaterial('dock_canopy', scene);
+  dockCanopyMat.diffuseColor = new BABYLON.Color3(0.42, 0.44, 0.48);
+
+  const dockRoot = new BABYLON.TransformNode('PLACEHOLDER_loading_dock', scene);
+  dockRoot.parent = root;
+  dockRoot.position = worldToLocal(-2, 0, -14);
+
+  const dockBody = BABYLON.MeshBuilder.CreateBox('dock_body_mesh', { width: 8, height: 4, depth: 5 }, scene);
+  dockBody.material = dockBodyMat;
+  dockBody.position.y = 2;
+  dockBody.parent = dockRoot;
+
+  const dockCanopy = BABYLON.MeshBuilder.CreateBox('dock_canopy_mesh', { width: 8.6, height: 0.25, depth: 2.2 }, scene);
+  dockCanopy.material = dockCanopyMat;
+  dockCanopy.position.set(0, 3.6, 3.1);
+  dockCanopy.parent = dockRoot;
+
+  for (let i = 0; i < 3; i++) {
+    const dockDoor = BABYLON.MeshBuilder.CreateBox(`dock_door_mesh_${i}`, { width: 2, height: 2.6, depth: 0.15 }, scene);
+    dockDoor.material = dockDoorMat;
+    dockDoor.position.set(-2.5 + i * 2.5, 1.5, 2.52);
+    dockDoor.parent = dockRoot;
+  }
+}
+
+// ===== 3D PROCEDURAL CLOUD FOR INTERNET / CLOUD BOUNDARY =====
+{
+  // Hide any existing rectangular box imported from GLB for DATA_internet_cloud
+  for (const m of scene.meshes) {
+    if (m.name && (m.name.includes('DATA_internet_cloud') || m.name.includes('DATA_internet_cloud_label'))) {
+      m.setEnabled(false);
+      m.visibility = 0;
+    }
+  }
+
+  const cloudRoot = new BABYLON.TransformNode('DATA_internet_cloud_root', scene);
+  cloudRoot.position = new BABYLON.Vector3(0, 9.6, -26);
+
+  const cloudMat = new BABYLON.StandardMaterial('cloud_glass_mat', scene);
+  cloudMat.diffuseColor = new BABYLON.Color3(0.92, 0.96, 1.0);
+  cloudMat.emissiveColor = new BABYLON.Color3(0.18, 0.38, 0.62);
+  cloudMat.specularColor = new BABYLON.Color3(0.6, 0.8, 1.0);
+  cloudMat.alpha = 0.86;
+  cloudMat.backFaceCulling = false;
+
+  const puffs = [
+    { r: 2.0, x: 0, y: 0, z: 0, sx: 1.35, sy: 0.85, sz: 1.1 },
+    { r: 1.5, x: -2.0, y: -0.2, z: 0.1, sx: 1.15, sy: 0.8, sz: 0.95 },
+    { r: 1.6, x: 2.0, y: -0.15, z: -0.1, sx: 1.15, sy: 0.8, sz: 0.95 },
+    { r: 1.1, x: -3.2, y: -0.45, z: 0.2, sx: 1.0, sy: 0.65, sz: 0.85 },
+    { r: 1.15, x: 3.2, y: -0.4, z: 0.1, sx: 1.0, sy: 0.7, sz: 0.85 },
+    { r: 1.4, x: 0.5, y: 1.0, z: -0.1, sx: 1.15, sy: 0.85, sz: 0.9 },
+    { r: 1.1, x: -1.2, y: 0.8, z: 0.15, sx: 1.05, sy: 0.8, sz: 0.85 },
+    { r: 1.05, x: 1.4, y: 0.7, z: 0.2, sx: 1.0, sy: 0.75, sz: 0.85 },
+    { r: 1.3, x: 0, y: -0.6, z: 0, sx: 2.2, sy: 0.45, sz: 1.2 }
+  ];
+
+  const puffMeshes = [];
+  puffs.forEach((p, idx) => {
+    const puff = BABYLON.MeshBuilder.CreateSphere(`cloud_puff_${idx}`, { diameter: p.r * 2, segments: 16 }, scene);
+    puff.scaling.set(p.sx, p.sy, p.sz);
+    puff.position.set(p.x, p.y, p.z);
+    puffMeshes.push(puff);
+  });
+
+  const mergedCloud = BABYLON.Mesh.MergeMeshes(puffMeshes, true, true, undefined, false, true);
+  if (mergedCloud) {
+    mergedCloud.name = 'DATA_internet_cloud';
+    mergedCloud.parent = cloudRoot;
+    mergedCloud.material = cloudMat;
+    mergedCloud.metadata = { assetId: 'internet', graphNode: 'internet' };
+
+    // Floating 3D Badge Label
+    const labelPlane = BABYLON.MeshBuilder.CreatePlane('cloud_label_plane', { width: 3.4, height: 0.85 }, scene);
+    labelPlane.parent = cloudRoot;
+    labelPlane.position.set(0, -1.3, 1.4);
+    
+    const labelDT = new BABYLON.DynamicTexture('cloud_label_dt', { width: 512, height: 128 }, scene, true);
+    labelDT.hasAlpha = true;
+    const ctx = labelDT.getContext();
+    ctx.clearRect(0, 0, 512, 128);
+    // Draw pill background
+    ctx.fillStyle = 'rgba(7, 10, 14, 0.88)';
+    ctx.strokeStyle = '#ee7623';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.roundRect(12, 12, 488, 104, 26);
+    ctx.fill();
+    ctx.stroke();
+    // Text
+    ctx.fillStyle = '#f0f6f3';
+    ctx.font = 'bold 34px "Instrument Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('☁ INTERNET / CLOUD', 256, 64);
+    labelDT.update();
+
+    const labelMat = new BABYLON.StandardMaterial('cloud_label_mat', scene);
+    labelMat.diffuseTexture = labelDT;
+    labelMat.emissiveTexture = labelDT;
+    labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    labelMat.backFaceCulling = false;
+    labelPlane.material = labelMat;
+
+    // Subtle ambient breathing float animation
+    let cloudTime = 0;
+    scene.onBeforeRenderObservable.add(() => {
+      cloudTime += engine.getDeltaTime() * 0.0012;
+      cloudRoot.position.y = 9.6 + Math.sin(cloudTime) * 0.25;
+    });
+  }
+}
+
+for (const m of scene.materials) {
+  m.alpha = 1;
+  if (m.transparencyMode !== undefined) m.transparencyMode = BABYLON.Material.MATERIAL_OPAQUE;
+}
+
+const matBase = new Map();
+for (const m of scene.materials) matBase.set(m, { alpha: m.alpha, transparencyMode: m.transparencyMode });
+
+const byName = new Map();
+for (const n of scene.transformNodes.concat(scene.meshes)) if (n.name) byName.set(n.name, n);
+
+const assets = new Map();
+let bound = 0, unbound = 0;
+for (const a of [...facility.assets, ...hall.assets]) {
+  if (assets.has(a.id)) continue;
+  assets.set(a.id, a);
+  const node = byName.get(a.mesh);
+  if (node) {
+    node.metadata = { ...(node.metadata || {}), assetId: a.id };
+    a._node = node;
+    bound++;
+  } else {
+    unbound++;
+  }
+}
+
+function assetOf(mesh) {
+  let n = mesh;
+  while (n) {
+    if (n.metadata?.assetId) return assets.get(n.metadata.assetId);
+    if (n.metadata?.graphNode) return assets.get(n.metadata.graphNode);
+    n = n.parent;
+  }
+  return null;
+}
+
+const edges = [];
+for (const c of [...facility.connections, ...hall.connections]) {
+  if (!assets.has(c.from) || !assets.has(c.to)) continue;
+  edges.push({ ...c, critical: c.critical_conduit, oneway: c.one_way, cross: c.zone_crossing, label: c.description });
+}
+
+// Expand rack-graph.json template across all 96 racks
+const REPRESENTATIVE_ONLY = new Set(['r13', 'r14', 'r15', 'r16', 'r19', 'r22', 'r23']);
+let rackExpandedEdges = 0, rackExpandSkipped = 0, rackExpandedAssets = 0;
+if (rack && Array.isArray(rack.components) && Array.isArray(rack.connections)) {
+  const rackInstances = hall.assets.filter(a => a.template === 'rack_gpu_48u');
+  for (const inst of rackInstances) {
+    const ownEdges = edges.filter(e => e.from === inst.id || e.to === inst.id);
+    const findExternal = matchFn => {
+      const hit = ownEdges.find(matchFn);
+      return hit ? (hit.from === inst.id ? hit.to : hit.from) : null;
+    };
+    const externalMap = {
+      _external_power_in:       findExternal(e => e.service === 'electricity'),
+      _external_chw_supply:     findExternal(e => e.service === 'water' && e.to === inst.id),
+      _external_chw_return:     findExternal(e => e.service === 'water' && e.from === inst.id),
+      _external_fabric_uplink:  findExternal(e => e.service === 'data' && (/_eor_sw/.test(e.from) || /_eor_sw/.test(e.to))),
+      _external_oob_uplink:     findExternal(e => e.service === 'data' && e.protocol === 'RS-232 console'),
+      _external_scaleout_uplink: assets.has('scaleout_spine_sw') ? 'scaleout_spine_sw' : null,
+      _external_leak_detection: null,
+    };
+
+    const instanceIdByCompId = new Map();
+    for (const comp of rack.components) {
+      const range = comp.mesh_suffix.match(/\{(\d+)\.\.(\d+)\}/);
+      const suffixes = range
+        ? Array.from({ length: +range[2] - +range[1] + 1 }, (_, i) => comp.mesh_suffix.replace(/\{\d+\.\.\d+\}/, String(+range[1] + i)))
+        : [comp.mesh_suffix];
+      const ids = [];
+      suffixes.forEach((suffix, idx) => {
+        const meshName = `${inst.mesh}${suffix}`;
+        const node = byName.get(meshName);
+        if (node?.metadata?.assetId && assets.has(node.metadata.assetId)) {
+          ids.push(node.metadata.assetId);
+          return;
+        }
+        const localId = `${inst.id}_${comp.id}${suffixes.length > 1 ? '_' + idx : ''}`;
+        const rackAsset = {
+          id: localId, label: `${comp.label} (${inst.id}${suffixes.length > 1 ? ' #' + idx : ''})`,
+          kind: comp.kind, system: comp.system, location: inst.location, mesh: meshName,
+          zone: comp.zone, purdue: comp.purdue, sl_target: comp.sl_target, standards: comp.standards,
+          template: `rack_component:${comp.id}`, attributes: comp.attributes, attack_surface: comp.attack_surface,
+          cell: inst.cell,
+        };
+        assets.set(localId, rackAsset);
+        if (node) { node.metadata = { ...(node.metadata || {}), assetId: localId }; rackAsset._node = node; bound++; } else { unbound++; }
+        rackExpandedAssets++;
+        ids.push(localId);
+      });
+      instanceIdByCompId.set(comp.id, ids);
+    }
+
+    const resolveSingle = ref => {
+      if (ref === '_external_scaleout_uplink') return assets.has('scaleout_spine_sw') ? 'scaleout_spine_sw' : null;
+      return ref.startsWith('_external_') ? externalMap[ref] : (instanceIdByCompId.get(ref) || [])[0];
+    };
+
+    for (const c of rack.connections) {
+      const fromMulti = !c.from.startsWith('_external_') && instanceIdByCompId.get(c.from)?.length > 1;
+      const toMulti = !c.to.startsWith('_external_') && instanceIdByCompId.get(c.to)?.length > 1;
+      // Allow multi on data and control fabrics so all blades are actively wired to ToR, BMC, and Scale-out Spine
+      const representative = c.service !== 'data' && c.service !== 'control' && REPRESENTATIVE_ONLY.has(c.id);
+      const fromIds = fromMulti && !representative ? instanceIdByCompId.get(c.from) : [resolveSingle(c.from)];
+      const toIds = toMulti && !representative ? instanceIdByCompId.get(c.to) : [resolveSingle(c.to)];
+      const totalCombos = fromIds.length * toIds.length;
+      let comboIdx = 0;
+      for (const f of fromIds) for (const t of toIds) {
+        if (!f || !t || !assets.has(f) || !assets.has(t)) { rackExpandSkipped++; continue; }
+        edges.push({
+          id: totalCombos > 1 ? `${inst.id}_${c.id}_${comboIdx}` : `${inst.id}_${c.id}`,
+          from: f, to: t, service: c.service, protocol: c.protocol,
+          description: c.description,
+          critical: c.critical_conduit, oneway: c.one_way, cross: false, label: c.description, note: c.note, count: c.count,
+          _rackInternal: true,
+        });
+        comboIdx++;
+        rackExpandedEdges++;
+      }
+    }
+
+    const mgmtIds = instanceIdByCompId.get('mgmt_tray');
+    if (mgmtIds && mgmtIds.length === 1 && assets.has(mgmtIds[0])) {
+      edges.push({
+        id: `${inst.id}_bridge_mgmt`, from: inst.id, to: mgmtIds[0], service: 'data',
+        protocol: 'IPMI 2.0 (RMCP+) / Redfish HTTPS',
+        description: `${inst.id}'s hall-level BMC identity is backed by its own mgmt_tray internally`,
+        critical: true, oneway: false, cross: false,
+        label: 'rack BMC identity -> internal mgmt_tray', count: null,
+        _rackInternal: true,
+      });
+      rackExpandedEdges++;
+    }
+  }
+}
+
+const BUILD_TAG = 'master-v3-zero-diamond';
+if (statsEl) statsEl.style.display = 'none';
+
+const adj = new Map();
+for (const id of assets.keys()) adj.set(id, { in: [], out: [] });
+const edgesById = new Map(edges.map(e => [e.id, e]));
+for (const e of edges) {
+  if (adj.has(e.from)) adj.get(e.from).out.push(e);
+  if (adj.has(e.to)) adj.get(e.to).in.push(e);
+}
+window.assets = assets;
+window.adj = adj;
+window.edges = edges;
+window.edgesById = edgesById;
+
+// Graph Overlay Setup (Zero Diamond Nodes — markers completely omitted)
+const overlay = new BABYLON.TransformNode('_graph_overlay', scene);
+overlay.parent = root;
+
+const CELLCOL = { 'Cell A': 0x2b8fd9, 'Cell B': 0xe0a326, 'Campus (shared)': 0x7a7a78 };
+const nodeMarks = new Map(); // Empty map to preserve API compatibility without rendering floating diamond shapes
+
+const routesById = new Map([...routesData.routes, ...rackRoutesData.routes].map(r => [r.id, r]));
+const edgeMatCache = new Map();
+
+// Dynamic Flow Pulse Texture Engine (Fluid & Current Simulation)
+const flowTextures = new Map();
+function createFlowTexture(patternType) {
+  if (flowTextures.has(patternType)) return flowTextures.get(patternType);
+  const dt = new BABYLON.DynamicTexture('flow_tex_' + patternType, { width: 256, height: 16 }, scene, false);
+  const ctx = dt.getContext();
+  const grad = ctx.createLinearGradient(0, 0, 256, 0);
+  if (patternType === 'electric') {
+    grad.addColorStop(0.00, 'rgba(255,255,255,0.06)');
+    grad.addColorStop(0.35, 'rgba(255,255,255,0.10)');
+    grad.addColorStop(0.48, 'rgba(255,255,255,0.95)');
+    grad.addColorStop(0.52, 'rgba(255,240,180,1.00)');
+    grad.addColorStop(0.56, 'rgba(255,255,255,0.95)');
+    grad.addColorStop(0.68, 'rgba(255,255,255,0.10)');
+    grad.addColorStop(1.00, 'rgba(255,255,255,0.06)');
+  } else if (patternType === 'photonic') {
+    grad.addColorStop(0.00, 'rgba(255,255,255,0.08)');
+    grad.addColorStop(0.40, 'rgba(255,255,255,0.15)');
+    grad.addColorStop(0.45, 'rgba(200,255,255,0.95)');
+    grad.addColorStop(0.50, 'rgba(255,255,255,1.00)');
+    grad.addColorStop(0.55, 'rgba(200,255,255,0.95)');
+    grad.addColorStop(0.60, 'rgba(255,255,255,0.15)');
+    grad.addColorStop(1.00, 'rgba(255,255,255,0.08)');
+  } else {
+    grad.addColorStop(0.00, 'rgba(255,255,255,0.12)');
+    grad.addColorStop(0.30, 'rgba(255,255,255,0.35)');
+    grad.addColorStop(0.50, 'rgba(255,255,255,0.98)');
+    grad.addColorStop(0.70, 'rgba(255,255,255,0.35)');
+    grad.addColorStop(1.00, 'rgba(255,255,255,0.12)');
+  }
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 256, 16);
+  dt.update();
+  dt.wrapU = BABYLON.Texture.WRAP_ADDRESS_MODE;
+  dt.uScale = 4.0;
+  dt.vScale = 1.0;
+  flowTextures.set(patternType, dt);
+  return dt;
+}
+
+let flowActive = true;
+let flowSpeedMultiplier = 1.0;
+let flowOffset = 0;
+
+scene.onBeforeRenderObservable.add(() => {
+  if (!flowActive) return;
+  const deltaSec = engine.getDeltaTime() / 1000.0;
+  flowOffset -= deltaSec * 0.75 * flowSpeedMultiplier;
+  for (const dt of flowTextures.values()) {
+    dt.uOffset = flowOffset;
+  }
+});
+
+function edgeMaterialFor(service, protocol) {
+  const key = protocol || service;
+  if (edgeMatCache.has(key)) return edgeMatCache.get(key);
+  const hexColor = PROTOCOLS[protocol]?.color ?? SERVICES[service]?.color ?? 0x888888;
+  const c = colorOf(hexColor);
+  const mat = new BABYLON.StandardMaterial('ge_' + key, scene);
+  mat.diffuseColor = c;
+  mat.emissiveColor = c.scale(0.35);
+  mat.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+  mat.metadata = { baseColor: c };
+
+  let pattern = 'fluid';
+  if (service === 'electricity') pattern = 'electric';
+  else if (service === 'data') pattern = 'photonic';
+  const flowTex = createFlowTexture(pattern);
+  mat.emissiveTexture = flowTex;
+
+  edgeMatCache.set(key, mat);
+  return mat;
+}
+
+function greyTint(base, greyAmount, emissiveScale, targetGrey) {
+  const grey = new BABYLON.Color3(targetGrey, targetGrey, targetGrey);
+  const diffuse = BABYLON.Color3.Lerp(base, grey, greyAmount);
+  return { diffuse, emissive: diffuse.scale(emissiveScale) };
+}
+const GRAPH_LOOK = { grey: 1.0, opacity: 0.45, edgeOpacity: 0.35, emissive: 0.18, targetGrey: 0.35 };
+const FULL_LOOK = { opacity: 0.97, emissive: 0.30 };
+const BOTH_LOOK = { opacity: 0.88, emissive: 0.24 };
+
+function conduitLook(mode) {
+  if (mode === 'graph') {
+    for (const mat of edgeMatCache.values()) {
+      const { diffuse, emissive } = greyTint(mat.metadata.baseColor, GRAPH_LOOK.grey, GRAPH_LOOK.emissive, GRAPH_LOOK.targetGrey);
+      mat.diffuseColor = diffuse; mat.emissiveColor = emissive; mat.alpha = GRAPH_LOOK.edgeOpacity;
+    }
+  } else {
+    const k = mode === 'both' ? BOTH_LOOK : FULL_LOOK;
+    for (const mat of edgeMatCache.values()) { mat.diffuseColor = mat.metadata.baseColor; mat.emissiveColor = mat.metadata.baseColor.scale(k.emissive); mat.alpha = k.opacity; }
+  }
+}
+
+const edgeTubes = new Map();
+for (const e of edges) {
+  if (e._rackInternal) continue;
+  const r = routesById.get(e.id);
+  if (!r || !r.points || r.points.length < 2) continue;
+  const path = r.points.map(p => new BABYLON.Vector3(p[0], p[1], p[2]));
+  const radius = (e.service === 'water' || e.service === 'condenser' || e.service === 'air') ? 0.055 : 0.038;
+  const tube = BABYLON.MeshBuilder.CreateTube('gedge_' + e.id, { path, radius, tessellation: 6, cap: BABYLON.Mesh.NO_CAP }, scene);
+  tube.parent = overlay;
+  tube.material = edgeMaterialFor(e.service, e.protocol);
+  tube.metadata = { ...(tube.metadata || {}), graphEdge: e.id };
+  tube.freezeWorldMatrix();
+  tube.doNotSyncBoundingInfo = true;
+  edgeTubes.set(e.id, tube);
+}
+window.edgeTubes = edgeTubes;
+
+let rackInternalOverlayBuilt = false;
+function ensureRackInternalOverlay() {
+  if (rackInternalOverlayBuilt) return;
+  rackInternalOverlayBuilt = true;
+  for (const e of edges) {
+    if (!e._rackInternal) continue;
+    if (edgeTubes.has(e.id)) continue;
+    const r = routesById.get(e.id);
+    if (!r || !r.points || r.points.length < 2) continue;
+    const path = r.points.map(p => new BABYLON.Vector3(p[0], p[1], p[2]));
+    const radius = (e.service === 'water' || e.service === 'condenser' || e.service === 'air') ? 0.055 : 0.038;
+    const tube = BABYLON.MeshBuilder.CreateTube('gedge_' + e.id, { path, radius, tessellation: 6, cap: BABYLON.Mesh.NO_CAP }, scene);
+    tube.parent = overlay;
+    tube.material = edgeMaterialFor(e.service, e.protocol);
+    tube.metadata = { ...(tube.metadata || {}), graphEdge: e.id };
+    tube.freezeWorldMatrix();
+    tube.doNotSyncBoundingInfo = true;
+    edgeTubes.set(e.id, tube);
+  }
+  conduitLook(S.mode);
+}
+
+// Conduit Altitude Strata Definitions
+const STRATA = {
+  all:      { label: 'All Strata', min: 0.0, max: 10.0, icon: '🌐' },
+  power:    { label: 'Power & Busways', min: 3.92, max: 4.08, icon: '⚡', service: 'electricity', nominalY: 3.99 },
+  cooling:  { label: 'Liquid Cooling & CHW', min: 3.20, max: 3.50, icon: '❄️', service: ['water', 'condenser'], nominalY: 3.45 },
+  data:     { label: 'Data & AI Fabric', min: 3.84, max: 3.95, icon: '🌐', service: 'data', nominalY: 3.89 },
+  control:  { label: 'OT Controls & SCADA', min: 3.70, max: 3.86, icon: '🎛️', service: 'control', nominalY: 3.80 },
+  fire:     { label: 'Safety & Fire Loops', min: 4.10, max: 4.40, icon: '🔥', service: ['fire', 'security'], nominalY: 4.24 },
+  subfloor: { label: 'Sub-Floor & Fuel', min: 0.00, max: 1.20, icon: '⛽', service: 'fuel', nominalY: 0.40 },
+};
+
+function setStratumFilter(stratumKey) {
+  S.activeStratum = stratumKey;
+  for (const b of document.querySelectorAll('#strataBtns .vpbtn')) {
+    b.classList.toggle('active', b.dataset.stratum === stratumKey);
+  }
+  const stratum = STRATA[stratumKey] || STRATA.all;
+
+  for (const [eid, tube] of edgeTubes) {
+    const e = edgesById.get(eid);
+    if (!e) continue;
+    if (stratumKey === 'all') {
+      tube.visibility = 1.0;
+    } else {
+      const match = Array.isArray(stratum.service) ? stratum.service.includes(e.service) : (e.service === stratum.service);
+      tube.visibility = match ? 1.0 : 0.04;
+    }
+  }
+
+  const badge = document.getElementById('stratumBadge');
+  if (badge) {
+    if (stratumKey === 'all') {
+      badge.style.display = 'none';
+    } else {
+      badge.style.display = 'block';
+      const count = [...edgeTubes.keys()].filter(id => {
+        const e = edgesById.get(id);
+        return e && (Array.isArray(stratum.service) ? stratum.service.includes(e.service) : e.service === stratum.service);
+      }).length;
+      badge.innerHTML = `<b>${stratum.icon} ${stratum.label}</b> (Y = ${stratum.nominalY}m) · ${count} conduits · Click to reset [×]`;
+    }
+  }
+}
+
+// Overhead Cable Ladder Trays & Pipe Trapezes (BIM Containment)
+let containmentNode = null;
+let containmentVisible = true;
+
+function buildContainmentMesh() {
+  if (containmentNode) return containmentNode;
+  containmentNode = new BABYLON.TransformNode('_containment_system', scene);
+  containmentNode.parent = overlay;
+
+  const trayMat = new BABYLON.StandardMaterial('mat_tray_steel', scene);
+  trayMat.diffuseColor = new BABYLON.Color3(0.40, 0.43, 0.48);
+  trayMat.specularColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+  trayMat.emissiveColor = new BABYLON.Color3(0.08, 0.09, 0.11);
+  trayMat.alpha = 0.55;
+
+  const rodMat = new BABYLON.StandardMaterial('mat_trapeze_rod', scene);
+  rodMat.diffuseColor = new BABYLON.Color3(0.35, 0.36, 0.38);
+  rodMat.alpha = 0.40;
+
+  const LONG_SPINES = [
+    { x: -4.70, zMin: -19.0, zMax: 14.0, y: 3.82, w: 0.55 },
+    { x: 0.92,  zMin: -19.0, zMax: 14.0, y: 3.93, w: 0.60 },
+    { x: 6.78,  zMin: -19.0, zMax: 14.0, y: 3.82, w: 0.55 },
+    { x: -12.3, zMin: -11.0, zMax: 14.0, y: 3.82, w: 0.50 },
+    { x: -16.9, zMin: -11.0, zMax: 8.0,  y: 3.93, w: 0.65 },
+  ];
+
+  const LAT_SPINES = [
+    { z: -11.3, xMin: -24.5, xMax: 13.4, y: 3.82, w: 0.50 },
+    { z: -9.0,  xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: -5.4,  xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: -1.8,  xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: 1.8,   xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: 5.4,   xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: 9.0,   xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+    { z: 12.6,  xMin: -6.3,  xMax: 7.34, y: 3.82, w: 0.45 },
+  ];
+
+  LONG_SPINES.forEach((sp, idx) => {
+    const len = sp.zMax - sp.zMin;
+    const midZ = (sp.zMin + sp.zMax) / 2;
+    const railL = BABYLON.MeshBuilder.CreateBox(`tray_long_rail_l_${idx}`, { width: 0.03, height: 0.08, depth: len }, scene);
+    railL.position.set(sp.x - sp.w / 2, sp.y, midZ);
+    railL.material = trayMat;
+    railL.parent = containmentNode;
+    const railR = BABYLON.MeshBuilder.CreateBox(`tray_long_rail_r_${idx}`, { width: 0.03, height: 0.08, depth: len }, scene);
+    railR.position.set(sp.x + sp.w / 2, sp.y, midZ);
+    railR.material = trayMat;
+    railR.parent = containmentNode;
+    for (let z = sp.zMin; z <= sp.zMax; z += 0.8) {
+      const rung = BABYLON.MeshBuilder.CreateBox(`tray_long_rung_${idx}_${Math.round(z*10)}`, { width: sp.w, height: 0.015, depth: 0.03 }, scene);
+      rung.position.set(sp.x, sp.y - 0.035, z);
+      rung.material = trayMat;
+      rung.parent = containmentNode;
+    }
+  });
+
+  LAT_SPINES.forEach((sp, idx) => {
+    const len = sp.xMax - sp.xMin;
+    const midX = (sp.xMin + sp.xMax) / 2;
+    const rail1 = BABYLON.MeshBuilder.CreateBox(`tray_lat_rail_1_${idx}`, { width: len, height: 0.08, depth: 0.03 }, scene);
+    rail1.position.set(midX, sp.y, sp.z - sp.w / 2);
+    rail1.material = trayMat;
+    rail1.parent = containmentNode;
+    const rail2 = BABYLON.MeshBuilder.CreateBox(`tray_lat_rail_2_${idx}`, { width: len, height: 0.08, depth: 0.03 }, scene);
+    rail2.position.set(midX, sp.y, sp.z + sp.w / 2);
+    rail2.material = trayMat;
+    rail2.parent = containmentNode;
+  });
+
+  for (let z = -18.0; z <= 12.0; z += 3.6) {
+    const trapezeBar = BABYLON.MeshBuilder.CreateBox(`chw_trapeze_bar_${Math.round(z*10)}`, { width: 1.4, height: 0.04, depth: 0.04 }, scene);
+    trapezeBar.position.set(0.92, 3.32, z);
+    trapezeBar.material = trayMat;
+    trapezeBar.parent = containmentNode;
+    const rodL = BABYLON.MeshBuilder.CreateCylinder(`chw_rod_l_${Math.round(z*10)}`, { height: 1.5, diameter: 0.015 }, scene);
+    rodL.position.set(0.92 - 0.65, 3.32 + 0.75, z);
+    rodL.material = rodMat;
+    rodL.parent = containmentNode;
+    const rodR = BABYLON.MeshBuilder.CreateCylinder(`chw_rod_r_${Math.round(z*10)}`, { height: 1.5, diameter: 0.015 }, scene);
+    rodR.position.set(0.92 + 0.65, 3.32 + 0.75, z);
+    rodR.material = rodMat;
+    rodR.parent = containmentNode;
+  }
+
+  return containmentNode;
+}
+
+function setContainmentVisible(on) {
+  containmentVisible = on;
+  if (!containmentNode && on) buildContainmentMesh();
+  if (containmentNode) containmentNode.setEnabled(on);
+  for (const b of document.querySelectorAll('#containmentModeBtns button')) {
+    b.classList.toggle('active', (b.dataset.cont === 'show') === on);
+  }
+}
+
+// Build initial containment trays
+buildContainmentMesh();
+
+// Hazard-log Lookups
+const HAZ_BY_ASSET = new Map();
+for (const h of HZ.hazards) for (const id of h.assets || []) {
+  if (!HAZ_BY_ASSET.has(id)) HAZ_BY_ASSET.set(id, []);
+  HAZ_BY_ASSET.get(id).push(h);
+}
+const CRIT_BY_ASSET = new Map();
+for (const c of HZ.critical_items) for (const id of c.assets || []) {
+  if (!CRIT_BY_ASSET.has(id)) CRIT_BY_ASSET.set(id, []);
+  CRIT_BY_ASSET.get(id).push(c);
+}
+
+const NODE_OF_ASSET = new Map();
+for (const [nodeId, rec] of Object.entries(HZ.node_crosswalk)) {
+  if (nodeId.startsWith('_')) continue;
+  for (const a of rec.assets || []) NODE_OF_ASSET.set(a, nodeId);
+}
+const ALE_BY_NODE = new Map(HZ.ale.map(a => [a.node, a]));
+const REDUNDANCY_OVERRIDE = {};
+for (const [id, rec] of Object.entries(HZ.redundancy)) {
+  if (id.startsWith('_')) continue;
+  if (rec.service_override) REDUNDANCY_OVERRIDE[id] = rec.service_override;
+}
+const TIMING = HZ.timing || { dlc_throttle_seconds: 45, dlc_shutdown_seconds: 90 };
+
+const HARD = new Set(['electricity', 'water', 'condenser', 'air', 'fuel']);
+const SOFT = new Set(['data', 'control']);
+
+function supplyMap() {
+  const sup = {};
+  for (const id of assets.keys()) sup[id] = {};
+  for (const e of edges) {
+    if (!HARD.has(e.service) && !SOFT.has(e.service)) continue;
+    (sup[e.to][e.service] = sup[e.to][e.service] || []).push(e.from);
+  }
+  return sup;
+}
+const SUPPLY = supplyMap();
+
+function rule(id, service) {
+  const o = REDUNDANCY_OVERRIDE[id];
+  if (o && o[service]) return o[service];
+  return (SUPPLY[id][service] || []).length >= 2 ? 'any-of' : 'all-of';
+}
+
+function cascade(seedIds) {
+  const failed = new Map();
+  const degraded = new Map();
+  const blinded = new Map();
+  const held = [];
+  for (const s of seedIds) failed.set(s, 0);
+
+  let wave = 0, frontier = [...seedIds];
+  while (frontier.length && wave < 20) {
+    wave++;
+    const next = [];
+    for (const id of assets.keys()) {
+      if (failed.has(id)) continue;
+      const nd = assets.get(id);
+      if (nd && nd.protective) {
+        for (const feeds of Object.values(SUPPLY[id] || {}))
+          if (feeds.some(f => failed.has(f)) && !blinded.has(id))
+            blinded.set(id, nd.protective);
+        continue;
+      }
+      for (const [service, feeds] of Object.entries(SUPPLY[id] || {})) {
+        const lost = feeds.filter(f => failed.has(f));
+        if (!lost.length) continue;
+        const r = rule(id, service);
+        const allGone = lost.length === feeds.length;
+        if (HARD.has(service)) {
+          if (r === 'all-of' || allGone) {
+            if (!failed.has(id)) { failed.set(id, wave); next.push(id); }
+          } else {
+            held.push({ id, service, lost: lost.length, of: feeds.length });
+          }
+        } else if (allGone && !degraded.has(id)) {
+          degraded.set(id, 'lost all ' + service + ' supply');
+        }
+      }
+    }
+    frontier = next;
+  }
+  for (const id of failed.keys()) {
+    const nd = assets.get(id);
+    if (nd && nd.protective && !blinded.has(id)) blinded.set(id, nd.protective);
+  }
+  for (const id of assets.keys()) {
+    const nd = assets.get(id);
+    if (!nd.protective || blinded.has(id)) continue;
+    const host = nd.attrs && nd.attrs.host_equipment;
+    if (host && failed.has(host)) blinded.set(id, nd.protective);
+  }
+  return { failed, degraded, blinded, held, waves: wave };
+}
+
+// Global Filter State
+const S = {
+  mode: 'graph',
+  touring: false,
+  services: new Set(Object.keys(SERVICES)),
+  protocols: new Set(Object.keys(PROTOCOLS)),
+  zones: new Set(Object.keys(ZONES)),
+  criticalOnly: false,
+  activeStratum: 'all',
+  trace: null,
+  markerColor: 'system',
+  showRackInternal: false,
+  showNodeMarkers: false, // Strict No-Diamonds default
+};
+window.S = S;
+
+function edgeVisible(e) {
+  if (S.trace) return S.trace.edges.has(e.id);
+  if (!S.showRackInternal && e._rackInternal) return false;
+  if (S.criticalOnly && !e.critical) return false;
+  if (!S.services.has(e.service)) return false;
+  if (e.protocol && PROTOCOLS[e.protocol] && !S.protocols.has(e.protocol)) return false;
+  return true;
+}
+
+function apply() {
+  for (const [id, e] of edgesById) {
+    const tube = edgeTubes.get(id);
+    if (tube) tube.setEnabled(edgeVisible(e));
+  }
+  if (S.activeStratum && S.activeStratum !== 'all') {
+    setStratumFilter(S.activeStratum);
+  }
+}
+apply();
+
+function stateMaterial(name, hexVal, emissiveHex, emissiveIntensity, roughness) {
+  const mat = new BABYLON.StandardMaterial('state_' + name, scene);
+  mat.diffuseColor = colorOf(hexVal);
+  mat.emissiveColor = colorOf(emissiveHex).scale(emissiveIntensity);
+  mat.specularColor = new BABYLON.Color3(roughness, roughness, roughness);
+  return mat;
+}
+const STATE_MATS = {
+  entry: stateMaterial('entry', 0xff8a3d, 0xff8a3d, 0.85, 0.30),
+  active: stateMaterial('active', 0xffb74d, 0xffa726, 1.25, 0.20),
+  reached: stateMaterial('reached', 0xc8332a, 0xc8332a, 0.60, 0.35),
+  blocked: stateMaterial('blocked', 0x2bd96a, 0x2bd96a, 0.50, 0.35),
+  seed: stateMaterial('seed', 0xffffff, 0xff4a3d, 1.10, 0.30),
+  failed: stateMaterial('failed', 0xc8332a, 0xc8332a, 0.60, 0.35),
+  degraded: stateMaterial('degraded', 0xf2b736, 0xf2b736, 0.45, 0.40),
+  held: stateMaterial('held', 0x2bd96a, 0x2bd96a, 0.40, 0.40),
+  blind: stateMaterial('blind', 0xf5e6c8, 0xd8a63a, 0.80, 0.30),
+};
+
+// Direct Physical Mesh & Conduit Lighting ("Zero Diamonds")
+function paintNode(id, state) {
+  let a = assets.get(id);
+  let mesh = a?._node;
+  if (!mesh && id && id.startsWith('row')) {
+    const rackMatch = id.match(/row\d+_rack\d+/);
+    if (rackMatch) {
+      const parentRack = assets.get(rackMatch[0]);
+      if (parentRack?._node) mesh = parentRack._node;
+    }
+  }
+  if (!mesh) return;
+  if (state) {
+    if (!mesh.metadata) mesh.metadata = {};
+    if (mesh.metadata._paintOrigMaterial === undefined) mesh.metadata._paintOrigMaterial = mesh.material;
+    mesh.material = STATE_MATS[state];
+  } else if (mesh.metadata && mesh.metadata._paintOrigMaterial !== undefined) {
+    mesh.material = mesh.metadata._paintOrigMaterial;
+    delete mesh.metadata._paintOrigMaterial;
+  }
+}
+function paintEdge(id, state) {
+  const e = edgesById.get(id);
+  const t = edgeTubes.get(id);
+  if (!e || !t) return;
+  t.material = state ? STATE_MATS[state] : edgeMaterialFor(e.service, e.protocol);
+}
+
+for (const b of document.querySelectorAll('#colmode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#colmode button')) x.classList.toggle('active', x === b);
+    S.markerColor = b.dataset.c;
+  };
+}
+
+function dimPhysical(on) {
+  for (const [m, base] of matBase) {
+    if (on) { m.alpha = 0.45; if (m.transparencyMode !== undefined) m.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND; }
+    else { m.alpha = base.alpha; if (m.transparencyMode !== undefined) m.transparencyMode = base.transparencyMode; }
+  }
+}
+function setOverlayVisible(on) {
+  overlay.setEnabled(on);
+  if (on) apply();
+}
+function setMode(mode) {
+  S.mode = mode;
+  for (const b of document.querySelectorAll('#viewModeBtns .toggle')) b.classList.toggle('active', b.dataset.mode === mode);
+  if (mode === 'physical') { dimPhysical(false); setOverlayVisible(false); }
+  else if (mode === 'graph') { dimPhysical(true); setOverlayVisible(true); }
+  else { dimPhysical(false); setOverlayVisible(true); }
+  conduitLook(mode);
+}
+for (const b of document.querySelectorAll('#viewModeBtns .toggle')) b.onclick = () => setMode(b.dataset.mode);
+setMode('graph');
+
+function renderChips(container, dict, activeSet) {
+  if (!container) return;
+  container.innerHTML = '';
+  for (const [key, def] of Object.entries(dict)) {
+    const btn = document.createElement('button');
+    btn.className = 'chip ' + (activeSet.has(key) ? 'on' : 'off');
+    btn.style.borderColor = hex(def.color);
+    btn.style.background = activeSet.has(key) ? hex(def.color) : 'rgba(255,255,255,0.04)';
+    btn.textContent = def.label || key;
+    btn.onclick = () => {
+      if (activeSet.has(key)) activeSet.delete(key); else activeSet.add(key);
+      btn.classList.toggle('on', activeSet.has(key));
+      btn.classList.toggle('off', !activeSet.has(key));
+      btn.style.background = activeSet.has(key) ? hex(def.color) : 'rgba(255,255,255,0.04)';
+      apply();
+    };
+    container.appendChild(btn);
+  }
+}
+renderChips(document.getElementById('serviceChips'), SERVICES, S.services);
+renderChips(document.getElementById('protocolChips'), PROTOCOLS, S.protocols);
+
+for (const b of document.querySelectorAll('#critmode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#critmode button')) x.classList.toggle('active', x === b);
+    S.criticalOnly = b.dataset.k === 'crit';
+    apply();
+  };
+}
+for (const b of document.querySelectorAll('#rackDetailMode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#rackDetailMode button')) x.classList.toggle('active', x === b);
+    S.showRackInternal = b.dataset.k === 'show';
+    if (S.showRackInternal) ensureRackInternalOverlay();
+    apply();
+  };
+}
+for (const b of document.querySelectorAll('#nodeMarkerMode button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#nodeMarkerMode button')) x.classList.toggle('active', x === b);
+    S.showNodeMarkers = b.dataset.k === 'show';
+    apply();
+  };
+}
+
+// Flow Animation & Speed Controls
+for (const b of document.querySelectorAll('#flowModeBtns button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#flowModeBtns button')) x.classList.toggle('active', x === b);
+    flowActive = b.dataset.flow === 'on';
+  };
+}
+for (const b of document.querySelectorAll('#flowSpeedBtns button')) {
+  b.onclick = () => {
+    for (const x of document.querySelectorAll('#flowSpeedBtns button')) x.classList.toggle('active', x === b);
+    flowSpeedMultiplier = parseFloat(b.dataset.spd) || 1.0;
+  };
+}
+
+// BIM Containment Trays Toggle
+for (const b of document.querySelectorAll('#containmentModeBtns button')) {
+  b.onclick = () => {
+    setContainmentVisible(b.dataset.cont === 'show');
+  };
+}
+
+// Altitude Strata Isolation Buttons
+for (const b of document.querySelectorAll('#strataBtns .vpbtn')) {
+  b.onclick = () => {
+    setStratumFilter(b.dataset.stratum);
+  };
+}
+
+// Analysis Arbiter
+const analysis = { kind: null, paintedNodes: new Set(), paintedEdges: new Set(), timer: null };
+function beginAnalysis(kind) {
+  endAnalysis();
+  analysis.kind = kind;
+  clearHighlight();
+  if (kind !== 'trace') rightEl.hidden = true;
+  if (S.mode === 'physical') setMode('graph'); else apply();
+  return analysis;
+}
+function endAnalysis() {
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+  analysis.kind = null;
+  S.trace = null;
+  apply();
+}
+
+function traceFrom(startId, dir = 'both', maxDepth = 25) {
+  const seenN = new Set(), seenE = new Set();
+  const seeds = [startId];
+
+  // If startId is a rack component (e.g. row02_rack08_busbar), also seed its parent rack
+  const rackMatch = startId.match(/^(row\d+_rack\d+)/);
+  if (rackMatch && assets.has(rackMatch[1]) && startId !== rackMatch[1]) {
+    seeds.push(rackMatch[1]);
+  }
+  // If startId is a rack (e.g. row02_rack08), also seed its internal components
+  if (startId.match(/^row\d+_rack\d+$/)) {
+    for (const id of assets.keys()) {
+      if (id.startsWith(startId + '_')) seeds.push(id);
+    }
+  }
+
+  seeds.forEach(s => seenN.add(s));
+  let frontier = [...seeds];
+  for (let d = 0; d < maxDepth && frontier.length; d++) {
+    const next = [];
+    for (const id of frontier) {
+      const entry = adj.get(id);
+      if (!entry) continue;
+      const list = dir === 'up' ? entry.in : dir === 'down' ? entry.out : [...entry.in, ...entry.out];
+      for (const e of list) {
+        seenE.add(e.id);
+        const other = e.from === id ? e.to : e.from;
+        if (!seenN.has(other)) {
+          seenN.add(other);
+          next.push(other);
+        }
+      }
+    }
+    frontier = next;
+  }
+  return { nodes: seenN, edges: seenE };
+}
+
+function setTrace(startId, dir) {
+  beginAnalysis('trace');
+  ensureRackInternalOverlay();
+
+  const res = traceFrom(startId, dir);
+  S.trace = { nodes: res.nodes, edges: res.edges, startId, dir };
+
+  if (S.mode === 'physical') setMode('both');
+  else apply();
+
+  // Highlight start node as seed and connected nodes as active/entry
+  for (const nId of res.nodes) {
+    if (nId === startId) {
+      paintNode(nId, 'seed');
+    } else {
+      paintNode(nId, dir === 'up' ? 'entry' : 'active');
+    }
+    analysis.paintedNodes.add(nId);
+  }
+  // Light up all traced conduits with glowing active flow material
+  for (const eId of res.edges) {
+    paintEdge(eId, 'active');
+    analysis.paintedEdges.add(eId);
+  }
+
+  // Update selection popup trace buttons and active summary text
+  document.querySelectorAll('#traceBtnRow button').forEach(b => {
+    b.classList.toggle('active', b.dataset.trace === dir);
+  });
+  const stats = document.getElementById('traceStats');
+  if (stats) {
+    stats.innerHTML = `⚡ Active: <b>${dir.toUpperCase()}</b> · <b>${res.nodes.size.toLocaleString()}</b> assets · <b>${res.edges.size.toLocaleString()}</b> conduits`;
+    stats.style.display = 'block';
+  }
+}
+
+function clearTrace() {
+  endAnalysis();
+  document.querySelectorAll('#traceBtnRow button').forEach(b => b.classList.remove('active'));
+  const stats = document.getElementById('traceStats');
+  if (stats) { stats.innerHTML = ''; stats.style.display = 'none'; }
+  if (S.sel) {
+    const a = assets.get(S.sel);
+    if (a) highlight(a._node);
+  }
+}
+
+// Threat Path Explorer Engine
+const ROUTABLE = new Set(['Ethernet/TCP-IP', 'BGP', 'SNMP', 'CAPWAP', 'Modbus TCP',
+  'BACnet/IP', 'OPC UA', 'DNP3', 'PROFINET', 'EtherNet/IP',
+  'AMD Infinity Fabric xGMI', 'UALink over Ethernet (UALoE) / UEC 1.0',
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS', 'NVMe-oF (RDMA/TCP)', 'Ethernet/TCP-IP (RoCEv2-capable)']);
+const REVERSIBLE = new Set(['Ethernet/TCP-IP', 'RS-232 console', 'SNMP',
+  'IPMI 2.0 (RMCP+) / Redfish HTTPS', 'Ethernet/TCP-IP (RoCEv2-capable)',
+  'UALink over Ethernet (UALoE) / UEC 1.0', 'AMD Infinity Fabric xGMI',
+  'NVMe-oF (RDMA/TCP)']);
+const BLOCKED_REASON = e => {
+  if (e.oneway) return 'one-way (hardware enforced)';
+  if (!ROUTABLE.has(e.protocol)) return e.protocol + ' — not routable';
+  return null;
+};
+const ENTRY = [
+  ['internet', 'Internet / vendor cloud'],
+  ['guest_wap', 'Guest Wi-Fi'],
+  ['greeter_ws', 'Reception workstation'],
+  ['guest_kiosk', 'Visitor kiosk'],
+  ['carrier_a', 'Carrier entry A'],
+  ['dmz_ra', 'Vendor remote access'],
+  ['eng_ws', 'Engineering workstation'],
+  ['cellA_ot_sw', 'Cell A OT segment'],
+  ['cellB_ot_sw', 'Cell B OT segment'],
+  ['secoff_ws', 'Security officer workstation'],
+  ['row01_rack01', 'Compromised GPU rack'],
+].filter(([id]) => assets.has(id));
+
+function threatWalk(startId, maxHops = 20) {
+  const reached = new Map([[startId, 0]]);
+  const used = new Set();
+  const boundary = [];
+  let frontier = [startId];
+  for (let hop = 1; hop <= maxHops && frontier.length; hop++) {
+    const next = [];
+    for (const id of frontier) {
+      const entry = adj.get(id);
+      if (!entry) continue;
+      const edgesHere = entry.out.map(e => ({ e, to: e.to }))
+        .concat(entry.in.filter(e => !e.oneway && REVERSIBLE.has(e.protocol))
+                        .map(e => ({ e, to: e.from })));
+      for (const { e, to } of edgesHere) {
+        const why = BLOCKED_REASON(e);
+        if (why) { boundary.push({ edge: e, from: id, to, reason: why }); continue; }
+        used.add(e.id);
+        if (!reached.has(to)) { reached.set(to, hop); next.push(to); }
+      }
+    }
+    frontier = next;
+  }
+  return { reached, used, boundary };
+}
+
+const threatTitle = document.getElementById('threatTitle');
+const threatSummary = document.getElementById('threatSummary');
+const threatBody = document.getElementById('threatBody');
+const threatEl = document.getElementById('threat');
+let threatState = null;
+
+function paintThreat(uptoHop) {
+  if (!threatState) return;
+  const { startId, walk: w } = threatState;
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+
+  paintNode(startId, 'entry');
+  analysis.paintedNodes.add(startId);
+  const live = new Set([startId]);
+  for (const [id, hop] of w.reached) {
+    if (hop > uptoHop) continue;
+    live.add(id);
+    if (id === startId) continue;
+    const state = (hop === uptoHop) ? 'active' : 'reached';
+    paintNode(id, state);
+    analysis.paintedNodes.add(id);
+  }
+  const liveEdges = new Set();
+  for (const eid of w.used) {
+    const e = edgesById.get(eid);
+    if (!e || !live.has(e.from) || !live.has(e.to)) continue;
+    liveEdges.add(eid);
+    const hopTo = Math.max(w.reached.get(e.to) ?? 0, w.reached.get(e.from) ?? 0);
+    const state = (hopTo === uptoHop) ? 'active' : 'reached';
+    paintEdge(eid, state);
+    analysis.paintedEdges.add(eid);
+  }
+  const seen = new Set();
+  for (const b of w.boundary) {
+    if (seen.has(b.edge.id) || !live.has(b.from)) continue;
+    seen.add(b.edge.id);
+    paintEdge(b.edge.id, 'blocked');
+    analysis.paintedEdges.add(b.edge.id);
+  }
+  S.trace = { nodes: live, edges: liveEdges };
+  apply();
+  return { reached: live.size - 1, blocked: seen.size };
+}
+
+function playThreat(onComplete) {
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  if (!threatState) return;
+  const max = Math.max(0, ...[...threatState.walk.reached.values()]);
+  let h = 0;
+  paintThreat(0);
+  if (max === 0) {
+    if (onComplete) {
+      threatTourTimer = setTimeout(onComplete, 3000);
+    }
+    return;
+  }
+  analysis.timer = setInterval(() => {
+    h++;
+    const r = paintThreat(h);
+    const el = document.getElementById('threatHop');
+    if (el && r) el.textContent = 'hop ' + Math.min(h, max) + ' / ' + max + ' · ' + r.reached + ' reached';
+    if (h >= max) {
+      clearInterval(analysis.timer);
+      analysis.timer = null;
+      if (onComplete && threatTourActive) {
+        threatTourTimer = setTimeout(onComplete, 3000);
+      }
+    }
+  }, 950);
+}
+
+function runThreat(startId, label, onComplete) {
+  beginAnalysis('threat');
+  ensureRackInternalOverlay();
+  if (S.mode !== 'graph') setMode('graph');
+  const w = threatWalk(startId);
+  threatState = { startId, walk: w };
+  playThreat(onComplete);
+  const seenBlock = new Set(w.boundary.map(b => b.edge.id));
+
+  const hops = [...w.reached].filter(([id]) => id !== startId)
+    .sort((a, b) => a[1] - b[1] || (assets.get(a[0])?.label || '').localeCompare(assets.get(b[0])?.label || ''));
+  const critHit = hops.filter(([id]) => {
+    const a = assets.get(id);
+    return a && (a.zone === 'Z2' || a.zone === 'Z4');
+  }).length;
+
+  threatTitle.textContent = 'From: ' + (label || assets.get(startId)?.label || startId);
+  const maxHop = Math.max(0, ...[...w.reached.values()]);
+  threatSummary.innerHTML = '<span id="threatHop">hop 0 / ' + maxHop + ' · 0 reached</span> · '
+    + hops.length + ' reachable · stopped at ' + seenBlock.size + ' boundaries';
+
+  const uniqueBlocks = [];
+  const bseen = new Set();
+  for (const b of w.boundary) {
+    if (bseen.has(b.edge.id)) continue;
+    bseen.add(b.edge.id);
+    uniqueBlocks.push(b);
+  }
+
+  let html = '<div class="tstat">'
+    + '<div><div class="tv">' + hops.length + '</div><div class="tk">ASSETS REACHED</div></div>'
+    + '<div><div class="tv">' + critHit + '</div><div class="tk">IN Z2 / Z4</div></div>'
+    + '<div><div class="tv">' + uniqueBlocks.length + '</div><div class="tk">BLOCKED PATHWAYS</div></div>'
+    + '<div><div class="tv">' + (hops.length ? Math.max(...hops.map(h => h[1])) : 0)
+    + '</div><div class="tk">MAX HOPS</div></div></div>';
+
+  const z4 = hops.filter(([id]) => assets.get(id)?.zone === 'Z4').length;
+  html += '<div class="blockrow" style="border-color:' + (z4 ? '#c8332a' : '#2bd96a') + '">'
+       + '<b>Safety instrumented systems (Z4): ' + (z4 ? z4 + ' REACHED' : 'not reachable') + '.</b> '
+       + (z4 ? 'A routable path exists into the SIS — this is a finding.'
+             : 'Every path into Z4 terminates at a supervised dry-contact or one-way interface.')
+       + '</div>';
+  if (critHit === 0 && hops.length) {
+    html += '<div class="blockrow" style="border-color:#2bd96a"><b>No supervisory zone reached.</b> '
+         + 'Every path into Z2 from here terminates at a boundary below.</div>';
+  }
+
+  html += '<div class="sec mt">REACHABLE ASSETS</div>';
+  for (const [id, hop] of hops) {
+    const a = assets.get(id);
+    const zc = a && ZONES[a.zone] ? hex(ZONES[a.zone].color) : '#555';
+    const dark = a && (a.zone === 'Z3' || a.zone === 'Z0');
+    html += '<div class="hop" data-id="' + id + '" title="' + (a?.label || id) + '">'
+      + '<div class="hn">' + hop + '</div>'
+      + '<div class="hl">' + (a?.label || id) + '</div>'
+      + '<div class="hz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (a?.zone || '—') + '</div></div>';
+  }
+  if (!hops.length) html += '<div class="empty">Nothing reachable over a routable protocol.</div>';
+
+  html += '<div class="sec mt">WHERE THE PATH STOPS</div>';
+  for (const b of uniqueBlocks.slice(0, 60)) {
+    const a2 = assets.get(b.from), b2 = assets.get(b.to);
+    html += '<div class="blockrow"><b>' + (a2 ? a2.label : b.from) + '</b> → '
+      + '<b>' + (b2 ? b2.label : b.to) + '</b><br><span>' + b.reason + '</span>'
+      + (b.edge.note ? ' · ' + b.edge.note : '') + '</div>';
+  }
+
+  threatBody.innerHTML = html;
+  threatBody.querySelectorAll('.hop').forEach(r => r.onclick = () => {
+    const a = assets.get(r.dataset.id);
+    if (a) selectAndFly(a, a._node);
+  });
+  rightEl.hidden = true;
+  cascadeEl.hidden = true;
+  riskEl.hidden = true;
+  assumeEl.hidden = true;
+  threatEl.hidden = false;
+  threatEl.classList.remove('collapsed');
+  document.getElementById('threatCollapse').textContent = '–';
+}
+
+// Threat Path Tour Engine (Graph View Mode, 3s pause per path)
+let threatTourActive = false;
+let threatTourIndex = 0;
+let threatTourTimer = null;
+const threatTourBtn = document.getElementById('threatTourBtn');
+
+function updateThreatEntryHighlight(activeId) {
+  document.querySelectorAll('#entryPoints .vpbtn').forEach(b => {
+    b.classList.toggle('active', b.dataset.entryId === activeId);
+  });
+}
+
+function playNextThreatTourStep() {
+  if (!threatTourActive) return;
+  if (S.mode !== 'graph') setMode('graph');
+  const [id, label] = ENTRY[threatTourIndex % ENTRY.length];
+  const stepNum = (threatTourIndex % ENTRY.length) + 1;
+  threatTourIndex++;
+  updateThreatEntryHighlight(id);
+
+  runThreat(id, `${label} (${stepNum}/${ENTRY.length})`, () => {
+    if (threatTourActive) {
+      playNextThreatTourStep();
+    }
+  });
+}
+
+function startThreatTour() {
+  if (threatTourActive) return;
+  if (S.touring) stopTour();
+  threatTourActive = true;
+  threatTourIndex = 0;
+  if (threatTourBtn) {
+    threatTourBtn.textContent = '■ Stop Threat Tour';
+    threatTourBtn.classList.add('active');
+  }
+  setMode('graph');
+  playNextThreatTourStep();
+}
+
+function stopThreatTour() {
+  if (!threatTourActive) return;
+  threatTourActive = false;
+  if (threatTourTimer) {
+    clearTimeout(threatTourTimer);
+    threatTourTimer = null;
+  }
+  if (threatTourBtn) {
+    threatTourBtn.textContent = '⚡ Threat Path Tour';
+    threatTourBtn.classList.remove('active');
+  }
+  updateThreatEntryHighlight(null);
+}
+
+{
+  const box = document.getElementById('entryPoints');
+  for (const [id, label] of ENTRY) {
+    const b = document.createElement('button');
+    b.className = 'vpbtn';
+    b.dataset.entryId = id;
+    b.textContent = label;
+    b.onclick = () => {
+      stopThreatTour();
+      runThreat(id, label);
+      updateThreatEntryHighlight(id);
+    };
+    box.appendChild(b);
+  }
+}
+if (threatTourBtn) threatTourBtn.onclick = () => (threatTourActive ? stopThreatTour() : startThreatTour());
+document.getElementById('threatPlay').onclick = () => { if (threatState) playThreat(); };
+document.getElementById('threatClear').onclick = () => { stopThreatTour(); threatState = null; endAnalysis(); threatEl.hidden = true; };
+document.getElementById('threatClose').onclick = () => { stopThreatTour(); threatState = null; endAnalysis(); threatEl.hidden = true; };
+document.getElementById('threatCollapse').onclick = e => {
+  const on = threatEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// Cascading Failure Engine
+const money = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1e3) + 'K';
+const cascadeEl = document.getElementById('cascade');
+const cascadeTitle = document.getElementById('cascadeTitle');
+const cascadeSummary = document.getElementById('cascadeSummary');
+const cascadeBody = document.getElementById('cascadeBody');
+let cascadeState = null;
+
+function paintCascade(uptoWave) {
+  if (!cascadeState) return;
+  const { seeds, res } = cascadeState;
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+
+  for (const [id, w] of res.failed) {
+    if (w > uptoWave) continue;
+    paintNode(id, seeds.includes(id) ? 'seed' : 'failed');
+    analysis.paintedNodes.add(id);
+  }
+  if (uptoWave >= res.waves) {
+    for (const [id] of res.degraded) {
+      if (res.failed.has(id)) continue;
+      paintNode(id, 'degraded');
+      analysis.paintedNodes.add(id);
+    }
+    for (const [id] of res.blinded) {
+      if (res.failed.has(id)) continue;
+      paintNode(id, 'blind');
+      analysis.paintedNodes.add(id);
+    }
+    for (const h of res.held) {
+      if (res.failed.has(h.id)) continue;
+      paintNode(h.id, 'held');
+      analysis.paintedNodes.add(h.id);
+    }
+  }
+  const liveIds = new Set([...res.failed].filter(([, w]) => w <= uptoWave).map(([id]) => id));
+  const liveEdges = new Set(edges.filter(e => liveIds.has(e.from) && liveIds.has(e.to)).map(e => e.id));
+  for (const eid of liveEdges) { paintEdge(eid, 'failed'); analysis.paintedEdges.add(eid); }
+  S.trace = { nodes: liveIds, edges: liveEdges };
+  apply();
+}
+
+function animateCascade() {
+  if (!cascadeState) return;
+  if (analysis.timer) { clearInterval(analysis.timer); analysis.timer = null; }
+  let w = 0;
+  paintCascade(0);
+  analysis.timer = setInterval(() => {
+    w++;
+    paintCascade(w);
+    const el = document.getElementById('cascadeWave');
+    if (el) el.textContent = 'wave ' + Math.min(w, cascadeState.res.waves) + ' / ' + cascadeState.res.waves;
+    if (w >= cascadeState.res.waves) { clearInterval(analysis.timer); analysis.timer = null; }
+  }, 950);
+}
+
+function runCascade(seedIds, label, hazard) {
+  beginAnalysis('cascade');
+  ensureRackInternalOverlay();
+  const seeds = seedIds.filter(id => assets.has(id));
+  if (!seeds.length) return;
+  const res = cascade(seeds);
+  cascadeState = { seeds, res };
+
+  const failedList = [...res.failed].filter(([id]) => !seeds.includes(id))
+    .sort((a, b) => a[1] - b[1] || (assets.get(a[0])?.label || '').localeCompare(assets.get(b[0])?.label || ''));
+
+  const bySystem = {};
+  for (const [id] of res.failed) { const sy = assets.get(id)?.system; if (sy) bySystem[sy] = (bySystem[sy] || 0) + 1; }
+  const racksLost = [...res.failed].filter(([id]) => /rack\d\d$/.test(id)).length;
+  const z4 = [...res.failed].filter(([id]) => assets.get(id)?.zone === 'Z4').length;
+  const z2 = [...res.failed].filter(([id]) => assets.get(id)?.zone === 'Z2').length;
+
+  cascadeTitle.textContent = 'Failure: ' + (label || assets.get(seeds[0])?.label || seeds[0]);
+  cascadeSummary.innerHTML = '<span id="cascadeWave">wave 0 / ' + res.waves + '</span> · '
+    + res.failed.size + ' assets stopped · ' + res.degraded.size + ' degraded'
+    + (res.blinded.size ? ' · ' + res.blinded.size + ' protection lost' : '');
+
+  const mor = [];
+  if (z4) mor.push(['SAFETY', 'BREACH', z4 + ' safety instrumented asset(s) stopped']);
+  else mor.push(['SAFETY', 'HELD', 'no Z4 asset lost']);
+  if (racksLost) mor.push(['MINIMUM OPERATION', 'BREACH', racksLost + ' of 96 GPU racks stopped']);
+  else mor.push(['MINIMUM OPERATION', 'HELD', 'no compute rack lost']);
+  if (res.held.length) mor.push(['RELIABILITY', 'DEGRADED', res.held.length + ' redundant feed(s) now single-path']);
+  else mor.push(['RELIABILITY', z2 ? 'DEGRADED' : 'HELD', z2 + ' supervisory asset(s) stopped']);
+  if (res.blinded.size) {
+    const trips = [...res.blinded].filter(([id]) =>
+      /interlock|TRIP/i.test(res.blinded.get(id) || '')).length;
+    mor.push(['PROTECTION', trips ? 'BREACH' : 'DEGRADED',
+      res.blinded.size + ' protective function(s) lost'
+      + (trips ? ', ' + trips + ' of them a hardwired trip or interlock' : '')]);
+  } else mor.push(['PROTECTION', 'HELD', 'no protective function lost']);
+
+  const rb = HZ && HZ.meta.revenue_basis;
+  const cell = rb && rb.cell_structure && rb.cell_structure.modelled_cell;
+  const perRackHour = cell ? cell.per_rack_hour_usd : 0;
+  const cellsPerCampus = rb && rb.cell_structure ? rb.cell_structure.cells_per_campus : 1;
+  let cons = '';
+  if (perRackHour && racksLost) {
+    const mw = (racksLost * 120 / 1000).toFixed(2);
+    cons = '<div class="sec">CONSEQUENCE — ONE CELL (' + racksLost + ' racks, ' + mw + ' MW at '
+         + money(perRackHour) + '/rack-hour)</div>'
+         + '<div class="blockrow">' + [1, 2, 4, 8].map(h =>
+             '<b>' + h + ' h</b> ' + money(perRackHour * racksLost * h)).join(' · ') + '</div>';
+  }
+  const seedNodes = [...new Set(seeds.map(id => NODE_OF_ASSET.get(id)).filter(Boolean))];
+  if (seedNodes.length) {
+    cons += '<div class="blockrow">' + seedNodes.map(n => {
+      const a = ALE_BY_NODE.get(n);
+      return a ? '<b>' + n + '</b> authored ALE ' + money(a.ale_usd) + '/yr · SLE '
+                 + money(a.sle_usd) + ' · ARO ' + a.aro : '<b>' + n + '</b>';
+    }).join('<br>') + '</div>';
+  }
+  if (hazard) {
+    cons += '<div class="blockrow" style="border-left:3px solid #c8332a;padding-left:8px">'
+         + '<b>' + hazard.id + '</b> · RPN ' + hazard.rpn + ' · ' + hazard.mitre
+         + ' · target ' + hazard.sl_t + '<br>' + hazard.cyber_cause + '</div>';
+  }
+
+  let html = cons + '<div class="tstat">'
+    + '<div><div class="tv">' + res.failed.size + '</div><div class="tk">STOPPED</div></div>'
+    + '<div><div class="tv">' + res.degraded.size + '</div><div class="tk">DEGRADED</div></div>'
+    + '<div><div class="tv">' + res.blinded.size + '</div><div class="tk">PROTECTION LOST</div></div>'
+    + '<div><div class="tv">' + res.held.length + '</div><div class="tk">HELD BY N+1</div></div>'
+    + '<div><div class="tv">' + res.waves + '</div><div class="tk">WAVES</div></div></div>';
+
+  html += '<div class="sec">MINIMUM OPERATING REQUIREMENTS</div>';
+  for (const [k, v, note] of mor) {
+    const col = v === 'BREACH' ? '#c8332a' : v === 'DEGRADED' ? '#EE7623' : '#2bd96a';
+    html += '<div class="blockrow" style="border-left:3px solid ' + col + ';padding-left:8px">'
+      + '<b>' + k + '</b> — <span style="color:' + col + '">' + v + '</span><br>' + note + '</div>';
+  }
+
+  html += '<div class="sec mt">PROPAGATION BY SYSTEM</div><div class="blockrow">'
+    + Object.entries(bySystem).sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => '<b>' + k + '</b> ' + v).join(' · ') + '</div>';
+
+  html += '<div class="sec mt">STOPPED, BY WAVE</div>';
+  const failedShown = failedList.slice(0, 60);
+  for (const [id, w] of failedShown) {
+    const n = assets.get(id);
+    const zc = n && ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+    const dark = n && (n.zone === 'Z3' || n.zone === 'Z0');
+    html += '<div class="wv" data-id="' + id + '" title="' + (n?.label || id) + '">'
+      + '<div class="wn">' + w + '</div><div class="wl">' + (n?.label || id) + '</div>'
+      + '<div class="wz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (n?.zone || '—') + '</div></div>';
+  }
+
+  cascadeBody.innerHTML = html;
+  cascadeBody.querySelectorAll('.wv').forEach(r => r.onclick = () => {
+    const a = assets.get(r.dataset.id);
+    if (a) selectAndFly(a, a._node);
+  });
+  rightEl.hidden = true;
+  threatEl.hidden = true;
+  riskEl.hidden = true;
+  assumeEl.hidden = true;
+  cascadeEl.hidden = false;
+  cascadeEl.classList.remove('collapsed');
+  document.getElementById('cascadeCollapse').textContent = '–';
+  animateCascade();
+}
+
+{
+  const box = document.getElementById('hazardSeeds');
+  if (HZ) for (const h of HZ.hazards) {
+    const seeds = (h.assets || []).filter(a => assets.has(a));
+    if (!seeds.length) continue;
+    const b = document.createElement('button');
+    b.className = 'vpbtn';
+    b.textContent = h.id + ' · RPN ' + h.rpn;
+    b.title = h.deviation + ' — ' + h.cyber_cause + ' (' + h.mitre + ')';
+    b.onclick = () => runCascade(seeds, h.id + ' — ' + h.deviation, h);
+    box.appendChild(b);
+  }
+}
+
+const CASCADE_SEEDS = [
+  ['ups', 'UPS 1'], ['chiller', 'Chiller 1'], ['row01_cdu', 'Row 1 CDU'],
+  ['busway', 'Cell A busway'], ['busway_b', 'Cell B busway'],
+  ['dali_gw', 'Lighting gateway'], ['pava_vacu', 'Voice alarm unit'],
+  ['chw_buffer', 'Thermal buffer'], ['fw_pump', 'Fire pump'], ['dcs_a', 'DCS controller A'], ['tower', 'Cooling tower 1'],
+  ['gen', 'Generator 1'], ['mv_swg', 'MV switchgear'], ['fws_spine', 'Facility water spine'],
+].filter(([id]) => assets.has(id));
+
+{
+  const box = document.getElementById('cascadeSeeds');
+  for (const [id, label] of CASCADE_SEEDS) {
+    const b = document.createElement('button');
+    b.className = 'vpbtn'; b.textContent = label;
+    b.onclick = () => runCascade([id], label);
+    box.appendChild(b);
+  }
+}
+document.getElementById('cascadeSel').onclick = () => {
+  if (S.sel && assets.has(S.sel)) runCascade([S.sel], assets.get(S.sel)?.label);
+};
+document.getElementById('cascadePlay').onclick = animateCascade;
+const closeCascade = () => { cascadeState = null; endAnalysis(); cascadeEl.hidden = true; };
+document.getElementById('cascadeClear').onclick = closeCascade;
+document.getElementById('cascadeClose').onclick = closeCascade;
+document.getElementById('cascadeCollapse').onclick = e => {
+  const on = cascadeEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// Risk Portfolio HUD Drawer (Right overlay)
+const riskEl = document.getElementById('risk');
+const riskBody = document.getElementById('riskBody');
+const riskSummary = document.getElementById('riskSummary');
+const chosen = new Set();
+
+function renderRisk() {
+  if (!riskBody) return;
+  if (!HZ) { riskBody.innerHTML = '<div class="empty">hazard-log.json not loaded.</div>'; return; }
+  const baseline = HZ.ale.reduce((a, x) => a + x.ale_usd, 0);
+
+  const perNode = {};
+  for (const a of HZ.ale) {
+    const rates = HZ.controls
+      .filter(c => chosen.has(c.control) && (c.nodes.includes('all') || c.nodes.includes(a.node)))
+      .map(c => c.mitigation_rate);
+    const best = rates.length ? Math.max(...rates) : 0;
+    perNode[a.node] = { ale: a.ale_usd, residual: a.ale_usd * (1 - best), rate: best };
+  }
+  const residual = Object.values(perNode).reduce((a, x) => a + x.residual, 0);
+  const spend = HZ.controls.filter(c => chosen.has(c.control))
+    .reduce((a, c) => a + c.annual_cost_usd, 0);
+  const avoided = baseline - residual;
+  const rosi = spend ? (avoided - spend) / spend : 0;
+
+  riskSummary.textContent = money(baseline) + ' baseline · ' + money(residual) + ' residual · '
+    + chosen.size + ' control' + (chosen.size === 1 ? '' : 's') + ' selected';
+
+  let html = '<div class="tstat">'
+    + '<div class="bigfig"><div class="bv">' + money(baseline) + '</div><div class="bk">BASELINE ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(residual) + '</div><div class="bk">RESIDUAL ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(spend) + '</div><div class="bk">ANNUAL SPEND</div></div>'
+    + '<div class="bigfig"><div class="bv">' + (spend ? Math.round(rosi * 100) + '%' : '—')
+    + '</div><div class="bk">PORTFOLIO ROSI</div></div></div>';
+
+  html += '<div class="sec">EXPOSURE BY NODE</div>';
+  for (const a of HZ.ale.slice().sort((x, y) => y.ale_usd - x.ale_usd)) {
+    const p = perNode[a.node];
+    const cut = p.rate ? ' → ' + money(p.residual) : '';
+    const col = p.rate ? '#2bd96a' : '#E8E8E6';
+    html += '<div class="alerow" title="' + a.scenario + '">'
+      + '<div class="an2">' + a.node + '</div>'
+      + '<div class="al">' + a.scenario + '</div>'
+      + '<div class="av" style="color:' + col + '">' + money(a.ale_usd) + cut + '</div></div>';
+  }
+
+  html += '<div class="sec mt">CONTROLS · SELECT TO APPLY</div>';
+  for (const c of HZ.controls.slice().sort((a, b) => b.rosi - a.rosi)) {
+    const on = chosen.has(c.control);
+    html += '<div class="ctrlrow" data-ctrl="' + c.control.replace(/"/g, '&quot;') + '">'
+      + '<input type="checkbox"' + (on ? ' checked' : '') + '>'
+      + '<div><div class="cl">' + c.control + '</div>'
+      + '<div class="cm">' + money(c.annual_cost_usd) + '/yr · mitigates '
+      + Math.round(c.mitigation_rate * 100) + '% · nodes ' + c.nodes.join(', ')
+      + '<br>' + c.clause + '</div></div>'
+      + '<div class="cr">' + Math.round(c.rosi * 100) + '%</div></div>';
+  }
+
+  riskBody.innerHTML = html;
+  riskBody.querySelectorAll('.ctrlrow').forEach(r => r.onclick = () => {
+    const k = r.dataset.ctrl;
+    chosen.has(k) ? chosen.delete(k) : chosen.add(k);
+    renderRisk();
+  });
+}
+
+function openRisk() {
+  rightEl.hidden = true;
+  threatEl.hidden = true;
+  cascadeEl.hidden = true;
+  assumeEl.hidden = true;
+  riskEl.hidden = false;
+  riskEl.classList.remove('collapsed');
+  document.getElementById('riskCollapse').textContent = '–';
+  renderRisk();
+}
+function closeRisk() {
+  riskEl.hidden = true;
+}
+
+document.getElementById('riskOpen').onclick = openRisk;
+document.getElementById('riskClose').onclick = closeRisk;
+document.getElementById('riskCollapse').onclick = e => {
+  const on = riskEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// Assumptions & Provenance HUD Drawer (Right overlay)
+const assumeEl = document.getElementById('assume');
+const assumeBody = document.getElementById('assumeBody');
+const assumeSummary = document.getElementById('assumeSummary');
+
+const SEV = { high: '#ff5252', medium: '#ffa726', low: '#8a8a88' };
+const STAT = { met: '#2bd96a', partial: '#ffa726', gap: '#ff5252',
+               resolved: '#2bd96a', 'partially resolved': '#ffa726', ambiguous: '#ffa726',
+               unresolved: '#ff5252', unconfirmed: '#ff5252', inconsistent: '#ffa726',
+               'source limitation': '#8a8a88', 'method choice': '#8a8a88' };
+
+function renderAssume() {
+  if (!assumeBody) return;
+  if (!HZ || !HZ.assumptions) { assumeBody.innerHTML = '<div class="empty">hazard-log.json not loaded.</div>'; return; }
+  
+  const hi = HZ.assumptions.filter(a => a.severity === 'high').length;
+  const cc = HZ.cell_conformance;
+  const cellGaps = cc ? cc.requirements.filter(r => r.status === 'gap').length : 0;
+  
+  assumeSummary.textContent = '16 recorded · ' + hi + ' high severity · '
+    + cellGaps + ' cell gaps · 7 gaps closed, 8 open';
+
+  let html = '';
+  
+  // Section: CELL CONFORMANCE — WP06 section 3.2
+  html += '<div class="sec">CELL CONFORMANCE — WP06 section 3.2</div>';
+  if (cc) {
+    for (const r of cc.requirements) {
+      const col = STAT[r.status] || '#2bd96a';
+      html += '<div class="blockrow">'
+        + '<b style="color:' + col + '">' + r.status.toUpperCase() + '</b> · <b>' + r.requirement + '</b>'
+        + '<br><span style="color:#C8C8C6;font-weight:normal;">' + r.evidence + '</span>'
+        + '</div>';
+    }
+  }
+
+  // Significance card
+  html += '<div class="blockrow" style="border-left:2px solid var(--dutch-orange);background:rgba(238,118,35,0.06);margin-top:6px;padding:7px 9px;">'
+    + '<b style="color:var(--dutch-orange);">Significance</b><br>'
+    + '<span style="color:#E8E8E6;font-weight:normal;">All five cell requirements are met in the topology, and each one is verified by a query against the model rather than by inspection. The OT boundary bounds a compromise to 4 assets; the power boundary bounds a busway loss to one cell. The residual exposure is the shared central chiller facility — correctly shared per WP06, and the reason N5 reconciles at 2.9x rather than the full campus multiple.</span><br><br>'
+    + '<span style="color:#8a8a88;font-weight:normal;">Correctly held campus-shared: substation and MV lineup, generators and bulk fuel, BESS, central chiller facility and cooling towers, carrier demarcs and internet boundary, core IT / DCS room, NOC and campus BMS, data diode</span>'
+    + '</div>';
+
+  // Section: ASSUMPTIONS
+  html += '<div class="sec mt">ASSUMPTIONS</div>';
+  const order = { high: 0, medium: 1, low: 2 };
+  for (const a of [...(HZ.assumptions || [])].sort((x, y) => order[x.severity] - order[y.severity])) {
+    const sCol = SEV[a.severity] || '#8a8a88';
+    const stCol = STAT[a.status] || '#8a8a88';
+    html += '<div class="blockrow">'
+      + '<b>' + a.id + ' · ' + a.topic + '</b> '
+      + '<span style="color:' + sCol + ';font-weight:700;">' + a.severity + '</span> · '
+      + '<span style="color:' + stCol + ';font-weight:normal;">' + a.status + '</span>'
+      + '<br><span style="color:#E8E8E6;font-weight:normal;">' + a.statement + '</span>'
+      + '<br><span style="color:#8a8a88;font-weight:normal;">Consequence: ' + a.consequence + '</span>'
+      + '<br><span style="color:#2bd96a;font-weight:normal;">→ ' + a.resolution + '</span>'
+      + '</div>';
+  }
+
+  assumeBody.innerHTML = html;
+}
+
+function openAssume() {
+  rightEl.hidden = true;
+  threatEl.hidden = true;
+  cascadeEl.hidden = true;
+  riskEl.hidden = true;
+  assumeEl.hidden = false;
+  assumeEl.classList.remove('collapsed');
+  document.getElementById('assumeCollapse').textContent = '–';
+  renderAssume();
+}
+function closeAssume() {
+  assumeEl.hidden = true;
+}
+
+document.getElementById('assumeOpen').onclick = openAssume;
+document.getElementById('assumeClose').onclick = closeAssume;
+document.getElementById('assumeCollapse').onclick = e => {
+  const on = assumeEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '–';
+};
+
+// Camera & Framing
+let flyAnim = null;
+function flyTo(center, radius, opts = {}) {
+  pauseIdleRotate();
+  const { durationMs = 620, alpha, beta } = opts;
+  const dist = Math.max(1.6, radius);
+  if (flyAnim) { scene.stopAnimation(camera); flyAnim = null; }
+
+  const frameRate = 60;
+  const totalFrames = Math.round((durationMs / 1000) * frameRate);
+  const ease = new BABYLON.QuadraticEase();
+  ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+  const anims = [];
+  const targetAnim = new BABYLON.Animation('flyTarget', 'target', frameRate,
+    BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+  targetAnim.setKeys([{ frame: 0, value: camera.target.clone() }, { frame: totalFrames, value: center }]);
+  targetAnim.setEasingFunction(ease);
+  anims.push(targetAnim);
+
+  const radiusAnim = new BABYLON.Animation('flyRadius', 'radius', frameRate,
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+  radiusAnim.setKeys([{ frame: 0, value: camera.radius }, { frame: totalFrames, value: dist }]);
+  radiusAnim.setEasingFunction(ease);
+  anims.push(radiusAnim);
+
+  if (alpha !== undefined) {
+    const twoPi = Math.PI * 2;
+    const diff = ((alpha - camera.alpha) % twoPi + twoPi + Math.PI) % twoPi - Math.PI;
+    const alphaAnim = new BABYLON.Animation('flyAlpha', 'alpha', frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    alphaAnim.setKeys([{ frame: 0, value: camera.alpha }, { frame: totalFrames, value: camera.alpha + diff }]);
+    alphaAnim.setEasingFunction(ease);
+    anims.push(alphaAnim);
+  }
+  if (beta !== undefined) {
+    const betaAnim = new BABYLON.Animation('flyBeta', 'beta', frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    betaAnim.setKeys([{ frame: 0, value: camera.beta }, { frame: totalFrames, value: beta }]);
+    betaAnim.setEasingFunction(ease);
+    anims.push(betaAnim);
+  }
+
+  camera.animations = anims;
+  flyAnim = scene.beginAnimation(camera, 0, totalFrames, false);
+  return (totalFrames / frameRate) * 1000;
+}
+function frameBounds(min, max, opts = {}) {
+  const { padding = 1.0 } = opts;
+  const center = min.add(max).scale(0.5);
+  const size = max.subtract(min);
+  const aspect = engine.getAspectRatio(camera) || 1.5;
+  const fov = camera.fov || 0.8;
+
+  let radius;
+  if (opts.beta !== undefined && opts.beta < 0.2) {
+    // Exact top-down projection: compute the exact radius where the facility bounds fill the screen
+    const radiusV = (size.z / 2) / Math.tan(fov / 2);
+    const radiusH = (size.x / 2) / (Math.tan(fov / 2) * aspect);
+    radius = Math.max(radiusV, radiusH) * padding;
+  } else {
+    radius = (BABYLON.Vector3.Distance(min, max) / 2) * padding;
+  }
+  return flyTo(center, radius, opts);
+}
+function boundsOfMeshes(meshes) {
+  let min = null, max = null;
+  for (const m of meshes) {
+    if (!m.getBoundingInfo || m.name === 'proceduralSky' || m.infiniteDistance) continue;
+    const b = m.getBoundingInfo().boundingBox;
+    min = min ? BABYLON.Vector3.Minimize(min, b.minimumWorld) : b.minimumWorld.clone();
+    max = max ? BABYLON.Vector3.Maximize(max, b.maximumWorld) : b.maximumWorld.clone();
+  }
+  return min ? { min, max } : null;
+}
+function getCampusBounds() {
+  let min = null, max = null;
+  for (const m of scene.meshes) {
+    if (!m.getBoundingInfo || m.name === 'proceduralSky' || m.infiniteDistance) continue;
+    if (m.name.startsWith('gnode_') || m.name.startsWith('gedge_') || m.name === '_graph_overlay' || m.name === '__root__') continue;
+    const b = m.getBoundingInfo().boundingBox;
+    const spanX = b.maximumWorld.x - b.minimumWorld.x;
+    const spanZ = b.maximumWorld.z - b.minimumWorld.z;
+    if (spanX > 200 || spanZ > 200) continue;
+    min = min ? BABYLON.Vector3.Minimize(min, b.minimumWorld) : b.minimumWorld.clone();
+    max = max ? BABYLON.Vector3.Maximize(max, b.maximumWorld) : b.maximumWorld.clone();
+  }
+  return min && max ? { min, max } : { min: new BABYLON.Vector3(-30, 0, -27.5), max: new BABYLON.Vector3(32, 11, 22) };
+}
+function frameCampus(opts = {}) {
+  const cb = getCampusBounds();
+  return frameBounds(cb.min, cb.max, { padding: 1.0, ...TOP_VIEW, ...opts });
+}
+function frameObject(node, opts = {}) {
+  if (!node) return;
+  const meshes = node.getChildMeshes ? node.getChildMeshes(false) : [];
+  if (node.getBoundingInfo) meshes.push(node);
+  const b = boundsOfMeshes(meshes);
+  if (!b) return;
+  return frameBounds(b.min, b.max, opts);
+}
+function frameByLocation(locations, opts = {}) {
+  const locSet = new Set(Array.isArray(locations) ? locations : [locations]);
+  const meshes = [];
+  for (const a of assets.values()) {
+    if (!locSet.has(a.location)) continue;
+    const n = a._node || (a.mesh ? scene.meshes.find(m => m.name === a.mesh) : null);
+    if (!n) continue;
+    if (n.getChildMeshes) meshes.push(...n.getChildMeshes(false));
+    if (n.getBoundingInfo) meshes.push(n);
+  }
+  const b = boundsOfMeshes(meshes);
+  if (!b) return frameCampus(opts);
+  return frameBounds(b.min, b.max, { padding: 1.3, ...opts });
+}
+function frameByMeshPrefix(prefix, opts = {}) {
+  const meshes = scene.meshes.filter(m => m.name && m.name.startsWith(prefix));
+  const b = boundsOfMeshes(meshes);
+  if (!b) return frameCampus(opts);
+  return frameBounds(b.min, b.max, { padding: 1.3, ...opts });
+}
+
+// Idle Auto-Rotate
+const IDLE_ROTATE_SPEED = 0.025;
+const IDLE_RESUME_AFTER_MS = 25000;
+let idleRotating = false;
+let idleResumeTimer = null;
+function pauseIdleRotate() {
+  idleRotating = false;
+  if (idleResumeTimer) clearTimeout(idleResumeTimer);
+  idleResumeTimer = setTimeout(() => { if (!S.touring) idleRotating = true; }, IDLE_RESUME_AFTER_MS);
+}
+scene.onBeforeRenderObservable.add(() => {
+  if (!idleRotating) return;
+  camera.alpha += IDLE_ROTATE_SPEED * (engine.getDeltaTime() / 1000);
+});
+canvas.addEventListener('pointerdown', pauseIdleRotate);
+canvas.addEventListener('wheel', pauseIdleRotate, { passive: true });
+
+const TOP_VIEW = { alpha: -Math.PI / 2, beta: 0.001 };
+const initialFlightMs = frameCampus() || 620;
+setTimeout(() => { if (!S.touring) idleRotating = true; }, initialFlightMs + 8000);
+
+// Sub-Rack Explode & Thermal/Power Telemetry Engine
+let activeExplodedRack = null;
+const explodedEntries = []; // { mesh, origPos, targetPos, origMat, isProcedural }
+const thermalMatCache = new Map();
+
+function getRackForAsset(asset) {
+  if (!asset) return null;
+  if (asset.template === 'rack_gpu_48u') return asset;
+  if (asset.id && asset.id.startsWith('row') && asset.id.includes('_rack')) {
+    const rackId = asset.id.split('_').slice(0, 2).join('_');
+    return assets.get(rackId) || null;
+  }
+  return null;
+}
+
+function getThermalColor(tempC, isCritical = false) {
+  if (isCritical) return new BABYLON.Color3(1.0, 0.12, 0.12);
+  if (tempC < 45) {
+    const t = Math.max(0, (tempC - 35) / 10);
+    return new BABYLON.Color3(0.1 + 0.1 * t, 0.75 + 0.15 * t, 0.6 - 0.2 * t);
+  } else if (tempC < 65) {
+    const t = (tempC - 45) / 20;
+    return new BABYLON.Color3(0.2 + 0.7 * t, 0.9 - 0.2 * t, 0.4 - 0.3 * t);
+  } else {
+    const t = Math.min(1, (tempC - 65) / 20);
+    return new BABYLON.Color3(0.9 + 0.1 * t, 0.5 - 0.3 * t, 0.08);
+  }
+}
+
+function getThermalMaterial(tempC, isFault = false) {
+  const key = `${Math.round(tempC)}_${isFault}`;
+  if (thermalMatCache.has(key)) return thermalMatCache.get(key);
+  const mat = new BABYLON.StandardMaterial(`thermal_mat_${key}`, scene);
+  const col = getThermalColor(tempC, isFault);
+  mat.diffuseColor = new BABYLON.Color3(0.12, 0.12, 0.14);
+  mat.emissiveColor = isFault ? new BABYLON.Color3(0.95, 0.1, 0.1) : col.scale(0.85);
+  mat.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+  thermalMatCache.set(key, mat);
+  return mat;
+}
+
+function getBladeTelemetry(asset) {
+  if (!asset) return null;
+  const rackAsset = getRackForAsset(asset);
+  const rackId = rackAsset ? rackAsset.id : null;
+  const isCritical = Boolean(typeof cascadeState !== 'undefined' && cascadeState && (cascadeState.failed.has(asset.id) || (rackId && cascadeState.failed.has(rackId))));
+  const isThreat = Boolean(typeof threatState !== 'undefined' && threatState && (threatState.reached.has(asset.id) || (rackId && threatState.reached.has(rackId))));
+  const hasFault = isCritical || isThreat;
+
+  let baseTemp = 72.4;
+  let powerKw = 6.4;
+  let flowLpm = 1.85;
+  let chwIn = 24.1;
+  let chwOut = 38.6;
+  let category = 'Blade';
+
+  if (asset.id.includes('compute_tray')) {
+    const idx = parseInt(asset.id.split('_').pop()) || 0;
+    baseTemp = hasFault ? 96.8 : (68.5 + (idx % 6) * 1.6);
+    powerKw = hasFault ? 1.2 : 6.4;
+    flowLpm = hasFault ? 0.2 : 1.85;
+    chwOut = hasFault ? 54.2 : 38.6;
+    category = 'AMD Instinct MI300X OAM Compute Blade';
+  } else if (asset.id.includes('nvswitch')) {
+    const idx = parseInt(asset.id.split('_').pop()) || 0;
+    baseTemp = hasFault ? 84.5 : (52.0 + (idx % 4) * 1.4);
+    powerKw = hasFault ? 0.4 : 1.8;
+    flowLpm = 0.75;
+    chwOut = 33.8;
+    category = 'NVSwitch / UALink 800G Fabric Tray';
+  } else if (asset.id.includes('power_shelf')) {
+    baseTemp = hasFault ? 68.2 : 48.6;
+    powerKw = 33.0;
+    flowLpm = 0.0;
+    chwOut = 0.0;
+    category = 'OCP Open Rack v3 48V DC Power Shelf';
+  } else if (asset.id.includes('mgmt')) {
+    baseTemp = hasFault ? 58.0 : 38.2;
+    powerKw = 0.35;
+    flowLpm = 0.0;
+    chwOut = 0.0;
+    category = 'OOB Management & BMC Telemetry Tray';
+  } else if (asset.id.includes('storage')) {
+    baseTemp = hasFault ? 62.0 : 42.1;
+    powerKw = 0.65;
+    flowLpm = 0.0;
+    chwOut = 0.0;
+    category = 'E1.S / NVMe-oF High-Density Storage Node';
+  } else if (asset.id.includes('tor')) {
+    baseTemp = hasFault ? 72.0 : 49.5;
+    powerKw = 1.2;
+    flowLpm = 0.0;
+    chwOut = 0.0;
+    category = '800GbE Top-of-Rack Leaf Switch';
+  } else {
+    baseTemp = hasFault ? 88.0 : 64.0;
+    powerKw = hasFault ? 2.0 : 120.0;
+    flowLpm = 32.0;
+    chwIn = 24.1;
+    chwOut = 38.6;
+    category = '42U Liquid-Cooled AI GPU Rack';
+  }
+
+  return {
+    tempC: baseTemp,
+    powerKw: powerKw,
+    flowLpm: flowLpm,
+    chwIn: chwIn,
+    chwOut: chwOut,
+    deltaT: (chwOut - chwIn).toFixed(1),
+    hasFault: hasFault,
+    category: category,
+    faultReason: isCritical ? 'CDU / Primary Cooling Loss' : (isThreat ? 'BMC Firmware Compromise' : null),
+  };
+}
+
+function explodeRack(rackId) {
+  if (activeExplodedRack === rackId) {
+    collapseRack();
+    return;
+  }
+  if (activeExplodedRack) collapseRack();
+
+  const rackAsset = assets.get(rackId);
+  if (!rackAsset) return;
+  activeExplodedRack = rackId;
+
+  const rackComps = [];
+  for (const [id, a] of assets) {
+    if (a.id.startsWith(rackId + '_') || a.id === rackId) {
+      rackComps.push(a);
+    }
+  }
+
+  const rackNode = rackAsset._node || byName.get(rackAsset.mesh);
+  let trayCount = 0;
+
+  for (const comp of rackComps) {
+    if (comp.id === rackId) continue;
+    const meshNode = comp._node || byName.get(comp.mesh);
+    const telem = getBladeTelemetry(comp);
+    const thermalMat = getThermalMaterial(telem.tempC, telem.hasFault);
+
+    if (meshNode && meshNode instanceof BABYLON.Mesh) {
+      const origPos = meshNode.position.clone();
+      const stagger = 0.35 + (trayCount % 6) * 0.05;
+      const targetPos = origPos.clone();
+      targetPos.z += stagger;
+
+      explodedEntries.push({
+        mesh: meshNode,
+        origPos: origPos,
+        targetPos: targetPos,
+        origMat: meshNode.material,
+        isProcedural: false
+      });
+
+      meshNode.material = thermalMat;
+      BABYLON.Animation.CreateAndStartAnimation(
+        'explodeTray', meshNode, 'position', 60, 24,
+        origPos, targetPos, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
+        new BABYLON.QuadraticEase()
+      );
+      trayCount++;
+    }
+  }
+
+  if (trayCount === 0 && rackNode) {
+    const parentTransform = rackNode;
+    const shelfHeights = [
+      ...Array.from({length: 6}, (_, i) => ({ type: 'power', y: 0.15 + i * 0.08, label: `Power shelf #${i}` })),
+      ...Array.from({length: 9}, (_, i) => ({ type: 'nvswitch', y: 0.70 + i * 0.06, label: `NVSwitch tray #${i}` })),
+      ...Array.from({length: 18}, (_, i) => ({ type: 'compute', y: 1.30 + i * 0.045, label: `Compute blade #${i}` })),
+    ];
+
+    shelfHeights.forEach((sh, idx) => {
+      const trayMesh = BABYLON.MeshBuilder.CreateBox(`${rackId}_proc_tray_${idx}`, { width: 0.52, height: 0.038, depth: 0.85 }, scene);
+      trayMesh.parent = parentTransform;
+      const origPos = new BABYLON.Vector3(0, sh.y, 0);
+      const stagger = 0.35 + (idx % 6) * 0.05;
+      const targetPos = new BABYLON.Vector3(0, sh.y, stagger);
+      trayMesh.position = origPos.clone();
+
+      const tempC = sh.type === 'compute' ? (70 + (idx % 6) * 1.5) : (sh.type === 'nvswitch' ? 56 : 48);
+      const isFault = cascadeState && (cascadeState.failed.has(rackId));
+      trayMesh.material = getThermalMaterial(tempC, isFault);
+
+      explodedEntries.push({
+        mesh: trayMesh,
+        origPos: origPos,
+        targetPos: targetPos,
+        origMat: null,
+        isProcedural: true
+      });
+
+      BABYLON.Animation.CreateAndStartAnimation(
+        'explodeProcTray', trayMesh, 'position', 60, 24,
+        origPos, targetPos, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
+        new BABYLON.QuadraticEase()
+      );
+    });
+  }
+
+  if (rackNode) {
+    const pos = rackNode.getAbsolutePosition ? rackNode.getAbsolutePosition() : new BABYLON.Vector3(0, 1.5, 0);
+    flyTo(pos, 2.2, { durationMs: 700, alpha: camera.alpha, beta: 1.25 });
+  }
+
+  if (S.sel) {
+    const selAsset = assets.get(S.sel);
+    if (selAsset && (selAsset.id === rackId || selAsset.id.startsWith(rackId + '_'))) {
+      select(selAsset, selAsset._node);
+    }
+  }
+}
+
+function collapseRack() {
+  if (!activeExplodedRack) return;
+  const currentEntries = [...explodedEntries];
+  explodedEntries.length = 0;
+  activeExplodedRack = null;
+
+  for (const entry of currentEntries) {
+    if (!entry.mesh) continue;
+    BABYLON.Animation.CreateAndStartAnimation(
+      'collapseTray', entry.mesh, 'position', 60, 20,
+      entry.mesh.position.clone(), entry.origPos,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
+      new BABYLON.QuadraticEase(),
+      () => {
+        if (entry.isProcedural) {
+          entry.mesh.dispose();
+        } else if (entry.origMat) {
+          entry.mesh.material = entry.origMat;
+        }
+      }
+    );
+  }
+
+  if (S.sel) {
+    const selAsset = assets.get(S.sel);
+    if (selAsset) select(selAsset, selAsset._node);
+  }
+}
+
+// Selection & Inspection Panel
+const rightEl = document.getElementById('right');
+const selName = document.getElementById('selName');
+const selKind = document.getElementById('selKind');
+const selBody = document.getElementById('selBody');
+const zoneTag = document.getElementById('zoneTag');
+
+const highlightLayer = new BABYLON.HighlightLayer('hl', scene);
+highlightLayer.innerGlow = false;
+highlightLayer.outerGlow = true;
+
+function clearHighlight() { highlightLayer.removeAllMeshes(); }
+function highlight(node) {
+  clearHighlight();
+  if (!node) return;
+  const meshes = node.getChildMeshes ? node.getChildMeshes(false) : [];
+  if (node.getBoundingInfo) meshes.push(node);
+  for (const m of meshes) highlightLayer.addMesh(m, BABYLON.Color3.FromHexString('#EE7623'));
+}
+
+function select(asset, pickedMesh) {
+  highlight(asset._node);
+  threatEl.hidden = true;
+  cascadeEl.hidden = true;
+  riskEl.hidden = true;
+  assumeEl.hidden = true;
+  rightEl.hidden = false;
+  rightEl.classList.remove('collapsed');
+  document.getElementById('rightCollapse').textContent = '–';
+  let kindStr = `${asset.kind}${asset.location ? ' · ' + asset.location : ''}${asset.cell ? ' · ' + asset.cell : ''}`;
+  if (asset.id && asset.id.startsWith('row') && asset.id.includes('_')) {
+    const parts = asset.id.split('_');
+    if (parts.length >= 3) {
+      const rowNum = parts[0].replace('row', 'Row ');
+      const rackNum = parts[1].replace('rack', 'Rack ');
+      kindStr = `${rowNum} > ${rackNum} > ${asset.kind} · ${asset.cell || 'Cell A'}`;
+    }
+  }
+  selName.textContent = asset.label;
+  selKind.textContent = kindStr;
+
+  if (asset.zone && ZONES[asset.zone]) {
+    zoneTag.style.display = 'inline-flex';
+    zoneTag.style.background = hex(ZONES[asset.zone].color);
+    zoneTag.style.color = asset.zone === 'Z3' ? '#16203B' : '#fff';
+    zoneTag.textContent = `${ZONES[asset.zone].label} · Purdue ${asset.purdue || ZONES[asset.zone].purdue} · ${asset.sl_target || ZONES[asset.zone].slt}`;
+  } else {
+    zoneTag.style.display = 'none';
+  }
+
+  const rackAsset = getRackForAsset(asset);
+  const rackId = rackAsset ? rackAsset.id : null;
+  const isRackOrBlade = rackAsset !== null;
+  const isCurrentlyExploded = activeExplodedRack === rackId;
+
+  let telemetryHtml = '';
+  if (isRackOrBlade) {
+    const telem = getBladeTelemetry(asset);
+    const tempCol = telem.hasFault ? '#ff3b30' : (telem.tempC > 75 ? '#ff9500' : '#2bd96a');
+    const tempWidth = Math.min(100, Math.max(10, ((telem.tempC - 20) / 80) * 100));
+
+    telemetryHtml += `<div class="sec mt">SUB-RACK TELEMETRY &amp; SENSORS</div>`
+      + `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:9px 11px;margin-bottom:8px;">`
+      + `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">`
+      + `<span style="font-size:10px;color:var(--text-muted);font-weight:600;">DIE TEMPERATURE</span>`
+      + `<span style="font-size:12px;font-weight:700;color:${tempCol};font-family:var(--font-mono);">${telem.tempC.toFixed(1)}°C ${telem.hasFault ? '⚠️ CRITICAL' : '(Nominal)'}</span>`
+      + `</div>`
+      + `<div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-bottom:8px;">`
+      + `<div style="width:${tempWidth}%;height:100%;background:${tempCol};border-radius:2px;"></div>`
+      + `</div>`
+      + `<div class="kv"><b>power draw</b><span>${telem.powerKw.toFixed(1)} kW</span></div>`
+      + `<div class="kv"><b>liquid cooling</b><span>${telem.flowLpm > 0 ? telem.flowLpm.toFixed(2) + ' L/min (ΔT +' + telem.deltaT + '°C)' : '48V DC Busbar'}</span></div>`
+      + `<div class="kv"><b>cooling loop</b><span>${telem.flowLpm > 0 ? telem.chwIn.toFixed(1) + '°C In / ' + telem.chwOut.toFixed(1) + '°C Out' : 'Direct Air/Busbar'}</span></div>`
+      + (telem.hasFault ? `<div class="kv" style="color:#ff5252;border:none;"><b>hazard alert</b><span>${telem.faultReason}</span></div>` : '')
+      + `</div>`
+      + `<div class="btnrow" style="margin-bottom:10px;">`
+      + `<button class="vpbtn" id="btnExplodeRack" style="width:100%;font-weight:700;color:${isCurrentlyExploded ? 'var(--dutch-orange)' : '#fff'};background:${isCurrentlyExploded ? 'rgba(238,118,35,0.15)' : 'rgba(255,255,255,0.06)'};border-color:${isCurrentlyExploded ? 'var(--dutch-orange)' : 'var(--border)'};">`
+      + `${isCurrentlyExploded ? '🔒 Collapse Sub-Rack Trays' : '⚡ Explode Sub-Rack View'}`
+      + `</button>`
+      + `</div>`;
+  }
+
+  const ident = (asset.vendor ? `<div class="kv"><b>vendor</b><span>${asset.vendor}</span></div>` : '')
+              + (asset.standards ? `<div class="kv"><b>standards</b><span>${asset.standards}</span></div>` : '');
+  const attrs = Object.entries(asset.attributes || {})
+    .map(([k, v]) => `<div class="kv"><b>${k.replace(/_/g, ' ')}</b><span>${v}</span></div>`).join('');
+  const surf = (asset.attack_surface || []).length
+    ? `<div class="sec mt">ATTACK SURFACE &amp; ASSURANCE NOTES</div>` +
+      asset.attack_surface.map(t => `<div class="kv" style="border:none"><span>${t}</span></div>`).join('')
+    : '';
+
+  selBody.innerHTML =
+    telemetryHtml +
+    (ident ? `<div class="sec">IDENTIFICATION</div>${ident}` : '') +
+    (attrs ? `<div class="sec mt">ATTRIBUTES</div>${attrs}` : '') +
+    surf +
+    `<div class="sec mt">MESH</div><div class="kv"><b>name</b><span>${pickedMesh?.name || asset.mesh}</span></div>` +
+    `<div class="sec mt">TRACE CONNECTIONS</div>` +
+    `<div class="tracerow" id="traceBtnRow">` +
+      `<button class="vpbtn" data-trace="up">Upstream</button>` +
+      `<button class="vpbtn" data-trace="down">Downstream</button>` +
+      `<button class="vpbtn" data-trace="both">Both</button>` +
+      `<button class="vpbtn" data-trace="clear">Clear</button>` +
+    `</div>` +
+    `<div id="traceStats" style="display:none;"></div>`;
+  selBody.dataset.assetId = asset.id;
+}
+
+function selectAndFly(asset, pickedMesh) {
+  select(asset, pickedMesh);
+  frameObject(asset._node || pickedMesh);
+}
+window.select = select;
+window.selectAndFly = selectAndFly;
+
+selBody.addEventListener('click', e => {
+  if (e.target.id === 'btnExplodeRack' || e.target.closest('#btnExplodeRack')) {
+    const id = selBody.dataset.assetId;
+    const asset = assets.get(id);
+    const rackAsset = getRackForAsset(asset);
+    if (rackAsset) explodeRack(rackAsset.id);
+    return;
+  }
+  const btn = e.target.closest('[data-trace]');
+  if (!btn) return;
+  const id = selBody.dataset.assetId;
+  if (!id) return;
+  if (btn.dataset.trace === 'clear') clearTrace();
+  else setTrace(id, btn.dataset.trace);
+});
+
+// Picking with Single/Double-Click Support
+let down = null;
+let lastPickTime = 0;
+let lastPickedMesh = null;
+
+canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
+canvas.addEventListener('pointerup', e => {
+  if (!down) return;
+  const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  down = null;
+  if (moved > 5) return;
+  const pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (!pick?.hit || !pick.pickedMesh) return;
+  const asset = assetOf(pick.pickedMesh);
+  if (asset) {
+    const now = performance.now();
+    const isDoubleClick = (now - lastPickTime < 350) && (lastPickedMesh === pick.pickedMesh);
+    lastPickTime = now;
+    lastPickedMesh = pick.pickedMesh;
+
+    selectAndFly(asset, pick.pickedMesh);
+
+    if (isDoubleClick) {
+      const rackAsset = getRackForAsset(asset);
+      if (rackAsset) explodeRack(rackAsset.id);
+    }
+  }
+});
+
+document.getElementById('rightClose').onclick = () => { rightEl.hidden = true; clearHighlight(); collapseRack(); };
+document.getElementById('rightCollapse').onclick = () => {
+  rightEl.classList.toggle('collapsed');
+  document.getElementById('rightCollapse').textContent = rightEl.classList.contains('collapsed') ? '+' : '–';
+};
+
+// Left Menu Toggle & Embed Mode Support
+const urlParams = new URLSearchParams(window.location.search);
+const isEmbed = urlParams.has('embed') || urlParams.has('nomenu') || urlParams.has('hero') || urlParams.get('menu') === '0';
+const leftEl = document.getElementById('left');
+const menuToggleBtn = document.getElementById('menuToggleBtn');
+const leftHideBtn = document.getElementById('leftHideBtn');
+
+function setMenuVisibility(show) {
+  if (!leftEl) return;
+  leftEl.style.display = show ? 'flex' : 'none';
+  if (menuToggleBtn) menuToggleBtn.style.display = show ? 'none' : 'block';
+}
+window.setMenuVisibility = setMenuVisibility;
+
+if (leftHideBtn) leftHideBtn.onclick = () => setMenuVisibility(false);
+if (menuToggleBtn) menuToggleBtn.onclick = () => setMenuVisibility(true);
+if (isEmbed) {
+  setMenuVisibility(false);
+}
+
+// Search Engine
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+function runSearch(qRaw) {
+  const q = qRaw.trim().toLowerCase();
+  searchResults.innerHTML = '';
+  if (q.length < 2) return;
+
+  const assetHits = [];
+  for (const a of assets.values()) {
+    const hay = [a.label, a.mesh, a.kind, a.location, a.cell].filter(Boolean).join(' ').toLowerCase();
+    if (hay.includes(q)) assetHits.push(a);
+    if (assetHits.length >= 8) break;
+  }
+  const hitAssetIds = new Set(assetHits.map(a => a.id));
+
+  const meshHits = [];
+  for (const m of scene.meshes) {
+    if (!m.name || m.name.startsWith('gnode_') || m.name.startsWith('gedge_')) continue;
+    if (!m.name.toLowerCase().includes(q)) continue;
+    const owner = assetOf(m);
+    if (owner && hitAssetIds.has(owner.id)) continue;
+    meshHits.push(m);
+    if (meshHits.length >= 5) break;
+  }
+
+  for (const a of assetHits) {
+    const row = document.createElement('div');
+    row.className = 'hit';
+    row.innerHTML = `${a.label}<div class="hn">${a.mesh}</div>`;
+    row.onclick = () => { searchInput.value = ''; searchResults.innerHTML = ''; selectAndFly(a, a._node); };
+    searchResults.appendChild(row);
+  }
+  for (const m of meshHits) {
+    const row = document.createElement('div');
+    row.className = 'hit';
+    row.innerHTML = `${m.name}<div class="hn">mesh</div>`;
+    row.onclick = () => { searchInput.value = ''; searchResults.innerHTML = ''; frameObject(m); };
+    searchResults.appendChild(row);
+  }
+}
+searchInput.addEventListener('input', () => runSearch(searchInput.value));
+
+// Asset List & Zone Multi-Group Toggles
+const AGROUPS = new Map();
+
+function toggleGroup(mode, key, btn) {
+  if (mode === 'all') {
+    AGROUPS.clear();
+    document.querySelectorAll('#panelSystems button, #panelRows button, #panelCells button, #listZones button').forEach(b => b.classList.remove('on'));
+    const allAssets = [...assets.values()];
+    AGROUPS.set('all', { mode: 'all', key: 'all', btn, list: allAssets });
+    btn.classList.add('on');
+    highlightActiveGroups();
+    return;
+  }
+
+  if (AGROUPS.has('all')) {
+    AGROUPS.delete('all');
+    const allBtn = document.getElementById('listAllBtn');
+    if (allBtn) allBtn.classList.remove('on');
+  }
+
+  const gk = `${mode}_${key}`;
+  if (AGROUPS.has(gk)) {
+    AGROUPS.delete(gk);
+    btn.classList.remove('on');
+  } else {
+    const list = [...assets.values()].filter(a => {
+      if (mode === 'zone') return a.zone === key;
+      if (mode === 'system') return a.system === key;
+      if (mode === 'cell') return (a.cell || 'Campus (shared)') === key;
+      if (mode === 'location') return a.location === key;
+      if (mode === 'row') {
+        if (key.startsWith('ROW')) return a.id.toLowerCase().startsWith(key.toLowerCase());
+        if (key === 'Core IT & MMR') return a.location === 'Core IT room' || a.location === 'MMR' || a.location === 'NOC';
+        if (key === 'West Yard & MV') return a.location === 'West yard' || a.location === 'MV room' || a.location === 'LV/UPS room' || a.location === 'Battery room';
+        if (key === 'Central Facility & East') return a.location === 'Central facility (shared)' || a.location === 'East yard';
+        if (key === 'Security & Admin') return a.location === 'Reception' || a.location === 'Security officer\'s office' || a.location === 'Mantrap' || a.location === 'Entry way';
+      }
+      return false;
+    });
+    AGROUPS.set(gk, { mode, key, btn, list });
+    btn.classList.add('on');
+  }
+
+  highlightActiveGroups();
+}
+
+function clearGroups(scope) {
+  if (scope === 'zone') {
+    for (const gk of [...AGROUPS.keys()]) {
+      if (gk.startsWith('zone_')) {
+        const g = AGROUPS.get(gk);
+        if (g?.btn) g.btn.classList.remove('on');
+        AGROUPS.delete(gk);
+      }
+    }
+    document.querySelectorAll('#listZones button').forEach(b => b.classList.remove('on'));
+  } else {
+    AGROUPS.clear();
+    document.querySelectorAll('#panelSystems button, #panelRows button, #panelCells button, #listZones button, #listAll button').forEach(b => b.classList.remove('on'));
+  }
+  highlightActiveGroups();
+}
+
+function highlightActiveGroups() {
+  for (const id of analysis.paintedNodes) paintNode(id, null);
+  for (const id of analysis.paintedEdges) paintEdge(id, null);
+  analysis.paintedNodes.clear();
+  analysis.paintedEdges.clear();
+
+  if (AGROUPS.size === 0) {
+    S.trace = null;
+    apply();
+    return;
+  }
+
+  const unionNodes = new Set();
+  const unionEdges = new Set();
+
+  for (const g of AGROUPS.values()) {
+    for (const a of g.list) {
+      unionNodes.add(a.id);
+      paintNode(a.id, 'entry');
+      analysis.paintedNodes.add(a.id);
+    }
+  }
+
+  for (const e of edges) {
+    if (unionNodes.has(e.from) || unionNodes.has(e.to)) {
+      unionEdges.add(e.id);
+      paintEdge(e.id, 'reached');
+      analysis.paintedEdges.add(e.id);
+    }
+  }
+
+  S.trace = { nodes: unionNodes, edges: unionEdges };
+  apply();
+}
+
+function setupAssetListAndZoneButtons() {
+  const css = h => '#' + h.toString(16).padStart(6, '0');
+  const lift = (h, k = 0.18) => {
+    const r = (h >> 16) & 255, g = (h >> 8) & 255, b2 = h & 255;
+    const f = v => Math.round(v + (255 - v) * k);
+    return css((f(r) << 16) | (f(g) << 8) | f(b2));
+  };
+  const fgFor = h => {
+    const ch = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    const L = 0.2126 * ch((h >> 16) & 255) + 0.7152 * ch((h >> 8) & 255) + 0.0722 * ch(h & 255);
+    const onWhite = 1.05 / (L + 0.05);
+    const onBlack = (L + 0.05) / 0.0433;
+    return onBlack >= onWhite ? '#0a0a0b' : '#ffffff';
+  };
+  const paint = (b, hex) => {
+    b.style.setProperty('--c', css(hex));
+    b.style.setProperty('--c2', lift(hex));
+    b.style.setProperty('--fg', fgFor(hex));
+  };
+
+  // 1. ASSET LIST TABS SWITCHER
+  const tabBtns = document.querySelectorAll('#assetTabs .vpbtn');
+  const panels = {
+    system: document.getElementById('panelSystems'),
+    row: document.getElementById('panelRows'),
+    cell: document.getElementById('panelCells'),
+  };
+  tabBtns.forEach(btn => {
+    btn.onclick = () => {
+      tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const target = btn.dataset.tab;
+      Object.entries(panels).forEach(([k, p]) => {
+        if (p) p.style.display = k === target ? 'flex' : 'none';
+      });
+    };
+  });
+
+  // 2. PANEL: BY SYSTEM
+  const ps = panels.system;
+  if (ps) {
+    ps.innerHTML = '';
+    const sysDefs = [
+      { key: 'IT', label: 'IT', count: 2025, col: 0x35c2c9, title: 'Compute blades, storage nodes, management trays' },
+      { key: 'DATA', label: 'DATA', count: 1255, col: 0x1fa8a0, title: 'NVSwitch fabric, EoR switches, spine uplinks' },
+      { key: 'PWR', label: 'PWR', count: 739, col: 0xd8b23a, title: 'Power shelves, 400V busways, switchgear, UPS' },
+      { key: 'CHW', label: 'CHW', count: 224, col: 0x1f6fd0, title: 'CDUs, chilled water headers, liquid cold plates' },
+      { key: 'BMS', label: 'BMS', count: 64, col: 0xe8e8e2, title: 'DDC controllers, environmental sensors' },
+      { key: 'SEC', label: 'SEC', count: 42, col: 0xe07a26, title: 'Access control, mantraps, CCTV cameras' },
+      { key: 'FA', label: 'FA', count: 25, col: 0xc8332a, title: 'Fire alarm panels, VESDA aspirating detectors' },
+      { key: 'OT', label: 'OT', count: 22, col: 0x8a4fd0, title: 'PLCs, SCADA gateways, protocol translators' },
+      { key: 'AIR', label: 'AIR', count: 8, col: 0x9aa4ac, title: 'CRAH units, AHUs, exhaust ventilation' },
+      { key: 'FAC', label: 'FAC', count: 1, col: 0x7f8f9a, title: 'Loading dock and facility civil boundary' },
+    ];
+    for (const s of sysDefs) {
+      const b = document.createElement('button');
+      b.className = 'btn cls';
+      b.textContent = `${s.label} (${s.count.toLocaleString()})`;
+      b.title = s.title;
+      paint(b, s.col);
+      b.onclick = () => toggleGroup('system', s.key, b);
+      ps.appendChild(b);
+    }
+  }
+
+  // 3. PANEL: BY ROW / RACK
+  const pr = panels.row;
+  if (pr) {
+    pr.innerHTML = '';
+    const rowDefs = [
+      { key: 'ROW01', label: 'Row 01', count: 703, col: 0x35c2c9 },
+      { key: 'ROW02', label: 'Row 02', count: 699, col: 0x1f6fd0 },
+      { key: 'ROW03', label: 'Row 03', count: 699, col: 0x8a4fd0 },
+      { key: 'ROW04', label: 'Row 04', count: 699, col: 0xd8b23a },
+      { key: 'ROW05', label: 'Row 05', count: 699, col: 0xe07a26 },
+      { key: 'ROW06', label: 'Row 06', count: 699, col: 0xc8332a },
+      { key: 'Core IT & MMR', label: 'Core IT & MMR', count: 69, col: 0x2ad0c9 },
+      { key: 'West Yard & MV', label: 'West Yard & MV', count: 20, col: 0xd8c23a },
+      { key: 'Central Facility & East', label: 'Central Facility & East', count: 16, col: 0x1fa8a0 },
+      { key: 'Security & Admin', label: 'Security & Admin', count: 14, col: 0xe07a26 },
+    ];
+    for (const r of rowDefs) {
+      const b = document.createElement('button');
+      b.className = 'btn cls';
+      b.textContent = `${r.label} (${r.count})`;
+      paint(b, r.col);
+      b.onclick = () => toggleGroup('row', r.key, b);
+      pr.appendChild(b);
+    }
+  }
+
+  // 4. PANEL: BY CELL & LOCATION
+  const pc = panels.cell;
+  if (pc) {
+    pc.innerHTML = '';
+    const cellDefs = [
+      { mode: 'cell', key: 'Cell A', label: 'Cell A (West)', count: 2118, col: 0x1f6fd0 },
+      { mode: 'cell', key: 'Cell B', label: 'Cell B (East)', count: 2109, col: 0xd8b23a },
+      { mode: 'cell', key: 'Campus (shared)', label: 'Campus (Shared)', count: 178, col: 0x9ba1a8 },
+      { mode: 'location', key: 'Data hall', label: 'Data Hall', count: 4243, col: 0x35c2c9 },
+      { mode: 'location', key: 'Core IT room', label: 'Core IT Room', count: 51, col: 0x2aa9b5 },
+      { mode: 'location', key: 'MMR', label: 'MMR', count: 18, col: 0x46a8d0 },
+      { mode: 'location', key: 'West yard', label: 'West Yard', count: 14, col: 0xd8c23a },
+      { mode: 'location', key: 'Central facility (shared)', label: 'Central Facility', count: 11, col: 0x1f6fd0 },
+      { mode: 'location', key: 'LV/UPS room', label: 'LV/UPS Room', count: 11, col: 0xd8b23a },
+      { mode: 'location', key: 'Reception', label: 'Reception & Entry', count: 10, col: 0xe07a26 },
+    ];
+    for (const c of cellDefs) {
+      const b = document.createElement('button');
+      b.className = 'btn cls';
+      b.textContent = `${c.label} (${c.count.toLocaleString()})`;
+      paint(b, c.col);
+      b.onclick = () => toggleGroup(c.mode, c.key, b);
+      pc.appendChild(b);
+    }
+  }
+
+  const allBtn = document.getElementById('listAllBtn');
+  if (allBtn) allBtn.onclick = () => toggleGroup('all', 'all', allBtn);
+  const clearBtn = document.getElementById('listClearBtn');
+  if (clearBtn) clearBtn.onclick = () => clearGroups();
+
+  // 5. IEC 62443 ZONE BUTTONS
+  const zb = document.getElementById('listZones');
+  if (zb) {
+    zb.innerHTML = '';
+    const zoneDefs = [
+      { key: 'Z0', label: 'Z0 — Enterprise IT', count: 3160, col: 0x9ba1a8, title: 'Zone 4 / Enterprise IT (3,160 assets)' },
+      { key: 'Z1', label: 'Z1 — DCIM / IDMZ', count: 35, col: 0x35c2c9, title: 'Zone 3 / DCIM & IDMZ (35 assets)' },
+      { key: 'Z2', label: 'Z2 — Supervisory OT', count: 646, col: 0x8a4fd0, title: 'Zone 2 / Supervisory SCADA/EPMS (646 assets)' },
+      { key: 'Z3', label: 'Z3 — Field Control', count: 433, col: 0xd8b23a, title: 'Zone 1 / Field I/O & Sensors (433 assets)' },
+      { key: 'Z4', label: 'Z4 — SIS Safety', count: 17, col: 0xc8332a, title: 'Zone 4 / Safety Instrumented Systems (17 assets)' },
+      { key: 'Z5', label: 'Z5 — Out-of-Band', count: 114, col: 0xe07a26, title: 'Zone 5 / OOB Console DMZ (114 assets)' },
+    ];
+    for (const z of zoneDefs) {
+      const b = document.createElement('button');
+      b.className = 'btn cls';
+      b.textContent = `${z.key} (${z.count.toLocaleString()})`;
+      b.title = z.title;
+      paint(b, z.col);
+      b.onclick = () => toggleGroup('zone', z.key, b);
+      zb.appendChild(b);
+    }
+  }
+
+  const zoneAllBtn = document.getElementById('zoneAllBtn');
+  if (zoneAllBtn) zoneAllBtn.onclick = () => {
+    ['Z0', 'Z1', 'Z2', 'Z3', 'Z4', 'Z5'].forEach(zk => {
+      const b = [...(zb?.querySelectorAll('button') || [])].find(x => x.textContent.startsWith(zk));
+      if (b && !b.classList.contains('on')) toggleGroup('zone', zk, b);
+    });
+  };
+  const zoneClearBtn = document.getElementById('zoneClearBtn');
+  if (zoneClearBtn) zoneClearBtn.onclick = () => clearGroups('zone');
+}
+
+setupAssetListAndZoneButtons();
+
+// 11 Viewpoints Map
+const DEFAULT_ANGLE = { alpha: -Math.PI / 2.4, beta: Math.PI / 2.6 };
+const VIEWPOINTS = {
+  campus:     () => frameCampus(),
+  hall:       () => frameByLocation('Data hall', { padding: 1.15, alpha: -Math.PI / 2.35, beta: Math.PI / 2.3 }),
+  subrack:    () => {
+    setMode('graph');
+    const targetRackId = (S.sel && getRackForAsset(assets.get(S.sel))?.id) || 'row01_rack01';
+    explodeRack(targetRackId);
+    const blade = assets.get(targetRackId + '_compute_tray_0') || assets.get(targetRackId);
+    if (blade) select(blade, blade._node);
+  },
+  rack:       () => {
+    const targetRackId = (S.sel && getRackForAsset(assets.get(S.sel))?.id) || 'row01_rack01';
+    frameByMeshPrefix(targetRackId, { padding: 1.25, alpha: -Math.PI / 3, beta: Math.PI / 2.4 });
+  },
+  coreit:     () => frameByLocation('Core IT room', { padding: 1.3, ...DEFAULT_ANGLE }),
+  electrical: () => frameByLocation('West yard', { padding: 1.25, ...DEFAULT_ANGLE }),
+  power:      () => frameByLocation(['LV/UPS room', 'Battery room'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  cooling:    () => frameByLocation(['Central facility (shared)', 'East yard'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  mmr:        () => frameByLocation(['MMR', 'NOC'], { padding: 1.3, ...DEFAULT_ANGLE }),
+  reception:  () => frameByLocation(['Reception', 'Entry way', 'Mantrap'], { padding: 1.35, ...DEFAULT_ANGLE }),
+  dock:       () => frameByLocation('IT Staging', { padding: 1.7, ...DEFAULT_ANGLE }),
+};
+window.VIEWPOINTS = VIEWPOINTS;
+window.frameCampus = frameCampus;
+const VIEWPOINT_ORDER = Object.keys(VIEWPOINTS);
+const VIEWPOINT_LABELS = {
+  campus: 'Full campus', hall: 'Data hall', subrack: 'Sub-rack telemetry', rack: 'GPU rack close-up', coreit: 'Core IT room',
+  electrical: 'Electrical yard', power: 'Power room', cooling: 'Central facility',
+  mmr: 'MMR / NOC', reception: 'Reception & security', dock: 'Loading dock',
+};
+for (const b of document.querySelectorAll('#viewpointBtns .vpbtn')) {
+  b.onclick = () => (VIEWPOINTS[b.dataset.vp] || VIEWPOINTS.campus)();
+}
+
+// Tour System (Strictly Graph-Only)
+const TOUR_HOLD_MS = 4000;
+let tourTimer = null, tourIndex = 0, tourPrevMode = null;
+const tourCaptionEl = document.getElementById('tourCaption');
+const tourCaptionLabelEl = document.getElementById('tourCaptionLabel');
+const tourCaptionSubEl = document.getElementById('tourCaptionSub');
+const tourBtnEl = document.getElementById('tourBtn');
+const phasesEl = document.getElementById('phases');
+
+function tourStep() {
+  if (!S.touring) return;
+  if (S.mode !== 'graph') setMode('graph');
+  const key = VIEWPOINT_ORDER[tourIndex % VIEWPOINT_ORDER.length];
+  tourIndex++;
+  tourCaptionLabelEl.textContent = VIEWPOINT_LABELS[key] || key;
+  tourCaptionSubEl.textContent = `Stop ${((tourIndex - 1) % VIEWPOINT_ORDER.length) + 1} of ${VIEWPOINT_ORDER.length}`;
+  const flightMs = (VIEWPOINTS[key] ? VIEWPOINTS[key]() : VIEWPOINTS.campus()) || 620;
+  tourTimer = setTimeout(tourStep, flightMs + TOUR_HOLD_MS);
+}
+function startTour() {
+  if (S.touring) return;
+  if (typeof stopThreatTour === 'function') stopThreatTour();
+  S.touring = true;
+  tourIndex = 0;
+  tourPrevMode = S.mode;
+  setMode('graph');
+  phasesEl.style.display = 'none';
+  rightEl.hidden = true;
+  clearHighlight();
+  tourCaptionEl.style.display = 'flex';
+  tourBtnEl.textContent = '■ Exit tour';
+  tourStep();
+}
+function stopTour() {
+  if (!S.touring) return;
+  S.touring = false;
+  if (tourTimer) clearTimeout(tourTimer);
+  tourTimer = null;
+  tourCaptionEl.style.display = 'none';
+  tourBtnEl.textContent = '▶ Start tour';
+  phasesEl.style.display = '';
+  setMode('graph');
+  pauseIdleRotate();
+}
+tourBtnEl.onclick = () => (S.touring ? stopTour() : startTour());
+document.getElementById('tourExitBtn').onclick = stopTour;
+
+// Hover Tooltip
+const tooltipEl = document.getElementById('tooltip');
+let lastTooltipAt = 0;
+canvas.addEventListener('pointermove', e => {
+  const now = performance.now();
+  if (now - lastTooltipAt < 60) return;
+  lastTooltipAt = now;
+  const pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (!pick?.hit || !pick.pickedMesh) { tooltipEl.style.display = 'none'; return; }
+  let text = null;
+  if (pick.pickedMesh.metadata?.graphNode) {
+    const a = assets.get(pick.pickedMesh.metadata.graphNode);
+    text = a ? a.label : null;
+  } else if (pick.pickedMesh.metadata?.graphEdge) {
+    const edge = edges.find(x => x.id === pick.pickedMesh.metadata.graphEdge);
+    if (edge) text = `${edge.from} → ${edge.to} · ${edge.protocol || edge.service}`;
+  } else {
+    const a = assetOf(pick.pickedMesh);
+    if (a) text = a.label;
+  }
+  if (!text) { tooltipEl.style.display = 'none'; return; }
+  tooltipEl.textContent = text;
+  tooltipEl.style.display = 'block';
+  tooltipEl.style.left = (e.clientX + 14) + 'px';
+  tooltipEl.style.top = (e.clientY + 14) + 'px';
+});
+canvas.addEventListener('pointerleave', () => { tooltipEl.style.display = 'none'; });
+
+// Keyboard Shortcuts
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'Escape') {
+    if (S.touring) stopTour();
+    rightEl.hidden = true; threatEl.hidden = true; cascadeEl.hidden = true;
+    riskEl.hidden = true; assumeEl.hidden = true;
+    clearHighlight(); clearTrace(); collapseRack();
+  }
+  else if (e.key === 'f' || e.key === 'F') VIEWPOINTS.campus();
+  else if (e.key === 'e' || e.key === 'E') VIEWPOINTS.subrack();
+  else if (e.key === 'g' || e.key === 'G') setMode('graph');
+  else if (e.key === 'p' || e.key === 'P') setMode('physical');
+  else if (e.key === 'b' || e.key === 'B') setMode('both');
+});
+
+// Accordion Sections Logic
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.onclick = () => {
+    const body = document.getElementById(h.dataset.fold);
+    if (!body) return;
+    h.classList.toggle('shut');
+    body.classList.toggle('shut');
+  };
+});
+
+// Phase Switchboard Logic
+const ALL_SECS = ['fView', 'fMode', 'fSearch', 'fMarker', 'fSvc', 'fList', 'fProto', 'fZone', 'fCond', 'fStrata', 'fThreat', 'fCascade', 'fAssume', 'fRisk'];
+const GROUPS = {
+  nav: ['fView', 'fMode', 'fSearch'],
+  filter: ['fMarker', 'fSvc', 'fList', 'fProto', 'fZone', 'fCond', 'fStrata'],
+  analyse: ['fThreat', 'fCascade'],
+  gov: ['fAssume', 'fRisk']
+};
+
+const PHASES = [
+  { k: 'all', t: 'All', note: 'Every control. Filter to a phase to see only what that stage uses.', secs: ALL_SECS },
+  { k: '1', t: '1 Build', note: 'Phase 1 — build the model from HLD, DLD and ICD. Asset register, connections, services and protocols.',
+    secs: ['fView', 'fMode', 'fSearch', 'fSvc', 'fList', 'fProto'] },
+  { k: '2', t: '2 WS-1', note: 'Workshop 1–2 — threat and vulnerability assessment. Threat pathways, consequence, and the first zone and conduit cut.',
+    secs: ['fView', 'fMode', 'fSearch', 'fSvc', 'fList', 'fProto', 'fThreat', 'fCascade', 'fZone', 'fCond'] },
+  { k: '3', t: '3 Detail', note: 'Detail risk assessment. Zone and conduit requirements, SL-T against SL-C, ALARP/SFAIRP rationale, risk portfolio and provenance.',
+    secs: ['fView', 'fMode', 'fSearch', 'fMarker', 'fSvc', 'fList', 'fProto', 'fZone', 'fCond', 'fStrata', 'fThreat', 'fCascade', 'fAssume', 'fRisk'] },
+  { k: '4', t: '4 WS-2', note: 'WS-2 risk alignment. Gap analysis to SL-A, target reference architecture, and reporting pack. Everything in one view.',
+    secs: ALL_SECS },
+];
+
+const phNote = document.getElementById('phnote');
+const phBtns = PHASES.map(p => {
+  const b = document.querySelector('.phbtn[data-k="' + p.k + '"]');
+  if (!b) return null;
+  b.onclick = () => setPhase(p.k);
+  return b;
+}).filter(Boolean);
+
+function setPhase(k) {
+  const p = PHASES.find(x => x.k === k) || PHASES[0];
+  phBtns.forEach(b => b.classList.toggle('on', b.dataset.k === p.k));
+  if (phNote) phNote.textContent = p.note;
+  const want = new Set(p.secs);
+  for (const id of ALL_SECS) {
+    const hdr = document.querySelector('[data-fold="' + id + '"]'), body = document.getElementById(id);
+    if (!hdr || !body) continue;
+    const off = !want.has(id);
+    hdr.classList.toggle('off', off);
+    body.classList.toggle('off', off);
+  }
+  for (const [g, ids] of Object.entries(GROUPS)) {
+    const head = document.querySelector('.grp[data-grp="' + g + '"]');
+    if (head) head.classList.toggle('off', !ids.some(id => want.has(id)));
+  }
+}
+
+// Initialize all sections collapsed (shut)
+for (const id of ALL_SECS) {
+  const hdr = document.querySelector('[data-fold="' + id + '"]'), body = document.getElementById(id);
+  if (hdr) hdr.classList.add('shut');
+  if (body) body.classList.add('shut');
+}
+
+setPhase('all');
+renderRisk();
+renderAssume();
+
+// Auto-start Threat Path Tour ~5.5s after load
+setTimeout(() => {
+  if (!analysis.active && !S.touring && !threatTourActive) {
+    startThreatTour();
+  }
+}, 5500);
+</script>
+</body>
+</html>

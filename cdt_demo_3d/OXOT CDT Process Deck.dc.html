@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0b0b0c}
+  a{color:#EE7623;text-decoration:none}
+  a:hover{color:#f79350}
+</style>
+</helmet>
+
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+  <section data-label="Title" data-screen-label="01" data-speaker-notes="Three phases, two workshops, three floor walks. The point of the whole method: one dataset produces every artifact." style="display:flex;flex-direction:column;justify-content:center;padding:130px 140px;background:#0b0b0c;font-family:Inter,sans-serif;color:#f2f1ee">
+    <div style="font:700 26px/1 Inter,sans-serif;letter-spacing:.2em;color:#EE7623;margin-bottom:52px">OXOT · OT SECURITY ENGINEERING</div>
+    <h1 style="font:800 108px/1.04 Inter,sans-serif;letter-spacing:-.03em;margin:0 0 44px;color:#fff;max-width:20em">How we build a Cyber Digital Twin</h1>
+    <p style="font:400 34px/1.5 Inter,sans-serif;color:#a8a8a6;margin:0;max-width:34em">Three phases, two client workshops, three floor walks — from the client's own documentation to a defensible IEC 62443 determination.</p>
+    <div style="margin-top:70px;padding-top:36px;border-top:2px solid #232326;font:500 24px/1.4 Inter,sans-serif;color:#6a6a6d">One dataset produces every artifact, so a change in the field propagates everywhere at once.</div>
+  </section>
+
+  <section data-label="The process" data-screen-label="02" data-speaker-notes="Walk left to right. Orange columns are the two client workshops. The floor walks sit under W1 and Phase 3." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+      <h2 style="font:700 54px/1.1 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">The process, end to end</h2>
+      <div style="font:700 22px/1 Inter,sans-serif;letter-spacing:.14em;color:#9a9a9d">OXOT · <span style="color:#EE7623">CYBER DIGITAL TWIN</span></div>
+    </div>
+    <p style="font:400 26px/1.5 Inter,sans-serif;color:#5a5a5d;margin:0 0 44px;max-width:60em">The model is built from documentation, corrected against the physical facility, then loaded with safety and reliability data before any control is recommended.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:20px;flex:1 1 auto">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:4px solid #0f0f10">
+          <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:8px;background:#0f0f10;color:#fff;font:800 24px/1 Inter,sans-serif">1</span>
+          <span style="font:700 25px/1.15 Inter,sans-serif;color:#0f0f10">Build the model</span>
+        </div>
+        <p style="font:400 24px/1.45 Inter,sans-serif;color:#3a3a3d;margin:0">Derive the asset list, establish every connection, classify services and protocols, separate routable from hardwired.</p>
+        <div style="margin-top:auto;padding:18px 20px;border-radius:8px;background:#0f0f10">
+          <div style="font:700 17px/1 Inter,sans-serif;letter-spacing:.12em;color:#EE7623;margin-bottom:12px">ARTIFACTS</div>
+          <div style="font:600 23px/1.4 Inter,sans-serif;color:#fff">Asset register · Connection graph · 3D model</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:4px solid #EE7623">
+          <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:8px;background:#EE7623;color:#0f0f10;font:800 24px/1 Inter,sans-serif">W1</span>
+          <span style="font:700 25px/1.15 Inter,sans-serif;color:#0f0f10">Workshop 1</span>
+        </div>
+        <p style="font:400 24px/1.45 Inter,sans-serif;color:#3a3a3d;margin:0">Review the model with the client, walk the floor, correct to as-is, then frame the threat through ATQ.</p>
+        <div style="margin-top:auto;padding:18px 20px;border-radius:8px;background:#0f0f10">
+          <div style="font:700 17px/1 Inter,sans-serif;letter-spacing:.12em;color:#EE7623;margin-bottom:12px">ARTIFACTS</div>
+          <div style="font:600 23px/1.4 Inter,sans-serif;color:#fff">Initial SL-T zones and conduits · SIL items marked</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:4px solid #0f0f10">
+          <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:8px;background:#0f0f10;color:#fff;font:800 24px/1 Inter,sans-serif">2</span>
+          <span style="font:700 25px/1.15 Inter,sans-serif;color:#0f0f10">Load consequence</span>
+        </div>
+        <p style="font:400 24px/1.45 Inter,sans-serif;color:#3a3a3d;margin:0">Attach failure modes to assets, encode redundancy from the design, make every pathway traceable to a physical outcome.</p>
+        <div style="margin-top:auto;padding:18px 20px;border-radius:8px;background:#0f0f10">
+          <div style="font:700 17px/1 Inter,sans-serif;letter-spacing:.12em;color:#EE7623;margin-bottom:12px">ARTIFACTS</div>
+          <div style="font:600 23px/1.4 Inter,sans-serif;color:#fff">Consequence model · MoR and operating modes</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:4px solid #EE7623">
+          <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:8px;background:#EE7623;color:#0f0f10;font:800 24px/1 Inter,sans-serif">W2</span>
+          <span style="font:700 25px/1.15 Inter,sans-serif;color:#0f0f10">Workshop 2</span>
+        </div>
+        <p style="font:400 24px/1.45 Inter,sans-serif;color:#3a3a3d;margin:0">Show threat actors and pathways on the model, trace to loss, then test gaps against ALARP / SFAIRP.</p>
+        <div style="margin-top:auto;padding:18px 20px;border-radius:8px;background:#0f0f10">
+          <div style="font:700 17px/1 Inter,sans-serif;letter-spacing:.12em;color:#EE7623;margin-bottom:12px">ARTIFACTS</div>
+          <div style="font:600 23px/1.4 Inter,sans-serif;color:#fff">SL-C rationale · ZCR diagram</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:4px solid #0f0f10">
+          <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:8px;background:#0f0f10;color:#fff;font:800 24px/1 Inter,sans-serif">3</span>
+          <span style="font:700 25px/1.15 Inter,sans-serif;color:#0f0f10">Verify &amp; report</span>
+        </div>
+        <p style="font:400 24px/1.45 Inter,sans-serif;color:#3a3a3d;margin:0">Raise fidelity with configurations and bills of material, walk the floor again, then deliver the roadmap.</p>
+        <div style="margin-top:auto;padding:18px 20px;border-radius:8px;background:#0f0f10">
+          <div style="font:700 17px/1 Inter,sans-serif;letter-spacing:.12em;color:#EE7623;margin-bottom:12px">ARTIFACTS</div>
+          <div style="font:600 23px/1.4 Inter,sans-serif;color:#fff">NOW / NEXT / NEVER · Target architecture · Readout</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:26px">
+      <div></div>
+      <div style="border-top:3px dashed #e3b48c;padding-top:12px;font:700 21px/1.3 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#EE7623">Floor walk 1 — confirm as-is</div>
+      <div></div>
+      <div></div>
+      <div style="border-top:3px dashed #e3b48c;padding-top:12px;font:700 21px/1.3 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#EE7623">Floor walk 2 — confirm high-fidelity model</div>
+    </div>
+  </section>
+
+  <section data-label="Phase 1 — Build" data-screen-label="03" data-speaker-notes="Nothing is asked of the client team yet. Separating routable from hardwired is the step most assessments skip." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:10px;background:#0f0f10;color:#fff;font:800 30px/1 Inter,sans-serif">1</span>
+      <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">Build the model</h2>
+    </div>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 48px;max-width:52em">Documents in, queryable model out. Nothing is asked of the client team at this stage.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:26px;flex:1 1 auto">
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">INPUTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">High-level design (HLD)</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Detailed level design (DLD)</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Interface control document (ICD)</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">OT equipment schedules</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">Descriptions and narratives</div>
+        </div>
+      </div>
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">WHAT WE DO</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Derive the <strong style="font-weight:700;color:#0f0f10">asset list</strong> from documentation</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Establish every <strong style="font-weight:700;color:#0f0f10">connection</strong> between assets</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Classify <strong style="font-weight:700;color:#0f0f10">services</strong> — what flows</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Classify <strong style="font-weight:700;color:#0f0f10">protocols</strong> — how it is carried</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">Separate routable from hardwired</div>
+        </div>
+      </div>
+      <div style="border:2px solid #0f0f10;border-radius:10px;overflow:hidden;background:#0f0f10">
+        <div style="padding:18px 24px;background:#1c1c1e;border-bottom:2px solid #2c2c2e;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#EE7623">ARTIFACTS</div>
+        <div style="padding:24px">
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff;margin-bottom:16px">Asset register</div>
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff;margin-bottom:16px">Connection graph</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6;margin-bottom:16px">Service and protocol inventory</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6">3D model of the facility</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Workshop 1" data-screen-label="04" data-speaker-notes="TS 50701 works from worst case. ATQ gives comparative sector threat instead — defensible rather than hypothetical." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:58px;padding:0 14px;border-radius:10px;background:#EE7623;color:#0f0f10;font:800 30px/1 Inter,sans-serif">W1</span>
+      <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">Workshop 1 — Initial Risk Assessment</h2>
+    </div>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 48px;max-width:52em">Review the model, walk the floor, correct to as-is, then frame the threat.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:26px;flex:1 1 auto">
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">INPUTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">The model from Phase 1</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Client review and corrections</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Sector threat intelligence</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Client, equipment and facility profile</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">Geography</div>
+        </div>
+      </div>
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">WHAT WE DO</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Review the model with the client</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px"><strong style="font-weight:700;color:#0f0f10">Walk the floor</strong> — confirm against as-is</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Adjust where documents and facility disagree</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Frame the threat landscape. TS 50701 uses worst case; we apply comparative sector threats through <strong style="font-weight:700;color:#0f0f10">ATQ</strong></div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a">Mark SIL-rated items</div>
+        </div>
+      </div>
+      <div style="border:2px solid #0f0f10;border-radius:10px;overflow:hidden;background:#0f0f10">
+        <div style="padding:18px 24px;background:#1c1c1e;border-bottom:2px solid #2c2c2e;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#EE7623">ARTIFACTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6;margin-bottom:16px">As-is corrections</div>
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff;margin-bottom:16px">Initial SL-T zones and conduits</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6">Asset registry, SIL items marked</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Phase 2 — Consequence" data-screen-label="05" data-speaker-notes="Redundancy is encoded from the design, not inferred from feed count — that distinction matters and clients notice it." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:10px;background:#0f0f10;color:#fff;font:800 30px/1 Inter,sans-serif">2</span>
+      <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">Load consequence</h2>
+    </div>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 48px;max-width:52em">The safety and reliability teams' own work, built into the model.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:26px;flex:1 1 auto">
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">INPUTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Safety team: FMEA, hazard log</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Safety critical item list</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Reliability critical item list</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">ConOps</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">Minimum operating requirements</div>
+        </div>
+      </div>
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">WHAT WE DO</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Attach <strong style="font-weight:700;color:#0f0f10">failure modes</strong> to assets</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Build impacts and <strong style="font-weight:700;color:#0f0f10">consequences</strong> into the model</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Encode redundancy from the design, not from feed count</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Encode MoR thresholds and operating modes</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a">Make a pathway traceable to a physical outcome</div>
+        </div>
+      </div>
+      <div style="border:2px solid #0f0f10;border-radius:10px;overflow:hidden;background:#0f0f10">
+        <div style="padding:18px 24px;background:#1c1c1e;border-bottom:2px solid #2c2c2e;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#EE7623">ARTIFACTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6;margin-bottom:16px">Failure modes on assets</div>
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff;margin-bottom:16px">Consequence model</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6">MoR and operating modes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Workshop 2" data-screen-label="06" data-speaker-notes="This is where controls get argued from the pathway and the consequence at the end of it, not from a checklist." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:58px;padding:0 14px;border-radius:10px;background:#EE7623;color:#0f0f10;font:800 30px/1 Inter,sans-serif">W2</span>
+      <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">Workshop 2 — Risk Alignment</h2>
+    </div>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 48px;max-width:52em">Show the consequence, then agree what is reasonable to do about it.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:26px;flex:1 1 auto">
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">INPUTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Consequence-loaded model</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px"><strong style="font-weight:700;color:#0f0f10">TACAM</strong> — typical vulnerabilities by equipment class</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Threat actor profiles from ATQ</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">SL-T from Workshop 1</div>
+        </div>
+      </div>
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">WHAT WE DO</div>
+        <div style="padding:24px">
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#26262a;margin-bottom:14px">Show <strong style="font-weight:700;color:#0f0f10">threat actors and pathways</strong> on the model</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#26262a;margin-bottom:14px">Trace to fat-tail loss, critical loss and safety consequence — our own <strong style="font-weight:700;color:#0f0f10">ALE model</strong></div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#26262a;margin-bottom:14px">Review controls the SL-T ratings require, and why, grounded in pathway and consequence</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#26262a;margin-bottom:14px">Test architectural gaps against <strong style="font-weight:700;color:#0f0f10">ALARP / SFAIRP</strong> for a reasonable SL-C</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#26262a">Draw the flat network view of the 3D model</div>
+        </div>
+      </div>
+      <div style="border:2px solid #0f0f10;border-radius:10px;overflow:hidden;background:#0f0f10">
+        <div style="padding:18px 24px;background:#1c1c1e;border-bottom:2px solid #2c2c2e;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#EE7623">ARTIFACTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#d8d8d6;margin-bottom:16px">Threat pathways and consequence</div>
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff;margin-bottom:16px">SL-C rationale</div>
+          <div style="font:700 26px/1.5 Inter,sans-serif;color:#fff">ZCR diagram — zones and conduits</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Phase 3 — Verify" data-screen-label="07" data-speaker-notes="Second floor walk is with the high-fidelity model. This is what makes the NOW/NEXT/NEVER call defensible." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:10px;background:#0f0f10;color:#fff;font:800 30px/1 Inter,sans-serif">3</span>
+      <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0;color:#0f0f10">Verify &amp; report</h2>
+    </div>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 48px;max-width:52em">Raise the model to the fidelity of the actual facility, then deliver the roadmap.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:26px;flex:1 1 auto">
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">INPUTS</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Samples and configurations</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">SBOMs and HBOMs</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a;margin-bottom:16px">Switch and firewall configurations</div>
+          <div style="font:400 26px/1.5 Inter,sans-serif;color:#26262a">SL-C and security requirements by zone</div>
+        </div>
+      </div>
+      <div style="border:2px solid #ddd9d0;border-radius:10px;overflow:hidden">
+        <div style="padding:18px 24px;background:#faf8f4;border-bottom:2px solid #ddd9d0;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#8a8a8d">WHAT WE DO</div>
+        <div style="padding:24px">
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Enter SL-C and requirements per asset by zone</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Raise model fidelity to the actual facility</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px"><strong style="font-weight:700;color:#0f0f10">Walk the floor again</strong> with the improved model</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a;margin-bottom:15px">Gap analysis SL-C against SL-A</div>
+          <div style="font:400 26px/1.48 Inter,sans-serif;color:#26262a">Build the target reference architecture</div>
+        </div>
+      </div>
+      <div style="border:2px solid #0f0f10;border-radius:10px;overflow:hidden;background:#0f0f10">
+        <div style="padding:18px 24px;background:#1c1c1e;border-bottom:2px solid #2c2c2e;font:700 20px/1 Inter,sans-serif;letter-spacing:.13em;color:#EE7623">ARTIFACTS</div>
+        <div style="padding:24px">
+          <div style="font:700 25px/1.45 Inter,sans-serif;color:#fff;margin-bottom:14px">NOW / NEXT / NEVER report</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#d8d8d6;margin-bottom:14px">Target reference architecture (IEC 62443)</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#d8d8d6;margin-bottom:14px">SL-C to SL-A gap analysis</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#d8d8d6;margin-bottom:14px">Roadmap, priority actions, quick wins</div>
+          <div style="font:400 25px/1.45 Inter,sans-serif;color:#d8d8d6">Executive readout + long-form report</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Where outputs go" data-screen-label="08" data-speaker-notes="The usual failure is each team getting a different document. Here every team reads the same model through its own view." style="display:flex;flex-direction:column;padding:78px 90px;background:#ffffff;font-family:Inter,sans-serif;color:#1a1a1c">
+    <h2 style="font:700 58px/1.08 Inter,sans-serif;letter-spacing:-.022em;margin:0 0 16px;color:#0f0f10">Where the outputs go</h2>
+    <p style="font:400 28px/1.45 Inter,sans-serif;color:#5a5a5d;margin:0 0 52px;max-width:56em">One dataset, every team. The usual failure of an OT assessment is that each team receives a different document and none of them reconcile.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:28px;flex:1 1 auto">
+      <div style="border-top:5px solid #EE7623;padding:26px 4px 0">
+        <h3 style="font:700 34px/1.2 Inter,sans-serif;margin:0 0 14px;color:#0f0f10">Executives and risk</h3>
+        <p style="font:400 26px/1.5 Inter,sans-serif;color:#3a3a3d;margin:0">Executive briefing and readout. Input to the organisational risk ledger where the sponsor is organisational. Consequence tied to numbers, top down.</p>
+      </div>
+      <div style="border-top:5px solid #0f0f10;padding:26px 4px 0">
+        <h3 style="font:700 34px/1.2 Inter,sans-serif;margin:0 0 14px;color:#0f0f10">Facility managers</h3>
+        <p style="font:400 26px/1.5 Inter,sans-serif;color:#3a3a3d;margin:0">SecRAC for the facility. Zone and conduit responsibilities, and the controls that apply to facility they operate day to day.</p>
+      </div>
+      <div style="border-top:5px solid #0f0f10;padding:26px 4px 0">
+        <h3 style="font:700 34px/1.2 Inter,sans-serif;margin:0 0 14px;color:#0f0f10">Safety and reliability</h3>
+        <p style="font:400 26px/1.5 Inter,sans-serif;color:#3a3a3d;margin:0">Reliability and safety critical items returned to the hazard log, so the safety team's own artifact stays current.</p>
+      </div>
+      <div style="border-top:5px solid #0f0f10;padding:26px 4px 0">
+        <h3 style="font:700 34px/1.2 Inter,sans-serif;margin:0 0 14px;color:#0f0f10">IT, OT, controls, network, operations, security</h3>
+        <p style="font:400 26px/1.5 Inter,sans-serif;color:#3a3a3d;margin:0">The full detailed report aligned to IEC 62443 and CLC/TS 50701, and the model itself. Bottom-up engineering view that earns trust.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Close" data-screen-label="09" data-speaker-notes="Close on the defensibility point — including where SL-C is negotiated down to SL-A, which is the honest case." style="display:flex;flex-direction:column;justify-content:center;padding:130px 140px;background:#0b0b0c;font-family:Inter,sans-serif;color:#f2f1ee">
+    <div style="font:700 26px/1 Inter,sans-serif;letter-spacing:.2em;color:#EE7623;margin-bottom:52px">THE OUTCOME</div>
+    <h2 style="font:800 72px/1.16 Inter,sans-serif;letter-spacing:-.026em;margin:0 0 44px;color:#fff;max-width:26em">A formal, defensible process and artifact set for an IEC 62443 determination of SL-C — including where it is negotiated down to SL-A.</h2>
+    <p style="font:400 32px/1.5 Inter,sans-serif;color:#a8a8a6;margin:0;max-width:36em">Consequence-driven reporting from the top down, an engineering and operations view from the bottom up, and one common set of information for every team.</p>
+    <div style="margin-top:80px;padding-top:36px;border-top:2px solid #232326;display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font:600 24px/1 Inter,sans-serif;letter-spacing:.14em;color:#6a6a6d">OXOT · OT SECURITY ENGINEERING</span>
+      <span style="font:600 24px/1 Inter,sans-serif;color:#EE7623">info@oxot.nl</span>
+    </div>
+  </section>
+
+</x-import>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=services.html#workshop-process">
+  <script>window.location.replace("services.html#workshop-process");</script>
+  <title>OXOT Cyber Digital Twin — 3 Phases, 2 Workshops, 2 Floor Walks Process</title>
+  <link rel="stylesheet" href="shared/oxot-theme.css">
+  <style>
+    /* EXECUTIVE INTRO WITH VIDEO SECTION */
+    .executive-intro-card {
+      background: rgba(10, 15, 22, 0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem 2.25rem;
+      backdrop-filter: blur(12px);
+      margin-top: 1.5rem;
+    }
+    .intro-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .intro-hero-grid {
+        grid-template-columns: 1.05fr 0.95fr;
+      }
+    }
+    .intro-hero-video-box {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .intro-hero-video-box video {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      background: #06090e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: block;
+    }
+
+    /* HORIZONTAL TABS AUTO-PROGRESSING CAROUSEL HERO */
+    .carousel-section {
+      margin-top: 3rem;
+    }
+    .phase-tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: var(--card);
+      padding: 0.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+    .phase-tab-btn {
+      position: relative;
+      overflow: hidden;
+      flex: 1 1 0;
+      min-width: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      padding: 0.95rem 1.15rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--muted-foreground);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+    .phase-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    .phase-tab-btn.active {
+      background: linear-gradient(180deg, rgba(238, 118, 35, 0.12) 0%, rgba(10, 15, 22, 0.9) 100%);
+      border-color: var(--dutch-orange-border);
+      color: #ffffff;
+      box-shadow: 0 4px 20px var(--dutch-orange-glow);
+    }
+    .tab-progress-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--dutch-orange);
+      box-shadow: 0 0 8px var(--dutch-orange);
+      transition: width 4000ms linear;
+    }
+    .phase-tab-btn:not(.active) .tab-progress-fill {
+      width: 0% !important;
+      transition: none !important;
+    }
+    .phase-tab-btn .tab-badge-num {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-foreground);
+    }
+    .phase-tab-btn.active .tab-badge-num {
+      color: var(--dutch-orange);
+    }
+    .phase-tab-btn .tab-title-text {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .phase-tab-btn.is-workshop .tab-badge-num {
+      color: #f79350;
+    }
+
+    /* Tab Content Panel */
+    .phase-tab-pane {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem 2.25rem;
+      animation: fadeIn 0.3s ease;
+    }
+    .phase-tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Detail Grid */
+    .detail-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .detail-card-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+    }
+    .detail-card-box strong.title-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.75rem;
+    }
+    .flow-bl {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .flow-bl li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      padding-left: 0.75rem;
+      position: relative;
+    }
+    .flow-bl li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.45rem;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--muted-foreground);
+    }
+    .flow-bl li strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .floor-walk-banner {
+      background: rgba(238, 118, 35, 0.08);
+      border: 1px solid var(--dutch-orange-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Carousel Controls Bar */
+    .carousel-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-top: 1.25rem;
+    }
+    .carousel-indicators {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .carousel-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: var(--dutch-orange);
+      box-shadow: 0 0 8px var(--dutch-orange);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-top: 1.25rem;
+    }
+    .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+    .table-container th {
+      background: rgba(0, 0, 0, 0.5);
+      color: var(--muted-foreground);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-container td {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .table-container tr:last-child td {
+      border-bottom: none;
+    }
+    .table-container tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .table-container td strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section style="padding: 3.5rem 0 2rem; background: radial-gradient(circle at 50% 0%, #151e29 0%, #070a0e 70%);">
+    <div class="container">
+      <span class="eyebrow-orange">STRUCTURED ENGINEERING DELIVERY · IEC 62443 &amp; CLC/TS 50701</span>
+      <h1 class="hero-title-serif">How We Build a Cyber Digital Twin</h1>
+      <p class="body-prose" style="max-width: 860px; font-size: 1.15rem; color: var(--text-secondary);">
+        Three phases. Two workshops. Two floor walks. Under 6 hours of your team's time. We build a living model from your engineering drawings, calibrate it against your physical facility, and calculate exact financial risk reduction before you spend a single dollar on controls.
+      </p>
+      
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+        <a href="#carousel-explorer" class="btn btn-dutch-orange">
+          <span>Explore 5-Stage Carousel</span>
+          <span>↓</span>
+        </a>
+        <a href="master-explorer.html" class="btn btn-outline">
+          <span>Open Live 3D Twin</span>
+          <span>⚡</span>
+        </a>
+        <a href="demo-hub.html" class="btn btn-outline">
+          <span>Guided Customer Walkthrough</span>
+          <span>🎯</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 4rem;">
+
+    <!-- INITIAL EXECUTIVE INTRO & DYNAMIC MOTION VIDEO (NO TOP TABS HERE) -->
+    <section class="executive-intro-card">
+      <div class="intro-hero-grid">
+        
+        <!-- LEFT: SHORTENED EXECUTIVE INTRO PARAGRAPH -->
+        <div>
+          <span class="eyebrow-orange" style="margin-bottom: 0.5rem; display: inline-block;">EXECUTIVE OVERVIEW</span>
+          <h2 class="section-title-serif" style="font-size: 1.85rem; margin-bottom: 1rem;">
+            Transforming Static Schematics into a Queryable Risk Engine
+          </h2>
+          <p class="body-prose" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Traditional industrial assessments rely on static checklist audits that fail to capture complex physical failure kinetics. OXOT ingests CAD P&amp;IDs, electrical single-line diagrams, and network switch tables passively into the Seldon Engine to construct a high-fidelity digital twin.
+          </p>
+          <p class="body-prose" style="font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Across 3 structured phases and 2 collaborative 3-hour calibration workshops, we calculate exact financial exposure (ALE) and prove how targeted CapEx eliminates 92% of facility risk before you touch your live facility.
+          </p>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <span class="badge badge-outline">Zero Facility Downtime</span>
+            <span class="badge badge-cyan">449 Assets Bound</span>
+            <span class="badge badge-primary">92% ALE Cut</span>
+            <span class="badge badge-emerald">&lt; 6 Hours SME Time</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: DYNAMIC KINETIC SIMULATION VIDEO BOX -->
+        <div class="intro-hero-video-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dutch-orange);">Dynamic Kinetic Simulation</span>
+            <span class="badge badge-primary">Motion</span>
+          </div>
+          <video src="images/CDT_arch_motion.mp4" autoplay loop muted playsinline controls></video>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.75rem; line-height: 1.45;">
+            <strong>Dynamic Failure Propagation:</strong> Simulating BFS upstream and downstream cascading across Purdue zones, conduits, and physical systems.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 1: 5-STAGE METHODOLOGY EXPLORER — HORIZONTAL TABS AUTO-PROGRESSING CAROUSEL HERO -->
+    <section class="carousel-section" id="carousel-explorer">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <span class="eyebrow-orange">PHASE-BY-PHASE ENGINEERING BREAKDOWN</span>
+          <h2 class="section-title-serif" style="font-size: 1.85rem;">5-Stage Methodology Carousel</h2>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span class="badge badge-primary" id="carousel-status-badge">AUTO-PROGRESSING (4s)</span>
+        </div>
+      </div>
+
+      <!-- AUTO-PROGRESSING HORIZONTAL TABS (EACH TAB HAS 4s GLOWING PROGRESS FILL BAR) -->
+      <div class="phase-tabs-nav" id="carousel-tabs-container" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+        
+        <!-- TAB 0: PHASE 1 -->
+        <button class="phase-tab-btn active" onclick="selectCarouselTab(0)">
+          <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+          <span class="tab-badge-num">PHASE 01</span>
+          <span class="tab-title-text">Build the Model</span>
+        </button>
+
+        <!-- TAB 1: WORKSHOP 1 -->
+        <button class="phase-tab-btn is-workshop" onclick="selectCarouselTab(1)">
+          <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+          <span class="tab-badge-num">WORKSHOP 01 · 3 HOURS</span>
+          <span class="tab-title-text">Threat Calibration</span>
+        </button>
+
+        <!-- TAB 2: PHASE 2 -->
+        <button class="phase-tab-btn" onclick="selectCarouselTab(2)">
+          <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+          <span class="tab-badge-num">PHASE 02</span>
+          <span class="tab-title-text">Load Consequence</span>
+        </button>
+
+        <!-- TAB 3: WORKSHOP 2 -->
+        <button class="phase-tab-btn is-workshop" onclick="selectCarouselTab(3)">
+          <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+          <span class="tab-badge-num">WORKSHOP 02 · 3 HOURS</span>
+          <span class="tab-title-text">ALARP Sign-Off</span>
+        </button>
+
+        <!-- TAB 4: PHASE 3 -->
+        <button class="phase-tab-btn" onclick="selectCarouselTab(4)">
+          <div class="tab-progress-track"><div class="tab-progress-fill"></div></div>
+          <span class="tab-badge-num">PHASE 03</span>
+          <span class="tab-title-text">Verify &amp; Report</span>
+        </button>
+
+      </div>
+
+      <!-- DYNAMIC TAB PANES (SYNCHRONIZED WITH ACTIVE TAB) -->
+      <div id="carousel-panes-wrapper" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+        
+        <!-- PANE 0: PHASE 1 DETAIL -->
+        <div class="phase-tab-pane active" id="pane-phase-1">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <span class="badge badge-cyan" style="margin-bottom: 0.5rem; display: inline-block;">PHASE 01</span>
+              <h3 class="section-title-serif" style="font-size: 1.6rem; margin: 0;">Model Ingestion &amp; Baseline Twin Construction</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0.25rem 0 0;">
+                Send us your engineering drawings. We build your facility's digital twin without touching your operational network.
+              </p>
+            </div>
+            <span class="badge badge-outline">AUTONOMOUS EXECUTION · ZERO DOWNTIME</span>
+          </div>
+
+          <div class="detail-grid-3">
+            <div class="detail-card-box">
+              <strong class="title-label">📁 Required Engineering Inputs</strong>
+              <ul class="flow-bl">
+                <li><strong>High-Level Design (HLD):</strong> Campus power, cooling, compute topologies.</li>
+                <li><strong>Detailed Design (DLD):</strong> Panel schedules, cable schedules, IP VLAN allocations.</li>
+                <li><strong>Interface Control Docs (ICD):</strong> Vendor interfaces, Modbus/BACnet point lists.</li>
+                <li><strong>Equipment Manifests:</strong> PLC models, firmware versions, generator specs.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">⚙️ Seldon Engine Automation</strong>
+              <ul class="flow-bl">
+                <li><strong>Asset Extraction:</strong> Resolves 449 physical and logical assets into a canonical ontology.</li>
+                <li><strong>Connection Synthesis:</strong> Maps 1,155 conduits and classifies services vs. carrier protocols.</li>
+                <li><strong>Routable Boundary Isolation:</strong> Separates routable Ethernet from hardwired 4-20mA / serial links.</li>
+                <li><strong>3D Mesh Binding:</strong> Binds each asset node to interactive GLB 3D coordinates.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📋 Deliverables Produced</strong>
+              <ul class="flow-bl">
+                <li><strong>Asset Register (`A1`):</strong> Complete 449-asset inventory with Purdue levels.</li>
+                <li><strong>Connection Graph (`A2`):</strong> Solved 1,155-link conduit graph.</li>
+                <li><strong>Service Inventory:</strong> Protocol and payload distribution catalogue.</li>
+                <li><strong>Interactive 3D Twin:</strong> Navigable campus twin ready for Workshop 1.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 1: WORKSHOP 1 DETAIL -->
+        <div class="phase-tab-pane" id="pane-workshop-1">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <span class="badge badge-primary" style="margin-bottom: 0.5rem; display: inline-block;">WORKSHOP 01 · 3 HOURS</span>
+              <h3 class="section-title-serif" style="font-size: 1.6rem; margin: 0;">Threat &amp; Vulnerability Calibration (TVA)</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0.25rem 0 0;">
+                Walk through the 3D twin together, visit the facility floor, and establish your realistic threat profile.
+              </p>
+            </div>
+            <span class="badge badge-primary">COLLABORATIVE SESSION · SME TIME: 3 HOURS</span>
+          </div>
+
+          <div class="detail-grid-3">
+            <div class="detail-card-box">
+              <strong class="title-label">👥 Participants &amp; Roles</strong>
+              <ul class="flow-bl">
+                <li><strong>Facility Operations Director:</strong> Validates real-world operational procedures and shifts.</li>
+                <li><strong>Lead OT/Control Engineer:</strong> Confirms PLC wiring, remote maintenance tunnels, and DCS loops.</li>
+                <li><strong>CISO / Security Architect:</strong> Aligns enterprise threat intelligence with facility security policies.</li>
+                <li><strong>OXOT Lead Architect:</strong> Moderates session and executes real-time digital twin calibrations.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">🔍 Interactive Workshop Activities</strong>
+              <ul class="flow-bl">
+                <li><strong>Digital Twin Redline:</strong> Walk through 3D campus to reconcile drawing-vs-facility drift.</li>
+                <li><strong>ATQ Sector Threat Calibration:</strong> Frame realistic adversary profiles (replaces generic worst-case).</li>
+                <li><strong>SIL Asset Identification:</strong> Mark safety-instrumented systems and emergency shutoffs.</li>
+                <li><strong>Initial Zone &amp; Conduit Cut:</strong> Define boundary crossings under IEC 62443-3-2 §5.6.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📋 Outputs &amp; Milestones</strong>
+              <ul class="flow-bl">
+                <li><strong>As-Is Facility Corrections:</strong> Corrected asset registry reflecting real physical installation.</li>
+                <li><strong>Initial SL-T Target Matrix (`A3`):</strong> Target security levels assigned per zone.</li>
+                <li><strong>SIL Boundary Ledger:</strong> Isolated safety systems verified against network access.</li>
+                <li><strong>Calibration Sign-off:</strong> Consensus baseline for consequence loading in Phase 2.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="floor-walk-banner">
+            <span style="font-size: 1.5rem;">🚶‍♂️</span>
+            <div>
+              <strong style="color: #ffffff; font-size: 0.9rem;">Integrated Floor Walk 1: Physical As-Is Facility Reconciliation</strong>
+              <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0.2rem 0 0;">
+                Immediately following Workshop 1, OXOT engineers conduct an on-site physical floor walk alongside facility staff to verify physical cabinet locations, check unmanaged maintenance ports, and validate physical conduit separation.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 2: PHASE 2 DETAIL -->
+        <div class="phase-tab-pane" id="pane-phase-2">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <span class="badge badge-cyan" style="margin-bottom: 0.5rem; display: inline-block;">PHASE 02</span>
+              <h3 class="section-title-serif" style="font-size: 1.6rem; margin: 0;">Consequence &amp; Operational Dependency Loading</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0.25rem 0 0;">
+                We attach your safety FMEA to the model and calculate exact financial downtime costs per hour.
+              </p>
+            </div>
+            <span class="badge badge-outline">AUTONOMOUS EXECUTION · ZERO DOWNTIME</span>
+          </div>
+
+          <div class="detail-grid-3">
+            <div class="detail-card-box">
+              <strong class="title-label">📁 Safety &amp; Reliability Inputs</strong>
+              <ul class="flow-bl">
+                <li><strong>Facility Hazard Log:</strong> 74 identified facility hazards categorized by RPN severity.</li>
+                <li><strong>Safety Critical Items (SCIL):</strong> EPO interlocks, VESDA aspirating smoke, fire suppression.</li>
+                <li><strong>Reliability Critical Items (RCIL):</strong> Dual UPS strings, generator synchronizers, CDU pumps.</li>
+                <li><strong>ConOps &amp; MoR:</strong> Minimum operating thresholds (e.g. 45s thermal runaway buffer on CDU loss).</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">⚡ Graph Consequence Modeling</strong>
+              <ul class="flow-bl">
+                <li><strong>Failure Mode Binding:</strong> Attaches mechanical, electrical, and cyber failure modes to assets.</li>
+                <li><strong>Redundancy Encoding:</strong> Encodes true 2N and N+1 active redundancy paths (not just feed count).</li>
+                <li><strong>Cascading Propagation:</strong> Simulates upstream power drop and downstream cooling failure kinetics.</li>
+                <li><strong>ALE Quantification:</strong> Computes financial exposure per hour of downtime ($125k/MW-hr revenue basis).</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📋 Deliverables Produced</strong>
+              <ul class="flow-bl">
+                <li><strong>Consequence Model (`A5`):</strong> Fully parameterized kinetic loss propagation twin.</li>
+                <li><strong>Degraded Operating Matrix:</strong> MoR breach impact schedules under cyber compromise.</li>
+                <li><strong>Fat-Tail Risk Schedule:</strong> High-consequence low-frequency failure modes isolated.</li>
+                <li><strong>Workshop 2 Pre-Brief:</strong> Model prepared for executive ALARP sign-off in Workshop 2.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 3: WORKSHOP 2 DETAIL -->
+        <div class="phase-tab-pane" id="pane-workshop-2">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <span class="badge badge-primary" style="margin-bottom: 0.5rem; display: inline-block;">WORKSHOP 02 · 3 HOURS</span>
+              <h3 class="section-title-serif" style="font-size: 1.6rem; margin: 0;">Risk Justification &amp; ALARP Sign-Off</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0.25rem 0 0;">
+                Prove the ROI of security spend: $125k in CapEx eliminates 92% of your facility risk.
+              </p>
+            </div>
+            <span class="badge badge-primary">EXECUTIVE SIGN-OFF · SME TIME: 3 HOURS</span>
+          </div>
+
+          <div class="detail-grid-3">
+            <div class="detail-card-box">
+              <strong class="title-label">👥 Executive &amp; Engineering Panel</strong>
+              <ul class="flow-bl">
+                <li><strong>Chief Information Security Officer:</strong> Validates regulatory compliance with CRA &amp; IEC 62443.</li>
+                <li><strong>Chief Financial Officer / VP Risk:</strong> Evaluates CapEx budget allocation and ALE risk return.</li>
+                <li><strong>VP of Facility Infrastructure:</strong> Approves proposed network modifications and maintenance windows.</li>
+                <li><strong>OXOT Lead Architect:</strong> Demonstrates live virtual controls and ALARP cost-benefit calculations.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📊 Threat Walking &amp; ALARP Testing</strong>
+              <ul class="flow-bl">
+                <li><strong>Live Threat Pathway Walking:</strong> Walk attacker pathways from external entry points to critical DCS.</li>
+                <li><strong>Virtual Countermeasure Testing:</strong> Simulate micro-segmentation, data diodes, and firmware locks.</li>
+                <li><strong>ALARP / SFAIRP Testing:</strong> Prove where additional spend reaches disproportionate diminishing returns.</li>
+                <li><strong>CapEx Prioritization:</strong> Rank controls by risk reduction per dollar spent ($125k spend = 92% cut).</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📋 Decisions &amp; Governance Outputs</strong>
+              <ul class="flow-bl">
+                <li><strong>SL-C Rationale (`A6`):</strong> Defensible capability ratings justified by architectural controls.</li>
+                <li><strong>ZCR Diagram:</strong> Flattened IEC 62443 zone and conduit network blueprint.</li>
+                <li><strong>NOW / NEXT / NEVER Plan:</strong> Approved remediation actions and legally accepted risks.</li>
+                <li><strong>Board Risk Memo:</strong> Executive sign-off document for insurance and board audit.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 4: PHASE 3 DETAIL -->
+        <div class="phase-tab-pane" id="pane-phase-3">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <span class="badge badge-amber" style="margin-bottom: 0.5rem; display: inline-block;">PHASE 03</span>
+              <h3 class="section-title-serif" style="font-size: 1.6rem; margin: 0;">Fidelity Verification, Gap Analysis &amp; Final Reporting</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0.25rem 0 0;">
+                Receive your IEC 62443 reference architecture and audit-ready NOW/NEXT/NEVER roadmap.
+              </p>
+            </div>
+            <span class="badge badge-outline">FINAL AUDIT DELIVERY</span>
+          </div>
+
+          <div class="detail-grid-3">
+            <div class="detail-card-box">
+              <strong class="title-label">📁 High-Fidelity Ingestion</strong>
+              <ul class="flow-bl">
+                <li><strong>Switch &amp; Firewall Configs:</strong> Ingest active ACLs, VLAN tagging rules, and routing tables.</li>
+                <li><strong>5 Machine-Readable BOMs:</strong> CycloneDX SBOM, HBOM, CBOM, SaaSBOM, and Ops-BOM.</li>
+                <li><strong>PLC Memory &amp; Firmware Dumps:</strong> Validate controller firmware versions against CVE databases.</li>
+                <li><strong>Operational Security Requirements:</strong> Target security controls per zone.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">🔬 Gap Analysis &amp; Final Calibration</strong>
+              <ul class="flow-bl">
+                <li><strong>SL-C vs. SL-A Gap Analysis:</strong> Compare reasonably achievable security against actual field posture.</li>
+                <li><strong>Target Reference Architecture:</strong> Design final IEC 62443-3-3 compliant network topology.</li>
+                <li><strong>Floor Walk 2 Verification:</strong> Second physical walk to confirm high-fidelity model accuracy.</li>
+                <li><strong>Automated Report Generation:</strong> Produce complete compliance technical file and executive summaries.</li>
+              </ul>
+            </div>
+
+            <div class="detail-card-box">
+              <strong class="title-label">📋 Complete Artifact Pack Delivered</strong>
+              <ul class="flow-bl">
+                <li><strong>NOW / NEXT / NEVER Report (`A8`):</strong> Actionable remediation roadmap with NEVER ledger.</li>
+                <li><strong>Target Architecture Blueprints:</strong> Certified IEC 62443 reference blueprints.</li>
+                <li><strong>Risk Portfolio &amp; ALE Ledger (`A7`):</strong> Post-remediation residual risk certification.</li>
+                <li><strong>Queryable Living Twin:</strong> Interactive digital twin handed over for operational change management.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="floor-walk-banner">
+            <span style="font-size: 1.5rem;">🚶‍♂️</span>
+            <div>
+              <strong style="color: #ffffff; font-size: 0.9rem;">Integrated Floor Walk 2: High-Fidelity Digital Twin Final Verification</strong>
+              <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0.2rem 0 0;">
+                Before final delivery, OXOT engineers conduct the second physical floor walk to confirm that all simulated virtual controls match active firewall policies, physical diode installations, and OT segmentation boundaries.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CAROUSEL CONTROLS BAR -->
+      <div class="carousel-controls-bar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button class="btn btn-outline" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" id="carousel-prev-btn" onclick="prevCarouselStep()">‹ Prev Stage</button>
+          <button class="btn btn-outline" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" id="carousel-pause-btn" onclick="toggleCarouselPause()">⏸️ Pause</button>
+          <button class="btn btn-outline" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" id="carousel-next-btn" onclick="nextCarouselStep()">Next Stage ›</button>
+        </div>
+
+        <div class="carousel-indicators">
+          <span class="carousel-dot active" onclick="selectCarouselTab(0)"></span>
+          <span class="carousel-dot" onclick="selectCarouselTab(1)"></span>
+          <span class="carousel-dot" onclick="selectCarouselTab(2)"></span>
+          <span class="carousel-dot" onclick="selectCarouselTab(3)"></span>
+          <span class="carousel-dot" onclick="selectCarouselTab(4)"></span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- COMPONENT 2: SHADCN SEPARATOR WITH LABEL -->
+    <div class="separator-with-label">
+      <span>DELIVERABLES &amp; COMPLIANCE ARTIFACTS</span>
+    </div>
+
+    <!-- SECTION 2: THE 9 MASTER ENGAGEMENT DELIVERABLES (TABLE) -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+        <div>
+          <span class="eyebrow-orange">STANDARDIZED ENGAGEMENT ARTIFACTS</span>
+          <h2 class="section-title-serif" style="font-size: 1.75rem;">Master Deliverables Matrix (A1 – A9)</h2>
+        </div>
+        <span class="badge badge-primary">ALL 9 GENERATED FROM 1 DATASET</span>
+      </div>
+      <p class="body-prose" style="max-width: 850px; font-size: 0.95rem; margin-bottom: 1rem;">
+        Every artifact carries the same join keys, so an engineering change to a single asset automatically synchronizes across the asset register, consequence propagation, compliance certificates, and executive financial ledgers.
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">ID</th>
+              <th style="width: 25%;">Artifact Name</th>
+              <th style="width: 40%;">Description &amp; Engineering Scope</th>
+              <th style="width: 12%;">Phase</th>
+              <th style="width: 13%;">Primary Join Key</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-outline">A1</span></td>
+              <td><strong>Asset Register</strong></td>
+              <td>Comprehensive inventory of all 449 facility assets with system, Purdue Level (Z0–Z4), IEC 62443 zone, SL-T target, cell boundary, and vendor.</td>
+              <td><span class="badge badge-cyan">Phase 1</span></td>
+              <td><code>asset_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A2</span></td>
+              <td><strong>Services &amp; Protocols Inventory</strong></td>
+              <td>Classification of all 1,155 connections detailing service payload, carrier protocol, directionality, and strict isolation of routable vs. hardwired/serial links.</td>
+              <td><span class="badge badge-cyan">Phase 1</span></td>
+              <td><code>conduit_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A3</span></td>
+              <td><strong>Zones, Conduits &amp; SL-T Matrix</strong></td>
+              <td>Zone definition catalogue, boundary definitions, and the 154 critical zone-crossing conduits required under IEC 62443-3-2 §5.6.</td>
+              <td><span class="badge badge-primary">Workshop 1</span></td>
+              <td><code>zone_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A4</span></td>
+              <td><strong>Threat Scenarios &amp; Pathways</strong></td>
+              <td>Attacker Threat Quotient (ATQ) sector threat framing applied through TACAM vulnerabilities, walking explicit routable attack paths across assets.</td>
+              <td><span class="badge badge-primary">Workshop 2</span></td>
+              <td><code>threat_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A5</span></td>
+              <td><strong>Consequence &amp; Cascading Failure</strong></td>
+              <td>Kinetic failure propagation model with hourly downtime cost calculations, Minimum Operating Requirements (MoR), and environmental hazard triggers.</td>
+              <td><span class="badge badge-cyan">Phase 2</span></td>
+              <td><code>hazard_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A6</span></td>
+              <td><strong>SL-C &amp; CapEx Rationale</strong></td>
+              <td>Hazard-level safeguards priced individually, ALARP/SFAIRP disproportion factor tests, and CapEx ROI curves mapped to specific standard clauses.</td>
+              <td><span class="badge badge-primary">Workshop 2</span></td>
+              <td><code>clause_id</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A7</span></td>
+              <td><strong>Risk Portfolio &amp; ALE Ledger</strong></td>
+              <td>Annualized Loss Expectancy (ALE = Asset Value × Exposure Factor × ARO) quantified per node before and after simulated virtual controls.</td>
+              <td><span class="badge badge-amber">Phase 3</span></td>
+              <td><code>ale_node</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A8</span></td>
+              <td><strong>Executive Readout &amp; NOW / NEXT / NEVER</strong></td>
+              <td>Board-level readout summarizing key risks and the 3-tier action roadmap. The NEVER column legally preserves non-viable architectural decisions.</td>
+              <td><span class="badge badge-amber">Phase 3</span></td>
+              <td><code>action_tier</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-outline">A9</span></td>
+              <td><strong>Assumptions &amp; Provenance Register</strong></td>
+              <td>Complete mathematical audit trail tagging every data point as Sourced (from client documents), Derived (from model graph), or Assumed.</td>
+              <td><span class="badge badge-outline">All Phases</span></td>
+              <td><code>source_ref</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COMPONENT 2: SHADCN SEPARATOR WITH LABEL -->
+    <div class="separator-with-label">
+      <span>STAKEHOLDER DISTRIBUTION &amp; OUTCOMES</span>
+    </div>
+
+    <!-- SECTION 3: WHO GETS WHAT (TABLE) -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+        <div>
+          <span class="eyebrow-orange">CROSS-ORGANIZATIONAL ALIGNMENT</span>
+          <h2 class="section-title-serif" style="font-size: 1.75rem;">Where the Outputs Go — One Dataset, Every Team</h2>
+        </div>
+        <span class="badge badge-outline">ELIMINATES INTER-DEPARTMENTAL SILOS</span>
+      </div>
+      <p class="body-prose" style="max-width: 850px; font-size: 0.95rem; margin-bottom: 1rem;">
+        Different organizational teams require different lenses. The Cyber Digital Twin provides top-down financial clarity for leadership and bottom-up engineering rigor for operations.
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Stakeholder Group</th>
+              <th style="width: 35%;">Deliverables &amp; Artifacts Received</th>
+              <th style="width: 40%;">Operational &amp; Business Enablement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong style="color: var(--dutch-orange);">Executives, Board &amp; Risk Officers</strong>
+                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.2rem;">CISO, CFO, VP Operations</div>
+              </td>
+              <td>Executive Briefing &amp; Readout (A8), ALE Loss Expectancy Ledger (A7), CapEx Justification Proof (A6).</td>
+              <td>Quantifies cyber exposure in currency ($8.88M → $680k), validates ALARP proportionality, and justifies insurance premium discounts.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong style="color: var(--signal-cyan);">Facility &amp; Facility Managers</strong>
+                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.2rem;">Site Directors, Maintenance Leads</div>
+              </td>
+              <td>Facility Security RACI Matrix (SecRAC), Zone &amp; Conduit Operational Rules (A3), Degraded Operating Modes (A5).</td>
+              <td>Defines exact day-to-day access boundaries, third-party vendor maintenance controls, and physical/environmental interlock safeguards.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong style="color: var(--signal-green);">Safety &amp; Reliability Engineering</strong>
+                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.2rem;">Functional Safety, FMEA Team, Quality</div>
+              </td>
+              <td>Updated Hazard Log Integration (A5), SIL-Tagged Asset List (A1), Kinetic Cascade Dependency Model.</td>
+              <td>Returns validated cyber deviations back into the safety team's native Hazard Log and FMEA documents, preventing cross-team drift.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong style="color: #ffffff;">IT, OT, Network, Controls &amp; Security</strong>
+                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.2rem;">Control System Engineers, SecOps, Network Admins</div>
+              </td>
+              <td>Full IEC 62443 / CLC/TS 50701 Technical Report, ZCR Diagrams, 5 CycloneDX BOMs, Interactive 3D Digital Twin.</td>
+              <td>Provides actionable firewall rules, VLAN segmentation maps, diode gateway specifications, and a queryable model for change management.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COMPONENT 2: SHADCN SEPARATOR WITH LABEL -->
+    <div class="separator-with-label">
+      <span>TECHNICAL GLOSSARY &amp; STANDARDS</span>
+    </div>
+
+    <!-- SECTION 4: METHODOLOGY GLOSSARY (TABLE) -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+        <div>
+          <span class="eyebrow-orange">CORE CONCEPTS</span>
+          <h2 class="section-title-serif" style="font-size: 1.75rem;">Methodology Framework Terms</h2>
+        </div>
+        <span class="badge badge-outline">IEC 62443 &amp; EU CRA READY</span>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 15%;">Term / Acronym</th>
+              <th style="width: 85%;">Engineering Definition &amp; Application in Digital Twin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ATQ</strong></td>
+              <td><strong>Attacker Threat Quotient:</strong> Our sector-specific threat framing methodology that weights comparative adversary capabilities by facility type, equipment classes, and geographic jurisdiction, replacing generic worst-case assumptions with defensible likelihood metrics.</td>
+            </tr>
+            <tr>
+              <td><strong>TACAM</strong></td>
+              <td><strong>Target Attack Consequence &amp; Asset Mapping:</strong> Threat actor and attack pathway taxonomy carrying typical vulnerabilities across OT equipment classes (PLCs, BMS, UPS, CDUs) and mapping them directly to physical network dependencies.</td>
+            </tr>
+            <tr>
+              <td><strong>ZCR</strong></td>
+              <td><strong>Zone &amp; Conduit Requirements:</strong> The flattened network and logical topology view of the digital twin, establishing zone boundaries, conduit inspection requirements, and target security levels per IEC 62443-3-2.</td>
+            </tr>
+            <tr>
+              <td><strong>SL-T / SL-C / SL-A</strong></td>
+              <td><strong>Security Level Framework:</strong> <em>SL-T (Target)</em> is the required security level based on consequence; <em>SL-C (Capability)</em> is what security countermeasures can reasonably achieve; <em>SL-A (Achieved)</em> is the validated real-world state of the facility.</td>
+            </tr>
+            <tr>
+              <td><strong>ALARP / SFAIRP</strong></td>
+              <td><strong>As Low As Reasonably Practicable / So Far As Is Reasonably Practicable:</strong> The legal and engineering test applied to residual risk gaps to prove that the cost of additional mitigation is grossly disproportionate to the risk reduction gained.</td>
+            </tr>
+            <tr>
+              <td><strong>Critical Conduit</strong></td>
+              <td>A network connection crossing an IEC 62443 zone boundary (especially between different Purdue levels or security domains) requiring explicit logging, filtering, or cryptographic protection under IEC 62443-3-2 §5.6.</td>
+            </tr>
+            <tr>
+              <td><strong>Cell Architecture</strong></td>
+              <td>A self-contained 5–10 MW electrical and thermal block within a hyperscale facility featuring independent power distribution, CDU loops, and OT VLANs with data diode isolation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SHADCN ACCORDION FAQS -->
+    <section style="margin-top: 3.5rem;">
+      <span class="eyebrow-orange">PREPARATION &amp; GOVERNANCE</span>
+      <h3 class="section-title-serif" style="font-size: 1.75rem; margin-bottom: 1.25rem;">Frequently Asked Questions</h3>
+      <div class="shadcn-accordion">
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>What engineering documents must the facility team provide for Phase 1?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            Only standard engineering documentation is required: piping and instrumentation diagrams (P&amp;IDs), single-line power schematics (SLDs), controller equipment lists, network architecture drawings, and Interface Control Documents (ICDs). No specialized formatting or pre-processing is needed; the Seldon Engine parses standard engineering formats directly.
+          </div>
+        </div>
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>Why are two physical floor walks included in the methodology?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            Engineering documentation and real-world installations inevitably drift over time. <strong>Floor Walk 1</strong> (during Workshop 1) reconciles the baseline twin against physical field reality (uncovering unmanaged maintenance ports and ghost assets). <strong>Floor Walk 2</strong> (during Phase 3) validates the high-fidelity twin against active switch configurations and physical firewall barriers before delivering audit-grade reports.
+          </div>
+        </div>
+        <div class="shadcn-accordion-item">
+          <button class="shadcn-accordion-trigger" onclick="this.closest('.shadcn-accordion-item').classList.toggle('open')">
+            <span>How does the ALARP framework defend cyber risk decisions to insurers and regulators?</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="shadcn-accordion-content">
+            Under the As Low As Reasonably Practicable (ALARP) principle, the digital twin quantifies the diminishing marginal return of security spending. Once the disproportion factor is reached, the decision to accept residual risk is mathematically justified and documented in the executive risk memo (A8), providing legal defensibility under EU CRA and IEC 62443 audits.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="shared/oxot-nav.js"></script>
+  <script>
+    // 5-Stage Carousel Stepper Logic
+    let currentCarouselIndex = 0;
+    const totalCarouselStages = 5;
+    const stageDurationMs = 4000;
+    let carouselTimer = null;
+    let isCarouselPaused = false;
+
+    const stagePaneIds = [
+      'pane-phase-1',
+      'pane-workshop-1',
+      'pane-phase-2',
+      'pane-workshop-2',
+      'pane-phase-3'
+    ];
+
+    function selectCarouselTab(index) {
+      currentCarouselIndex = (index + totalCarouselStages) % totalCarouselStages;
+      renderCarouselStage();
+    }
+
+    function nextCarouselStep() {
+      selectCarouselTab(currentCarouselIndex + 1);
+    }
+
+    function prevCarouselStep() {
+      selectCarouselTab(currentCarouselIndex - 1);
+    }
+
+    function renderCarouselStage() {
+      const tabBtns = document.querySelectorAll('.phase-tab-btn');
+      const dots = document.querySelectorAll('.carousel-dot');
+
+      // Update Tab Buttons & Progress Fill Bars
+      tabBtns.forEach((btn, idx) => {
+        const fill = btn.querySelector('.tab-progress-fill');
+        if (idx === currentCarouselIndex) {
+          btn.classList.add('active');
+          if (fill) {
+            fill.style.transition = 'none';
+            fill.style.width = '0%';
+            void fill.offsetWidth; // Force CSS reflow
+            if (!isCarouselPaused) {
+              fill.style.transition = `width ${stageDurationMs}ms linear`;
+              fill.style.width = '100%';
+            }
+          }
+        } else {
+          btn.classList.remove('active');
+          if (fill) {
+            fill.style.transition = 'none';
+            fill.style.width = '0%';
+          }
+        }
+      });
+
+      // Update Dot Indicators
+      dots.forEach((dot, idx) => {
+        if (idx === currentCarouselIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      // Switch Active Detail Pane
+      stagePaneIds.forEach((paneId, idx) => {
+        const pane = document.getElementById(paneId);
+        if (pane) {
+          if (idx === currentCarouselIndex) {
+            pane.classList.add('active');
+          } else {
+            pane.classList.remove('active');
+          }
+        }
+      });
+
+      startCarouselTimer();
+    }
+
+    function startCarouselTimer() {
+      clearTimeout(carouselTimer);
+      if (!isCarouselPaused) {
+        carouselTimer = setTimeout(() => {
+          nextCarouselStep();
+        }, stageDurationMs);
+      }
+    }
+
+    function pauseCarousel() {
+      isCarouselPaused = true;
+      clearTimeout(carouselTimer);
+      const statusBadge = document.getElementById('carousel-status-badge');
+      if (statusBadge) {
+        statusBadge.textContent = 'PAUSED';
+        statusBadge.className = 'badge badge-outline';
+      }
+      const pauseBtn = document.getElementById('carousel-pause-btn');
+      if (pauseBtn) pauseBtn.innerHTML = '▶️ Resume';
+
+      const activeFill = document.querySelector('.phase-tab-btn.active .tab-progress-fill');
+      if (activeFill) {
+        const computedWidth = window.getComputedStyle(activeFill).width;
+        activeFill.style.transition = 'none';
+        activeFill.style.width = computedWidth;
+      }
+    }
+
+    function resumeCarousel() {
+      isCarouselPaused = false;
+      const statusBadge = document.getElementById('carousel-status-badge');
+      if (statusBadge) {
+        statusBadge.textContent = 'AUTO-PROGRESSING (4s)';
+        statusBadge.className = 'badge badge-primary';
+      }
+      const pauseBtn = document.getElementById('carousel-pause-btn');
+      if (pauseBtn) pauseBtn.innerHTML = '⏸️ Pause';
+
+      renderCarouselStage();
+    }
+
+    function toggleCarouselPause() {
+      if (isCarouselPaused) {
+        resumeCarousel();
+      } else {
+        pauseCarousel();
+      }
+    }
+
+    // Initialize Auto-Progressing Carousel on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCarouselStage();
+    });
+  </script>
+</body>
+</html>

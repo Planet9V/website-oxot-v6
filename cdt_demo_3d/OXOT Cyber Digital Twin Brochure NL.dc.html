@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./doc-page.js"></script>
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  a { color: #EE7623; text-decoration: none; }
+  a:hover { color: #16203B; }
+</style>
+</helmet>
+
+<doc-page size="a4">
+
+<section class="page" id="p1" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="background:#16203B;padding:0.5in 0.6in 0.46in 0.62in;position:relative">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:9px;background:#EE7623"></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+      <div style="color:#EE7623;font-size:9.5pt;font-weight:700;letter-spacing:2.4px">OXOT · CYBER DIGITAL TWIN</div>
+      <div style="color:#8794AE;font-size:9.5pt;font-weight:600;letter-spacing:2.4px">IEC 62443 · NIS2 · CRA</div>
+    </div>
+    <h1 style="margin:0 0 12px;font-family:'Source Serif 4',serif;font-weight:700;font-size:31pt;line-height:1.04;color:#FBFAF8;letter-spacing:-0.5px">U kunt niet verdedigen wat u nooit heeft <span style="color:#EE7623">gemodelleerd</span>.</h1>
+    <p style="margin:0;font-size:11pt;line-height:1.5;color:#C3CCDE;max-width:6.4in">Een levend, doorzoekbaar 3D-model van de installatie — elk asset, elke stroom, elke afhankelijkheid — verrijkt met de stuklijst, gekruist met actuele kwetsbaarheidsinformatie, en gesimuleerd tot het een getal oplevert waarmee uw bestuur kan handelen.</p>
+    <div style="display:flex;gap:0.42in;margin-top:20px">
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:19pt;font-weight:700;line-height:1">Geometrie</div><div style="color:#8794AE;font-size:8.5pt;margin-top:2px">de installatie zoals gebouwd</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:19pt;font-weight:700;line-height:1">Topologie</div><div style="color:#8794AE;font-size:8.5pt;margin-top:2px">elke gerouteerde verbinding</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:19pt;font-weight:700;line-height:1">Attributen</div><div style="color:#8794AE;font-size:8.5pt;margin-top:2px">het cyber- en veiligheidsdossier</div></div>
+      <div><div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:19pt;font-weight:700;line-height:1">Gedrag</div><div style="color:#8794AE;font-size:8.5pt;margin-top:2px">wat er gebeurt als het faalt</div></div>
+    </div>
+  </div>
+
+  <div style="padding:0.34in 0.6in 0.28in;display:flex;flex-direction:column">
+    <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">HET PROBLEEM</div>
+    <h2 style="margin:6px 0 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:17pt;color:#16203B;line-height:1.15">Uw faciliteit bestaat in zes onverenigbare beschrijvingen.</h2>
+    <div style="width:52px;height:3px;background:#EE7623;margin:10px 0 14px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="background:#F2F0EA;border-radius:7px;padding:14px 16px">
+        <div style="color:#7A6A55;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:6px">WAT U HEEFT</div>
+        <div style="color:#3D4759;font-size:10pt;line-height:1.45">P&amp;ID's in de ene la. Eenlijnschema's in de andere. Een assetregister in Excel, een netwerktekening uit 2019, een BMS-puntenlijst en een CMDB die niemand vertrouwt.</div>
+      </div>
+      <div style="background:#EFF3FA;border-left:5px solid #EE7623;border-radius:0 7px 7px 0;padding:14px 16px">
+        <div style="color:#16203B;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:6px">WAT EEN AUDITOR VRAAGT</div>
+        <div style="color:#2B3550;font-size:10pt;line-height:1.45">“Laat mij elk pad zien van die kaartlezer naar een koelmachine. Bewijs dat de CDU blijft draaien als deze switch uitvalt.” Zes documenten kunnen samen niet één vraag beantwoorden.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
+      <div style="background:#16203B;border-radius:7px;padding:13px 15px">
+        <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">Statisch</div>
+        <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4;margin-top:3px">Documenten verouderen op de dag dat ze worden getekend. De installatie verandert wekelijks.</div>
+      </div>
+      <div style="background:#16203B;border-radius:7px;padding:13px 15px">
+        <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">Verkokerd</div>
+        <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4;margin-top:3px">Voeding, koeling, netwerk en beveiliging worden elk door een andere discipline gemodelleerd.</div>
+      </div>
+      <div style="background:#16203B;border-radius:7px;padding:13px 15px">
+        <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">Niet toetsbaar</div>
+        <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4;margin-top:3px">Een faalscenario laat zich niet doorrekenen op een PDF.</div>
+      </div>
+    </div>
+    <div style="height:2.05in;margin-top:14px;border-radius:8px;overflow:hidden;background:#16203B">
+      <img src="shots/01-view.png" alt="Digital twin van een hyperscale AI-datacenter — overzicht van de campus" style="width:100%;height:100%;object-fit:cover;object-position:50% 45%;display:block">
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px">
+      <div style="color:#7A879E;font-size:8.5pt;font-style:italic">Doorlopend uitgewerkt voorbeeld: een hyperscale AI-datacenter — 96 racks, 7 technische systemen, 4.000+ benoemde componenten.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">OXOT CYBER DIGITAL TWIN</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 1</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p2" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="padding:0.55in 0.6in 0.3in">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2.5px solid #16203B">
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">LAAG 1 &amp; 2 · GEOMETRIE EN TOPOLOGIE</div>
+      <div style="color:#7A879E;font-size:9pt;font-weight:600;letter-spacing:2.2px">HET MODEL</div>
+    </div>
+    <h2 style="margin:18px 0 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:23pt;color:#16203B;line-height:1.08;letter-spacing:-0.3px">Selecteerbaar tot de afzonderlijke tray. Van begin tot eind te doorlopen.</h2>
+    <p style="margin:0;font-size:10.5pt;line-height:1.5;color:#3D4759">Klik op een willekeurig object en de twin geeft de identiteit terug, niet slechts een markering. Eén vloeistofgekoeld 48U-rack valt uiteen in compute-trays, switch-trays, voedingsshelves, opslag, blind-mate koppelingen voor koelvloeistof en de DC-busbar erachter — en elke verbinding ertussen is getekend als een werkelijk gerouteerd pad tussen werkelijke eindpunten. Afhankelijkheid is daarmee iets dat u natrekt in plaats van aanneemt.</p>
+  </div>
+
+  <div style="height:3.55in;padding:0 0.6in;display:flex;gap:0.22in">
+    <div style="flex:0 0 2.5in;border-radius:8px;overflow:hidden;background:#16203B">
+      <img src="shots/01-rack.png" alt="Vloeistofgekoeld GPU-rack, detail op trayniveau" style="width:100%;height:100%;object-fit:cover;object-position:42% 50%;display:block">
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+      <div style="border-radius:8px;overflow:hidden;background:#16203B;height:2.35in">
+        <img src="shots/04-fix2.png" alt="Ingesloten rijen met busway, koelvloeistofleidingen en glasvezelgoten" style="width:100%;height:100%;object-fit:cover;object-position:50% 48%;display:block">
+      </div>
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px;margin:14px 0 8px">P&amp;ID-DISCIPLINE, IN DRIE DIMENSIES</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px">
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#1F6FD0;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">Koelvloeistof aanvoer</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#C23A2E;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">Koelvloeistof retour</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#2E8B57;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">Condensorcircuit</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#D8B23A;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">Busway en aftakkingen</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#35C2C9;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">IT-fabric</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:22px;height:7px;border-radius:4px;background:#8A4FD0;flex:0 0 auto"></span><span style="color:#2B3550;font-size:9.5pt">OT-signaalpad</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0.24in 0.6in 0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-radius:8px;padding:14px 16px">
+        <div style="color:#16203B;font-size:11pt;font-weight:700;margin-bottom:5px">Voeding — onderstation tot rack-busbar</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">GIS- en middenspanningsschakelinstallatie, beveiligingsrelais, transformatoren, ATS en STS, UPS'en en batterijstrengen, noodstroomaggregaten met dagtanks en bulkbrandstof, BESS, RPP's en busway-aftakkingen — één ononderbroken keten, met de EPMS-meting die erop toeziet.</div>
+      </div>
+      <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-radius:8px;padding:14px 16px">
+        <div style="color:#16203B;font-size:11pt;font-weight:700;margin-bottom:5px">Koeling — koeltoren tot chip</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">Koeltorens en drycooler-economisers, koelmachines, primaire pompen en frequentieregelaars, facility-waterleidingen, rij-CDU's, rackverdelers en elke snelkoppeling — inclusief lekdetectie en besturing.</div>
+      </div>
+    </div>
+    <div style="background:#16203B;border-radius:8px;padding:15px 18px;margin-top:14px">
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:6px">WAAR HET OPHOUDT EEN ENGINEERINGMODEL TE ZIJN</div>
+      <div style="color:#C3CCDE;font-size:10pt;line-height:1.45">De twin draagt de segmentatie als geometrie. Het IT-fabric — carrier-entries, ISP-routers, perimeterfirewalls, core spine, leaf, end-of-row en ToR — en het OT-signaalpad — CDU- en koelmachine-PLC's, EPMS, aggregaatbesturingen, gasdetectie en BMS-velddevices achter een geharde OT-switch, OT-firewall en eenrichtings-datadiode — zijn fysiek onderscheiden objecten. U ziet de grens, en u ziet elke plek waar iets die grens passeert.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0.2in 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">OXOT CYBER DIGITAL TWIN</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 2</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p3" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="padding:0.55in 0.6in 0.3in">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2.5px solid #16203B">
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">DE METHODE</div>
+      <div style="color:#7A879E;font-size:9pt;font-weight:600;letter-spacing:2.2px">BOUWEN · VERRIJKEN · SIMULEREN · PRIORITEREN</div>
+    </div>
+    <h2 style="margin:18px 0 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:23pt;color:#16203B;line-height:1.08;letter-spacing:-0.3px">Wij bouwen het model. Daarna breken we het — tienduizend keer.</h2>
+    <p style="margin:0;font-size:10.5pt;line-height:1.5;color:#3D4759">Een engineeringtwin vertelt u wat er staat. Een <em>cyber</em> digital twin vertelt u wat het u kost wanneer het faalt, hoe waarschijnlijk dat dit jaar is, en welke drie dingen u als eerste moet oplossen.</p>
+  </div>
+
+  <div style="padding:0 0.6in;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-top:3px solid #EE7623;border-radius:3px 3px 8px 8px;padding:13px 16px">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">01</span><span style="color:#16203B;font-size:11pt;font-weight:700">BOUW de as-is</span></div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">Geometrie, topologie en besturingslaag, afgestemd op tekeningen, configuratie en een schouw ter plaatse. De twin wordt de gedeelde vaststelling van wat er werkelijk staat.</div>
+    </div>
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-top:3px solid #EE7623;border-radius:3px 3px 8px 8px;padding:13px 16px">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">02</span><span style="color:#16203B;font-size:11pt;font-weight:700">VERRIJK met de stuklijst</span></div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">Elk object erft zijn hardware-, software-, cryptografische en servicestuklijst, die continu wordt gekruist met actuele kwetsbaarheids- en dreigingsinformatie.</div>
+    </div>
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-top:3px solid #EE7623;border-radius:3px 3px 8px 8px;padding:13px 16px">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">03</span><span style="color:#16203B;font-size:11pt;font-weight:700">SIMULEER het gevolg</span></div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">Modelleer de dreiging per pad, doorbreek de minimale bedrijfsvereisten en bereken de uitkomstverdeling — geen enkelvoudig worstcase en geen kleurvlak in een heatmap.</div>
+    </div>
+    <div style="background:#16203B;border-top:3px solid #EE7623;border-radius:3px 3px 8px 8px;padding:13px 16px">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:15pt;font-weight:700">04</span><span style="color:#FBFAF8;font-size:11pt;font-weight:700">PRIORITEER de besteding</span></div>
+      <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.45">Rangschik elke bevinding op vermeden verlies per geïnvesteerde euro, en verdedig die rangschikking tegenover een bestuur, een verzekeraar of een toezichthouder.</div>
+    </div>
+  </div>
+
+  <div style="padding:0.26in 0.6in 0">
+    <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">STAP 02 · DE STUKLIJST</div>
+    <h3 style="margin:6px 0 12px;font-family:'Source Serif 4',serif;font-weight:700;font-size:16pt;color:#16203B;line-height:1.15">Elk object draagt zijn eigen aanvalsoppervlak.</h3>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">HBOM · hardware</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Merk, model, revisie, firmwareniveau, einddatum van ondersteuning en herkomst in de toeleverketen.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">SBOM · software</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Componenten en transitieve afhankelijkheden in elke controller, gateway en appliance-image.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">CBOM · cryptografie</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Algoritmen, sleutellengtes, vervaldata van certificaten, vertrouwensankers en post-quantumblootstelling.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">SaaS- en dienstenstuklijst</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Toegang op afstand door leveranciers, cloud-controlplanes, uitgaande telemetrie en licentieafhankelijkheden.</div>
+      </div>
+    </div>
+    <div style="background:#16203B;border-radius:8px;padding:14px 18px;margin-top:12px">
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:8px">CONTINU GEKRUIST MET</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">CVE / NVD</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">CISA KEV</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">EPSS-exploitkans</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">ICS-CERT-adviezen</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">PSIRT van leveranciers</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">Beschikbaarheid van exploits</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">TTP's van dreigingsactoren</span>
+        <span style="background:#22304F;color:#DCE4F2;font-size:9pt;font-weight:600;padding:5px 10px;border-radius:5px">Einde-levensduurstatus</span>
+      </div>
+      <div style="color:#C3CCDE;font-size:10pt;line-height:1.45;margin-top:10px">Een CVE op zichzelf is ruis. Een CVE op <em>deze</em> controller, bereikbaar via <em>dit</em> conduit, waar <em>dit</em> koelcircuit van afhangt, is een beslissing.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0.2in 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">VAN KWETSBAARHEDENLIJST NAAR EXPLOITEERBAAR PAD</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 3</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p4" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="padding:0.55in 0.6in 0.3in">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2.5px solid #16203B">
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">STAP 03 · WHAT-IF EN PROBABILISTISCHE UITKOMSTEN</div>
+      <div style="color:#7A879E;font-size:9pt;font-weight:600;letter-spacing:2.2px">GEVOLGGEDREVEN ANALYSE</div>
+    </div>
+    <h2 style="margin:18px 0 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:23pt;color:#16203B;line-height:1.08;letter-spacing:-0.3px">Eerst het gevolg. Dan de kans.</h2>
+    <p style="margin:0;font-size:10.5pt;line-height:1.5;color:#3D4759">Wij leggen de minimale bedrijfsvereisten samen met uw engineers vast vóórdat we ook maar één dreiging modelleren. Een scenario telt pas wanneer het er één doorbreekt.</p>
+  </div>
+
+  <div style="padding:0 0.6in;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:#16203B;border-radius:7px;padding:12px 15px">
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:4px">VEILIGHEID</div>
+      <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4">Geen toestand die mensen in gevaar brengt of een beveiligingsfunctie buiten werking stelt.</div>
+    </div>
+    <div style="background:#16203B;border-radius:7px;padding:12px 15px">
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:4px">BETROUWBAARHEID</div>
+      <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4">Gelijktijdige onderhoudbaarheid en N+1 behouden op zowel voeding als koeling.</div>
+    </div>
+    <div style="background:#16203B;border-radius:7px;padding:12px 15px">
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px;margin-bottom:4px">MINIMALE BEDRIJFSVOERING</div>
+      <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.4">De ondergrens waaronder de dienst contractueel en juridisch in gebreke is.</div>
+    </div>
+  </div>
+
+  <div style="padding:0.2in 0.6in 0">
+    <table style="width:100%;border-collapse:collapse;font-size:9.5pt">
+      <thead>
+        <tr>
+          <th style="text-align:left;color:#16203B;font-size:8.5pt;font-weight:700;letter-spacing:1.6px;padding:0 10px 6px 0;border-bottom:2px solid #16203B">WHAT-IF-SCENARIO</th>
+          <th style="text-align:left;color:#16203B;font-size:8.5pt;font-weight:700;letter-spacing:1.6px;padding:0 10px 6px;border-bottom:2px solid #16203B;width:2.5in">GEMODELLEERD GEVOLG</th>
+          <th style="text-align:left;color:#16203B;font-size:8.5pt;font-weight:700;letter-spacing:1.6px;padding:0 0 6px 10px;border-bottom:2px solid #16203B;width:0.95in">VEREISTE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="color:#2B3550;font-weight:600;padding:9px 10px 9px 0;border-bottom:1px solid #E2E6EE">Ransomware bereikt de DCIM en de BMS-headend</td><td style="color:#3D4759;padding:9px 10px;border-bottom:1px solid #E2E6EE">Verlies van zicht; koeling handmatig besturen</td><td style="color:#C8332A;font-weight:700;padding:9px 0 9px 10px;border-bottom:1px solid #E2E6EE">Doorbroken</td></tr>
+        <tr><td style="color:#2B3550;font-weight:600;padding:9px 10px 9px 0;border-bottom:1px solid #E2E6EE">Gecompromitteerde rij-CDU-controller legt beide pompen stil</td><td style="color:#3D4759;padding:9px 10px;border-bottom:1px solid #E2E6EE">Thermische runaway binnen ± 90 s bij volle belasting</td><td style="color:#C8332A;font-weight:700;padding:9px 0 9px 10px;border-bottom:1px solid #E2E6EE">Doorbroken</td></tr>
+        <tr><td style="color:#2B3550;font-weight:600;padding:9px 10px 9px 0;border-bottom:1px solid #E2E6EE">Kwaadaardige firmware in een PSU-familie van de voedingsshelf</td><td style="color:#3D4759;padding:9px 10px;border-bottom:1px solid #E2E6EE">Gecorreleerde uitval in alle rijen tegelijk</td><td style="color:#C8332A;font-weight:700;padding:9px 0 9px 10px;border-bottom:1px solid #E2E6EE">Doorbroken</td></tr>
+        <tr><td style="color:#2B3550;font-weight:600;padding:9px 10px 9px 0;border-bottom:1px solid #E2E6EE">Verlopen certificaat op de OT-protocolgateway</td><td style="color:#3D4759;padding:9px 10px;border-bottom:1px solid #E2E6EE">Stil verlies van telemetrie; tragere respons</td><td style="color:#EE7623;font-weight:700;padding:9px 0 9px 10px;border-bottom:1px solid #E2E6EE">Verminderd</td></tr>
+        <tr><td style="color:#2B3550;font-weight:600;padding:9px 10px 9px 0;border-bottom:1px solid #E2E6EE">SaaS-controlplane van leverancier 72 uur onbereikbaar</td><td style="color:#3D4759;padding:9px 10px;border-bottom:1px solid #E2E6EE">Geen orkestratie of diagnose op afstand</td><td style="color:#EE7623;font-weight:700;padding:9px 0 9px 10px;border-bottom:1px solid #E2E6EE">Verminderd</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="padding:0.26in 0.6in 0;display:flex;flex-direction:column">
+    <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">MONTE CARLO · 10.000 ITERATIES PER SCENARIO</div>
+    <h3 style="margin:6px 0 10px;font-family:'Source Serif 4',serif;font-weight:700;font-size:16pt;color:#16203B;line-height:1.15">Een bandbreedte aan uitkomsten, geen rood vakje.</h3>
+    <p style="margin:0 0 12px;font-size:10pt;line-height:1.45;color:#3D4759">Elk pad krijgt een frequentie en een impactverdeling — uitvaltijd, schade aan apparatuur, SLA-boetes, responskosten en blootstelling aan toezicht — omgezet naar een verlies op jaarbasis waarop de organisatie kan begroten.</p>
+    <div style="background:#16203B;border-radius:8px;padding:14px 18px 12px;height:1.75in;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+        <div style="color:#DCE4F2;font-size:9.5pt;font-weight:600">Jaarlijkse verliesverdeling — pad van koelverlies</div>
+        <div style="color:#7C8AA6;font-size:8pt;letter-spacing:1.2px">ILLUSTRATIEVE MODELUITKOMST</div>
+      </div>
+      <div style="flex:1;display:flex;align-items:flex-end;gap:3px">
+        <div style="flex:1;height:5%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:11%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:22%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:38%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:57%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:76%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:90%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:97%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:100%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:94%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:84%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:71%;background:#3B4C6E;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:58%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:46%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:36%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:27%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:20%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:14%;background:#EE7623;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:10%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:7%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:5%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:3%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:2%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+        <div style="flex:1;height:1%;background:#C8332A;border-radius:2px 2px 0 0"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;border-top:1.5px solid #3B4C6E;padding-top:5px;margin-top:4px">
+        <div style="color:#7C8AA6;font-size:8pt">€ 0</div>
+        <div style="color:#EE7623;font-size:8pt;font-weight:700">P50</div>
+        <div style="color:#EE7623;font-size:8pt;font-weight:700">P90</div>
+        <div style="color:#C8332A;font-size:8pt;font-weight:700">staart</div>
+        <div style="color:#7C8AA6;font-size:8pt">ergst denkbaar</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0.2in 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">ALE PER PAD · Δ ALE PER KANDIDAAT-MAATREGEL</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 4</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p5" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="padding:0.55in 0.6in 0.3in">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2.5px solid #16203B">
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">STAP 04 · HET RESULTAAT</div>
+      <div style="color:#7A879E;font-size:9pt;font-weight:600;letter-spacing:2.2px">EEN VERDEDIGBARE BESTEDINGSVOLGORDE</div>
+    </div>
+    <h2 style="margin:18px 0 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:23pt;color:#16203B;line-height:1.08;letter-spacing:-0.3px">NU · STRAKS · NOOIT</h2>
+    <p style="margin:0;font-size:10.5pt;line-height:1.5;color:#3D4759">Geen ernstscore, maar een rangorde afgeleid uit bereikbaarheid in de twin, exploiteerbaarheid in de praktijk, en vermeden verlies per bestede euro.</p>
+  </div>
+
+  <div style="padding:0 0.6in;display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    <div style="background:#16203B;border-top:5px solid #C8332A;border-radius:3px 3px 8px 8px;padding:15px 17px">
+      <div style="color:#FF6B5E;font-size:8.5pt;font-weight:700;letter-spacing:2px;margin-bottom:6px">NU</div>
+      <div style="color:#FBFAF8;font-family:'Source Serif 4',serif;font-size:13pt;font-weight:700;line-height:1.2;margin-bottom:8px">Bereikbaar, actief misbruikt, doorbreekt een minimale vereiste.</div>
+      <div style="color:#C3CCDE;font-size:9.5pt;line-height:1.45">Aantoonbaar misbruikte kwetsbaarheid op een asset met een levend pad naar een veiligheids- of koelfunctie. Hoogste vermeden verlies per euro. Oplossen binnen het changevenster.</div>
+    </div>
+    <div style="background:#FDEEDC;border-top:5px solid #EE7623;border-radius:3px 3px 8px 8px;padding:15px 17px">
+      <div style="color:#B4530F;font-size:8.5pt;font-weight:700;letter-spacing:2px;margin-bottom:6px">STRAKS</div>
+      <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:13pt;font-weight:700;line-height:1.2;margin-bottom:8px">Reëel, maar begrensd — of het pad is lang.</div>
+      <div style="color:#5A4630;font-size:9.5pt;line-height:1.45">Betekenisvolle ALE-reductie die geen spoedstop rechtvaardigt. Ingepland in het eerstvolgende onderhoudsvenster, met een compenserende maatregel tot die tijd.</div>
+    </div>
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-top:5px solid #7A879E;border-radius:3px 3px 8px 8px;padding:15px 17px">
+      <div style="color:#5A6478;font-size:8.5pt;font-weight:700;letter-spacing:2px;margin-bottom:6px">NOOIT</div>
+      <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:13pt;font-weight:700;line-height:1.2;margin-bottom:8px">Onbereikbaar, of de oplossing kost meer dan het verlies.</div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.45">Geaccepteerd, met de onderbouwing vastgelegd bij het object in de twin. De waardevolste kolom — die stelt uw team in staat onderbouwd te stoppen met de overige 400 bevindingen.</div>
+    </div>
+  </div>
+
+  <div style="padding:0.24in 0.6in 0">
+    <div style="background:#16203B;border-radius:8px;padding:15px 18px;display:flex;gap:18px;align-items:center">
+      <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:14pt;font-weight:700;line-height:1.15;flex:0 0 2in">Draai het opnieuw zodra er iets verandert.</div>
+      <div style="color:#C3CCDE;font-size:10pt;line-height:1.45">Een nieuwe CVE, nieuwe firmware, een andere klantbelasting, een uitgefaseerde UPS — de padanalyse en de ALE bewegen mee met de installatie, omdat ze er nooit los van hebben gestaan.</div>
+    </div>
+  </div>
+
+  <div style="padding:0.26in 0.6in 0;display:flex;flex-direction:column">
+    <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">WAT HET OPLEVERT</div>
+    <h3 style="margin:6px 0 12px;font-family:'Source Serif 4',serif;font-weight:700;font-size:16pt;color:#16203B;line-height:1.15">Een model is niet meer waard dan de beslissingen die het verandert.</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#EE7623;font-size:8pt;font-weight:700;letter-spacing:1.6px;margin-bottom:3px">RISICOANALYSE</div>
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">Zones, conduits en SL-T die een toets doorstaan</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Teken de 62443-grens op de installatie zoals gebouwd — en laat de auditor dezelfde weergave zien als waarmee u hem heeft ontworpen.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#EE7623;font-size:8pt;font-weight:700;letter-spacing:1.6px;margin-bottom:3px">FMECA EN HAZOP</div>
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">Faalwijzen met een zichtbare impactstraal</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Elk component draagt zijn faalwijzen en criticaliteit. Volg het gevolg door de verbonden systemen in plaats van het te schatten.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#EE7623;font-size:8pt;font-weight:700;letter-spacing:1.6px;margin-bottom:3px">OEFENING EN OPLEIDING</div>
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">Oefeningen die iedereen daadwerkelijk ziet</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Engineering, security en directie redeneren vanuit één gedeeld object. Nieuwe operators leren de installatie kennen voordat ze er ooit binnenlopen.</div>
+      </div>
+      <div style="background:#F2F0EA;border-radius:7px;padding:12px 15px">
+        <div style="color:#EE7623;font-size:8pt;font-weight:700;letter-spacing:1.6px;margin-bottom:3px">WIJZIGING EN CONFORMITEIT</div>
+        <div style="color:#16203B;font-size:10.5pt;font-weight:700;margin-bottom:3px">Bewijs dat actueel blijft</div>
+        <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">De twin wordt meeversioneerd met de installatie, zodat het technisch dossier, het assetregister en de netwerktekening niet langer uit elkaar lopen tussen audits.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0.2in 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">OXOT CYBER DIGITAL TWIN</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 5</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p6" style="font-family:Inter,sans-serif;display:flex;flex-direction:column;min-height:100%;background:#FBFAF8">
+  <div style="padding:0.55in 0.6in 0.3in">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2.5px solid #16203B">
+      <div style="color:#EE7623;font-size:9pt;font-weight:700;letter-spacing:2.2px">AANPAK</div>
+      <div style="color:#7A879E;font-size:9pt;font-weight:600;letter-spacing:2.2px">BEGIN WAAR HET RISICO ZIT</div>
+    </div>
+    <h2 style="margin:18px 0 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:23pt;color:#16203B;line-height:1.08;letter-spacing:-0.3px">Begin met één cel, niet met de hele campus.</h2>
+    <p style="margin:0;font-size:10.5pt;line-height:1.5;color:#3D4759">Wij modelleren één kritieke cel — de voedingsketen, het koelcircuit, het netwerk en de besturingslaag — en bewijzen de methode aan de hand van uw eigen tekeningen. Daarna schalen we op over het hele areaal.</p>
+  </div>
+
+  <div style="padding:0 0.6in;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-radius:7px;padding:13px 15px">
+      <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:14pt;font-weight:700;margin-bottom:3px">Omvang</div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Eén cel, één voedingsketen, één koelcircuit — met de werkelijke stuklijst.</div>
+    </div>
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-radius:7px;padding:13px 15px">
+      <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:14pt;font-weight:700;margin-bottom:3px">Resultaat</div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Een navigeerbare twin, een assetregister, een zone- en conduitweergave en een eerste NU/STRAKS/NOOIT-lijst.</div>
+    </div>
+    <div style="background:#EFF3FA;border:1.5px solid #DCE4F2;border-radius:7px;padding:13px 15px">
+      <div style="color:#EE7623;font-family:'Source Serif 4',serif;font-size:14pt;font-weight:700;margin-bottom:3px">Daarna</div>
+      <div style="color:#3D4759;font-size:9.5pt;line-height:1.4">Risicoanalyse, FMECA en ALE-modellering draaien op iets dat werkelijk bestaat.</div>
+    </div>
+  </div>
+
+  <div style="height:2.6in;margin:0.26in 0.6in 0;border-radius:8px;overflow:hidden;background:#16203B">
+    <img src="shots/03-fix2.png" alt="Aggregaatterrein en onderstation in de digital twin" style="width:100%;height:100%;object-fit:cover;object-position:50% 55%;display:block">
+  </div>
+
+  <div style="padding:0.26in 0.6in 0">
+    <div style="background:#FDEEDC;border-radius:8px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:20px">
+      <div>
+        <div style="color:#16203B;font-family:'Source Serif 4',serif;font-size:17pt;font-weight:700;line-height:1.15">Praat met ons over uw installatie.</div>
+        <div style="color:#5A4630;font-size:10pt;line-height:1.4;margin-top:4px">OXOT — Operational Excellence in Operational Technology.</div>
+      </div>
+      <div style="text-align:right;flex:0 0 auto">
+        <div style="color:#EE7623;font-size:13pt;font-weight:700">Neem contact op →</div>
+        <div style="color:#8A6A45;font-size:10pt;margin-top:2px">info@oxot.nl · oxot.nl</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding:0.2in 0.6in 0.42in">
+    <div style="border-top:2px solid #16203B;padding-top:8px;display:flex;justify-content:space-between">
+      <div style="color:#7A879E;font-size:8.5pt;font-weight:600;letter-spacing:1.8px">OXOT — OPERATIONAL EXCELLENCE IN OPERATIONAL TECHNOLOGY</div>
+      <div style="color:#EE7623;font-size:8.5pt;font-weight:700;letter-spacing:1.8px">oxot.nl · 6</div>
+    </div>
+  </div>
+</section>
+
+</doc-page>
+</x-dc>
+</body>
+</html>

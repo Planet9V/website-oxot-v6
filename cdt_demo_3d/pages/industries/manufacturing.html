@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturing & Process Industry OT Cyber Digital Twin — OXOT</title>
+  <link rel="stylesheet" href="../../shared/oxot-theme.css">
+  <script src="../../shared/nav.js" defer></script>
+</head>
+<body>
+
+  <div id="oxot-global-header"></div>
+
+  <!-- HERO SECTION -->
+  <section style="padding: 4.5rem 0 3rem; position: relative;">
+    <div class="container">
+      
+      <div class="oxot-breadcrumbs">
+        <a href="../../index.html">Platform</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="index.html">Industries</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Manufacturing & Process</span>
+      </div>
+
+      <div class="grid-2" style="align-items: center; gap: 3.5rem;">
+        <div>
+          <span class="eyebrow-orange">DISCRETE & CONTINUOUS PROCESS MANUFACTURING</span>
+          <h1 class="hero-title-serif">
+            Make cyber decisions without gambling with production uptime.
+          </h1>
+          <div class="lead-orange">
+            Connects chemical/discrete process physics, Safety Instrumented Systems (SIS), and Purdue Level 3 MES networks.
+          </div>
+          <p class="body-prose">
+            In chemical facilities, pharmaceuticals, automotive lines, and heavy discrete manufacturing, stopping a continuous process costs tens of thousands of dollars per minute. Unplanned shutdowns or contaminated product batches destroy operating margins.
+          </p>
+          <p class="body-prose" style="margin-bottom: 2.25rem;">
+            OXOT ingests your P&IDs, control logic, and network topologies to construct a working digital twin. Test patches, evaluate re-zoning proposals, and verify that MES links cannot corrupt safety instrumented systems—without taking facility lines offline.
+          </p>
+          
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="../../demo-hub.html" class="btn btn-dutch-orange">
+              Explore Manufacturing Scenarios
+            </a>
+            <a href="../../due-diligence.html" class="btn btn-outline-dark">
+              Bring a Facility P&ID
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="background: radial-gradient(circle at 50% 50%, rgba(70, 166, 109, 0.15) 0%, rgba(11, 18, 24, 0.95) 80%); border: 1px solid rgba(70, 166, 109, 0.4); padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <span class="badge badge-green">PURDUE & SAFETY SEGREGATION</span>
+              <span class="pulse-indicator" style="background-color: var(--signal-green); box-shadow: 0 0 8px var(--signal-green);"></span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-red); display: flex; justify-content: space-between;">
+                <span>Safety Instrumented Systems (SIS / SIL-3 ESD)</span>
+                <span style="color: var(--signal-red);">SAFETY CRITICAL</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-green); display: flex; justify-content: space-between;">
+                <span>Level 1 & 2: PLCs, DCS, HMIs & Field I/O</span>
+                <span style="color: var(--signal-green);">CONTROL</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-amber); display: flex; justify-content: space-between;">
+                <span>Level 3: MES, Batch Historian & Line Scheduling</span>
+                <span style="color: var(--signal-amber);">OPERATIONS</span>
+              </div>
+              <div style="background: var(--secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--signal-blue); display: flex; justify-content: space-between;">
+                <span>Level 3.5: Industrial DMZ & Enterprise ERP Bridge</span>
+                <span style="color: var(--signal-blue);">IT / OT BOUNDARY</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted);">
+              Process Integrity Envelope: Models batch cycle timing, exothermic reaction thresholds, and ESD trip tolerances.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OPERATIONAL TECHNOLOGY CONCERNS -->
+  <section style="padding: 3rem 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">MANUFACTURING OT RISKS</span>
+        <h2 class="section-title-serif">High-Consequence Facility Risk Scenarios</h2>
+      </div>
+
+      <div class="grid-3" style="gap: 1.5rem;">
+        
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-red); margin-bottom: 0.5rem;">01 / SAFETY SYSTEM TRIPS</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">SIS Emergency Shutdown Overrides</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Corrupting communications between basic process control systems (BPCS) and Safety Instrumented Systems (SIS) can trigger nuisance shutdowns ($500k+ per restart) or suppress emergency venting.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-green); margin-bottom: 0.5rem;">02 / BATCH RECIPE CORRUPTION</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">MES to PLC Recipe Tampering</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Subtle unauthorized modifications to temperature ramp curves, mix ratios, or sterilization hold times ruin high-value product batches, invalidating FDA 21 CFR Part 11 or GMP compliance records.
+          </p>
+        </div>
+
+        <div class="card" style="background: var(--secondary);">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber); margin-bottom: 0.5rem;">03 / OEM ACCESS & ROBOTICS</div>
+          <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">Robot Cell Maintenance Bypasses</h4>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Robotics OEMs maintain direct cellular or unmanaged VPN bridges into welding and packaging cells, bypassing Purdue Level 3.5 firewalls and exposing shopfloor networks to ransomware.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE FOUR DECISIONS IN MANUFACTURING -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      
+      <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-orange">DECISION FRAMEWORK</span>
+        <h2 class="section-title-serif">The Four Decisions in Facility Operations</h2>
+        <p style="color: var(--text-secondary); max-width: 720px;">
+          Replace subjective risk heatmaps with concrete financial loss metrics that facility managers, operations VPs, and corporate CISOs can agree upon.
+        </p>
+      </div>
+
+      <div class="four-decisions-grid">
+        
+        <div class="decision-col">
+          <h4>What do we fix first?</h4>
+          <p>Prioritize pathways that can halt continuous production lines or reach Safety Instrumented Systems over cosmetic IT findings.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>What should we spend?</h4>
+          <p>Cap security capital expenditures where physical interlocks and DMZ protocol breaks eliminate line stoppage risks.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4>Can we change safely?</h4>
+          <p>Test PLC ladder logic updates, DCS firmware, and re-zoning proposals in the digital twin replica before the turnaround window.</p>
+        </div>
+
+        <div class="decision-col">
+          <h4 class="orange">What can we ignore?</h4>
+          <p>A written, defensible decision to accept legacy vulnerabilities on isolated packaging cells with independent physical light curtains.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORKED USE CASE: THREE-GATE LEDGER -->
+  <section style="padding: 3.5rem 0; background: var(--card); border-top: 1px solid var(--border);">
+    <div class="container">
+      
+      <div style="margin-bottom: 1.5rem;">
+        <span class="eyebrow-orange">WORKED USE CASE & EVIDENCE LEDGER</span>
+        <h2 class="section-title-serif">Scenario: Chemical Batch Reactor Exothermic Runaway Protection</h2>
+        <p style="color: var(--text-secondary); max-width: 800px;">
+          Trace the attack vector from ERP/MES bridge to reactor PLC, testing virtual controls to guarantee physical safety without line stoppages.
+        </p>
+      </div>
+
+      <div class="node-chip-chain">
+        <span class="node-chip">MES Historian Server</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Level 2 OPC UA Bridge</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip">Reactor Temperature PLC</span>
+        <span class="node-arrow">→</span>
+        <span class="node-chip" style="border-color: var(--signal-red); color: var(--signal-red);">Exothermic Thermal Runaway ($1.4M Batch Loss)</span>
+      </div>
+
+      <!-- THREE GATE LEDGER -->
+      <div class="three-gate-ledger">
+        
+        <!-- COLUMN 1: BASELINE -->
+        <div class="ledger-col ledger-col-baseline">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-baseline">1. Baseline As-Documented</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-slate);">SL-1 / EXPOSED</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Entry Point:</strong> Compromised enterprise ERP credentials pivoting into MES Historian at Level 3.<br><br>
+            <strong>Lateral Path:</strong> Unsegmented OPC UA connection allows writing malicious temperature target setpoint directly to Reactor PLC.<br><br>
+            <strong>Consequence:</strong> Reaction overheats; emergency rupture disk bursts ($1.4M batch ruined + 3 days downtime for cleanup).
+          </p>
+        </div>
+
+        <!-- COLUMN 2: PROPOSED CONTROL -->
+        <div class="ledger-col ledger-col-proposed">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-proposed">2. Proposed Virtual Control</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-amber);">VIRTUAL TEST</span>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+            <strong>Simulated Remediation:</strong><br>
+            • Establish strict IEC 62443 Zone 2 conduit with read-only OPC UA profile for historian.<br>
+            • Hardwire independent SIL-3 SIS thermal cutoff relay bypassing all network commands.<br>
+            • Implement dual-authorization requirement for recipe write commands.
+          </p>
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--signal-amber); background: rgba(218, 125, 15, 0.1); padding: 0.5rem; border-radius: var(--radius-xs);">
+            Simulated Path Result: Setpoint tamper blocked; SIS hardware trip verified independent.
+          </div>
+        </div>
+
+        <!-- COLUMN 3: DECISION OUTPUT -->
+        <div class="ledger-col ledger-col-decision">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="ledger-tag tag-decision">3. Decision Output</span>
+            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--signal-green);">ACTIONABLE</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            <div style="margin-bottom: 0.5rem;"><strong>Action:</strong> Implement read-only OPC UA conduit & SIS interlock.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Window:</strong> Regular 8-hour shift changeover.</div>
+            <div style="margin-bottom: 0.5rem;"><strong>Capital Required:</strong> $8,500.</div>
+            <div><strong>Assurance:</strong> Validated against IEC 62443-3-3 & EU Machinery Reg.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 3.5rem 0; background: var(--secondary); border-top: 1px solid var(--border);">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow-orange">GET STARTED</span>
+      <h2 style="font-family: var(--font-serif); font-size: 2.25rem; color: #fff; margin-bottom: 1rem;">
+        Model your production facility in a 60-day decision sprint.
+      </h2>
+      <p style="color: var(--text-secondary); max-width: 680px; margin: 0 auto 2rem; font-size: 1rem;">
+        Bring one process P&ID, electrical one-line, or MES network architecture. We construct the cyber digital twin to validate your facility security investments.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="../../due-diligence.html" class="btn btn-dutch-orange">
+          Request Manufacturing Decision Sprint
+        </a>
+        <a href="../../demo-hub.html" class="btn btn-secondary">
+          Launch 3D Demo Hub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="oxot-global-footer"></div>
+
+</body>
+</html>

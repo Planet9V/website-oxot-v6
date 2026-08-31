@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hyperscale Campus — Connection Explorer</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;background:#e8e6e0}
+  three-d-stage{position:absolute;inset:0}
+  three-d-stage:not(:defined){visibility:hidden}
+  .hud{position:absolute;z-index:10;background:rgba(10,10,11,.95);color:#E8E8E6;border-radius:10px;
+       border:1px solid #2c2c2e;box-shadow:0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(8px)}
+  #left{display:none}
+  /* Four phase panels stacked down the left, one open at a time. Sections are
+     MOVED between panels rather than duplicated, so every control keeps its id. */
+  #phases{position:absolute;left:14px;top:14px;bottom:14px;width:266px;z-index:10;
+          display:flex;flex-direction:column;gap:7px;pointer-events:none}
+  #phases > *{pointer-events:auto}
+  .ph{background:rgba(10,10,11,.95);color:#E8E8E6;border-radius:10px;border:1px solid #2c2c2e;
+      box-shadow:0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(8px);
+      display:flex;flex-direction:column;flex:0 0 auto;overflow:hidden}
+  .ph.open{flex:1 1 auto;min-height:0}
+  .ph > .phhd{padding:9px 12px 9px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;
+              border-bottom:1px solid transparent;user-select:none}
+  .ph.open > .phhd{border-bottom-color:#2c2c2e}
+  .ph > .phhd:hover{background:#17171a}
+  .phnum{flex:0 0 auto;width:19px;height:19px;border-radius:5px;background:#2c2c2e;color:#B4B4B2;
+         font:700 10.5px Inter,sans-serif;display:flex;align-items:center;justify-content:center}
+  .ph.open .phnum{background:#EE7623;color:#0a0a0b}
+  .phttl{flex:1 1 auto;font:600 12px Inter,sans-serif;letter-spacing:.02em}
+  .ph.open .phttl{color:#fff}
+  .phcar{flex:0 0 auto;font-size:8px;color:#8a8a88;transition:transform .12s}
+  .ph:not(.open) .phcar{transform:rotate(-90deg)}
+  .phsub{padding:0 12px 9px;font:400 10.5px/1.45 Inter,sans-serif;color:#8a8a88}
+  .phbd{padding:0 12px 12px;overflow-y:auto;flex:1 1 auto;min-height:0}
+  .phbd::-webkit-scrollbar{width:7px}
+  .phbd::-webkit-scrollbar-thumb{background:#2c2c2e;border-radius:4px}
+  #phstat{background:rgba(10,10,11,.95);border:1px solid #2c2c2e;border-radius:8px;padding:8px 12px;
+          font:500 9.5px/1.5 Inter,sans-serif;color:#6e6e6c;flex:0 0 auto}
+  #right{right:14px;top:14px;width:320px;max-height:calc(100% - 92px);display:flex;flex-direction:column}
+  .hd{padding:12px 62px 10px 14px;border-bottom:1px solid #2c2c2e;flex:0 0 auto;position:relative}
+  .hudbtns{position:absolute;right:9px;top:9px;display:flex;gap:4px}
+  .iconbtn{width:22px;height:22px;border:1px solid #3a3a3d;background:#1c1c1e;color:#B4B4B2;border-radius:5px;
+           cursor:pointer;font:700 12px Inter,sans-serif;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+  .iconbtn:hover{background:#2c2c2e;color:#fff}
+  .hud.collapsed .bd{display:none}
+  .hud.collapsed{max-height:none}
+  #right[hidden]{display:none}
+  /* Two result lanes, fixed. Panels in a lane are mutually exclusive, so
+     nothing ever needs to step aside and nothing can bury anything else.
+     Lane B (middle): asset list, risk portfolio.
+     Lane C (right):  asset viewer, threat path, cascading failure. */
+  #risk, #assume{left:288px;top:14px;width:min(300px, calc(100vw - 302px - 330px));min-width:250px;
+                 max-height:calc(100% - 92px);display:flex;flex-direction:column;z-index:11}
+  #assets, #threat, #cascade{right:14px;top:14px;width:314px;max-height:calc(100% - 92px);
+                    display:flex;flex-direction:column;z-index:12}
+  #assets[hidden], #risk[hidden], #threat[hidden], #cascade[hidden], #assume[hidden]{display:none}
+
+  /* sits between the left panel (262px) and the selection panel (320px), never over either */
+
+  #assets[hidden]{display:none}
+  /* own column: right of the asset list, left of the selection panel */
+
+  /* when both are open the selection panel steps aside so neither is buried */
+  #threat[hidden]{display:none}
+
+  #cascade[hidden]{display:none}
+  /* right lane, same constraints as #threat / #cascade */
+
+  #risk[hidden]{display:none}
+  .gsec{border-bottom:1px solid #232326}
+  .ghd{display:flex;align-items:center;gap:6px;padding:6px 9px;cursor:pointer;
+       background:#141416;font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+       color:#e8681f;font-weight:600;position:sticky;top:0;z-index:2}
+  .ghd:hover{background:#1a1a1d}
+  .ghd .caret{font-size:8px;transition:transform .15s;color:#7a7a80}
+  .gsec.folded .ghd .caret{transform:rotate(-90deg)}
+  .gsec.folded .gbd{display:none}
+  .ghd .gct{margin-left:auto;color:#7a7a80;font-weight:400;letter-spacing:0}
+  .ghd .gx{color:#7a7a80;font-size:13px;padding:0 2px;line-height:1}
+  .ghd .gx:hover{color:#e8681f}
+  .alerow{display:grid;grid-template-columns:34px minmax(0,1fr) 62px;gap:6px;align-items:center;
+          padding:5px 7px;border-bottom:1px solid #1e1e20}
+  .alerow .an2{font-size:9px;font-weight:700;color:#EE7623}
+  .alerow .al{font-size:10px;color:#C8C8C6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .alerow .av{font-size:10.5px;font-weight:700;color:#E8E8E6;text-align:right}
+  .ctrlrow{display:grid;grid-template-columns:16px minmax(0,1fr) 54px;gap:6px;align-items:start;
+           padding:6px 7px;border-bottom:1px solid #1e1e20;cursor:pointer}
+  .ctrlrow:hover{background:#242426}
+  .ctrlrow input{margin:2px 0 0;accent-color:#EE7623}
+  .ctrlrow .cl{font-size:10px;color:#E8E8E6;line-height:1.35}
+  .ctrlrow .cm{font-size:9px;color:#8a8a88;margin-top:2px}
+  .ctrlrow .cr{font-size:10px;font-weight:700;color:#2bd96a;text-align:right}
+  .bigfig{background:#151516;border:1px solid #2c2c2e;border-radius:6px;padding:9px 11px;margin-bottom:7px}
+  .bigfig .bv{font-size:19px;font-weight:700;color:#EE7623;line-height:1.1}
+  .bigfig .bk{font-size:8.5px;color:#8a8a88;letter-spacing:1px;margin-top:2px}
+  .wv{display:grid;grid-template-columns:22px minmax(0,1fr) 40px;gap:5px;align-items:center;
+      padding:4px 7px;border-bottom:1px solid #1e1e20;cursor:pointer}
+  .wv:hover{background:#242426}
+  .wv .wn{font-size:8.5px;font-weight:700;color:#c8332a;text-align:center}
+  .wv .wl{font-size:10.5px;color:#E8E8E6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wv .wz{font-size:9px;font-weight:700;text-align:center;padding:1px 3px;border-radius:8px}
+  .heldrow{padding:4px 7px;border-bottom:1px solid #1e1e20;font-size:9.5px;color:#C8C8C6}
+  .heldrow b{color:#2bd96a;font-weight:700}
+  .hop{display:grid;grid-template-columns:22px minmax(0,1fr) 40px;gap:5px;align-items:center;
+       padding:4px 7px;border-bottom:1px solid #1e1e20;cursor:pointer}
+  .hop:hover{background:#242426}
+  .hop .hn{font-size:8.5px;font-weight:700;color:#EE7623;text-align:center}
+  .hop .hl{font-size:10.5px;color:#E8E8E6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hop .hz{font-size:9px;font-weight:700;text-align:center;padding:1px 3px;border-radius:8px}
+  .blockrow{padding:5px 7px;border-bottom:1px solid #1e1e20;font-size:9.5px;line-height:1.45}
+  .blockrow b{color:#E8E8E6;font-weight:600}
+  .blockrow span{color:#2bd96a;font-weight:700}
+  .tstat{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px}
+  .tstat div{background:#151516;border:1px solid #2c2c2e;border-radius:6px;padding:7px 9px}
+  .tstat .tv{font-size:17px;font-weight:700;color:#EE7623;line-height:1.1}
+  .tstat .tk{font-size:8.5px;color:#8a8a88;letter-spacing:1px;margin-top:2px}
+  .hud.collapsed .bd{display:none}
+  .arow{display:grid;grid-template-columns:minmax(0,1fr) 40px 44px;gap:4px;align-items:center;padding:5px 7px;
+        border-radius:5px;cursor:pointer;border-bottom:1px solid #1e1e20}
+  .arow > .acell{min-width:0;overflow:hidden}
+  .arow:hover{background:#242426}
+  .arow .an{font-size:10.5px;color:#E8E8E6;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .arow .ak{font-size:9px;color:#8a8a88;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .arow .az{font-size:9px;font-weight:700;text-align:center;padding:2px 3px;border-radius:8px}
+  .arow .as{font-size:9px;color:#C8C8C6;text-align:right;font-weight:600}
+  .ahead{display:grid;grid-template-columns:minmax(0,1fr) 40px 44px;gap:4px;font-size:8.5px;font-weight:700;
+         letter-spacing:1.2px;color:#8a8a88;padding:0 7px 5px;border-bottom:1px solid #3a3a3d;margin-bottom:5px}
+  .ahead span:nth-child(2){text-align:center}
+  .ahead span:nth-child(3){text-align:right}
+  .agroup{font-size:9px;font-weight:700;letter-spacing:1.2px;color:#EE7623;margin:11px 0 5px;padding:0 7px}
+  .statline{font-size:9.5px;color:#8a8a88;padding:7px 14px 9px;border-top:1px solid #2c2c2e;flex:0 0 auto;line-height:1.5}
+  .ttl{font-size:12.5px;font-weight:700;color:#FBFAF8;letter-spacing:.2px}
+  .sub{font-size:10.5px;color:#8a8a88;margin-top:3px;line-height:1.4}
+  .bd{padding:11px 14px 13px;overflow-y:auto;flex:1 1 auto}
+  .sec{font-size:9.5px;font-weight:700;letter-spacing:1.6px;color:#EE7623;margin:0 0 7px}
+  .sec.mt{margin-top:15px}
+  .sec.fold{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;
+            padding:3px 0;border-bottom:1px solid #262628;margin-bottom:8px}
+  .sec.fold:hover{color:#F49A55}
+  .sec.fold .caret{font-size:8px;color:#8a8a88;transition:transform .12s;width:8px;display:inline-block}
+  .sec.fold.shut .caret{transform:rotate(-90deg)}
+  .fold-body.shut{display:none}
+  .seg{display:flex;gap:4px;margin-bottom:4px}
+  .seg button{flex:1;font:600 10.5px Inter,sans-serif;padding:6px 4px;border:1px solid #3a3a3d;background:#1c1c1e;
+              color:#B4B4B2;border-radius:5px;cursor:pointer}
+  .seg button.on{background:#EE7623;border-color:#EE7623;color:#fff}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{display:flex;align-items:center;gap:5px;font:600 10px Inter,sans-serif;padding:4px 8px;border-radius:20px;
+        background:#1a1a1c;border:1px solid #3a3a3d;color:#8a8a88;cursor:pointer;user-select:none}
+  .chip.on{background:#2a2a2c;border-color:#5a5a5d;color:#F0F0EE}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .btns{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+  .btn{font:600 10.5px Inter,sans-serif;padding:6px 9px;border:1px solid #3a3a3d;background:#1c1c1e;color:#C8C8C6;
+       border-radius:5px;cursor:pointer}
+  .btn:hover{background:#2c2c2e;color:#fff}
+  .btn.pri{background:#EE7623;border-color:#EE7623;color:#fff}
+  .btn.on{background:#EE7623;border-color:#EE7623;color:#fff}
+  .btn.on:hover{background:#f4842f;border-color:#f4842f;color:#fff}
+  input[type=search]{width:100%;box-sizing:border-box;font:500 11px Inter,sans-serif;padding:6px 8px;border-radius:5px;
+       border:1px solid #3a3a3d;background:#111112;color:#F0F0EE}
+  input[type=search]::placeholder{color:#6e6e6c}
+  .hit{padding:5px 7px;border-radius:5px;font-size:10.5px;cursor:pointer;color:#C8C8C6}
+  .hit:hover{background:#2c2c2e;color:#fff}
+  .selname{font-size:15px;font-weight:700;color:#FBFAF8;line-height:1.25}
+  .selkind{font-size:10.5px;color:#EE7623;font-weight:600;margin-top:3px}
+  .kv{display:flex;gap:8px;font-size:10.5px;padding:3px 0;border-bottom:1px solid #262628}
+  .kv b{flex:0 0 84px;color:#8a8a88;font-weight:600}
+  .kv span{color:#E8E8E6}
+  .conn{display:block;width:100%;text-align:left;padding:7px 8px;margin-bottom:4px;border-radius:6px;border:1px solid #2c2c2e;
+        background:#151516;cursor:pointer;color:inherit;font-family:inherit}
+  .conn:hover{background:#242426;border-color:#5a5a5d}
+  .conn .top{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;color:#F0F0EE}
+  .conn .arrow{color:#EE7623;font-weight:700}
+  .conn .meta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:9.5px;color:#8a8a88}
+  .pill{padding:2px 6px;border-radius:10px;font-weight:700;font-size:9px;color:#101a2e}
+  .empty{font-size:10.5px;color:#8a8a88;line-height:1.5}
+  #tip{position:absolute;z-index:20;pointer-events:none;display:none;background:#0a0a0b;color:#F0F0EE;
+       font:600 10.5px Inter,sans-serif;padding:5px 8px;border-radius:5px;border:1px solid #4a4a4d;white-space:nowrap}
+  .zonetag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:12px;margin-top:6px}
+  .surf{font-size:10px;line-height:1.5;color:#C8C8C6;padding:5px 0 5px 12px;position:relative;border-bottom:1px solid #262628}
+  .surf:before{content:'';position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%;background:#EE7623}
+  .crit{background:#C8332A;color:#fff;padding:1px 5px;border-radius:8px;font-size:8.5px;font-weight:700;letter-spacing:.4px}
+  .oneway{background:#3a3a3d;color:#E8E8E6;padding:1px 5px;border-radius:8px;font-size:8.5px;font-weight:700}
+  .note{font-size:9.5px;color:#8a8a88;line-height:1.45;margin-top:4px;font-style:italic}
+  .bd::-webkit-scrollbar{width:8px}.bd::-webkit-scrollbar-thumb{background:#3a3a3d;border-radius:4px}
+</style>
+</head>
+<body>
+<three-d-stage name="hyperscale_campus" background="#e8e6e0"></three-d-stage>
+
+<div id="phases"></div>
+
+<div id="left" class="hud">
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="leftCollapse" title="Collapse panel">–</button>
+    </div>
+    <div class="ttl">Campus Connection Explorer</div>
+    <div class="sub">Click a component to select and zoom it. Drag any panel by its header. Keys: G graph · P physical · B both · F fit · Esc clear.</div>
+  </div>
+  <div class="bd">
+    <div class="sec fold" data-fold="fView"><span class="caret">▼</span>VIEWPOINT</div>
+    <div class="fold-body" id="fView">
+    <div class="btns">
+      <button class="btn" id="vAll">Fit campus</button>
+      <button class="btn" id="vHall">Data hall</button>
+      <button class="btn" id="vElec">Electrical</button>
+      <button class="btn" id="vCool">Cooling</button>
+      <button class="btn" id="vMMR">MMR / NOC</button>
+      <button class="btn" id="vRack">Single rack</button>
+    </div>
+    </div>
+
+    <div class="sec fold mt" data-fold="fMode"><span class="caret">▼</span>VIEW</div>
+    <div class="fold-body" id="fMode">
+    <div class="seg" id="mode">
+      <button data-m="both">Both</button>
+      <button data-m="physical">Physical</button>
+      <button data-m="graph" class="on">Graph</button>
+    </div>
+    </div>
+
+    <div class="sec fold mt" data-fold="fSearch"><span class="caret">▼</span>SEARCH</div>
+    <div class="fold-body" id="fSearch">
+    <input type="search" id="q" placeholder="pump, firewall, CDU, rack01…" autocomplete="off">
+    <div id="hits"></div>
+    </div>
+
+    <div class="sec mt fold" data-fold="fMarker"><span class="caret">▼</span>MARKER COLOUR</div>
+    <div class="fold-body" id="fMarker">
+      <div class="seg" id="colmode">
+        <button data-c="system" class="on">System</button>
+        <button data-c="zone">IEC 62443 zone</button>
+        <button data-c="cell">Cell</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fSvc"><span class="caret">▼</span>SERVICE</div>
+    <div class="fold-body" id="fSvc"><div class="chips" id="svc"></div></div>
+    <div class="sec mt fold" data-fold="fList"><span class="caret">▼</span>ASSET LIST</div>
+    <div class="fold-body" id="fList">
+      <div class="btns" id="listZones"></div>
+      <div class="btns" id="listSystems" style="margin-top:5px"></div>
+      <div class="btns" id="listCells" style="margin-top:5px"></div>
+      <div class="btns" id="listAll" style="margin-top:5px">
+        <button class="btn" id="listAllBtn" title="List every asset in the model">All assets</button>
+        <button class="btn" id="listClearBtn" title="Clear every selected group">Clear</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fProto"><span class="caret">▼</span>PROTOCOL</div>
+    <div class="fold-body" id="fProto">
+      <div class="chips" id="proto"></div>
+      <div class="btns" style="margin-top:9px">
+        <button class="btn" id="pAll">All</button>
+        <button class="btn" id="pNone">None</button>
+        <button class="btn" id="pOT">OT only</button>
+        <button class="btn" id="pIT">IT only</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fZone"><span class="caret">▼</span>IEC 62443 ZONE</div>
+    <div class="fold-body" id="fZone"><div class="chips" id="zones"></div></div>
+    <div class="sec fold mt" data-fold="fCond"><span class="caret">▼</span>CONDUITS</div>
+    <div class="fold-body" id="fCond">
+    <div class="seg" id="critmode">
+      <button data-k="all" class="on">All</button>
+      <button data-k="crit">Critical only (§5.6)</button>
+    </div>
+    </div>
+
+    <div class="sec mt fold" data-fold="fThreat"><span class="caret">▼</span>THREAT PATH</div>
+    <div class="fold-body" id="fThreat">
+      <div class="sub" style="margin:0 0 7px">Pick an entry point. Walks forward over routable protocols only — hardwired, analogue, serial and one-way links stop the path.</div>
+      <div class="btns" id="entryPoints"></div>
+      <div class="btns" style="margin-top:5px">
+        <button class="btn" id="threatPlay">▶ Replay</button>
+        <button class="btn" id="threatClear">Clear</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fCascade"><span class="caret">▼</span>CASCADING FAILURE</div>
+    <div class="fold-body" id="fCascade">
+      <div class="sub" style="margin:0 0 7px">Fail an asset and propagate the loss. Redundancy is inferred from feed count — two or more feeds of a service hold, one does not.</div>
+      <div class="btns" id="cascadeSeeds"></div>
+      <div class="sec mt" style="margin-top:9px">FROM HAZARD LOG</div>
+      <div class="btns" id="hazardSeeds"></div>
+      <div class="btns" style="margin-top:5px">
+        <button class="btn" id="cascadeSel">Fail selected asset</button>
+        <button class="btn" id="cascadePlay">▶ Replay</button>
+        <button class="btn" id="cascadeClear">Clear</button>
+      </div>
+    </div>
+    <div class="sec mt fold" data-fold="fRisk"><span class="caret">▼</span>RISK PORTFOLIO</div>
+    <div class="fold-body" id="fRisk">
+      <div class="sub" style="margin:0 0 7px">Authored ALE by node, and the controls that reduce it. Tick controls to see residual exposure and cumulative ROSI.</div>
+      <div class="btns"><button class="btn" id="riskOpen">Open portfolio</button></div>
+    </div>
+    <div class="sec mt fold" data-fold="fAssume"><span class="caret">▼</span>ASSUMPTIONS &amp; PROVENANCE</div>
+    <div class="fold-body" id="fAssume">
+      <div class="sub" style="margin:0 0 7px">What in this model is sourced, what is inferred, and what is still unconfirmed.</div>
+      <div class="btns"><button class="btn" id="assumeOpen">Open</button></div>
+    </div>
+  </div>
+  <div class="statline" id="stats">loading…</div>
+</div>
+
+<div id="assume" class="hud" hidden>
+  <div class="hd" id="assumeHd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="assumeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="assumeClose" title="Close">×</button>
+    </div>
+    <div class="ttl">Assumptions &amp; provenance</div>
+    <div class="sub" id="assumeSummary"></div>
+  </div>
+  <div class="bd" id="assumeBody"></div>
+</div>
+
+<div id="right" class="hud" hidden>
+  <div class="hd" id="selHd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="rightCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="rightClose" title="Close (Esc)">×</button>
+    </div>
+    <div class="selname" id="selName">Nothing selected</div>
+    <div class="selkind" id="selKind">Click a component in the model</div>
+    <div class="zonetag" id="zoneTag" style="display:none"></div>
+  </div>
+  <div class="bd" id="selBody">
+    <div class="empty">The model carries a typed connection graph: water, condenser water, air, electricity, fuel, IT data, OT control, fire and security — each edge tagged with its protocol (Ethernet/TCP-IP, Modbus TCP/RTU, PROFINET, BACnet/IP and MS/TP, IEC 61850, OPC UA, OSDP, CAN, dry contact, 4–20 mA).</div>
+  </div>
+</div>
+
+<div id="assets" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="assetsCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="assetsClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="assetsTitle">Asset list</div>
+    <div class="selkind" id="assetsCount"></div>
+  </div>
+  <div class="bd" id="assetsBody"></div>
+</div>
+
+<div id="risk" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="riskCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="riskClose" title="Close">×</button>
+    </div>
+    <div class="selname">Risk portfolio</div>
+    <div class="selkind" id="riskSummary"></div>
+  </div>
+  <div class="bd" id="riskBody"></div>
+</div>
+
+<div id="cascade" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="cascadeCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="cascadeClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="cascadeTitle">Cascading failure</div>
+    <div class="selkind" id="cascadeSummary"></div>
+  </div>
+  <div class="bd" id="cascadeBody"></div>
+</div>
+
+<div id="threat" class="hud" hidden>
+  <div class="hd">
+    <div class="hudbtns">
+      <button class="iconbtn" id="threatCollapse" title="Collapse">–</button>
+      <button class="iconbtn" id="threatClose" title="Close">×</button>
+    </div>
+    <div class="selname" id="threatTitle">Threat path</div>
+    <div class="selkind" id="threatSummary"></div>
+  </div>
+  <div class="bd" id="threatBody"></div>
+</div>
+
+<div id="tip"></div>
+
+<script src="three-d-stage.js"></script>
+<script type="module">
+import { buildCampus, SERVICES, PROTOCOLS, ZONES } from './campus-model.js';
+
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+const { group: C, graph, materials } = buildCampus(THREE);
+window.__CG = graph;
+
+// ===== graph overlay ====================================================
+const SYSCOL = { PWR:0xd8b23a, CHW:0x1f6fd0, AIR:0x9aa4ac, DATA:0x35c2c9, OT:0x8a4fd0,
+                 BMS:0xe8e8e2, FA:0xc8332a, SEC:0xe07a26, IT:0x9ba1a8 };
+// Cell scope: two independent 48-rack cells plus the shared campus facility.
+const CELLCOL = { 'Cell A':0x2b8fd9, 'Cell B':0xe0a326, 'Campus (shared)':0x7a7a78 };
+const overlay = new THREE.Group();
+overlay.name = '_graph_overlay';
+overlay.userData.excludeFromExport = true;
+C.add(overlay);
+
+const nodeMarks = {}, edgeTubes = {};
+const localOf = v => C.worldToLocal(v.clone());
+
+for (const n of Object.values(graph.nodes)) {
+  const m = new THREE.Mesh(new THREE.OctahedronGeometry(0.17),
+    new THREE.MeshStandardMaterial({ name:'gn_'+n.system, color: SYSCOL[n.system] ?? 0xcccccc,
+      emissive: SYSCOL[n.system] ?? 0xcccccc, emissiveIntensity:.35, roughness:.4 }));
+  m.name = 'gnode_' + n.id;
+  m.position.copy(localOf(n.anchor));
+  m.userData.graphNode = n.id;
+  overlay.add(m); nodeMarks[n.id] = m;
+}
+// Routed geometry from graph/routes.json when available: orthogonal runs
+// following the containment corridors, filleted at the service bend radius.
+// Falls back to a schematic arc for any edge without a solved route.
+let ROUTES = null;
+try {
+  const res = await fetch('graph/routes.json');
+  if (res.ok) {
+    const j = await res.json();
+    ROUTES = new Map(j.routes.map(r => [r.id, r]));
+    console.log('[explorer] routes loaded', ROUTES.size, '· total', j.meta.total_length_m, 'm');
+  }
+} catch (err) { console.warn('[explorer] no routes.json, using schematic arcs', err); }
+
+// Merge hall-graph.json so cascade propagation reaches every rack, CDU and
+// end-of-row switch, not just the facility-level assets.
+let HALL = null;
+try {
+  const res = await fetch('graph/hall-graph.json');
+  if (res.ok) HALL = await res.json();
+} catch (err) { console.warn('[explorer] no hall-graph.json', err); }
+
+// Authored redundancy, timing, failure modes and consequence values.
+let HZ = null;
+try {
+  const res = await fetch('graph/hazard-log.json');
+  if (res.ok) {
+    HZ = await res.json();
+    console.log('[explorer] hazard log:', HZ.hazards.length, 'hazards,',
+      HZ.critical_items.length, 'critical items,', HZ.ale.length, 'ALE scenarios');
+  }
+} catch (err) { console.warn('[explorer] no hazard-log.json', err); }
+
+for (const e of graph.edges) {
+  const a = localOf(graph.nodes[e.from].anchor), b = localOf(graph.nodes[e.to].anchor);
+  const col = PROTOCOLS[e.protocol]?.color ?? SERVICES[e.service]?.color ?? 0x888888;
+  const r = ROUTES && ROUTES.get(e.id);
+  let curve, radius, segs;
+  if (r && r.points && r.points.length > 1) {
+    const pts = r.points.map(p => localOf(new THREE.Vector3(p[0], p[1], p[2])));
+    curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.02);
+    radius = r.service === 'water' || r.service === 'condenser' || r.service === 'air' ? 0.055 : 0.038;
+    segs = Math.min(220, Math.max(24, pts.length * 3));
+  } else {
+    const mid = a.clone().lerp(b, .5);
+    mid.y += Math.min(2.6, a.distanceTo(b) * .16) + .35;
+    curve = new THREE.QuadraticBezierCurve3(a, mid, b);
+    radius = 0.045; segs = 22;
+  }
+  const t = new THREE.Mesh(new THREE.TubeGeometry(curve, segs, radius, 6, false),
+    new THREE.MeshStandardMaterial({ name:'ge_'+e.service, color:col, emissive:col, emissiveIntensity:.3, roughness:.45 }));
+  t.name = 'gedge_' + e.id;
+  t.userData.graphEdge = e.id;
+  t.userData.routed = !!r;
+  overlay.add(t); edgeTubes[e.id] = t;
+}
+
+stage.setObject(C);
+stage._loop && stage._loop();
+
+// The graph overlay is a view aid — never let it reach the OBJ/GLB deliverable.
+// (OBJExporter ignores .visible entirely, so the overlay must leave the tree.)
+if (typeof stage._runExport === 'function') {
+  const runExport = stage._runExport.bind(stage);
+  stage._runExport = async (fmt) => {
+    const parent = overlay.parent;
+    if (parent) parent.remove(overlay);
+    try { return await runExport(fmt); }
+    finally { if (parent) parent.add(overlay); render(); }
+  };
+}
+
+// ===== dim / highlight bookkeeping ======================================
+const matBase = new Map();
+for (const m of Object.values(materials)) matBase.set(m, { t: m.transparent, o: m.opacity });
+function dimPhysical(on) {
+  for (const [m, b] of matBase) {
+    if (on) { m.transparent = true; m.opacity = 0.07; m.depthWrite = false; }
+    else { m.transparent = b.t; m.opacity = b.o; m.depthWrite = true; }
+    m.needsUpdate = true;
+  }
+}
+const HL = new THREE.MeshStandardMaterial({ name:'highlight', color:0xEE7623, emissive:0xEE7623, emissiveIntensity:.55, roughness:.35 });
+const HL2 = new THREE.MeshStandardMaterial({ name:'highlight_soft', color:0xf2b736, emissive:0xf2b736, emissiveIntensity:.3, roughness:.4 });
+const HL_COMPROMISED = new THREE.MeshStandardMaterial({ name:'threat_reached', color:0xc8332a, emissive:0xc8332a, emissiveIntensity:.55, roughness:.35 });
+const HL_ENTRY = new THREE.MeshStandardMaterial({ name:'threat_entry', color:0xff8a3d, emissive:0xff8a3d, emissiveIntensity:.7, roughness:.3 });
+const HL_BLOCKED = new THREE.MeshStandardMaterial({ name:'threat_blocked', color:0x2bd96a, emissive:0x2bd96a, emissiveIntensity:.5, roughness:.35 });
+const HL_SEED = new THREE.MeshStandardMaterial({ name:'cascade_seed', color:0xffffff, emissive:0xff4a3d, emissiveIntensity:1.1, roughness:.3 });
+const HL_FAILED = new THREE.MeshStandardMaterial({ name:'cascade_failed', color:0xc8332a, emissive:0xc8332a, emissiveIntensity:.6, roughness:.35 });
+const HL_DEGRADED = new THREE.MeshStandardMaterial({ name:'cascade_degraded', color:0xf2b736, emissive:0xf2b736, emissiveIntensity:.45, roughness:.4 });
+const HL_HELD = new THREE.MeshStandardMaterial({ name:'cascade_held', color:0x2bd96a, emissive:0x2bd96a, emissiveIntensity:.4, roughness:.4 });
+// Originals live in a Map keyed by the mesh, so a second paint over an
+// already-highlighted mesh cannot save a highlight material AS the original —
+// that was leaving red racks on screen after a panel closed.
+const HL_MATS = new Set([HL, HL2, HL_ENTRY, HL_COMPROMISED, HL_BLOCKED,
+                         HL_SEED, HL_FAILED, HL_DEGRADED, HL_HELD]);
+const highlighted = new Map();
+function clearHL() { for (const [o, m] of highlighted) o.material = m; highlighted.clear(); }
+function paintMesh(o, mat) {
+  if (!highlighted.has(o) && !HL_MATS.has(o.material)) highlighted.set(o, o.material);
+  o.material = mat;
+}
+function addHL(obj, soft) {
+  obj.traverse(o => { if (o.isMesh && !o.userData.graphNode && !o.userData.graphEdge)
+    paintMesh(o, soft ? HL2 : HL); });
+}
+
+// ===== state + filters ==================================================
+const usedProtos = [...new Set(graph.edges.map(e => e.protocol))]
+  .sort((a, b) => (PROTOCOLS[a]?.layer || '').localeCompare(PROTOCOLS[b]?.layer || '') || a.localeCompare(b));
+const usedSvcs = [...new Set(graph.edges.map(e => e.service))];
+const usedZones = Object.keys(ZONES).filter(z => Object.values(graph.nodes).some(n => n.zone === z));
+
+// ---- cascade model -----------------------------------------------------
+// Services an asset physically depends on. Losing all supply of one of these
+// stops the asset. Data and control loss degrades it but does not stop it.
+const HARD = new Set(['electricity','water','condenser','air','fuel']);
+// Combined node + edge set used ONLY by the cascade: facility graph plus the
+// hall graph, so a row-level failure propagates into the racks it feeds.
+const CG = (() => {
+  const byMesh = new Map();
+  C.traverse(o => { if (o.name && !byMesh.has(o.name)) byMesh.set(o.name, o); });
+  const nodes = Object.assign({}, graph.nodes);
+  // The two graphs name some of the same physical assets differently
+  // (row1_cdu vs row01_cdu). The mesh is the identity, so alias by mesh —
+  // otherwise a CDU failure never reaches the racks it feeds.
+  const meshToId = new Map();
+  for (const n of Object.values(nodes)) if (n.mesh) meshToId.set(n.mesh, n.id);
+  const alias = new Map();
+  if (HALL) {
+    for (const a of HALL.assets) {
+      const owner = a.mesh && meshToId.get(a.mesh);
+      if (owner && owner !== a.id) { alias.set(a.id, owner); continue; }
+      if (nodes[a.id]) continue;
+      nodes[a.id] = { id: a.id, label: a.label, kind: a.kind, system: a.system,
+        room: a.location, mesh: a.mesh, zone: a.zone, purdue: a.purdue, slt: a.sl_target,
+        attrs: a.attributes || {}, surface: a.attack_surface || [],
+        obj: byMesh.get(a.mesh) || null };
+      if (a.mesh) meshToId.set(a.mesh, a.id);
+    }
+  }
+  const rw = id => alias.get(id) || id;
+  const edges = graph.edges.concat(
+    HALL ? HALL.connections.map(c => ({ id: c.id, from: rw(c.from), to: rw(c.to), service: c.service,
+      protocol: c.protocol, label: c.description, geom: c.physical_run,
+      critical: c.critical_conduit, oneway: c.one_way, cross: c.zone_crossing, note: c.note })) : []
+  ).filter(e => nodes[e.from] && nodes[e.to] && e.from !== e.to);
+  if (alias.size) console.log('[cascade] aliased', alias.size, 'duplicate ids by mesh');
+  console.log('[cascade] scope', Object.keys(nodes).length, 'assets /', edges.length, 'connections');
+  window.__SCOPE = { nodes, edges };
+  return { nodes, edges };
+})();
+const SOFT = new Set(['data','control']);
+
+// Redundancy is INFERRED, not authored: two or more inbound feeds of the same
+// service are treated as N+1 (any-of), a single feed as a hard dependency.
+// Override here where the design says otherwise.
+// Authored from WP06 Table 6.5 and the WP09 critical items lists; anything not
+// listed still falls back to the feed-count inference.
+const REDUNDANCY_OVERRIDE = (() => {
+  const o = {};
+  if (HZ && HZ.redundancy) {
+    for (const [id, rec] of Object.entries(HZ.redundancy)) {
+      if (id.startsWith('_')) continue;
+      if (rec.service_override) o[id] = rec.service_override;
+    }
+    console.log('[cascade] authored redundancy for', Object.keys(o).length, 'assets');
+  }
+  return o;
+})();
+const REDUNDANCY_NOTE = HZ && HZ.redundancy ? HZ.redundancy : {};
+const TIMING = (HZ && HZ.timing) || { dlc_throttle_seconds: 45, dlc_shutdown_seconds: 90 };
+
+// hazard + consequence lookups keyed by asset id
+const HAZ_BY_ASSET = (() => {
+  const m = {};
+  if (HZ) for (const h of HZ.hazards) for (const a of (h.assets || [])) (m[a] = m[a] || []).push(h);
+  return m;
+})();
+const CRIT_BY_ASSET = (() => {
+  const m = {};
+  if (HZ) for (const c of HZ.critical_items) for (const a of (c.assets || [])) (m[a] = m[a] || []).push(c);
+  return m;
+})();
+const NODE_OF_ASSET = (() => {
+  const m = {};
+  if (HZ && HZ.node_crosswalk) for (const [n, rec] of Object.entries(HZ.node_crosswalk)) {
+    if (n.startsWith('_')) continue;
+    for (const a of (rec.assets || [])) m[a] = n;
+  }
+  return m;
+})();
+const ALE_BY_NODE = (() => {
+  const m = {};
+  if (HZ) for (const a of HZ.ale) m[a.node] = a;
+  return m;
+})();
+const CVE_BY_ASSET = (() => {
+  const m = {};
+  if (HZ && HZ.cve_watch) for (const c of HZ.cve_watch) for (const a of (c.assets || [])) (m[a] = m[a] || []).push(c);
+  return m;
+})();
+
+function supplyMap() {
+  const sup = {};
+  for (const id of Object.keys(CG.nodes)) sup[id] = {};
+  for (const e of CG.edges) {
+    if (!HARD.has(e.service) && !SOFT.has(e.service)) continue;
+    (sup[e.to][e.service] = sup[e.to][e.service] || []).push(e.from);
+  }
+  return sup;
+}
+const SUPPLY = supplyMap();
+
+function rule(id, service) {
+  const o = REDUNDANCY_OVERRIDE[id];
+  if (o && o[service]) return o[service];
+  return (SUPPLY[id][service] || []).length >= 2 ? 'any-of' : 'all-of';
+}
+
+/**
+ * Propagate a failure. Returns waves of failed assets, degraded assets, and
+ * the surviving redundant feeds that held.
+ */
+function cascade(seedIds) {
+  const failed = new Map();          // id -> wave
+  const degraded = new Map();        // id -> reason
+  const held = [];                   // redundancy that absorbed the loss
+  for (const s of seedIds) failed.set(s, 0);
+
+  let wave = 0, frontier = [...seedIds];
+  while (frontier.length && wave < 20) {
+    wave++;
+    const next = [];
+    // every asset that draws a hard service from something newly failed
+    for (const id of Object.keys(CG.nodes)) {
+      if (failed.has(id)) continue;
+      for (const [service, feeds] of Object.entries(SUPPLY[id])) {
+        const lost = feeds.filter(f => failed.has(f));
+        if (!lost.length) continue;
+        const r = rule(id, service);
+        const allGone = lost.length === feeds.length;
+        if (HARD.has(service)) {
+          if (r === 'all-of' || allGone) {
+            if (!failed.has(id)) { failed.set(id, wave); next.push(id); }
+          } else {
+            held.push({ id, service, lost: lost.length, of: feeds.length });
+          }
+        } else if (allGone && !degraded.has(id)) {
+          degraded.set(id, 'lost all ' + service + ' supply');
+        }
+      }
+    }
+    frontier = next;
+  }
+  return { failed, degraded, held, waves: wave };
+}
+
+// ---- threat path model -------------------------------------------------
+// Protocols an attacker can traverse from a compromised host. Everything else
+// is hardwired, analogue or serial: no routable path, so a walk stops there.
+const ROUTABLE = new Set(['Ethernet/TCP-IP','BGP','SNMP','CAPWAP','Modbus TCP',
+  'BACnet/IP','OPC UA','DNP3','PROFINET','EtherNet/IP']);
+const BLOCKED_REASON = e => {
+  if (e.oneway) return 'one-way (hardware enforced)';
+  if (!ROUTABLE.has(e.protocol)) return e.protocol + ' \u2014 not routable';
+  return null;
+};
+// Entry points: where an attacker realistically starts.
+const ENTRY = [
+  ['internet', 'Internet / vendor cloud'],
+  ['guest_wap', 'Guest Wi-Fi'],
+  ['greeter_ws', 'Reception workstation'],
+  ['guest_kiosk', 'Visitor kiosk'],
+  ['carrier_a', 'Carrier entry A'],
+  ['dmz_ra', 'Vendor remote access'],
+  ['eng_ws', 'Engineering workstation'],
+  ['cellA_ot_sw', 'Cell A OT segment'],
+  ['cellB_ot_sw', 'Cell B OT segment'],
+  ['secoff_ws', 'Security officer workstation'],
+  ['row01_rack01', 'Compromised GPU rack'],
+].filter(([id, label]) => {
+  if (CG.nodes[id]) return true;
+  console.warn('[explorer] threat entry dropped — unknown asset id:', id, '(' + label + ')');
+  return false;
+});
+
+/**
+ * Breadth-first reachability over routable protocols only.
+ * Returns reached nodes with hop depth, the traversed edges, and the
+ * boundary: edges that touch the frontier but cannot be crossed.
+ */
+function threatWalk(startId, maxHops = 12) {
+  // CG (facility + hall) not graph, so a path can reach into the 96 racks
+  const ADJ = {};
+  for (const id of Object.keys(CG.nodes)) ADJ[id] = { out: [], in: [] };
+  for (const e of CG.edges) { ADJ[e.from].out.push(e); ADJ[e.to].in.push(e); }
+  const reached = new Map([[startId, 0]]);
+  const via = new Map();
+  const used = new Set();
+  const boundary = [];
+  let frontier = [startId];
+  for (let hop = 1; hop <= maxHops && frontier.length; hop++) {
+    const next = [];
+    for (const id of frontier) {
+      // Follow the direction of initiated sessions and data flow only. Walking
+      // backwards up a link would make everything reachable from everything,
+      // which tells you nothing about the segmentation.
+      // Forward along initiated sessions, plus reverse along a host's own
+      // uplink / management plane: a compromised host can talk back up the
+      // link that manages it. Everything else stays one-directional.
+      const REVERSIBLE = new Set(['Ethernet/TCP-IP', 'RS-232 console', 'SNMP']);
+      const edges = ADJ[id].out.map(e => ({ e, to: e.to }))
+        .concat(ADJ[id].in.filter(e => !e.oneway && REVERSIBLE.has(e.protocol))
+                          .map(e => ({ e, to: e.from, reverse: true })));
+      for (const { e, to, reverse } of edges) {
+        const why = BLOCKED_REASON(e);
+        if (why) { boundary.push({ edge: e, from: id, to, reason: why }); continue; }
+        used.add(e.id);
+        if (!reached.has(to)) { reached.set(to, hop); via.set(to, e); next.push(to); }
+      }
+    }
+    frontier = next;
+  }
+  return { reached, used, boundary, via };
+}
+// Protocols start deselected — pick each one to bring its runs onto the model.
+const S = { mode:'graph', pick:null, svc:new Set(usedSvcs), proto:new Set(usedProtos), zone:new Set(usedZones),
+            crit:false, col:'system', sel:null, trace:null };
+
+const svcBox = document.getElementById('svc'), protoBox = document.getElementById('proto');
+const hex = n => '#' + n.toString(16).padStart(6, '0');
+function chip(box, label, color, setName, key) {
+  const el = document.createElement('div');
+  el.className = S[setName].has(key) ? 'chip on' : 'chip';
+  el.innerHTML = `<span class="dot" style="background:${color}"></span>${label}`;
+  el.onclick = () => {
+    const set = S[setName];              // read through S every time: the set is never replaced,
+    set.has(key) ? set.delete(key) : set.add(key);   // but read it fresh anyway so a chip can't
+    el.classList.toggle('on', set.has(key));         // end up bound to a stale object
+    apply();
+  };
+  box.appendChild(el); return el;
+}
+// Group buttons mutate the existing Set in place. Assigning a new Set here would
+// orphan every chip closure and silently kill the individual filters.
+const setAll = (name, values) => { S[name].clear(); for (const v of values) S[name].add(v); };
+const svcChips = {}, protoChips = {};
+for (const s of usedSvcs) svcChips[s] = chip(svcBox, SERVICES[s]?.label ?? s, hex(SERVICES[s]?.color ?? 0x888888), 'svc', s);
+for (const p of usedProtos) protoChips[p] = chip(protoBox, p, hex(PROTOCOLS[p]?.color ?? 0x888888), 'proto', p);
+const zoneBox = document.getElementById('zones'), zoneChips = {};
+for (const z of usedZones) zoneChips[z] = chip(zoneBox, ZONES[z].label.replace(/ —.*/, '') + ' · ' + ZONES[z].purdue,
+  hex(ZONES[z].color), 'zone', z);
+const syncChips = () => {
+  for (const [k, el] of Object.entries(svcChips)) el.classList.toggle('on', S.svc.has(k));
+  for (const [k, el] of Object.entries(protoChips)) el.classList.toggle('on', S.proto.has(k));
+  for (const [k, el] of Object.entries(zoneChips)) el.classList.toggle('on', S.zone.has(k));
+};
+
+const nodeVisible = id => { const n = graph.nodes[id]; return !n?.zone || S.zone.has(n.zone); };
+function edgeVisible(e) {
+  // ANY active focus — asset-list pick, upstream/downstream trace, threat path,
+  // cascade — is an explicit request for that set, so it wins over the filter
+  // chips. Without this the analyses run correctly but paint nothing whenever a
+  // protocol or service happens to be deselected.
+  if (S.trace) return S.trace.edges.has(e.id) && (!S.crit || e.critical);
+  if (!S.svc.has(e.service)) return false;
+  if (!S.proto.has(e.protocol)) return false;
+  if (S.crit && !e.critical) return false;
+  if (!nodeVisible(e.from) && !nodeVisible(e.to)) return false;
+  return true;
+}
+function apply() {
+  const showGraph = S.mode !== 'physical';
+  overlay.visible = showGraph;
+  dimPhysical(S.mode === 'graph');
+
+  const geomVis = new Map();
+  for (const e of graph.edges) {
+    const v = edgeVisible(e);
+    if (edgeTubes[e.id]) edgeTubes[e.id].visible = showGraph && v;
+    const g = graph.geomIndex.get(e.id);
+    if (g) geomVis.set(g, (geomVis.get(g) || false) || v);
+  }
+  for (const [g, v] of geomVis) g.visible = v;
+
+  const liveNodes = new Set();
+  for (const e of graph.edges) if (edgeVisible(e)) { liveNodes.add(e.from); liveNodes.add(e.to); }
+  // A focused asset shows regardless of the chips, and regardless of whether any
+  // of its runs happen to be in the focus set (an isolated reached node still draws).
+  const focused = id => (S.pick != null && S.pick.has(id))
+                     || (S.trace != null && S.trace.nodes.has(id));
+  for (const [id, m] of Object.entries(nodeMarks))
+    m.visible = showGraph && (liveNodes.has(id) || S.sel === id || focused(id))
+                          && (nodeVisible(id) || S.sel === id || focused(id));
+  for (const [id, m] of Object.entries(nodeMarks)) {
+    const n = graph.nodes[id];
+    const c = S.col === 'zone' ? (ZONES[n.zone]?.color ?? 0x777777)
+            : S.col === 'cell' ? (CELLCOL[n.cell] ?? 0x6a6a68)
+            : (SYSCOL[n.system] ?? 0xcccccc);
+    m.material.color.setHex(c); m.material.emissive.setHex(c);
+  }
+
+  render();
+}
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('on', x === b));
+  S.mode = b.dataset.m; apply();
+});
+// ---------- asset list popup ----------
+const assetsEl = document.getElementById('assets');
+const assetsBody = document.getElementById('assetsBody');
+const assetsTitle = document.getElementById('assetsTitle');
+const assetsCount = document.getElementById('assetsCount');
+const SYSLABEL = { PWR:'Electrical', CHW:'Cooling / fluid', AIR:'HVAC', DATA:'IT network',
+                   OT:'OT network', BMS:'Controls & monitoring', FA:'Fire & life safety',
+                   SEC:'Physical security', IT:'Compute payload' };
+
+// Resolve any asset — facility node, or hall-tier asset that has no facility
+// node and must be reached through its mesh (same path the search uses).
+function openAsset(n) {
+  if (graph.nodes[n.id]) { selectAndFly(n.id); return; }
+  const o = meshNames.find(m => m.name === n.mesh)
+         || meshNames.find(m => m.name.startsWith(n.mesh || '\u0000'));
+  if (!o) { console.warn('[explorer] no mesh for asset', n.id, n.mesh); return; }
+  const id = nodeOf(o);
+  if (id) select(id, o); else selectAsset(n, o);
+  frameObject(o);
+}
+// Asset groups are multi-select: each button toggles its group in or out, and the
+// panel stacks every active group. The newest opens expanded, earlier ones fold.
+const AGROUPS = new Map();
+function groupList(mode, key) {
+  if (mode === 'all') return Object.values(CG.nodes);
+  return Object.values(CG.nodes).filter(n =>
+    mode === 'zone' ? n.zone === key
+    : mode === 'cell' ? (n.cell || 'Campus (shared)') === key
+    : n.system === key);
+}
+function groupLabel(mode, key) {
+  return mode === 'all' ? 'All assets'
+       : mode === 'zone' ? (ZONES[key] ? ZONES[key].label : key)
+       : mode === 'cell' ? key
+       : (SYSLABEL[key] || key) + ' (' + key + ')';
+}
+function toggleGroup(mode, key, btn) {
+  const gk = mode + ':' + key;
+  if (AGROUPS.has(gk)) { AGROUPS.delete(gk); btn.classList.remove('on'); }
+  else { AGROUPS.set(gk, { mode, key, btn, label: groupLabel(mode, key), list: groupList(mode, key) });
+         btn.classList.add('on'); }
+  renderAssetGroups();
+}
+function clearGroups() {
+  for (const g of AGROUPS.values()) g.btn.classList.remove('on');
+  AGROUPS.clear();
+  renderAssetGroups();
+}
+function rowHTML(n) {
+  const zc = ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+  const dark = n.zone === 'Z3' || n.zone === 'Z0';
+  return '<div class="arow" data-id="' + n.id + '">'
+    + '<div class="acell"><div class="an" title="' + n.label + '">' + n.label + '</div>'
+    + '<div class="ak">' + (n.kind || '') + (n.room || n.location ? ' \u00b7 ' + (n.room || n.location) : '') + '</div></div>'
+    + '<div class="az" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+    + (n.zone || '\u2014') + '</div>'
+    + '<div class="as">' + (n.slt || '\u2014').replace('SL-T ', '') + '</div></div>';
+}
+function renderAssetGroups() {
+  if (!AGROUPS.size) {
+    assetsEl.hidden = true; PANELKEY.assets = null; clearPick(); return;
+  }
+  const union = new Map();
+  for (const g of AGROUPS.values()) for (const n of g.list) union.set(n.id, n);
+
+  assetsTitle.textContent = AGROUPS.size === 1 ? [...AGROUPS.values()][0].label
+                                               : AGROUPS.size + ' groups';
+  const slts = [...new Set([...union.values()].map(n => n.slt).filter(Boolean))];
+  assetsCount.textContent = union.size + ' assets'
+    + (slts.length ? ' \u00b7 SL-T ' + slts.sort().join(', ').replace(/SL-T /g, '') : '');
+
+  let html = '';
+  const keys = [...AGROUPS.keys()];
+  for (const gk of keys) {
+    const g = AGROUPS.get(gk);
+    const open = false;   // groups arrive folded — the panel stays a compact index
+    html += '<div class="gsec' + (open ? '' : ' folded') + '" data-gk="' + gk + '">'
+      + '<div class="ghd"><span class="caret">\u25bc</span>' + g.label
+      + '<span class="gct">' + g.list.length + '</span>'
+      + '<span class="gx" title="Remove this group">\u00d7</span></div>'
+      + '<div class="gbd"><div class="ahead"><span>ASSET</span><span>ZONE</span><span>SL-T</span></div>';
+    const groupBy = g.mode === 'zone' || g.mode === 'cell' ? 'system' : 'zone';
+    const sub = {};
+    for (const n of g.list) { const k = n[groupBy] || '\u2014'; (sub[k] = sub[k] || []).push(n); }
+    for (const sk of Object.keys(sub).sort()) {
+      const sl = groupBy === 'system' ? (SYSLABEL[sk] || sk) + ' (' + sk + ')'
+                                      : (ZONES[sk] ? ZONES[sk].label : sk);
+      html += '<div class="agroup">' + sl + ' \u00b7 ' + sub[sk].length + '</div>';
+      for (const n of sub[sk].sort((a, b) => a.label.localeCompare(b.label))) html += rowHTML(n);
+    }
+    html += '</div></div>';
+  }
+  assetsBody.innerHTML = html;
+
+  assetsBody.querySelectorAll('.ghd').forEach(h => h.onclick = e => {
+    if (e.target.classList.contains('gx')) {
+      const gk = h.parentElement.dataset.gk;
+      const g = AGROUPS.get(gk); if (g) g.btn.classList.remove('on');
+      AGROUPS.delete(gk); renderAssetGroups(); return;
+    }
+    h.parentElement.classList.toggle('folded');
+  });
+
+  const ids = new Set(union.keys());
+  assetsBody.querySelectorAll('.arow').forEach(r => r.onclick = () => {
+    const n = union.get(r.dataset.id);
+    if (!n) return;
+    openAsset(n);
+    S.pick = ids;
+    for (const m of union.values()) if (m.obj && m.id !== n.id) addHL(m.obj, true);
+    // Re-assert last: the soft pass walks each asset's subtree, so a parent can
+    // repaint the bright selection soft and the id guard can't see ancestors.
+    const selObj = n.obj || (n.mesh && meshNames.find(m => m.name === n.mesh));
+    if (selObj) addHL(selObj, false);
+    apply();
+  });
+
+  S.pick = ids;
+  S.sel = null;
+  S.trace = { nodes: ids,
+              edges: new Set(CG.edges.filter(e => ids.has(e.from) || ids.has(e.to)).map(e => e.id)) };
+  clearHL();
+  for (const n of union.values()) if (n.obj) addHL(n.obj, false);
+  for (const eid of S.trace.edges) { const g = graph.geomIndex.get(eid); if (g) addHL(g, true); }
+  apply();
+  claimLane('assets');
+  assetsEl.hidden = false;
+  assetsEl.classList.remove('collapsed');
+  document.getElementById('assetsCollapse').textContent = '\u2013';
+}
+function clearPick() { S.pick = null; S.trace = null; clearHL(); apply(); }
+document.getElementById('assetsClose').onclick = () => clearGroups();
+document.getElementById('listAllBtn').onclick = e => toggleGroup('all', 'all', e.currentTarget);
+document.getElementById('listClearBtn').onclick = () => clearGroups();
+document.getElementById('assetsCollapse').onclick = e => {
+  const on = assetsEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+{
+  const cb = document.getElementById('listCells');
+  const cells = [...new Set(Object.values(graph.nodes).map(n => n.cell || 'Campus (shared)'))].sort();
+  for (const c of cells) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = c;
+    b.title = 'List every asset scoped to ' + c;
+    b.onclick = () => toggleGroup('cell', c, b);
+    cb.appendChild(b);
+  }
+}
+{
+  const zb = document.getElementById('listZones'), sb = document.getElementById('listSystems');
+  for (const z of usedZones) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = z;
+    b.title = ZONES[z] ? ZONES[z].label : z;
+    b.onclick = () => toggleGroup('zone', z, b);
+    zb.appendChild(b);
+  }
+  const systems = [...new Set(Object.values(graph.nodes).map(n => n.system))].sort();
+  for (const sy of systems) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = sy;
+    b.title = SYSLABEL[sy] || sy;
+    b.onclick = () => toggleGroup('system', sy, b);
+    sb.appendChild(b);
+  }
+}
+
+// ---------- panel lanes ----------
+// Lane B holds the asset list and the risk portfolio; lane C holds the asset
+// viewer, threat path and cascade. Opening one hides the others in its lane.
+const LANES = { B: ['risk', 'assume'], C: ['right', 'threat', 'cascade', 'assets'] };
+function claimLane(id) {
+  for (const ids of Object.values(LANES)) {
+    if (!ids.includes(id)) continue;
+    for (const other of ids) {
+      if (other === id) continue;
+      const el = document.getElementById(other);
+      if (el && !el.hidden && !el.classList.contains('placed')) el.hidden = true;
+    }
+  }
+}
+
+// ---------- risk portfolio ----------
+const riskEl = document.getElementById('risk');
+const riskBody = document.getElementById('riskBody');
+const riskSummary = document.getElementById('riskSummary');
+const chosen = new Set();
+
+const money = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M'
+              : v >= 1e3 ? '$' + Math.round(v / 1e3) + 'K' : '$' + Math.round(v);
+
+function renderRisk() {
+  if (!HZ) { riskBody.innerHTML = '<div class="empty">hazard-log.json not loaded.</div>'; return; }
+  const baseline = HZ.ale.reduce((a, x) => a + x.ale_usd, 0);
+
+  // Residual: for each node, apply the best mitigation rate among chosen
+  // controls that cover it. Rates are not compounded — WP10 states them as
+  // independent effectiveness against that node's scenario, so taking the
+  // maximum avoids double-counting overlapping controls.
+  const perNode = {};
+  for (const a of HZ.ale) {
+    const rates = HZ.controls
+      .filter(c => chosen.has(c.control) && (c.nodes.includes('all') || c.nodes.includes(a.node)))
+      .map(c => c.mitigation_rate);
+    const best = rates.length ? Math.max(...rates) : 0;
+    perNode[a.node] = { ale: a.ale_usd, residual: a.ale_usd * (1 - best), rate: best };
+  }
+  const residual = Object.values(perNode).reduce((a, x) => a + x.residual, 0);
+  const spend = HZ.controls.filter(c => chosen.has(c.control))
+    .reduce((a, c) => a + c.annual_cost_usd, 0);
+  const avoided = baseline - residual;
+  const rosi = spend ? (avoided - spend) / spend : 0;
+
+  riskSummary.textContent = money(baseline) + ' baseline · ' + money(residual) + ' residual · '
+    + chosen.size + ' control' + (chosen.size === 1 ? '' : 's') + ' selected';
+
+  let html = '<div class="tstat">'
+    + '<div class="bigfig"><div class="bv">' + money(baseline) + '</div><div class="bk">BASELINE ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(residual) + '</div><div class="bk">RESIDUAL ALE / YR</div></div>'
+    + '<div class="bigfig"><div class="bv">' + money(spend) + '</div><div class="bk">ANNUAL SPEND</div></div>'
+    + '<div class="bigfig"><div class="bv">' + (spend ? Math.round(rosi * 100) + '%' : '—')
+    + '</div><div class="bk">PORTFOLIO ROSI</div></div></div>';
+
+  html += '<div class="sec">EXPOSURE BY NODE</div>';
+  for (const a of HZ.ale.slice().sort((x, y) => y.ale_usd - x.ale_usd)) {
+    const p = perNode[a.node];
+    const cut = p.rate ? ' → ' + money(p.residual) : '';
+    const col = p.rate ? '#2bd96a' : '#E8E8E6';
+    html += '<div class="alerow" title="' + a.scenario + '">'
+      + '<div class="an2">' + a.node + '</div>'
+      + '<div class="al">' + a.scenario + '</div>'
+      + '<div class="av" style="color:' + col + '">' + money(a.ale_usd) + cut + '</div></div>';
+  }
+
+  html += '<div class="sec mt">CONTROLS · SELECT TO APPLY</div>';
+  for (const c of HZ.controls.slice().sort((a, b) => b.rosi - a.rosi)) {
+    const on = chosen.has(c.control);
+    html += '<div class="ctrlrow" data-ctrl="' + c.control.replace(/"/g, '&quot;') + '">'
+      + '<input type="checkbox"' + (on ? ' checked' : '') + '>'
+      + '<div><div class="cl">' + c.control + '</div>'
+      + '<div class="cm">' + money(c.annual_cost_usd) + '/yr · mitigates '
+      + Math.round(c.mitigation_rate * 100) + '% · nodes ' + c.nodes.join(', ')
+      + '<br>' + c.clause + '</div></div>'
+      + '<div class="cr">' + Math.round(c.rosi * 100) + '%</div></div>';
+  }
+  html += '<div class="blockrow" style="margin-top:9px"><b>Method:</b> baseline ALE and control '
+       + 'effectiveness are authored in hazard-log.json from WP10. Where several selected controls '
+       + 'cover the same node the highest single mitigation rate is used, not the product, to avoid '
+       + 'claiming compounded benefit the source does not support.</div>';
+
+  riskBody.innerHTML = html;
+  riskBody.querySelectorAll('.ctrlrow').forEach(r => r.onclick = () => {
+    const k = r.dataset.ctrl;
+    chosen.has(k) ? chosen.delete(k) : chosen.add(k);
+    renderRisk();
+  });
+}
+function openRisk() {
+  claimLane('risk');
+  riskEl.hidden = false;
+  riskEl.classList.remove('collapsed');
+  document.getElementById('riskCollapse').textContent = '\u2013';
+  renderRisk();
+}
+// ---------- assumptions & provenance ----------
+// Renders the model's own epistemics: what is sourced, what is inferred, what is
+// unconfirmed, and how the topology measures against the cell architecture.
+const assumeEl = document.getElementById('assume');
+const SEV = { high: '#ff5252', medium: '#ffa726', low: '#8a8a88' };
+const STAT = { met: '#2bd96a', partial: '#ffa726', gap: '#ff5252',
+               resolved: '#2bd96a', 'partially resolved': '#ffa726', ambiguous: '#ffa726',
+               unresolved: '#ff5252', unconfirmed: '#ff5252', inconsistent: '#ffa726',
+               'source limitation': '#8a8a88', 'method choice': '#8a8a88' };
+function renderAssume() {
+  const body = document.getElementById('assumeBody');
+  if (!HZ || !HZ.assumptions) { body.innerHTML = '<div class="blockrow">No assumption record loaded.</div>'; return; }
+  const cc = HZ.cell_conformance;
+  const hi = HZ.assumptions.filter(a => a.severity === 'high').length;
+  document.getElementById('assumeSummary').textContent =
+    HZ.assumptions.length + ' recorded \u00b7 ' + hi + ' high severity \u00b7 '
+    + (cc ? cc.requirements.filter(r => r.status === 'gap').length + ' cell gaps' : '')
+    + (HZ.architecture_review ? ' \u00b7 ' + HZ.architecture_review.closed.length + ' gaps closed, '
+       + HZ.architecture_review.outstanding.length + ' open' : '');
+  let h = '';
+  if (cc) {
+    h += '<div class="sec">CELL CONFORMANCE \u2014 ' + cc.source + '</div>';
+    for (const r of cc.requirements) {
+      h += '<div class="blockrow"><b style="color:' + (STAT[r.status] || '#e8e8e6') + '">'
+         + r.status.toUpperCase() + '</b> \u00b7 ' + r.requirement
+         + '<br><span style="color:#8a8a88">' + r.evidence + '</span></div>';
+    }
+    h += '<div class="blockrow" style="border-left:2px solid #ff5252;padding-left:8px">'
+       + '<b>Significance</b><br>' + cc.significance + '</div>';
+    h += '<div class="blockrow"><span style="color:#8a8a88">Correctly held campus-shared: '
+       + cc.campus_shared_correctly_separated.join(', ') + '</span></div>';
+  }
+  h += '<div class="sec mt">ASSUMPTIONS</div>';
+  const order = { high: 0, medium: 1, low: 2 };
+  for (const a of [...HZ.assumptions].sort((x, y) => order[x.severity] - order[y.severity])) {
+    h += '<div class="blockrow"><b>' + a.id + ' \u00b7 ' + a.topic + '</b> '
+       + '<span style="color:' + SEV[a.severity] + '">' + a.severity + '</span> \u00b7 '
+       + '<span style="color:' + (STAT[a.status] || '#8a8a88') + '">' + a.status + '</span>'
+       + '<br>' + a.statement
+       + '<br><span style="color:#8a8a88">Consequence: ' + a.consequence + '</span>'
+       + '<br><span style="color:#2bd96a">\u2192 ' + a.resolution + '</span></div>';
+  }
+  const rb = HZ.meta.revenue_basis;
+  if (rb && rb.correction) {
+    h += '<div class="sec mt">CORRECTIONS MADE</div>'
+       + '<div class="blockrow">' + rb.correction + '</div>'
+       + '<div class="blockrow"><span style="color:#8a8a88">' + rb.scope_note + '</span></div>';
+  }
+  if (HZ.meta.coverage && HZ.meta.coverage.reconciliation) {
+    h += '<div class="sec mt">WP10 RECONCILIATION</div>';
+    for (const r of HZ.meta.coverage.reconciliation) {
+      h += '<div class="blockrow"><b>' + r.node + '</b> ' + r.scenario + ' \u00b7 ratio '
+         + r.ratio + '\u00d7<br><span style="color:#8a8a88">' + r.reading + '</span></div>';
+    }
+  }
+  const ar = HZ.architecture_review;
+  if (ar) {
+    h += '<div class="sec mt">ARCHITECTURE REVIEW \u2014 ' + ar.date + '</div>'
+       + '<div class="blockrow"><span style="color:#8a8a88">' + ar.method + '<br>Sources: '
+       + ar.sources.join(' \u00b7 ') + '</span></div>';
+    for (const g of ar.closed) {
+      h += '<div class="blockrow"><b style="color:#2bd96a">CLOSED</b> \u00b7 ' + g.gap
+         + ' <span style="color:#8a8a88">(' + g.source + ')</span>'
+         + '<br><span style="color:#8a8a88">Was: ' + g.was + '</span>'
+         + '<br>' + g.fix
+         + '<br><span style="color:#8a8a88">Significance: ' + g.significance + '</span></div>';
+    }
+    for (const g of ar.outstanding) {
+      h += '<div class="blockrow"><b style="color:' + (SEV[g.severity] || '#8a8a88') + '">OPEN</b> \u00b7 '
+         + g.gap + ' <span style="color:#8a8a88">(' + g.source + ')</span>'
+         + '<br><span style="color:#8a8a88">' + g.note + '</span></div>';
+    }
+    h += '<div class="blockrow" style="border-left:2px solid #ff8c42;padding-left:8px">'
+       + '<b>Systemic note</b><br>' + ar.systemic_note + '</div>';
+  }
+  if (HZ.meta.safeguard_summary) {
+    h += '<div class="sec mt">METHOD NOTES</div>'
+       + '<div class="blockrow">' + HZ.meta.safeguard_summary.note + '</div>';
+  }
+  body.innerHTML = h;
+}
+function openAssume() {
+  claimLane('assume');
+  assumeEl.hidden = false;
+  assumeEl.classList.remove('collapsed');
+  document.getElementById('assumeCollapse').textContent = '\u2013';
+  renderAssume();
+}
+// Panel buttons toggle: pressing the same button again closes the panel it opened.
+const PANELKEY = {}, PANELBTN = {};
+function markBtn(name, btn) {
+  if (PANELBTN[name]) PANELBTN[name].classList.remove('on');
+  PANELBTN[name] = btn || null;
+  if (btn) btn.classList.add('on');
+}
+function toggled(el, name, key, open, btn) {
+  if (!el.hidden && PANELKEY[name] === key) { el.hidden = true; PANELKEY[name] = null; markBtn(name, null);
+    if (name === 'assets') clearPick(); return; }
+  PANELKEY[name] = key; markBtn(name, btn); open();
+}
+document.getElementById('assumeOpen').onclick = e => toggled(assumeEl, 'assume', 1, openAssume, e.currentTarget);
+document.getElementById('assumeClose').onclick = () => { assumeEl.hidden = true; PANELKEY.assume = null; markBtn('assume', null); };
+document.getElementById('assumeCollapse').onclick = e => {
+  e.stopPropagation();
+  assumeEl.classList.toggle('collapsed');
+  e.target.textContent = assumeEl.classList.contains('collapsed') ? '+' : '\u2013';
+};
+
+document.getElementById('riskOpen').onclick = e => toggled(riskEl, 'risk', 1, openRisk, e.currentTarget);
+document.getElementById('riskClose').onclick = () => {
+  riskEl.hidden = true; PANELKEY.risk = null; markBtn('risk', null);
+};
+document.getElementById('riskCollapse').onclick = e => {
+  const on = riskEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+
+// ---------- draggable panels ----------
+// Every popup can be dragged by its header. Position is remembered for the
+// session so a panel you moved stays where you put it when it reopens.
+const dragged = new Set();
+function makeDraggable(el) {
+  const handle = el.querySelector('.hd');
+  if (!handle) return;
+  handle.style.cursor = 'grab';
+  handle.addEventListener('pointerdown', ev => {
+    if (ev.target.closest('.iconbtn')) return;      // let the buttons work
+    const r = el.getBoundingClientRect();
+    // pin to top/left so the drag is absolute regardless of the CSS anchor
+    el.style.left = r.left + 'px';
+    el.style.top = r.top + 'px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    el.style.width = r.width + 'px';
+    const dx = ev.clientX - r.left, dy = ev.clientY - r.top;
+    handle.style.cursor = 'grabbing';
+    el.style.zIndex = 40;
+    dragged.add(el.id);
+    el.classList.add('placed');
+    const move = e => {
+      const x = Math.min(Math.max(0, e.clientX - dx), innerWidth - 60);
+      const y = Math.min(Math.max(0, e.clientY - dy), innerHeight - 40);
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+    };
+    const up = () => {
+      handle.style.cursor = 'grab';
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    ev.preventDefault();
+  });
+}
+['left', 'right', 'assets', 'threat', 'cascade', 'risk', 'assume'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) makeDraggable(el);
+});
+// once a panel has been moved by hand, stop the auto-reposition rules
+const keepPlaced = id => dragged.has(id);
+
+// ---------- cascading failure wiring ----------
+const cascadeEl = document.getElementById('cascade');
+const cascadeTitle = document.getElementById('cascadeTitle');
+const cascadeSummary = document.getElementById('cascadeSummary');
+const cascadeBody = document.getElementById('cascadeBody');
+let cascadeState = null, cascadeTimer = null;
+
+function paintCascade(uptoWave) {
+  if (!cascadeState) return;
+  const { seeds, res } = cascadeState;
+  clearHL();
+  for (const [id, w] of res.failed) {
+    if (w > uptoWave) continue;
+    const n = CG.nodes[id];
+    if (n && n.obj) addHLMat(n.obj, seeds.includes(id) ? HL_SEED : HL_FAILED);
+  }
+  if (uptoWave >= res.waves) {
+    for (const [id] of res.degraded) {
+      const n = CG.nodes[id];
+      if (n && n.obj && !res.failed.has(id)) addHLMat(n.obj, HL_DEGRADED);
+    }
+    for (const h of res.held) {
+      const n = CG.nodes[h.id];
+      if (n && n.obj && !res.failed.has(h.id)) addHLMat(n.obj, HL_HELD);
+    }
+  }
+  // show only the runs between failed assets
+  const liveIds = new Set([...res.failed].filter(([, w]) => w <= uptoWave).map(([id]) => id));
+  S.trace = { nodes: liveIds,
+              edges: new Set(graph.edges.filter(e => liveIds.has(e.from) && liveIds.has(e.to)).map(e => e.id)) };
+  apply();
+}
+
+function animateCascade() {
+  if (!cascadeState) return;
+  if (cascadeTimer) clearInterval(cascadeTimer);
+  let w = 0;
+  paintCascade(0);
+  cascadeTimer = setInterval(() => {
+    w++;
+    paintCascade(w);
+    const el = document.getElementById('cascadeWave');
+    if (el) el.textContent = 'wave ' + Math.min(w, cascadeState.res.waves) + ' / ' + cascadeState.res.waves;
+    if (w >= cascadeState.res.waves) { clearInterval(cascadeTimer); cascadeTimer = null; }
+  }, 550);
+}
+
+function runCascade(seedIds, label, hazard) {
+  const seeds = seedIds.filter(id => CG.nodes[id]);
+  if (!seeds.length) return;
+  const res = cascade(seeds);
+  cascadeState = { seeds, res };
+
+  const failedList = [...res.failed].filter(([id]) => !seeds.includes(id))
+    .sort((a, b) => a[1] - b[1] || CG.nodes[a[0]].label.localeCompare(CG.nodes[b[0]].label));
+
+  const bySystem = {};
+  for (const [id] of res.failed) { const sy = CG.nodes[id].system; bySystem[sy] = (bySystem[sy] || 0) + 1; }
+  const racksLost = [...res.failed].filter(([id]) => /rack\d\d$/.test(id)).length;
+  const z4 = [...res.failed].filter(([id]) => CG.nodes[id].zone === 'Z4').length;
+  const z2 = [...res.failed].filter(([id]) => CG.nodes[id].zone === 'Z2').length;
+
+  cascadeTitle.textContent = 'Failure: ' + (label || CG.nodes[seeds[0]].label);
+  cascadeSummary.innerHTML = '<span id="cascadeWave">wave 0 / ' + res.waves + '</span> · '
+    + res.failed.size + ' assets stopped · ' + res.degraded.size + ' degraded';
+
+  // minimum operating requirements
+  const mor = [];
+  if (z4) mor.push(['SAFETY', 'BREACH', z4 + ' safety instrumented asset(s) stopped']);
+  else mor.push(['SAFETY', 'HELD', 'no Z4 asset lost']);
+  if (racksLost) mor.push(['MINIMUM OPERATION', 'BREACH', racksLost + ' of 96 GPU racks stopped']);
+  else mor.push(['MINIMUM OPERATION', 'HELD', 'no compute rack lost']);
+  if (res.held.length) mor.push(['RELIABILITY', 'DEGRADED', res.held.length + ' redundant feed(s) now single-path']);
+  else mor.push(['RELIABILITY', z2 ? 'DEGRADED' : 'HELD', z2 + ' supervisory asset(s) stopped']);
+
+  // costed consequence: racks lost x revenue rate x time to protective shutdown
+  // Cell basis: revenue scales with IT load, not with rack count as a share of
+  // the whole campus. One rack at 120 kW is 0.12 MW at $125K/MW-hour.
+  const rb = HZ && HZ.meta.revenue_basis;
+  const cell = rb && rb.cell_structure && rb.cell_structure.modelled_cell;
+  const perRackHour = cell ? cell.per_rack_hour_usd : 0;
+  const cellsPerCampus = rb && rb.cell_structure ? rb.cell_structure.cells_per_campus : 1;
+  const usd = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1e3) + 'K';
+  let cons = '';
+  if (perRackHour && racksLost) {
+    const mw = (racksLost * 120 / 1000).toFixed(2);
+    cons = '<div class="sec">CONSEQUENCE — ONE CELL (' + racksLost + ' racks, ' + mw + ' MW at '
+         + usd(perRackHour) + '/rack-hour)</div>'
+         + '<div class="blockrow">' + [1, 2, 4, 8].map(h =>
+             '<b>' + h + ' h</b> ' + usd(perRackHour * racksLost * h)).join(' · ') + '</div>'
+         + '<div class="blockrow"><b>If the same event hit every cell</b> (no isolation, shared '
+         + 'management plane): ×' + cellsPerCampus + ' → '
+         + [1, 4, 8].map(h => h + ' h ' + usd(perRackHour * racksLost * h * cellsPerCampus)).join(' · ')
+         + '<br><span style="color:#8a8a88">Cell isolation is the control that keeps a single-cell '
+         + 'event single-cell. WP10 node ALEs are the campus-wide figure.</span></div>';
+  }
+  const seedNodes = [...new Set(seeds.map(id => NODE_OF_ASSET[id]).filter(Boolean))];
+  if (seedNodes.length) {
+    cons += '<div class="blockrow">' + seedNodes.map(n => {
+      const a = ALE_BY_NODE[n];
+      return a ? '<b>' + n + '</b> authored ALE ' + usd(a.ale_usd) + '/yr · SLE '
+                 + usd(a.sle_usd) + ' · ARO ' + a.aro : '<b>' + n + '</b>';
+    }).join('<br>') + '</div>';
+  }
+  if (hazard) {
+    cons += '<div class="blockrow" style="border-left:3px solid #c8332a;padding-left:8px">'
+         + '<b>' + hazard.id + '</b> · RPN ' + hazard.rpn + ' · ' + hazard.mitre
+         + ' · target ' + hazard.sl_t + '<br>' + hazard.cyber_cause + '</div>';
+  }
+  if (TIMING && racksLost) {
+    cons += '<div class="blockrow"><b>Time to consequence</b> — throttle at '
+         + TIMING.dlc_throttle_seconds + ' s, protective shutdown at '
+         + TIMING.dlc_shutdown_seconds + ' s at direct-to-chip densities.</div>';
+  }
+  // controls that would have reduced this
+  let ctrls = '';
+  if (HZ && HZ.controls && seedNodes.length) {
+    const rel = HZ.controls.filter(c => c.nodes.includes('all') || c.nodes.some(n => seedNodes.includes(n)));
+    if (rel.length) {
+      ctrls = '<div class="sec mt">CONTROLS THAT REDUCE THIS</div>';
+      for (const c of rel.sort((a, b) => b.rosi - a.rosi))
+        ctrls += '<div class="blockrow"><b>' + c.control + '</b><br>'
+              + usd(c.annual_cost_usd) + '/yr · mitigates ' + Math.round(c.mitigation_rate * 100)
+              + '% · <span>ROSI ' + Math.round(c.rosi * 100) + '%</span><br>'
+              + '<span style="color:#8a8a88">' + c.clause + '</span></div>';
+    }
+  }
+
+  let html = cons + ctrls + '<div class="tstat">'
+    + '<div><div class="tv">' + res.failed.size + '</div><div class="tk">STOPPED</div></div>'
+    + '<div><div class="tv">' + res.degraded.size + '</div><div class="tk">DEGRADED</div></div>'
+    + '<div><div class="tv">' + res.held.length + '</div><div class="tk">HELD BY N+1</div></div>'
+    + '<div><div class="tv">' + res.waves + '</div><div class="tk">WAVES</div></div></div>';
+
+  html += '<div class="sec">MINIMUM OPERATING REQUIREMENTS</div>';
+  for (const [k, v, note] of mor) {
+    const col = v === 'BREACH' ? '#c8332a' : v === 'DEGRADED' ? '#EE7623' : '#2bd96a';
+    html += '<div class="blockrow" style="border-left:3px solid ' + col + ';padding-left:8px">'
+      + '<b>' + k + '</b> — <span style="color:' + col + '">' + v + '</span><br>' + note + '</div>';
+  }
+
+  html += '<div class="sec mt">PROPAGATION BY SYSTEM</div><div class="blockrow">'
+    + Object.entries(bySystem).sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => '<b>' + k + '</b> ' + v).join(' · ') + '</div>';
+
+  html += '<div class="sec mt">STOPPED, BY WAVE</div>';
+  for (const [id, w] of failedList) {
+    const n = CG.nodes[id];
+    const zc = ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+    const dark = n.zone === 'Z3' || n.zone === 'Z0';
+    html += '<div class="wv" data-id="' + id + '" title="' + n.label + '">'
+      + '<div class="wn">' + w + '</div><div class="wl">' + n.label + '</div>'
+      + '<div class="wz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (n.zone || '—') + '</div></div>';
+  }
+  if (!failedList.length) html += '<div class="empty">Nothing downstream depends on this asset.</div>';
+
+  if (res.held.length) {
+    html += '<div class="sec mt">HELD BY REDUNDANCY</div>';
+    const seen = new Set();
+    for (const h of res.held) {
+      const k = h.id + h.service;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      html += '<div class="heldrow"><b>held</b> ' + CG.nodes[h.id].label
+        + ' — lost ' + h.lost + ' of ' + h.of + ' ' + h.service + ' feeds</div>';
+    }
+  }
+  if (res.degraded.size) {
+    html += '<div class="sec mt">DEGRADED (LOST VISIBILITY OR CONTROL)</div>';
+    for (const [id, why] of res.degraded) {
+      if (res.failed.has(id)) continue;
+      html += '<div class="heldrow">' + CG.nodes[id].label + ' — ' + why + '</div>';
+    }
+  }
+  html += '<div class="blockrow" style="margin-top:9px"><b>Model:</b> redundancy inferred from feed '
+       + 'count, not authored. Two or more feeds of a service hold; one does not. Override in '
+       + 'REDUNDANCY_OVERRIDE where the design differs.</div>';
+
+  cascadeBody.innerHTML = html;
+  cascadeBody.querySelectorAll('.wv').forEach(r => r.onclick = () => selectAndFly(r.dataset.id));
+  claimLane('cascade');
+  cascadeEl.hidden = false;
+  cascadeEl.classList.remove('collapsed');
+  document.getElementById('cascadeCollapse').textContent = '\u2013';
+  animateCascade();
+}
+
+{
+  const box = document.getElementById('hazardSeeds');
+  if (HZ) for (const h of HZ.hazards) {
+    const seeds = (h.assets || []).filter(a => CG.nodes[a]);
+    if (!seeds.length) continue;
+    const b = document.createElement('button');
+    b.className = 'btn';
+    b.textContent = h.id + ' · RPN ' + h.rpn;
+    b.title = h.deviation + ' — ' + h.cyber_cause + ' (' + h.mitre + ')';
+    b.onclick = () => toggled(cascadeEl, 'cascade', h.id, () => runCascade(seeds, h.id + ' — ' + h.deviation, h), b);
+    box.appendChild(b);
+  }
+}
+
+const CASCADE_SEEDS = [
+  ['ups', 'UPS 1'], ['chiller', 'Chiller 1'], ['row01_cdu', 'Row 1 CDU'],
+  ['busway', 'Cell A busway'], ['busway_b', 'Cell B busway'], ['dcs_a', 'DCS controller A'], ['tower', 'Cooling tower 1'],
+  ['gen', 'Generator 1'], ['mv_swg', 'MV switchgear'], ['fws_spine', 'Facility water spine'],
+].filter(([id, label]) => {
+  if (CG.nodes[id]) return true;
+  console.warn('[explorer] cascade seed dropped — unknown asset id:', id, '(' + label + ')');
+  return false;
+});
+{
+  const box = document.getElementById('cascadeSeeds');
+  for (const [id, label] of CASCADE_SEEDS) {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = label;
+    b.onclick = () => toggled(cascadeEl, 'cascade', id, () => runCascade([id], label), b);
+    box.appendChild(b);
+  }
+}
+document.getElementById('cascadeSel').onclick = () => {
+  if (S.sel && CG.nodes[S.sel])
+    toggled(cascadeEl, 'cascade', S.sel, () => runCascade([S.sel], CG.nodes[S.sel].label));
+};
+document.getElementById('cascadePlay').onclick = animateCascade;
+const closeCascade = () => {
+  if (cascadeTimer) { clearInterval(cascadeTimer); cascadeTimer = null; }
+  cascadeState = null; S.trace = null; clearHL();
+  cascadeEl.hidden = true; PANELKEY.cascade = null; markBtn('cascade', null); apply();
+};
+document.getElementById('cascadeClear').onclick = closeCascade;
+document.getElementById('cascadeClose').onclick = closeCascade;
+document.getElementById('cascadeCollapse').onclick = e => {
+  const on = cascadeEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+
+// ---------- threat path wiring ----------
+const threatEl = document.getElementById('threat');
+const threatTitle = document.getElementById('threatTitle');
+const threatSummary = document.getElementById('threatSummary');
+const threatBody = document.getElementById('threatBody');
+let threatState = null, threatTimer = null;
+
+/** Reveal the walk hop by hop: frontier advances, boundaries flash as it hits them. */
+function paintThreat(uptoHop) {
+  if (!threatState) return;
+  const { startId, walk: w } = threatState;
+  clearHL();
+  const entry = CG.nodes[startId];
+  if (entry && entry.obj) addHLMat(entry.obj, HL_ENTRY);
+
+  const live = new Set([startId]);
+  for (const [id, hop] of w.reached) {
+    if (hop > uptoHop) continue;
+    live.add(id);
+    if (id === startId) continue;
+    const n = CG.nodes[id];
+    if (n && n.obj) addHLMat(n.obj, HL_COMPROMISED);
+  }
+  const liveEdges = new Set();
+  for (const eid of w.used) {
+    const e = CG.edges.find(x => x.id === eid);
+    if (!e || !live.has(e.from) || !live.has(e.to)) continue;
+    liveEdges.add(eid);
+    const g = graph.geomIndex.get(eid);
+    if (g) addHLMat(g, HL_COMPROMISED);
+  }
+  // a boundary lights only once the frontier has actually reached it
+  const seen = new Set();
+  for (const b of w.boundary) {
+    if (seen.has(b.edge.id) || !live.has(b.from)) continue;
+    seen.add(b.edge.id);
+    const g = graph.geomIndex.get(b.edge.id);
+    if (g) addHLMat(g, HL_BLOCKED);
+  }
+  S.trace = { nodes: live, edges: liveEdges };
+  apply();
+  return { reached: live.size - 1, blocked: seen.size };
+}
+
+function playThreat() {
+  if (threatTimer) { clearInterval(threatTimer); threatTimer = null; }
+  if (!threatState) return;
+  const max = Math.max(0, ...[...threatState.walk.reached.values()]);
+  let h = 0;
+  paintThreat(0);
+  threatTimer = setInterval(() => {
+    h++;
+    const r = paintThreat(h);
+    const el = document.getElementById('threatHop');
+    if (el && r) el.textContent = 'hop ' + Math.min(h, max) + ' / ' + max + ' · ' + r.reached + ' reached';
+    if (h >= max) { clearInterval(threatTimer); threatTimer = null; }
+  }, 550);
+}
+
+function runThreat(startId, label) {
+  const w = threatWalk(startId);
+  threatState = { startId, walk: w };
+
+  // paint: hop by hop, so the frontier and the boundaries it meets read in sequence
+  playThreat();
+  const seenBlock = new Set(w.boundary.map(b => b.edge.id));
+
+  // ---- report ----
+  const hops = [...w.reached].filter(([id]) => id !== startId)
+    .sort((a, b) => a[1] - b[1] || CG.nodes[a[0]].label.localeCompare(CG.nodes[b[0]].label));
+  const zonesHit = [...new Set(hops.map(([id]) => CG.nodes[id].zone).filter(Boolean))].sort();
+  const critHit = hops.filter(([id]) => {
+    const n = CG.nodes[id];
+    return n.zone === 'Z2' || n.zone === 'Z4';
+  }).length;
+
+  threatTitle.textContent = 'From: ' + (label || (CG.nodes[startId] || {}).label || startId);
+  const maxHop = Math.max(0, ...[...w.reached.values()]);
+  threatSummary.innerHTML = '<span id="threatHop">hop 0 / ' + maxHop + ' · 0 reached</span> · '
+    + hops.length + ' reachable · stopped at ' + seenBlock.size + ' boundaries';
+
+  const uniqueBlocks = [];
+  const bseen = new Set();
+  for (const b of w.boundary) {
+    const k = b.edge.id;
+    if (bseen.has(k)) continue;
+    bseen.add(k);
+    uniqueBlocks.push(b);
+  }
+
+  let html = '<div class="tstat">'
+    + '<div><div class="tv">' + hops.length + '</div><div class="tk">ASSETS REACHED</div></div>'
+    + '<div><div class="tv">' + critHit + '</div><div class="tk">IN Z2 / Z4</div></div>'
+    + '<div><div class="tv">' + uniqueBlocks.length + '</div><div class="tk">BLOCKED PATHWAYS</div></div>'
+    + '<div><div class="tv">' + (hops.length ? Math.max(...hops.map(h => h[1])) : 0)
+    + '</div><div class="tk">MAX HOPS</div></div></div>';
+
+  const z4 = hops.filter(([id]) => CG.nodes[id].zone === 'Z4').length;
+  html += '<div class="blockrow" style="border-color:' + (z4 ? '#c8332a' : '#2bd96a') + '">'
+       + '<b>Safety instrumented systems (Z4): ' + (z4 ? z4 + ' REACHED' : 'not reachable') + '.</b> '
+       + (z4 ? 'A routable path exists into the SIS \u2014 this is a finding.'
+             : 'Every path into Z4 terminates at a supervised dry-contact or one-way interface.')
+       + '</div>';
+  if (critHit === 0 && hops.length) {
+    html += '<div class="blockrow" style="border-color:#2bd96a"><b>No supervisory zone reached.</b> '
+         + 'Every path into Z2 from here terminates at a boundary below.</div>';
+  }
+  html += '<div class="blockrow"><b>Assumption:</b> <span>forward traversal only</span>. '
+       + 'Where a path runs out through <b>Internet / cloud</b> and back in, that models an '
+       + 'attacker pivoting via a public-facing service \u2014 not a direct route from the entry point.</div>';
+
+  html += '<div class="sec mt">REACHABLE ASSETS</div>';
+  for (const [id, hop] of hops) {
+    const n = CG.nodes[id];
+    const zc = ZONES[n.zone] ? hex(ZONES[n.zone].color) : '#555';
+    const dark = n.zone === 'Z3' || n.zone === 'Z0';
+    html += '<div class="hop" data-id="' + id + '" title="' + n.label + '">'
+      + '<div class="hn">' + hop + '</div>'
+      + '<div class="hl">' + n.label + '</div>'
+      + '<div class="hz" style="background:' + zc + ';color:' + (dark ? '#0a0a0b' : '#fff') + '">'
+      + (n.zone || '—') + '</div></div>';
+  }
+  if (!hops.length) html += '<div class="empty">Nothing reachable over a routable protocol.</div>';
+
+  html += '<div class="sec mt">WHERE THE PATH STOPS</div>';
+  for (const b of uniqueBlocks.slice(0, 60)) {
+    const a2 = CG.nodes[b.from], b2 = CG.nodes[b.to];
+    html += '<div class="blockrow"><b>' + (a2 ? a2.label : b.from) + '</b> → '
+      + '<b>' + (b2 ? b2.label : b.to) + '</b><br><span>' + b.reason + '</span>'
+      + (b.edge.note ? ' · ' + b.edge.note : '') + '</div>';
+  }
+  if (uniqueBlocks.length > 60)
+    html += '<div class="empty">… and ' + (uniqueBlocks.length - 60) + ' more.</div>';
+
+  threatBody.innerHTML = html;
+  threatBody.querySelectorAll('.hop').forEach(r => r.onclick = () => selectAndFly(r.dataset.id));
+  claimLane('threat');
+  threatEl.hidden = false;
+
+  threatEl.classList.remove('collapsed');
+  document.getElementById('threatCollapse').textContent = '\u2013';
+  render();
+}
+
+function addHLMat(obj, mat) {
+  obj.traverse(o => {
+    if (o.isMesh && !o.userData.graphNode && !o.userData.graphEdge) {
+      paintMesh(o, mat);
+    }
+  });
+}
+
+{
+  const box = document.getElementById('entryPoints');
+  for (const [id, label] of ENTRY) {
+    const b = document.createElement('button');
+    b.className = 'btn';
+    b.textContent = label;
+    b.onclick = () => toggled(threatEl, 'threat', id, () => runThreat(id, label), b);
+    box.appendChild(b);
+  }
+}
+const closeThreat = () => {
+  if (threatTimer) { clearInterval(threatTimer); threatTimer = null; }
+  threatState = null; S.trace = null; clearHL();
+  threatEl.hidden = true; PANELKEY.threat = null; markBtn('threat', null); apply();
+};
+document.getElementById('threatPlay').onclick = () => { if (threatState) playThreat(); };
+document.getElementById('threatClear').onclick = closeThreat;
+document.getElementById('threatClose').onclick = closeThreat;
+document.getElementById('threatCollapse').onclick = e => {
+  const on = threatEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+
+// foldable filter sections
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.onclick = () => {
+    const body = document.getElementById(h.dataset.fold);
+    if (!body) return;
+    h.classList.toggle('shut');
+    body.classList.toggle('shut');
+  };
+});
+// every section starts collapsed — the panel opens compact
+document.querySelectorAll('.sec.fold').forEach(h => {
+  h.classList.add('shut');
+  const b = document.getElementById(h.dataset.fold);
+  if (b) b.classList.add('shut');
+});
+
+// ---- phase stack -----------------------------------------------------
+// Each phase shows a subset of the same controls. Sections are moved, never
+// cloned, so ids stay unique and every existing handler keeps working.
+const PHASES = [
+  { n:'1', t:'Build Model', sub:'Phase 1 — build the model from HLD, DLD and ICD. Asset register, connections, services and protocols.',
+    secs:['fView','fMode','fSearch','fSvc','fList','fProto'] },
+  { n:'2', t:'WS-1 Initial Risk Assessment', sub:'Workshop 1–2 — threat and vulnerability assessment. Threat pathways, consequence, and the first zone and conduit cut.',
+    secs:['fView','fMode','fSearch','fSvc','fList','fProto','fThreat','fCascade','fZone','fCond'] },
+  { n:'3', t:'Detail Risk Assessment', sub:'Zone and conduit requirements. SL-T against SL-C, ALARP/SFAIRP rationale, risk portfolio and provenance.',
+    secs:['fView','fMode','fSearch','fMarker','fSvc','fList','fProto','fZone','fCond','fThreat','fCascade','fAssume','fRisk'] },
+  { n:'4', t:'WS-2 Risk Alignment', sub:'Gap analysis to SL-A, target reference architecture, and the reporting pack. Everything in one view.',
+    secs:['fView','fMode','fSearch','fMarker','fSvc','fList','fProto','fZone','fCond','fThreat','fCascade','fRisk','fAssume'] },
+];
+const phWrap = document.getElementById('phases');
+const phEls = PHASES.map((p, i) => {
+  const el = document.createElement('div');
+  el.className = 'ph'; el.id = 'ph' + (i + 1);
+  el.innerHTML = '<div class="phhd"><span class="phnum">' + p.n + '</span>'
+    + '<span class="phttl">' + p.t + '</span><span class="phcar">\u25bc</span></div>'
+    + '<div class="phsub" hidden>' + p.sub + '</div><div class="phbd" hidden></div>';
+  phWrap.appendChild(el);
+  return el;
+});
+const phStat = document.createElement('div');
+phStat.id = 'phstat';
+phWrap.appendChild(phStat);
+
+function openPhase(i) {
+  PHASES.forEach((p, j) => {
+    const el = phEls[j], on = j === i;
+    el.classList.toggle('open', on);
+    el.querySelector('.phsub').hidden = !on;
+    el.querySelector('.phbd').hidden = !on;
+  });
+  if (i < 0) return;
+  const bd = phEls[i].querySelector('.phbd');
+  for (const id of PHASES[i].secs) {
+    const hdr = document.querySelector('[data-fold="' + id + '"]'), body = document.getElementById(id);
+    if (!hdr || !body) { console.warn('[explorer] phase section missing:', id); continue; }
+    hdr.classList.add('shut'); body.classList.add('shut');
+    bd.appendChild(hdr); bd.appendChild(body);
+  }
+}
+phEls.forEach((el, i) => el.querySelector('.phhd').onclick = () =>
+  openPhase(el.classList.contains('open') ? -1 : i));
+openPhase(-1);   // all four collapsed on load
+
+// panel collapse / close
+const leftEl = document.getElementById('left'), rightEl = document.getElementById('right');
+document.getElementById('leftCollapse').onclick = e => {
+  const on = leftEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+  e.target.title = on ? 'Expand panel' : 'Collapse panel';
+};
+document.getElementById('rightCollapse').onclick = e => {
+  const on = rightEl.classList.toggle('collapsed');
+  e.target.textContent = on ? '+' : '\u2013';
+};
+function closePanel() {
+  rightEl.hidden = true;
+  S.sel = null; S.trace = null; S.pick = null; clearHL(); apply();
+}
+document.getElementById('rightClose').onclick = closePanel;
+
+// keyboard shortcuts
+window.addEventListener('keydown', ev => {
+  if (ev.target.tagName === 'INPUT') return;
+  const k = ev.key.toLowerCase();
+  if (k === 'escape') closePanel();
+  else if (k === 'g' || k === 'p' || k === 'b') {
+    const m = k === 'g' ? 'graph' : k === 'p' ? 'physical' : 'both';
+    document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('on', x.dataset.m === m));
+    S.mode = m; apply();
+  } else if (k === 'f') views.vAll();
+});
+
+document.querySelectorAll('#colmode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#colmode button').forEach(x => x.classList.toggle('on', x === b));
+  S.col = b.dataset.c; apply();
+});
+document.querySelectorAll('#critmode button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#critmode button').forEach(x => x.classList.toggle('on', x === b));
+  S.crit = b.dataset.k === 'crit'; apply();
+});
+document.getElementById('pAll').onclick = () => {
+  setAll('svc', usedSvcs); setAll('proto', usedProtos); setAll('zone', usedZones);
+  S.trace = null; syncChips(); apply();
+};
+document.getElementById('pNone').onclick = () => { setAll('proto', []); syncChips(); apply(); };
+document.getElementById('pOT').onclick = () => { setAll('proto', usedProtos.filter(p => PROTOCOLS[p]?.layer === 'OT')); syncChips(); apply(); };
+document.getElementById('pIT').onclick = () => { setAll('proto', usedProtos.filter(p => PROTOCOLS[p]?.layer === 'IT')); syncChips(); apply(); };
+
+// ===== camera =============================================================
+const cam = () => stage._camera, ctr = () => stage._controls;
+const render = () => stage._loop && stage._loop();
+let anim = null;
+function flyTo(center, radius, dirHint) {
+  const c = cam(), t = ctr();
+  const dist = Math.max(1.6, radius * 2.7);
+  const dir = dirHint || c.position.clone().sub(t.target).normalize();
+  const p1 = center.clone().add(dir.clone().multiplyScalar(dist));
+  const p0 = c.position.clone(), t0 = t.target.clone(), t1 = center.clone();
+  const start = performance.now(), dur = 620;
+  if (anim) cancelAnimationFrame(anim);
+  const step = () => {
+    const k = Math.min(1, (performance.now() - start) / dur);
+    const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    c.position.lerpVectors(p0, p1, e); t.target.lerpVectors(t0, t1, e);
+    t.update(); render();
+    if (k < 1) anim = requestAnimationFrame(step); else anim = null;
+  };
+  step();
+}
+const boxOf = o => new THREE.Box3().setFromObject(o);
+function frameObject(o, dirHint) {
+  const b = boxOf(o), ctrp = b.getCenter(new THREE.Vector3());
+  flyTo(ctrp, b.getSize(new THREE.Vector3()).length() / 2, dirHint);
+}
+const V = new THREE.Vector3();
+const views = {
+  vAll:  () => frameObject(C, new THREE.Vector3(.45, .62, .64).normalize()),
+  vHall: () => flyTo(new THREE.Vector3(3, 1.6, 0), 9, new THREE.Vector3(.2, .55, .81).normalize()),
+  vElec: () => flyTo(new THREE.Vector3(-17, 1.4, -1), 7, new THREE.Vector3(.35, .6, .72).normalize()),
+  vCool: () => flyTo(new THREE.Vector3(-9.5, 1.2, -9), 6.5, new THREE.Vector3(.3, .58, .76).normalize()),
+  vMMR:  () => flyTo(new THREE.Vector3(-13, 1.5, 10), 7, new THREE.Vector3(.25, .62, .74).normalize()),
+  // one 48U liquid-cooled GPU rack, close enough to read tray detail
+  vRack: () => { const n = CG.nodes['row01_rack01'] || CG.nodes['row01_rack00'];
+                 if (n && n.obj) frameObject(n.obj, new THREE.Vector3(.5, .35, .79).normalize(), 2.1);
+                 else flyTo(new THREE.Vector3(-1.2, 1.1, -9), 2.6, new THREE.Vector3(.5, .35, .79).normalize()); },
+};
+for (const [id, fn] of Object.entries(views)) document.getElementById(id).onclick = fn;
+
+// ===== selection ==========================================================
+const selName = document.getElementById('selName'), selKind = document.getElementById('selKind'),
+      selBody = document.getElementById('selBody');
+
+function protoPill(p) {
+  const c = hex(PROTOCOLS[p]?.color ?? 0x888888);
+  return `<span class="pill" style="background:${c}">${p}</span>`;
+}
+function select(id, pickedMesh) {
+  const n = graph.nodes[id];
+  if (!n) return;
+  S.sel = id; S.pick = null;
+  clearHL();
+  addHL(n.obj);
+  if (pickedMesh && pickedMesh !== n.obj) addHL(pickedMesh);
+
+  claimLane('right');
+  rightEl.hidden = false;
+  rightEl.classList.remove('collapsed');
+  document.getElementById('rightCollapse').textContent = '\u2013';
+  selName.textContent = n.label;
+  selKind.textContent = `${n.kind} · ${n.room}` + (n.cell ? ' · ' + n.cell : '');
+  const zh = document.getElementById('zoneTag');
+  if (n.zone && ZONES[n.zone]) {
+    zh.style.display = 'inline-flex';
+    zh.style.background = hex(ZONES[n.zone].color);
+    zh.style.color = ['Z3'].includes(n.zone) ? '#16203B' : '#fff';
+    zh.textContent = `${ZONES[n.zone].label}  ·  Purdue ${n.purdue || ZONES[n.zone].purdue}  ·  ${n.slt || ZONES[n.zone].slt}`;
+  } else zh.style.display = 'none';
+
+  const ins = graph.adj[id].in, outs = graph.adj[id].out;
+  const rows = (list, dirLabel) => list.map(e => {
+    const other = graph.nodes[e.from === id ? e.to : e.from];
+    const dim = edgeVisible(e) ? '' : 'opacity:.45;';
+    const badges = (e.critical ? '<span class="crit">CRITICAL CONDUIT</span>' : '')
+                 + (e.oneway ? '<span class="oneway">ONE-WAY</span>' : '')
+                 + (e.cross ? `<span class="oneway">${e.cross}</span>` : '');
+    const rt = ROUTES && ROUTES.get(e.id);
+    const runInfo = rt ? `${rt.length_m} m · ${rt.containment}` : null;
+    return `<button class="conn" data-node="${other.id}" style="${dim}">
+      <div class="top"><span class="arrow">${dirLabel}</span>${other.label}</div>
+      <div class="meta">${protoPill(e.protocol)}<span>${SERVICES[e.service]?.label ?? e.service}</span></div>
+      ${badges ? '<div class="meta">' + badges + '</div>' : ''}
+      <div class="meta"><span>${e.label}${e.geom ? ' · ' + e.geom : ''}</span></div>
+      ${runInfo ? '<div class="meta"><span>' + runInfo + '</span></div>' : ''}
+      ${e.note ? '<div class="note">' + e.note + '</div>' : ''}
+    </button>`;
+  }).join('');
+
+  const attrs = Object.entries(n.attrs).map(([k, v]) =>
+    `<div class="kv"><b>${k.replace(/_/g, ' ')}</b><span>${v}</span></div>`).join('');
+  const ident = (n.vendor ? `<div class="kv"><b>vendor</b><span>${n.vendor}</span></div>` : '')
+              + (n.standards ? `<div class="kv"><b>standards</b><span>${n.standards}</span></div>` : '');
+  const surf = n.surface.length
+    ? `<div class="sec mt">ATTACK SURFACE &amp; ASSURANCE NOTES</div>` + n.surface.map(t => `<div class="surf">${t}</div>`).join('')
+    : '';
+
+  // authored engineering data from the hazard log
+  const node = NODE_OF_ASSET[id];
+  const ale = node && ALE_BY_NODE[node];
+  const usd = v => '$' + (v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : (v / 1e3).toFixed(0) + 'K');
+  let eng = '';
+  if (node) {
+    const nx = HZ.node_crosswalk[node];
+    eng += `<div class="sec mt">NODE ${node} — ${nx.label}</div>`
+        + `<div class="kv"><b>zone</b><span>${nx.zone} · ${nx.sl_t}</span></div>`;
+    if (ale) eng += `<div class="kv"><b>SLE</b><span>${usd(ale.sle_usd)} · EF ${ale.ef}</span></div>`
+        + `<div class="kv"><b>ALE</b><span>${usd(ale.ale_usd)}/yr · ARO ${ale.aro}</span></div>`
+        + `<div class="kv"><b>scenario</b><span>${ale.scenario}</span></div>`;
+  }
+  const crits = CRIT_BY_ASSET[id] || [];
+  if (crits.length) {
+    eng += '<div class="sec mt">CRITICAL ITEM</div>';
+    for (const c of crits)
+      eng += `<div class="blockrow"><b>${c.component}</b> · SL-A ${c.sl_a}<br>`
+          + `<span style="color:#8a8a88">${c.ot_interface}</span><br>${c.failure_mode}</div>`;
+  }
+  const SAFE_BY_HAZARD = (() => {
+    const m = {};
+    if (HZ && HZ.safeguards) for (const sg of HZ.safeguards) for (const h of sg.hazards) (m[h] = m[h] || []).push(sg);
+    return m;
+  })();
+  const hz = HAZ_BY_ASSET[id] || [];
+  if (hz.length) {
+    eng += '<div class="sec mt">CYHAZOPS HAZARDS</div>';
+    for (const h of hz.sort((a, b) => b.rpn - a.rpn)) {
+      const col = h.rpn >= 200 ? '#c8332a' : h.rpn >= 140 ? '#EE7623' : '#8a8a88';
+      eng += `<div class="blockrow" style="border-left:3px solid ${col};padding-left:8px">`
+          + `<b>${h.id}</b> · <b>${h.guide_word}</b> · RPN <span style="color:${col}">${h.rpn}</span>`
+          + ` · ${h.mitre} · ${h.sl_t}<br>${h.deviation}<br>`
+          + `<span style="color:#8a8a88">${h.cyber_cause}</span><br>${h.consequence}`
+          + (SAFE_BY_HAZARD[h.id] || []).map(sg =>
+              `<br><span style="color:#2bd96a">✓ ${sg.priority} · ${sg.cost_usd ? '$' + (sg.cost_usd/1000) + 'K ' + sg.cost_basis : 'no incremental cost'}</span> ${sg.safeguard}`).join('')
+          + `</div>`;
+    }
+  }
+  const cves = CVE_BY_ASSET[id] || [];
+  if (cves.length) {
+    eng += '<div class="sec mt">KNOWN VULNERABILITIES</div>';
+    for (const c of cves)
+      eng += `<div class="blockrow"><b style="color:#c8332a">${c.cve}</b> · CVSS ${c.cvss || c.severity}<br>`
+          + `${c.product}<br><span style="color:#8a8a88">${c.impact}</span></div>`;
+  }
+  const red = REDUNDANCY_NOTE[id];
+  if (red) {
+    eng += '<div class="sec mt">REDUNDANCY (AUTHORED)</div><div class="blockrow">'
+        + Object.entries(red).filter(([k]) => !k.startsWith('_') && k !== 'note')
+            .map(([k, v]) => '<b>' + k.replace(/_/g, ' ') + '</b> ' + (typeof v === 'object' ? JSON.stringify(v) : v)).join('<br>')
+        + (red.note ? '<br><span style="color:#8a8a88">' + red.note + '</span>' : '') + '</div>';
+  }
+
+  selBody.innerHTML =
+    (ident ? `<div class="sec">IDENTIFICATION</div>${ident}` : '') +
+    (attrs ? `<div class="sec mt">ATTRIBUTES</div>${attrs}` : '') +
+    eng + surf +
+    `<div class="sec mt">MESH</div><div class="kv"><b>name</b><span>${pickedMesh?.name || n.mesh}</span></div>` +
+    `<div class="sec mt">TRACE</div><div class="btns">
+       <button class="btn" id="tUp">Upstream</button>
+       <button class="btn" id="tDown">Downstream</button>
+       <button class="btn" id="tBoth">Both</button>
+       <button class="btn" id="tClear">Clear</button></div>` +
+    `<div class="sec mt">FEEDS THIS (${ins.length})</div>${ins.length ? rows(ins, '←') : '<div class="empty">No upstream connections modelled.</div>'}` +
+    `<div class="sec mt">FEEDS FROM HERE (${outs.length})</div>${outs.length ? rows(outs, '→') : '<div class="empty">No downstream connections modelled.</div>'}`;
+
+  selBody.querySelectorAll('.conn').forEach(b => b.onclick = () => selectAndFly(b.dataset.node));
+  const tr = d => { S.trace = graph.trace(id, d); paintTrace(); apply(); };
+  selBody.querySelector('#tUp').onclick = () => tr('up');
+  selBody.querySelector('#tDown').onclick = () => tr('down');
+  selBody.querySelector('#tBoth').onclick = () => tr('both');
+  selBody.querySelector('#tClear').onclick = () => { S.trace = null; clearHL(); addHL(n.obj); apply(); };
+  apply();
+}
+function paintTrace() {
+  clearHL();
+  if (!S.trace) return;
+  for (const nid of S.trace.nodes) {
+    const n = graph.nodes[nid];
+    if (n) addHL(n.obj, nid !== S.sel);
+  }
+  for (const eid of S.trace.edges) {
+    const g = graph.geomIndex.get(eid);
+    if (g) addHL(g, true);
+  }
+}
+function selectAndFly(id) {
+  select(id);
+  const n = graph.nodes[id];
+  if (n) frameObject(n.obj);
+}
+
+// ===== picking ============================================================
+const canvas = stage.shadowRoot.querySelector('canvas');
+const ray = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+function pick(ev) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, cam());
+  const hits = ray.intersectObject(C, true);
+  for (const h of hits) {
+    const o = h.object;
+    if (!o.visible || (o.material && o.material.opacity < .12)) continue;
+    return o;
+  }
+  return null;
+}
+const nodeOf = o => { let p = o; while (p) { if (p.userData.nodeId) return p.userData.nodeId; p = p.parent; } return null; };
+
+let down = null;
+canvas.addEventListener('pointerdown', e => down = { x: e.clientX, y: e.clientY, t: performance.now() });
+canvas.addEventListener('pointerup', e => {
+  if (!down) return;
+  const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  down = null;
+  if (moved > 5) return;
+  const o = pick(e);
+  if (!o) return;
+  if (o.userData.graphNode) return selectAndFly(o.userData.graphNode);
+  if (o.userData.graphEdge) {
+    const ed = graph.edges.find(x => x.id === o.userData.graphEdge);
+    if (ed) return selectAndFly(ed.from);
+  }
+  const id = nodeOf(o);
+  if (id) { select(id, o); frameObject(o.parent && o.parent.type === 'Group' && graph.nodes[id].obj === o.parent ? graph.nodes[id].obj : o); }
+});
+canvas.addEventListener('dblclick', e => { if (!pick(e)) views.vAll(); });
+
+const tip = document.getElementById('tip');
+let tmr = 0;
+canvas.addEventListener('pointermove', e => {
+  if (performance.now() - tmr < 60) return;
+  tmr = performance.now();
+  const o = pick(e);
+  let txt = null;
+  if (o) {
+    if (o.userData.graphNode) txt = graph.nodes[o.userData.graphNode].label;
+    else if (o.userData.graphEdge) {
+      const ed = graph.edges.find(x => x.id === o.userData.graphEdge);
+      txt = ed ? `${graph.nodes[ed.from].label} → ${graph.nodes[ed.to].label} · ${ed.protocol}` : null;
+    } else {
+      const id = nodeOf(o);
+      txt = id ? `${graph.nodes[id].label} — ${o.name}` : o.name;
+    }
+  }
+  if (txt) { tip.textContent = txt; tip.style.display = 'block';
+             tip.style.left = (e.clientX + 12) + 'px'; tip.style.top = (e.clientY + 12) + 'px'; }
+  else tip.style.display = 'none';
+});
+canvas.addEventListener('pointerleave', () => tip.style.display = 'none');
+
+// Render a hall-tier asset (present in CG but not in the facility graph).
+function selectAsset(a, obj) {
+  claimLane('right');
+  rightEl.hidden = false; rightEl.classList.remove('collapsed');
+  document.getElementById('rightCollapse').textContent = '\u2013';
+  document.getElementById('selName').textContent = a.label || a.id;
+  document.getElementById('selKind').textContent =
+    [a.kind, a.room || a.location, a.cell].filter(Boolean).join('  \u00b7  ');
+  const z = ZONES[a.zone];
+  document.getElementById('zoneTag').textContent = z
+    ? z.label + '  \u00b7  Purdue ' + (a.purdue || z.purdue) + '  \u00b7  '
+      + (a.slt || a.sl_target || z.slt) : '';
+  const conns = (CG.edges || []).filter(e => e.from === a.id || e.to === a.id);
+  let h = '';
+  if (a.vendor) h += '<div class="blockrow"><b>Vendor</b> ' + a.vendor + '</div>';
+  if (a.standards) h += '<div class="blockrow"><b>Standards</b> ' + a.standards + '</div>';
+  const hn = a.hazard_node || (a.attrs && a.attrs.hazard_node);
+  if (hn) h += '<div class="blockrow"><b>Hazard node</b> ' + hn + '</div>';
+  for (const [k, v] of Object.entries(a.attrs || a.attributes || {}))
+    h += '<div class="blockrow"><b>' + k.replace(/_/g, ' ') + '</b> ' + v + '</div>';
+  for (const t of a.surface || a.attack_surface || [])
+    h += '<div class="blockrow" style="border-left:2px solid #ff8c42;padding-left:8px">' + t + '</div>';
+  h += '<div class="sec mt">CONNECTIONS \u00b7 ' + conns.length + '</div>';
+  for (const e of conns) {
+    const other = e.from === a.id ? e.to : e.from;
+    const on = (CG.nodes[other] || {}).label || other;
+    h += '<div class="conn">' + (e.from === a.id ? '\u2192 ' : '\u2190 ') + on
+       + '<div class="meta">' + [e.protocol, e.label || e.description].filter(Boolean).join(' \u00b7 ') + '</div></div>';
+  }
+  selBody.innerHTML = h;
+}
+
+// ===== search =============================================================
+const q = document.getElementById('q'), hits = document.getElementById('hits');
+const meshNames = [];
+C.traverse(o => { if (o.name && !o.name.startsWith('gnode_') && !o.name.startsWith('gedge_')) meshNames.push(o); });
+q.addEventListener('input', () => {
+  const s = q.value.trim().toLowerCase();
+  hits.innerHTML = '';
+  if (s.length < 2) return;
+  // index the whole scope (facility + hall), not just the facility graph
+  const nodeHits = Object.values(CG && CG.nodes ? CG.nodes : graph.nodes)
+    .filter(n => ((n.label || '') + ' ' + (n.mesh || '') + ' ' + (n.kind || '') + ' '
+                  + (n.location || n.room || '') + ' ' + (n.cell || '')).toLowerCase().includes(s))
+    .slice(0, 8);
+  const meshHits = meshNames.filter(o => o.name.toLowerCase().includes(s)).slice(0, 5);
+  for (const n of nodeHits) {
+    const d = document.createElement('div');
+    d.className = 'hit'; d.textContent = '◆ ' + n.label;
+    d.onclick = () => {
+      q.value = ''; hits.innerHTML = '';
+      if (graph.nodes[n.id]) { selectAndFly(n.id); return; }
+      // hall-tier asset: no facility node, so resolve through its mesh
+      let o = null; C.traverse(x => { if (!o && x.name === n.mesh) o = x; });
+      if (o) { const id = nodeOf(o); if (id) select(id, o); else selectAsset(n, o); frameObject(o); }
+    };
+    hits.appendChild(d);
+  }
+  for (const o of meshHits) {
+    if (nodeHits.some(n => n.mesh === o.name)) continue;
+    const d = document.createElement('div');
+    d.className = 'hit'; d.textContent = '· ' + o.name;
+    d.onclick = () => { q.value = ''; hits.innerHTML = '';
+      const id = nodeOf(o); if (id) select(id, o); frameObject(o); };
+    hits.appendChild(d);
+  }
+});
+
+apply();
+views.vAll();
+
+// footer stats
+{
+  const els = ['phstat','stats'].map(i => document.getElementById(i)).filter(Boolean);
+  let m = 0, runs = 0;
+  if (ROUTES) for (const r of ROUTES.values()) { m += r.length_m; runs++; }
+  const crit = graph.edges.filter(e => e.critical).length;
+  const scope = typeof CG !== 'undefined' ? CG : { nodes: graph.nodes, edges: graph.edges };
+  const critAll = scope.edges.filter(e => e.critical).length;
+  const html = `${Object.keys(scope.nodes).length} assets · ${scope.edges.length} connections · ${critAll} critical conduits<br>`
+    + (runs ? `${runs} routed runs · ${Math.round(m).toLocaleString()} m of containment` : 'routes.json not loaded');
+  for (const el of els) el.innerHTML = html;
+}
+
+console.log('[explorer] nodes', Object.keys(graph.nodes).length, 'edges', graph.edges.length,
+            'missing meshes', graph.missing.length);
+</script>
+</body>
+</html>

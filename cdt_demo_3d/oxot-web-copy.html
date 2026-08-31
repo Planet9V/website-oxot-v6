@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OXOT Cyber Digital Twin — web copy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/oxot-theme.css">
+<script src="shared/oxot-nav.js"></script>
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  body{font-family:Inter,system-ui,sans-serif;color:#1a1a1c}
+  h1{font:700 26px/1.16 Inter,sans-serif;letter-spacing:-.018em;margin:0 0 6px;color:#0f0f10}
+  .lede{font:400 13px/1.6 Inter,sans-serif;color:#4a4a4d;margin:0 0 8px;max-width:44em}
+  .meta{font:500 9.5px/1.5 Inter,sans-serif;color:#8a8a8d;margin:0 0 24px}
+  h2{font:700 15px/1.25 Inter,sans-serif;letter-spacing:-.008em;margin:30px 0 4px;color:#0f0f10;
+     padding-top:11px;border-top:2px solid #EE7623}
+  h3{font:650 11.5px/1.3 Inter,sans-serif;letter-spacing:.055em;text-transform:uppercase;color:#6a6a6d;margin:22px 0 6px}
+  h4{font:650 12.5px/1.35 Inter,sans-serif;margin:16px 0 4px;color:#1a1a1c}
+  p,li{font:400 11.4px/1.63 Inter,sans-serif;color:#26262a;margin:0 0 9px;orphans:3;widows:3}
+  ul{margin:0 0 11px;padding-left:17px} li{margin-bottom:3px}
+  strong,b{font-weight:650;color:#0f0f10}
+  em{font-style:normal;color:#8a8a8d}
+  .slot{font:650 8px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#EE7623;
+        display:block;margin:0 0 5px}
+  .copy{border-left:2.5px solid #EE7623;background:#faf8f4;padding:11px 14px;margin:11px 0 16px;break-inside:avoid}
+  .copy p:last-child{margin-bottom:0}
+  .copy .h{font:700 15px/1.25 Inter,sans-serif;letter-spacing:-.01em;color:#0f0f10;margin:0 0 6px}
+  .copy .sh{font:600 11.5px/1.4 Inter,sans-serif;color:#3a3a3d;margin:0 0 7px}
+  .alt{border-left-color:#0f0f10;background:#f4f3f0}
+  .alt .slot{color:#0f0f10}
+  table{width:100%;border-collapse:collapse;margin:9px 0 14px;font:400 9.6px/1.45 Inter,sans-serif}
+  thead th{text-align:left;font:650 8.4px/1.3 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+    color:#6a6a6d;padding:0 8px 5px 0;border-bottom:1.5px solid #26262a}
+  tbody td{padding:6px 8px 6px 0;border-bottom:.5px solid #ddd9d0;vertical-align:top;color:#26262a}
+  tbody tr{break-inside:avoid}
+  .caption{font:400 8.8px/1.45 Inter,sans-serif;color:#8a8a8d;margin:-8px 0 16px}
+  .note{background:#f4f3f0;padding:10px 13px;margin:12px 0 16px;break-inside:avoid;border-radius:3px}
+  .note p{margin:0;font-size:10.6px;color:#4a4a4d}
+  .pagebreak{break-before:page}
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font:600 8.4px/1 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#9a9a9d;
+       border-bottom:.5px solid #ddd9d0;padding-bottom:7px}
+  .hdr b{color:#EE7623}
+  .ft{display:flex;justify-content:space-between;align-items:baseline;
+      font:500 8.4px/1 Inter,sans-serif;color:#9a9a9d;border-top:.5px solid #ddd9d0;padding-top:7px}
+  a{color:#c05a12} a:hover{color:#EE7623}
+</style>
+</head>
+<body>
+<doc-page margin="0.75in">
+
+<div slot="header" class="hdr"><span><b>OXOT</b> &nbsp;Cyber Digital Twin</span><span>Website copy</span></div>
+<div slot="footer" class="ft"><span>Draft copy for review</span><span>OXOT</span></div>
+
+<h1>Cyber Digital Twin — website copy</h1>
+<p class="lede">Copy blocks for the Cyber Digital Twin offering: the model, the four phase views of the explorer, the sample artifact pack, and the method. Orange blocks are ready to lift; grey blocks are alternates or supporting text.</p>
+<p class="meta">Everything factual here is queried from the reference model — 449 assets, 1,155 connections, 216 critical conduits. Where a figure is illustrative it says so.</p>
+
+<h2>1 · Hero and positioning</h2>
+
+<div class="copy">
+<span class="slot">Hero — headline + subhead</span>
+<div class="h">Your facility, as a model that answers questions</div>
+<p>A Cyber Digital Twin is a working model of your facility — every asset, every connection, every protocol — loaded with your own safety and reliability data. Ask it what a compromised workstation can reach, what a cooling failure costs per hour, and which control actually breaks the path. It answers from your architecture, not from a benchmark.</p>
+</div>
+
+<div class="copy alt">
+<span class="slot">Alternate hero — for a more technical audience</span>
+<div class="h">IEC 62443 assessment, grounded in your architecture</div>
+<p>We build a queryable model of your facility from your HLD, DLD and interface control documents, correct it against the facility on a floor walk, and load it with your FMEA, hazard log and minimum operating requirements. Threat pathways, consequence, and SL-C rationale then come out of one dataset — traceable, defensible, and the same for every team.</p>
+</div>
+
+<div class="copy">
+<span class="slot">Positioning — three-sentence version</span>
+<p>Most OT security assessments produce a document. We produce a model. Because the asset register, the network diagram, the threat pathways, the consequence figures and the executive dashboard are all views of one dataset, a correction on the floor propagates to every artifact at once — instead of being reconciled by hand across documents that drift apart the moment the engagement ends.</p>
+</div>
+
+<h3>Why a model rather than a report</h3>
+<p>A report states a conclusion. A model can be interrogated, and it can be wrong in ways you can see. When we say cell isolation is worth $44M of a $50M exposure, that number comes from walking the actual dependency graph, and you can open the model and watch the propagation stop at the cell boundary. When we say no safety instrumented system is reachable from any entry point, that is a query result across 1,155 connections, not an assurance.</p>
+<p>It also means the assumptions are visible. Every figure is marked as sourced from your documents, derived from the model, or assumed — and the assumptions are listed with the consequence of each being wrong. A reader who disagrees can see exactly which numbers move.</p>
+
+<h2 class="pagebreak">2 · The model</h2>
+
+<div class="copy">
+<span class="slot">Section intro — the reference model</span>
+<div class="sh">A hyperscale AI campus, modelled end to end</div>
+<p>Our reference twin is a hyperscale AI datacenter: one data hall of 96 liquid-cooled GPU racks at 120 kW each, organised into two independently operable cells. It carries 449 assets and 1,155 connections — from the utility feed and MV switchgear through to the cold-plate manifold in a single rack, and from the carrier demarcation through to a dry contact on a fire panel.</p>
+<p>Every connection knows what flows over it and how it is carried. That distinction is what makes the model useful: of those 1,155 connections, 525 are physical flow — pipe, duct, busway, cable — and a further 188 are hardwired or serial. None of them can be reached remotely, and establishing that boundary early is what stops a threat assessment from treating the whole facility as uniformly exposed.</p>
+</div>
+
+<h3>Key systems — copy for a systems section</h3>
+<table>
+<thead><tr><th>System</th><th>Copy</th></tr></thead>
+<tbody>
+<tr><td><b>Power</b></td><td>Utility feed and MV switchgear through transformers, LV and transfer switching, two UPS blocks per cell in 2N, battery strings, remote power panels and a cell-bounded busway to every row. Generators, bulk fuel, battery storage and the microgrid controller are shared across the campus — cells share generation, not distribution.</td></tr>
+<tr><td><b>Cooling</b></td><td>Central chiller facility with N+1 redundancy, cooling towers, a dry-cooler economiser, and the facility water spine. A coolant distribution unit per row bridges facility water to the technology loop that feeds the cold plates. On loss of a row CDU the thermal clock is 45 seconds to throttle and 90 to protective shutdown.</td></tr>
+<tr><td><b>Compute</b></td><td>96 liquid-cooled 48U racks at 120 kW — compute trays, top-of-rack switching, cold-plate manifolds, switched rack PDUs on A and B buses, and a baseboard management controller estate of 128 per row.</td></tr>
+<tr><td><b>Network</b></td><td>Carrier demarcations north and south, ISP routers, DDoS scrubbing, perimeter and DMZ firewall pairs, dual core and spine, per-row distribution, out-of-band console and KVM, and an isolated guest network with captive portal.</td></tr>
+<tr><td><b>OT</b></td><td>A dedicated segment per cell — hardened switch, zone firewall and protocol gateway on a cell VLAN with no inter-cell routing — aggregating to a campus data diode. DDC field controllers sit at Purdue Level 1 where BACnet MS/TP terminates.</td></tr>
+<tr><td><b>Safety and fire</b></td><td>A fire panel per cell in its own isolated zone, with independent detection and agent release, aspirating detection per row, nozzle banks, emergency power off, and hardwired interlocks to HVAC and ventilation. None of it is reachable over a network path.</td></tr>
+<tr><td><b>Security</b></td><td>Perimeter intrusion detection, gates and bollards, guardhouse, mantrap with biometrics, hall cameras, supervised door contacts, and the CCTV storage estate.</td></tr>
+<tr><td><b>Applications</b></td><td>Twelve racks in the core IT and DCS room: BMS and power monitoring applications, video management, access control, SQL cluster, historians, DCS controllers and OPC UA, domain controllers and PKI, SIEM and SOAR, DMZ and jump infrastructure, SCADA, backup, virtualisation and storage.</td></tr>
+</tbody>
+</table>
+<p class="caption">System copy. Each block is written to stand alone as a card or accordion item.</p>
+
+<div class="copy alt">
+<span class="slot">Pull quote / stat band</span>
+<p><b>449 assets · 1,155 connections · 216 critical conduits · 188 hardwired interfaces · 17,720 m of solved containment</b></p>
+<p>Every asset binds to a named node in the 3D model, so a row in the register and a mesh in the twin are the same object.</p>
+</div>
+
+<h3>Cell architecture — copy for the differentiator section</h3>
+<p>Hyperscalers divide campuses into self-contained cells: 5–10 MW blocks that can be deployed, commissioned and operated independently. Each cell in the model has its own MV/LV distribution path, its own CDU cluster, its own BMS zone controller, its own fire detection and suppression, and its own OT network segment. Generation is shared; distribution is not.</p>
+<p>Modelling that properly is what makes the security argument measurable. A foothold inside one cell's OT segment reaches two assets, because the cell VLAN has no inter-cell routing and terminates at a one-way diode. The same compromise on a shared management plane reaches the whole campus. A busway loss bounded to one cell costs $720K per hour; unbounded, it costs $10.44M. The isolation is not an assertion in a slide — it is the difference between two query results.</p>
+
+<h2 class="pagebreak">3 · The explorer — four phase views</h2>
+<p>Copy for the interactive model. The explorer opens on the 3D campus with four collapsed panels down the left, one per phase of the engagement. Each opens to the controls that phase actually uses, so a client sees the model the way the process builds it.</p>
+
+<div class="copy">
+<span class="slot">Explorer intro</span>
+<div class="sh">Explore the twin the way we build it</div>
+<p>The same model, four ways. Start with what exists, then add threat, then add zones and requirements, then add assurance. Each view carries only the controls that phase uses, so nothing is shown before the work that justifies it.</p>
+</div>
+
+<h4>1 · Building</h4>
+<div class="copy">
+<p><b>What exists, and how it connects.</b> The model as built from your high-level design, detailed design and interface control documents. Search any asset, filter by service to see what flows where, and open the asset list by system to walk the register. Protocol filtering separates the routable from the hardwired — the first thing that shapes everything after it.</p>
+<p><em>Controls: viewpoint · view · search · service · asset list · protocol</em></p>
+</div>
+
+<h4>2 · Workshop — TVA</h4>
+<div class="copy">
+<p><b>Threat and vulnerability, on the model.</b> Pick an entry point and watch the pathway walk forward over routable protocols only — hardwired, analogue, serial and one-way links stop it, and the boundary that stopped it is named. Then fail an asset and watch the loss propagate through the facility's real dependencies, with the consequence costed per hour. Zones and conduits get their first cut here.</p>
+<p><em>Adds: threat paths · cascading failures · IEC 62443 zones · conduits</em></p>
+</div>
+
+<h4>3 · ZCR</h4>
+<div class="copy">
+<p><b>Zone and conduit requirements.</b> Colour the model by zone and see the boundaries as they actually fall. Every critical conduit is filterable, with its protocol, direction and the zone crossing it makes. The risk portfolio carries annualised loss by node and the controls that reduce it, with cumulative return. Assumptions and provenance are on the same screen — what is sourced, what is derived, what is still unconfirmed.</p>
+<p><em>Adds: marker colour · risk portfolio · assumptions and provenance</em></p>
+</div>
+
+<h4>4 · Assurance</h4>
+<div class="copy">
+<p><b>Everything, in one view.</b> The full control set for gap analysis against SL-A, the target reference architecture, and the reporting pack. This is the view a facility team keeps after the engagement — the model stays queryable, so the next change to the facility is a change to the twin rather than the start of another assessment.</p>
+</div>
+
+<h2 class="pagebreak">4 · The sample artifact pack</h2>
+
+<div class="copy">
+<span class="slot">Download / gated asset intro</span>
+<div class="sh">See what the engagement produces</div>
+<p>A worked sample of every artifact, drawn from the reference model. Each one is truncated to twenty rows to show its structure, format and reasoning — a live engagement produces the complete set. It covers the asset register, services and protocols, zones and conduits with SL-T, threat scenarios, cascading failure with costed consequence, the ALARP/SFAIRP rationale behind SL-C, the risk portfolio, the executive readout, and the assumption register.</p>
+</div>
+
+<h3>Artifact list — copy for a contents block</h3>
+<table>
+<thead><tr><th>Artifact</th><th>What it is</th><th>Phase</th></tr></thead>
+<tbody>
+<tr><td><b>A1 — Asset register</b></td><td>Every asset with its system, IEC 62443 zone, Purdue level, SL-T target and cell. The id is the join key across every other artifact.</td><td>1</td></tr>
+<tr><td><b>A2 — Services and protocols</b></td><td>What flows over each connection and how it is carried, with routable separated from hardwired and serial.</td><td>1</td></tr>
+<tr><td><b>A3 — Zones, conduits, SL-T</b></td><td>Zone definitions and population, and every connection that crosses a boundary — the §5.6 critical conduit set.</td><td>W1</td></tr>
+<tr><td><b>A4 — Threat scenarios</b></td><td>ATQ threat framing applied through TACAM, with pathways walked from each entry point and the hazard log's cyber deviations by RPN.</td><td>W2</td></tr>
+<tr><td><b>A5 — Consequence and cascade</b></td><td>Two failure scenarios propagated through real dependencies, costed per hour, with minimum operating requirements and violation responses.</td><td>2</td></tr>
+<tr><td><b>A6 — SL-C rationale</b></td><td>Hazard-level safeguards priced individually, and portfolio controls ranked by return, each mapped to the clause that requires it.</td><td>W2</td></tr>
+<tr><td><b>A7 — Risk portfolio</b></td><td>Annualised loss expectancy by node with asset value, exposure factor and rate of occurrence shown, not just the result.</td><td>3</td></tr>
+<tr><td><b>A8 — Executive briefing</b></td><td>What we found and what to do, as NOW / NEXT / NEVER. The NEVER column records decisions that should not be revisited, and why.</td><td>3</td></tr>
+<tr><td><b>A9 — Assumptions and provenance</b></td><td>Every figure marked sourced, derived or assumed, with the consequence of each assumption being wrong.</td><td>all</td></tr>
+</tbody>
+</table>
+<p class="caption">Sample pack contents. Phase column refers to the process diagram.</p>
+
+<h2>5 · The method</h2>
+
+<div class="copy">
+<span class="slot">Process section intro</span>
+<div class="sh">Three phases, two workshops, three floor walks</div>
+<p>We build from your documentation, correct the model against the facility, then load it with your safety and reliability data before recommending a single control. The order matters: a threat pathway is only worth discussing once it can be traced to a physical consequence your own hazard log recognises.</p>
+</div>
+
+<h3>Phase copy</h3>
+<h4>Phase 1 — gather artifacts and build the model</h4>
+<p>We build from your own documentation: high-level design, detailed design, interface control documents and equipment schedules. From those we derive the asset list, establish every connection, and classify the services and protocols each one carries. Where a document states something, we do not infer it.</p>
+
+<h4>Workshop 1 — review, walk the floor, frame the threat</h4>
+<p>We review the model with your teams and walk the floor to confirm it against the as-is facility, adjusting wherever documentation and installation disagree. Then we frame the threat landscape. CLC/TS 50701 works from worst case; we instead apply comparative sector threats through our <b>Attacker Threat Quotient</b>, weighted by client profile, equipment and facility type, and geography. The output is the initial SL-T zone and conduit cut, and an asset registry with SIL-rated items marked.</p>
+
+<h4>Phase 2 — load safety, reliability and operations data</h4>
+<p>We take your safety team's FMEA, hazard log and safety critical item list; your reliability team's critical item list; and your ConOps with its minimum operating requirements. Failure modes, impacts and consequences go into the model, so that a pathway can be traced through to an outcome your own teams already recognise.</p>
+
+<h4>Workshop 2 — threat actors, pathways and reasonable controls</h4>
+<p>We show threat actors and pathways on the model through <b>TACAM</b>, which carries typical vulnerabilities by equipment class, and trace them to fat-tail losses, critical losses and safety consequences using our own ALE model. We review the controls your SL-T ratings require and why they matter — grounded in the pathways and consequences on screen, not a generic catalogue. Architectural gaps are then tested against <b>ALARP/SFAIRP</b> to arrive at a reasonable SL-C, and the result is drawn as the ZCR diagram: the flat network view of the same 3D model.</p>
+
+<h4>Phase 3 — raise fidelity, verify, report</h4>
+<p>We enter SL-C and the security requirements for every asset by zone and produce the gap analysis. We then ask for samples and configurations, SBOMs and HBOMs, and switch and firewall configurations to raise the model's fidelity to the real facility — and walk the floor once more with the improved model to confirm it still matches. You receive a NOW/NEXT/NEVER report, a target reference architecture to IEC 62443, the SL-C to SL-A gap analysis, and a prioritised roadmap with quick wins.</p>
+
+<h3>Who gets what — copy for an outcomes block</h3>
+<table>
+<thead><tr><th>Audience</th><th>What they receive</th></tr></thead>
+<tbody>
+<tr><td><b>Executives and risk</b></td><td>Executive briefing and readout, and input to the organisational risk ledger where the sponsor is organisational. Consequence tied to numbers.</td></tr>
+<tr><td><b>Facility managers</b></td><td>A SecRAC for the facility — zone and conduit responsibilities, and the controls that apply to facility they operate daily.</td></tr>
+<tr><td><b>Safety and reliability</b></td><td>Reliability and safety critical items returned to the hazard log, so your own artifact stays current rather than being superseded.</td></tr>
+<tr><td><b>IT, OT, controls, network, operations, security</b></td><td>The full detailed report aligned to IEC 62443 and CLC/TS 50701, and the model itself.</td></tr>
+</tbody>
+</table>
+
+<div class="note"><p>The point of a common dataset is prioritisation. The consequence-driven top-down view builds awareness tied to numbers; the bottom-up engineering, controls and operations view earns trust with the people who run the facility. You need both to agree on where resources go — and both need to be defensible when an SL-C determination is negotiated down to SL-A.</p></div>
+
+<h2 class="pagebreak">6 · Short-form copy</h2>
+
+<div class="copy">
+<span class="slot">Meta description — 155 characters</span>
+<p>A working model of your facility — every asset, connection and protocol — loaded with your safety data, so threat pathways and consequence are queryable.</p>
+</div>
+
+<div class="copy">
+<span class="slot">Card / tile — 25 words</span>
+<p><b>Cyber Digital Twin.</b> We model your facility from your own design documents, correct it on the floor, and make threat pathways and consequence queryable.</p>
+</div>
+
+<div class="copy">
+<span class="slot">LinkedIn / social — 60 words</span>
+<p>Most OT security assessments end with a document. Ours ends with a model you can interrogate. Ask it what a compromised reception PC reaches, what a cooling failure costs per hour, or which control actually breaks the path — and see the answer propagate through your own architecture. IEC 62443 and CLC/TS 50701 aligned, built from your HLD, DLD and ICD.</p>
+</div>
+
+<div class="copy alt">
+<span class="slot">Call to action — three variants</span>
+<p><b>Primary:</b> Explore the model →</p>
+<p><b>Secondary:</b> Download the sample artifact pack →</p>
+<p><b>Consultative:</b> Talk to us about your facility →</p>
+</div>
+
+<h3>Terms worth defining on the page</h3>
+<table>
+<thead><tr><th>Term</th><th>One-line definition for a glossary or tooltip</th></tr></thead>
+<tbody>
+<tr><td><b>ATQ</b></td><td>Attacker Threat Quotient — our threat framing, weighting comparative sector threats by client profile, equipment and facility type, and geography, rather than defaulting to worst case.</td></tr>
+<tr><td><b>TACAM</b></td><td>Our threat actor and attack pathway method, carrying typical vulnerabilities by equipment class and applying them to the model.</td></tr>
+<tr><td><b>ZCR</b></td><td>Zone and conduit requirements — the flat network view of the twin, showing zones, the conduits between them, and the security level each requires.</td></tr>
+<tr><td><b>SL-T / SL-C / SL-A</b></td><td>Target, capability and achieved security level. SL-T is what the zone requires; SL-C is what is reasonably achievable; SL-A is what is actually in place.</td></tr>
+<tr><td><b>ALARP / SFAIRP</b></td><td>As low as reasonably practicable / so far as is reasonably practicable — the test applied to architectural gaps to reach a defensible SL-C.</td></tr>
+<tr><td><b>Critical conduit</b></td><td>A connection crossing a zone boundary that requires explicit documentation under IEC 62443-3-2 §5.6.</td></tr>
+<tr><td><b>Cell</b></td><td>A self-contained 5–10 MW block of a hyperscale campus, with independent power, cooling, BMS, fire and OT segment.</td></tr>
+</tbody>
+</table>
+
+<div class="note"><p><b>A note on the numbers.</b> Figures describing the reference model are query results and can be quoted directly. Cost figures rest on two stated assumptions — the mapping of hazard nodes to model assets, and a revenue basis of $125K per MW-hour — both recorded in the model's assumption register. If either is used in client-facing material, cite it as illustrative.</p></div>
+
+</doc-page>
+<script src="./doc-page.js"></script>
+</body>
+</html>

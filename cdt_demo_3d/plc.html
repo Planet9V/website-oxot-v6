@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Programmable Logic Controller</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="stylesheet" href="shared/oxot-theme.css">
+<style>
+  html,body{margin:0;height:100%}
+  three-d-stage:not(:defined){visibility:hidden}
+</style>
+<script src="shared/oxot-nav.js"></script>
+</head>
+<body>
+<three-d-stage name="plc" autorotate></three-d-stage>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const stage = document.querySelector('three-d-stage');
+const { THREE } = await stage.ready;
+
+// ---- shared materials (named -> usemtl in OBJ export) ----
+const M = {
+  housing:  new THREE.MeshStandardMaterial({ name:'housing',  color:0xd9dad5, roughness:0.62, metalness:0.05 }),
+  charcoal: new THREE.MeshStandardMaterial({ name:'charcoal', color:0x33373a, roughness:0.55, metalness:0.08 }),
+  green:    new THREE.MeshStandardMaterial({ name:'terminal_green', color:0x2f8f5b, roughness:0.5,  metalness:0.05 }),
+  brass:    new THREE.MeshStandardMaterial({ name:'brass',    color:0xd2ab5e, roughness:0.38, metalness:0.35 }),
+  steel:    new THREE.MeshStandardMaterial({ name:'rail_steel', color:0xc2c7cc, roughness:0.3, metalness:0.35 }),
+  label:    new THREE.MeshStandardMaterial({ name:'label_white', color:0xf4f4ef, roughness:0.8, metalness:0 }),
+  ledGreen: new THREE.MeshStandardMaterial({ name:'led_green', color:0x2bd96a, emissive:0x1faf4e, emissiveIntensity:0.9, roughness:0.3 }),
+  ledAmber: new THREE.MeshStandardMaterial({ name:'led_amber', color:0xf2b736, emissive:0xc78a12, emissiveIntensity:0.8, roughness:0.3 }),
+  ledOff:   new THREE.MeshStandardMaterial({ name:'led_off',  color:0x5a5f52, roughness:0.4, metalness:0.05 }),
+  socket:   new THREE.MeshStandardMaterial({ name:'socket_black', color:0x17191b, roughness:0.45, metalness:0.1 }),
+  latch:    new THREE.MeshStandardMaterial({ name:'latch_orange', color:0xe07a26, roughness:0.55, metalness:0.03 }),
+};
+
+const plc = new THREE.Group();
+plc.name = 'plc';
+function box(name, mat, w, h, d, x, y, z, parent = plc) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.name = name; m.position.set(x, y, z);
+  parent.add(m); return m;
+}
+
+// ================= DIN rail (TH35 top-hat profile, extruded along X) ==
+{
+  const s = new THREE.Shape(); // (x=depth from wall, y=height)
+  s.moveTo(0.0075, 0.0175); s.lineTo(0.0075, 0.0125); s.lineTo(0.0, 0.0105);
+  s.lineTo(0.0, -0.0105);   s.lineTo(0.0075, -0.0125); s.lineTo(0.0075, -0.0175);
+  s.lineTo(0.0065, -0.0175); s.lineTo(0.0065, -0.0130); s.lineTo(0.001, -0.0095);
+  s.lineTo(0.001, 0.0095);   s.lineTo(0.0065, 0.0130);  s.lineTo(0.0065, 0.0175);
+  s.closePath();
+  const L = 0.30;
+  const g = new THREE.ExtrudeGeometry(s, { depth: L, bevelEnabled: false });
+  const rail = new THREE.Mesh(g, M.steel);
+  rail.name = 'din_rail';
+  rail.rotation.y = Math.PI / 2;          // extrusion axis -> world X
+  rail.position.set(-L / 2 - 0.0175, 0.052, -0.045);
+  plc.add(rail);
+  // mounting screw heads at each end of the rail
+  for (const [i, x] of [-0.1525, 0.1175].entries()) {
+    const sc = new THREE.Mesh(new THREE.CylinderGeometry(0.0035, 0.0035, 0.002, 24), M.steel);
+    sc.name = 'rail_screw_' + i;
+    sc.rotation.x = Math.PI / 2;
+    sc.position.set(x, 0.052, -0.0365);
+    plc.add(sc);
+  }
+}
+
+// ================= one module =========================================
+// A module clips on the rail: body from z=-0.044 (rail face) to front.
+function module(name, w, h, cx, depth, opts = {}) {
+  const g = new THREE.Group(); g.name = name;
+  const zBack = -0.044, zFront = zBack + depth;
+  const zc = (zBack + zFront) / 2;
+  const yc = 0.052; // rail center height
+  // main body
+  box(name + '_body', M.housing, w, h, depth, 0, 0, 0, g);
+  // recessed front panel (slightly proud, darker)
+  box(name + '_panel', M.charcoal, w - 0.008, h - 0.036, 0.0015, 0, 0.002, depth / 2 + 0.0008, g);
+  // top + bottom terminal blocks (green) with brass screws
+  for (const sgn of [1, -1]) {
+    const ty = sgn * (h / 2 - 0.009);
+    box(name + (sgn > 0 ? '_terminals_top' : '_terminals_bottom'), M.green,
+        w - 0.006, 0.016, 0.017, 0, ty, depth / 2 - 0.0075, g);
+    const n = Math.max(3, Math.round((w - 0.012) / 0.0062));
+    for (let i = 0; i < n; i++) {
+      const sx = -((n - 1) / 2) * 0.0062 + i * 0.0062;
+      const sc = new THREE.Mesh(new THREE.CylinderGeometry(0.0021, 0.0021, 0.0018, 20), M.brass);
+      sc.name = name + '_screw_' + (sgn > 0 ? 't' : 'b') + i;
+      sc.rotation.x = Math.PI / 2;
+      sc.position.set(sx, ty + sgn * 0.001, depth / 2 + 0.001);
+      g.add(sc);
+      // slot in the screw head
+      box(name + '_slot_' + (sgn > 0 ? 't' : 'b') + i, M.socket, 0.0032, 0.0005, 0.0004,
+          sx, ty + sgn * 0.001, depth / 2 + 0.002, g);
+    }
+  }
+  // white label strip under top terminals
+  box(name + '_label', M.label, w - 0.010, 0.006, 0.0012, 0, h / 2 - 0.021, depth / 2 + 0.0012, g);
+  // vent slots on the top face
+  const vn = Math.max(4, Math.round(w / 0.009));
+  for (let i = 0; i < vn; i++) {
+    const vx = -((vn - 1) / 2) * 0.008 + i * 0.008;
+    box(name + '_vent_' + i, M.charcoal, 0.0025, 0.0008, depth * 0.45, vx, h / 2 + 0.0003, -depth * 0.15, g);
+  }
+  // rail latch tab at the bottom rear (safety orange)
+  box(name + '_latch', M.latch, 0.012, 0.008, 0.006, 0, -h / 2 - 0.003, -depth / 2 + 0.006, g);
+  g.position.set(cx, yc + (opts.dy ?? 0), zc);
+  plc.add(g);
+  return { g, w, h, depth };
+}
+
+function ledColumn(parent, name, x, yTop, count, litEvery, zFace) {
+  for (let i = 0; i < count; i++) {
+    const mat = i % litEvery === 0 ? M.ledGreen : M.ledOff;
+    box(name + '_led_' + i, mat, 0.004, 0.002, 0.0012, x, yTop - i * 0.0042, zFace, parent);
+  }
+}
+
+// ================= CPU module =========================================
+{
+  const w = 0.085, h = 0.104, d = 0.076;
+  const { g } = module('cpu', w, h, -0.065, d);
+  const zf = d / 2 + 0.0018;
+  // status LEDs: RUN (green), ERR (off), MAINT (amber)
+  const stat = [['run', M.ledGreen], ['err', M.ledOff], ['maint', M.ledAmber]];
+  stat.forEach(([n, mat], i) => {
+    box('cpu_stat_' + n, mat, 0.005, 0.0025, 0.0012, -w / 2 + 0.011, 0.030 - i * 0.006, zf, g);
+    box('cpu_stat_' + n + '_tag', M.label, 0.009, 0.0025, 0.0008, -w / 2 + 0.021, 0.030 - i * 0.006, zf - 0.0002, g);
+  });
+  // I/O status LED banks
+  ledColumn(g, 'cpu_in',  0.004, 0.030, 8, 3, zf);
+  ledColumn(g, 'cpu_out', 0.016, 0.030, 8, 4, zf);
+  box('cpu_led_frame', M.charcoal, 0.030, 0.040, 0.0006, 0.010, 0.0155, zf - 0.0006, g);
+  // ethernet port (recess + jack)
+  box('cpu_eth_recess', M.socket, 0.019, 0.017, 0.006, -w / 2 + 0.016, -0.022, d / 2 - 0.002, g);
+  box('cpu_eth_jack', M.steel, 0.015, 0.012, 0.002, -w / 2 + 0.016, -0.023, d / 2 + 0.0006, g);
+  // USB service port
+  box('cpu_usb', M.socket, 0.009, 0.004, 0.003, 0.006, -0.022, d / 2 + 0.0006, g);
+  // RUN/STOP mode switch
+  box('cpu_switch_well', M.socket, 0.006, 0.014, 0.002, 0.028, -0.020, d / 2 + 0.0006, g);
+  box('cpu_switch', M.label, 0.0045, 0.005, 0.0025, 0.028, -0.017, d / 2 + 0.0016, g);
+  // brand plate
+  box('cpu_brand', M.charcoal, 0.026, 0.007, 0.0012, -w / 2 + 0.019, 0.040, zf, g);
+}
+
+// ================= I/O expansion modules ==============================
+for (const [idx, cx] of [0.0, 0.05].entries()) {
+  const w = 0.045, h = 0.104, d = 0.076;
+  const name = 'io' + (idx + 1);
+  const { g } = module(name, w, h, cx, d);
+  const zf = d / 2 + 0.0018;
+  ledColumn(g, name + '_a', -0.006, 0.030, 8, idx ? 2 : 3, zf);
+  ledColumn(g, name + '_b',  0.006, 0.030, 8, idx ? 5 : 2, zf);
+  box(name + '_led_frame', M.charcoal, 0.024, 0.040, 0.0006, 0, 0.0155, zf - 0.0006, g);
+  box(name + '_brand', M.charcoal, 0.020, 0.006, 0.0012, 0, 0.040, zf, g);
+}
+
+// rest base at y=0
+new THREE.Box3().setFromObject(plc);
+const bb = new THREE.Box3().setFromObject(plc);
+plc.position.y = -bb.min.y;
+stage.setObject(plc);
+// hidden iframes never tick rAF — paint one frame so captures aren't blank
+stage._loop && stage._loop();
+</script>
+</body>
+</html>

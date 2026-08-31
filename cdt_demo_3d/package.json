@@ -1,0 +1,22 @@
+{
+  "name": "oxot-cyber-digital-twin-hub",
+  "version": "2.4.0",
+  "description": "OXOT Cyber Digital Twin — Consolidated Multi-Page Website & 3D Demo Hub",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -l 8124",
+    "dev": "npx serve . -l 8124",
+    "serve-node": "node server.js",
+    "preview": "python3 -m http.server 8124"
+  },
+  "keywords": [
+    "oxot",
+    "cyber-digital-twin",
+    "babylonjs",
+    "iec-62443",
+    "eu-cra",
+    "seldon-engine",
+    "industrial-cybersecurity"
+  ],
+  "license": "UNLICENSED"
+}
