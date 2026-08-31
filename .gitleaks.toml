@@ -1,0 +1,18 @@
+title = "OXOT website v6 gitleaks config"
+
+# Extends gitleaks' own default ruleset — this file only adds allowlist
+# entries, it does not replace or narrow any real detection rule.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Confirmed false positives, verified against source before allowlisting"
+regexes = [
+  # High-entropy URL query params in AI-research citation lists, not secrets.
+  # Verified directly against the source lines: a document key on ft.com's
+  # markets page (?dockey=...) and a committee key on ashrae.org's public
+  # meetings page (?cmtKey=...) — both public, both just tracking/lookup IDs
+  # in ordinary news/citation URLs, neither is a credential of any kind.
+  '''markets\.ft\.com/data/announce/detail\?dockey=[A-Za-z0-9-]+''',
+  '''tpc\.ashrae\.org/Meetings\?cmtKey=[A-Za-z0-9-]+'''
+]
